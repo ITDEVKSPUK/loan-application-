@@ -29,9 +29,11 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   cupertino_icons: ^1.0.8
+  dio: ^5.8.0+1
   flutter:
     sdk: flutter
   get: ^4.7.2
+  
 
 dev_dependencies:
   # The "flutter_lints" package below contains a set of recommended lints to
