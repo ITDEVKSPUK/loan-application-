@@ -35,11 +35,11 @@ class CustomTextField extends StatelessWidget {
         decoration: InputDecoration(
           labelText: labelText,
           labelStyle: TextStyle(color: color),
-          filled: filled, // Aktifkan warna latar belakang
-          fillColor: Colors.white, // Warna latar belakang putih
+          filled: filled,
+          fillColor: Colors.white, 
           border: OutlineInputBorder(),
           hintStyle: TextStyle(
-            color: color, // Warna teks abu-abu
+            color: color, 
           )
         ),
       ),
