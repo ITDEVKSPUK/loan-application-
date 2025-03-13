@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:loan_apllication/splash_screen.dart';
+import 'package:get/get.dart';
+import 'package:loan_apllication/views/Login.dart/loginScreen.dart';
 
 void main() {
-  runApp( MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -11,9 +12,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: SplashScreen(),
+    return GetMaterialApp(
+      home: LoginScreen(),
     );
   }
 }
-
