@@ -13,4 +13,7 @@ class AppColors {
   static const Color cyanBlue = Color(0xFF009FE3);
   static const Color greyBlue = Color(0xFF99AAB5);
   static const Color pureWhite = Color(0xFFFFFFFF);
+
+  
 }
+
