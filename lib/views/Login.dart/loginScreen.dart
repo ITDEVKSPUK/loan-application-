@@ -47,6 +47,8 @@ class LoginScreen extends StatelessWidget {
                           child: Text(
                             'KSP Utama Karya',
                             style: TextStyle(
+                              fontFamily: 'OutfitRegular',
+                              fontStyle: FontStyle.normal,
                               color: Colors.white,
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -57,7 +59,7 @@ class LoginScreen extends StatelessWidget {
                           height: 15,
                         ),
                         CustomTextField(
-                          hintStyle: TextStyle(color: Colors.white70),
+                          hintStyle: TextStyle(color: AppColors.pureWhite),
                           filled: true,
                           labelStyle: TextStyle(color: Colors.black26),
                           labelText: 'Username',
