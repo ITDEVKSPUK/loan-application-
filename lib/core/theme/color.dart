@@ -14,6 +14,9 @@ class AppColors {
   static const Color greyBlue = Color(0xFF99AAB5);
   static const Color pureWhite = Color(0xFFFFFFFF);
 
+  // Warna Hitam
+  static const Color black = Color(0xFF000000);
+
   
 }
 
