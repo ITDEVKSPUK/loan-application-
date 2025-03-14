@@ -3,8 +3,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get.dart';
 import 'package:loan_apllication/core/theme/color.dart';
+import 'package:loan_apllication/utils/routes/my_app_route.dart';
 import 'package:loan_apllication/widgets/app_button.dart';
+import 'package:loan_apllication/widgets/custom_text.dart';
 import 'package:loan_apllication/widgets/text_field.dart';
 import 'package:loan_apllication/views/Login/controller.dart'; // Import the controller
 
@@ -22,6 +25,7 @@ class LoginScreen extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
+          image: AssetImage("assets/images/bg.png"),
           image: AssetImage("assets/images/bg.png"),
           fit: BoxFit.cover,
         ),
