@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:loan_apllication/core/theme/color.dart';
 import 'package:loan_apllication/widgets/app_button.dart';
+import 'package:loan_apllication/widgets/custom_text.dart';
 import 'package:loan_apllication/widgets/text_field.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -43,18 +44,11 @@ class LoginScreen extends StatelessWidget {
                             width: 100, height: 100),
                         SizedBox(height: 5),
                         Padding(
-                          padding: EdgeInsets.only(bottom: 10),
-                          child: Text(
-                            'KSP Utama Karya',
-                            style: TextStyle(
-                              fontFamily: 'Outfit',
-                              fontStyle: FontStyle.normal,
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
+                            padding: EdgeInsets.only(bottom: 10),
+                            child: CustomText(
+                              text: 'KSP Utama Karya',
+                              color: AppColors.pureWhite,
+                            )),
                         SizedBox(
                           height: 15,
                         ),
