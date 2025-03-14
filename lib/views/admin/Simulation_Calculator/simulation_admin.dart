@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loan_apllication/core/theme/color.dart';
 
 class SimulationAdmin extends StatelessWidget {
   const SimulationAdmin({super.key});
@@ -6,9 +7,7 @@ class SimulationAdmin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Simulation Admin'),
-      ),
+      backgroundColor: AppColors.pureWhite,
       body: Center(
         child: Text('Calculator'),
       ),

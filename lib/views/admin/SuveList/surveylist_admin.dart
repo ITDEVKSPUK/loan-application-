@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loan_apllication/core/theme/color.dart';
 
 class SurveylistAdmin extends StatelessWidget {
   const SurveylistAdmin({super.key});
@@ -6,9 +7,7 @@ class SurveylistAdmin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Survey List'),
-      ),
+      backgroundColor: AppColors.pureWhite,
       body: Center(
         child: Text('SurveList'),
       ),

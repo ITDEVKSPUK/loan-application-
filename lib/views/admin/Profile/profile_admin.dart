@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loan_apllication/core/theme/color.dart';
 
 class ProfileAdmin extends StatelessWidget {
   const ProfileAdmin({super.key});
@@ -6,9 +7,7 @@ class ProfileAdmin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Profile Admin'),
-      ),
+      backgroundColor: AppColors.pureWhite,
       body: Center(
         child: Text('Profile'),
       ),

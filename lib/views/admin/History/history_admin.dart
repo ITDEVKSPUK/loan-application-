@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loan_apllication/core/theme/color.dart';
 
 class HistoryAdmin extends StatelessWidget {
   const HistoryAdmin({super.key});
@@ -6,9 +7,7 @@ class HistoryAdmin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('History'),
-      ),
+      backgroundColor: AppColors.pureWhite,
       body: Center(
         child: Text('History'),
       ),
