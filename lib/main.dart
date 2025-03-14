@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: MyAppRoutes.splashScreen,
+      initialRoute: MyAppRoutes.homeScreen,
       getPages: MyAppPage.pages,
     );
   }
