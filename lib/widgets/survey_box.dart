@@ -6,7 +6,7 @@ class SurveyBox extends StatelessWidget {
   final String location;
   final String status;
   final String image;
-  final Color statusColor; // Tambahkan parameter statusColor
+  final Color statusColor;
 
   const SurveyBox({
     Key? key,
@@ -15,7 +15,7 @@ class SurveyBox extends StatelessWidget {
     required this.location,
     required this.status,
     required this.image,
-    required this.statusColor, // Wajib diisi
+    required this.statusColor,
   }) : super(key: key);
 
   @override
