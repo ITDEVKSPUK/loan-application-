@@ -6,7 +6,7 @@ import 'package:loan_apllication/navigation/controller/admin/controller_page_adm
 import 'package:loan_apllication/views/admin/History/History_admin.dart';
 import 'package:loan_apllication/views/admin/Profile/Profile_admin.dart';
 import 'package:loan_apllication/views/admin/Simulation_Calculator/simulation_admin.dart';
-import 'package:loan_apllication/views/admin/SuveList/surveylist_admin.dart';
+import 'package:loan_apllication/views/admin/SurveyList/surveylist_admin.dart';
 
 import '../../../core/theme/color.dart';
 
