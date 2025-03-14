@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:loan_apllication/utils/routes/my_app_route.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -10,11 +11,18 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final storage = GetStorage();
+
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration(seconds: 1), () {
-      Get.toNamed(MyAppRoutes.loginScreen);
+      final sessionId = storage.read('dtsessionid');
+      if (sessionId != null && sessionId.isNotEmpty) {
+        Get.offNamed(MyAppRoutes.dashboard);
+      } else {
+        Get.offNamed(MyAppRoutes.loginScreen);
+      }
     });
   }
 

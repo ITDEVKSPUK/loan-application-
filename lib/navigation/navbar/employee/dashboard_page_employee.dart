@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loan_apllication/navigation/controller/employee/controller_page_employe.dart';
 import 'package:loan_apllication/views/employee/History/history_employee.dart';
-import 'package:loan_apllication/views/employee/SurveyList/surveylist_employee.dart';
+import 'package:loan_apllication/views/employee/Home/home.dart';
 import 'package:loan_apllication/views/employee/Profile/profile_employee.dart';
 import 'package:loan_apllication/views/employee/Simulation_Calculator/simulation_employee.dart';
 
@@ -15,7 +15,7 @@ class DashboardPageEmployee extends StatelessWidget {
         Get.put(ControllerPageEmploye());
 
     final List<Widget> menus = [
-      Survelist_Employe(),
+      Home(),
       History_Employe(),
       Simulation_Employe(),
       Profile_Employe(),
