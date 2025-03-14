@@ -3,7 +3,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loan_apllication/core/theme/color.dart';
+import 'package:loan_apllication/utils/routes/my_app_route.dart';
 import 'package:loan_apllication/widgets/app_button.dart';
 import 'package:loan_apllication/widgets/custom_text.dart';
 import 'package:loan_apllication/widgets/text_field.dart';
@@ -16,7 +18,7 @@ class LoginScreen extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("assets/images/bckrnd.png"),
+          image: AssetImage("assets/images/bg.png"),
           fit: BoxFit.cover,
         ),
       ),
@@ -78,7 +80,9 @@ class LoginScreen extends StatelessWidget {
                         SizedBox(height: 20),
                         CustomButton(
                           text: 'Login',
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.toNamed(MyAppRoutes.dashboard);
+                          },
                           color: AppColors.deepBlue,
                           borderRadius: 8,
                           textStyle: TextStyle(
