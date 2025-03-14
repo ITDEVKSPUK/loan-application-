@@ -17,14 +17,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(Duration(seconds: 1), () {
-      // Check if the session ID exists in storage
       final sessionId = storage.read('dtsessionid');
       if (sessionId != null && sessionId.isNotEmpty) {
-        // Navigate to the home screen if session ID exists
-        Get.toNamed(MyAppRoutes.homeScreen);
+        Get.offNamed(MyAppRoutes.dashboard);
       } else {
-        // Navigate to the login screen if no session ID
-        Get.toNamed(MyAppRoutes.loginScreen);
+        Get.offNamed(MyAppRoutes.loginScreen);
       }
     });
   }

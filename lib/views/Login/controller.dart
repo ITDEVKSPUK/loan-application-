@@ -27,7 +27,7 @@ class LoginController extends GetxController {
       isLoading.value = false;
 
       // Navigate to the home screen or dashboard
-      Get.toNamed(MyAppRoutes.homeScreen);
+      Get.offNamed(MyAppRoutes.dashboard);
       return true;
     } catch (e) {
       errorMessage.value =
@@ -38,9 +38,9 @@ class LoginController extends GetxController {
   }
 
   void logout() {
-  loggedUser.value = null;
-  final storage = GetStorage();
-  storage.remove('dtsessionid'); // Remove the session ID
-  Get.offAllNamed('/login');
-}
+    loggedUser.value = null;
+    final storage = GetStorage();
+    storage.remove('dtsessionid');
+    Get.offAllNamed('/login');
+  }
 }
