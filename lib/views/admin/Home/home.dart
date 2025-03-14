@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loan_apllication/core/theme/color.dart';
 import 'package:loan_apllication/widgets/survey_box.dart';
 
 class Home extends StatefulWidget {
@@ -77,11 +78,11 @@ class _HomeState extends State<Home> {
   Color getStatusColor(String status) {
     switch (status) {
       case 'ACCEPTED':
-        return Color.fromRGBO(102, 217, 150, 1);
+        return AppColors.greenstatus;
       case 'DECLINED':
-        return Color.fromRGBO(227, 31, 31, 1);
+        return AppColors.redstatus;
       case 'UNREAD':
-        return Color.fromRGBO(227, 135, 31, 1);
+        return AppColors.orangestatus;
       default:
         return Colors.grey;
     }

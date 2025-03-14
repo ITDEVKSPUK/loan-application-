@@ -20,6 +20,12 @@ class AppColors {
   static const Color blackLight = Color(0xFF666666);
   static const Color blackDark = Color(0xFF999999);
 
+  //button status
+  static const Color redstatus = Color.fromRGBO(227, 31, 31, 1);
+  static const Color greenstatus = Color.fromRGBO(102, 217, 150, 1);
+  static const Color orangestatus = Color.fromRGBO(227, 135, 31, 1);
+
+
   
 }
 
