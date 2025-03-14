@@ -61,7 +61,7 @@ class LoginScreen extends StatelessWidget {
                         CustomTextField(
                           hintStyle: TextStyle(color: AppColors.pureWhite),
                           filled: true,
-                          labelStyle: TextStyle(color: AppColors.black),
+                          labelStyle: TextStyle(color: AppColors.blackLight),
                           labelText: 'Username',
                           color: Colors.black12,
                           controller: TextEditingController(),
@@ -72,7 +72,7 @@ class LoginScreen extends StatelessWidget {
                         CustomTextField(
                           hintStyle: TextStyle(color: Colors.white70),
                           filled: true,
-                          labelStyle: TextStyle(color: Colors.black26),
+                          labelStyle: TextStyle(color: AppColors.blackLight),
                           labelText: 'Password',
                           color: Colors.black12,
                           controller: TextEditingController(),
