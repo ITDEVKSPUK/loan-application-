@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
         fit: StackFit.expand,
         children: [
           Image.asset(
-            'assets/images/bckrnd.png',
+            'assets/images/bg.png',
             fit: BoxFit.cover,
           ),
           Container(
