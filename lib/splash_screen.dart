@@ -36,6 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   'KSP UTAMA KARYA',
                   style: TextStyle(
                     color: Colors.white,
+                    fontFamily: 'Outfit',
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),

@@ -47,7 +47,7 @@ class LoginScreen extends StatelessWidget {
                           child: Text(
                             'KSP Utama Karya',
                             style: TextStyle(
-                              fontFamily: 'OutfitRegular',
+                              fontFamily: 'Outfit',
                               fontStyle: FontStyle.normal,
                               color: Colors.white,
                               fontSize: 20,
