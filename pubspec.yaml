@@ -33,7 +33,8 @@ dependencies:
   flutter:
     sdk: flutter
   get: ^4.7.2
-  
+  get_storage: ^2.1.1
+  shared_preferences: ^2.5.2
 
 dev_dependencies:
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -53,15 +54,15 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-  
+
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
   fonts:
     - family: Outfit
       fonts:
-        - asset: assets/fonts/Outfit-Medium.ttf
-        - asset: assets/fonts/Outfit-Regular.ttf
+        - asset: assets/fonts/outfitmedium.ttf
+        - asset: assets/fonts/outfitregular.ttf
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
   # For details regarding adding assets from package dependencies, see

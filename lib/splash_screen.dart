@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:loan_apllication/utils/routes/my_app_route.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -10,11 +11,21 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final storage = GetStorage();
+
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration(seconds: 1), () {
-      Get.toNamed(MyAppRoutes.loginScreen);
+      // Check if the session ID exists in storage
+      final sessionId = storage.read('dtsessionid');
+      if (sessionId != null && sessionId.isNotEmpty) {
+        // Navigate to the home screen if session ID exists
+        Get.toNamed(MyAppRoutes.homeScreen);
+      } else {
+        // Navigate to the login screen if no session ID
+        Get.toNamed(MyAppRoutes.loginScreen);
+      }
     });
   }
 
@@ -25,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
         fit: StackFit.expand,
         children: [
           Image.asset(
-            'assets/images/bckrnd.png',
+            'assets/images/bg.png',
             fit: BoxFit.cover,
           ),
           Container(

@@ -11,8 +11,8 @@ class CustomTextField extends StatefulWidget {
   final TextStyle labelStyle;
   final bool filled;
   final TextStyle hintStyle;
-  final Color borderColor; // Warna border baru
-  final double borderWidth; // Ketebalan border baru
+  final Color borderColor;
+  final double borderWidth;
 
   CustomTextField({
     required this.labelText,
