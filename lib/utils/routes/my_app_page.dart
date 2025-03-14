@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:loan_apllication/splash_screen.dart';
 import 'package:loan_apllication/utils/routes/my_app_route.dart';
-import 'package:loan_apllication/views/Login.dart/loginScreen.dart';
+import 'package:loan_apllication/views/Login/loginScreen.dart';
 
 class MyAppPage {
   static final List<GetPage> pages = [
