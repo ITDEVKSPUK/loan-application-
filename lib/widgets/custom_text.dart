@@ -41,7 +41,7 @@ class CustomText extends StatelessWidget {
         fontSize: fontSize ?? 16,
         fontWeight: fontWeight ?? FontWeight.normal,
         color: color ?? Colors.black,
-        fontFamily: fontFamily ?? 'OutfitRegular',
+        fontFamily: fontFamily ?? 'Outfit',
         fontStyle: fontStyle ?? FontStyle.normal,
       ),
       textAlign: textAlign,
