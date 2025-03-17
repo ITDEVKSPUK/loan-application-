@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:loan_apllication/core/theme/color.dart';
+import 'package:loan_apllication/widgets/custom_text.dart';
 
 class Profile_Employe extends StatelessWidget {
   const Profile_Employe({super.key});
@@ -9,27 +10,6 @@ class Profile_Employe extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-            'Profile',
-            style: TextStyle(
-                fontSize: 15,
-                color: AppColors.black,
-                fontWeight: FontWeight.bold),
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications,
-                color: Colors.black), // Ikon Notifikasi
-            onPressed: () {
-              // Tambahkan aksi jika ikon diklik
-              print('Notifikasi ditekan');
-            },
-          ),
-        ],
-      ),
       body: Padding(
         padding: const EdgeInsets.only(top: 100),
         child: Container(
@@ -57,6 +37,7 @@ class Profile_Employe extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                SizedBox(height: 20),
                 Transform.translate(
                   offset: Offset(0, -235), // Tambahkan "const"
                   child: Image.asset('assets/images/logo_ksp.png',
@@ -64,44 +45,13 @@ class Profile_Employe extends StatelessWidget {
                 ),
                 SizedBox(height: 5),
                 Transform.translate(
-                  offset: const Offset(0, -250),
-                  child: Text(
-                    'Usernya',
-                    style: TextStyle(
-                      fontFamily: 'Outfit',
-                      fontStyle: FontStyle.normal,
-                      color: AppColors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+                    offset: const Offset(0, -250),
+                    child: CustomText(text: 'Usert')),
                 SizedBox(height: 5),
                 Transform.translate(
                   offset: const Offset(0, -250),
-                  child: Text(
-                    'Gmail, nek perlu ngko',
-                    style: TextStyle(
-                      fontFamily: 'Outfit',
-                      fontStyle: FontStyle.normal,
-                      color: AppColors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 5),
-                Transform.translate(
-                  offset: const Offset(0, -250),
-                  child: Text(
-                    'KSP Utama Karya',
-                    style: TextStyle(
-                      fontFamily: 'Outfit',
-                      fontStyle: FontStyle.normal,
-                      color: AppColors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: CustomText(
+                    text: 'KSP Utama Karya',
                   ),
                 ),
               ],
