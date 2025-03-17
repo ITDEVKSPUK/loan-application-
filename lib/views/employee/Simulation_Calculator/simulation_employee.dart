@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:loan_apllication/views/employee/Simulation_Calculator/logic_calculator.dart';
 
@@ -21,10 +22,18 @@ class _Simulation_EmployeState extends State<Simulation_Employe> {
   List<Map<String, dynamic>> _repaymentSchedule = [];
 
   void _calculateLoan() {
-    final double loanAmount = double.parse(_loanAmountController.text);
+    if (_loanAmountController.text.isEmpty ||
+        _loanTermController.text.isEmpty ||
+        _interestRateController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Semua input harus diisi')),
+      );
+      return;
+    }
+
+    final double loanAmount = NumberFormat.decimalPattern().parse(_loanAmountController.text).toDouble();
     final int loanTerm = int.parse(_loanTermController.text);
-    final double annualInterestRate =
-        double.parse(_interestRateController.text) / 100;
+    final double annualInterestRate = NumberFormat.decimalPattern().parse(_interestRateController.text).toDouble() / 100;
 
     final result = LoanCalculator.calculateLoan(
       loanAmount: loanAmount,
@@ -53,7 +62,10 @@ class _Simulation_EmployeState extends State<Simulation_Employe> {
           children: [
             TextField(
               controller: _loanAmountController,
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[\d,]')),
+              ],
               decoration: const InputDecoration(
                 labelText: 'Jumlah Pinjaman',
                 prefixText: 'Rp ',
@@ -68,7 +80,10 @@ class _Simulation_EmployeState extends State<Simulation_Employe> {
             ),
             TextField(
               controller: _interestRateController,
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[\d,]')),
+              ],
               decoration: const InputDecoration(
                 labelText: 'Bunga/Tahun (%)',
               ),
@@ -115,12 +130,17 @@ class _Simulation_EmployeState extends State<Simulation_Employe> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text('Jumlah Pinjaman: Rp ${NumberFormat.decimalPattern().format(NumberFormat.decimalPattern().parse(_loanAmountController.text))}'),
+                  Text('Lama Peminjaman: ${_loanTermController.text} bulan'),
+                  Text('Jenis: $_loanType'),
+                  Text('Bunga per bulan: ${(NumberFormat.decimalPattern().parse(_interestRateController.text) / 12).toStringAsFixed(2)}%'),
+                  Text('Bunga per tahun: ${_interestRateController.text}%'),
+                  Text('Mulai Meminjam: ${DateFormat.yMMMMd().format(_startDate)}'),
+                  const SizedBox(height: 20),
                   Text('Angsuran: Rp ${_monthlyPayment.toStringAsFixed(2)}'),
                   Text('Total Bunga: Rp ${_totalInterest.toStringAsFixed(2)}'),
-                  Text(
-                      'Total yang Dibayarkan: Rp ${_totalPayment.toStringAsFixed(2)}'),
-                  Text(
-                      'Tanggal Lunas: ${DateFormat.yMMMMd().format(_startDate.add(Duration(days: 30 * int.parse(_loanTermController.text))))}'),
+                  Text('Total yang Dibayarkan: Rp ${_totalPayment.toStringAsFixed(2)}'),
+                  Text('Tanggal Lunas: ${DateFormat.yMMMMd().format(_startDate.add(Duration(days: 30 * int.parse(_loanTermController.text))))}'),
                   const SizedBox(height: 20),
                   const Text('Simulasi Angsuran:'),
                   SingleChildScrollView(
@@ -136,14 +156,10 @@ class _Simulation_EmployeState extends State<Simulation_Employe> {
                       rows: _repaymentSchedule.map((schedule) {
                         return DataRow(cells: [
                           DataCell(Text(schedule['month'].toString())),
-                          DataCell(Text(
-                              'Rp ${schedule['totalPayment'].toStringAsFixed(2)}')),
-                          DataCell(Text(
-                              'Rp ${schedule['interestPayment'].toStringAsFixed(2)}')),
-                          DataCell(Text(
-                              'Rp ${schedule['principalPayment'].toStringAsFixed(2)}')),
-                          DataCell(Text(
-                              'Rp ${schedule['remainingBalance'].toStringAsFixed(2)}')),
+                          DataCell(Text('Rp ${schedule['totalPayment'].toStringAsFixed(2)}')),
+                          DataCell(Text('Rp ${schedule['interestPayment'].toStringAsFixed(2)}')),
+                          DataCell(Text('Rp ${schedule['principalPayment'].toStringAsFixed(2)}')),
+                          DataCell(Text('Rp ${schedule['remainingBalance'].toStringAsFixed(2)}')),
                         ]);
                       }).toList(),
                     ),
