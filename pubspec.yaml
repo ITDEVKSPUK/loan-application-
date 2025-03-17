@@ -60,6 +60,15 @@ flutter:
       fonts:
         - asset: assets/fonts/outfitmedium.ttf
         - asset: assets/fonts/outfitregular.ttf
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-Regular.ttf
+        - asset: assets/fonts/Montserrat-Bold.ttf
+    - family: EricaOne
+      fonts:
+        - asset: assets/fonts/Ericaone-Regular.ttf
+
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
   # For details regarding adding assets from package dependencies, see
