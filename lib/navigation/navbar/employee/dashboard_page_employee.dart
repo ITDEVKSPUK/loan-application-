@@ -19,7 +19,7 @@ class DashboardPageEmployee extends StatelessWidget {
 
     final List<Widget> menus = [
       surveyList(),
-      History_Employe(),
+      HistoryEmployee(),
       Simulation_Employe(),
       Profile_Employe(),
     ];

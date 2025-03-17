@@ -30,4 +30,6 @@ class AppColors {
   static const Color greenstatus = Color.fromRGBO(102, 217, 150, 1);
   static const Color orangestatus = Color.fromRGBO(227, 135, 31, 1);
 
+  static var primary;
+
 }

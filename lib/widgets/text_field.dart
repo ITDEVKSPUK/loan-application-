@@ -13,20 +13,22 @@ class CustomTextField extends StatefulWidget {
   final TextStyle hintStyle;
   final Color borderColor;
   final double borderWidth;
+  final Function(String)? onChanged; // Tambahkan ini
 
   CustomTextField({
     required this.labelText,
     required this.controller,
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
-    required this.heigth,
-    required this.width,
-    required this.color,
-    required this.labelStyle,
-    required this.filled,
-    required this.hintStyle,
-    this.borderColor = Colors.blue, // Default warna border
-    this.borderWidth = 2.0, // Default ketebalan border
+    this.heigth = 50.0,
+    this.width = double.infinity,
+    this.color = Colors.white,
+    this.labelStyle = const TextStyle(color: Colors.black),
+    this.filled = true,
+    this.hintStyle = const TextStyle(color: Colors.grey),
+    this.borderColor = Colors.blue,
+    this.borderWidth = 2.0,
+    this.onChanged, // Tambahkan ini
   });
 
   @override
@@ -45,15 +47,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
         controller: widget.controller,
         obscureText: widget.obscureText ? _isObscured : false,
         keyboardType: widget.keyboardType,
+        onChanged: widget.onChanged, // Tambahkan ini
         decoration: InputDecoration(
           labelText: widget.labelText,
           hintText: widget.labelText,
           floatingLabelBehavior: FloatingLabelBehavior.never,
           labelStyle: widget.labelStyle,
           filled: widget.filled,
-          fillColor: Colors.white,
-
-          // **Custom Outline Border**
+          fillColor: widget.color,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide(
@@ -61,59 +62,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               width: widget.borderWidth,
             ),
           ),
-
-          // **Border saat tidak aktif (default)**
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(
-              color: widget.borderColor.withOpacity(0.5), // Lebih transparan
-              width: widget.borderWidth,
-            ),
-          ),
-
-          // **Border saat fokus**
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(
-              color: widget.borderColor, // Warna lebih jelas saat fokus
-              width: widget.borderWidth + 1, // Tambah ketebalan
-            ),
-          ),
-
-          // **Border saat error**
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(
-              color: Colors.red, // Warna merah saat error
-              width: widget.borderWidth,
-            ),
-          ),
-
-          // **Border saat fokus dalam kondisi error**
-          focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(
-              color: Colors.redAccent,
-              width: widget.borderWidth + 1,
-            ),
-          ),
-
           hintStyle: widget.hintStyle,
-
-          // **Icon show/hide password**
-          suffixIcon: widget.obscureText
-              ? IconButton(
-                  icon: Icon(
-                    _isObscured ? Icons.visibility_off : Icons.visibility,
-                    color: Colors.grey,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _isObscured = !_isObscured;
-                    });
-                  },
-                )
-              : null,
         ),
       ),
     );
