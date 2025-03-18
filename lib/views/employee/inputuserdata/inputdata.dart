@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loan_apllication/widgets/custom_appbar.dart';
+import 'package:loan_apllication/widgets/textfield_form.dart';
 
 class InputData extends StatelessWidget {
   @override
@@ -8,9 +9,9 @@ class InputData extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
-        title: 'Input User Data',
+        title: 'Debitur Form',
         onBack: () {
-          Get.offAllNamed('/home'); // Balik ke halaman Home
+          Get.offAllNamed('/home'); 
         },
       ),
       body: SingleChildScrollView(
@@ -23,47 +24,39 @@ class InputData extends StatelessWidget {
                 children: [
                   Container(
                     width: 317,
-                    height: 200,
-                    child: Stack(
-                      children: [
-                        Positioned.fill(
-                          child: Image.asset(
-                            'assets/images/rawktp.png',
-                            fit: BoxFit.cover,
-                          ),
+                    height: 180,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/rawktp.png'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Padding(
+                    padding: EdgeInsets.only(left: 6.0), 
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'foto ktp (klik untuk mengganti foto)',
+                        style: TextStyle(
+                          color: Color(0xFF666DFF),
+                          fontSize: 14,
+                          fontFamily: 'Outfit',
+                          fontWeight: FontWeight.w400,
                         ),
-                        Positioned(
-                          left: 0,
-                          top: 184.67,
-                          child: SizedBox(
-                            width: 217,
-                            height: 15.25,
-                            child: Opacity(
-                              opacity: 0.53,
-                              child: Text(
-                                'foto ktp (klik untuk mengganti foto)',
-                                style: TextStyle(
-                                  color: Color(0xFF666DFF),
-                                  fontSize: 14,
-                                  fontFamily: 'Outfit',
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                   SizedBox(height: 20),
                 ],
               ),
             ),
-            _buildTextField('NIK'),
-            _buildTextField('Nama Lengkap'),
-            _buildTextField('No. Telpon'),
-            _buildTextField('Pekerjaan'),
-            _buildTextField('Alamat Lengkap'),
+            TextfieldForm(label: 'NIK'),
+            TextfieldForm(label: 'Nama Lengkap'),
+            TextfieldForm(label: 'No. Telpon'),
+            TextfieldForm(label: 'Pekerjaan'),
+            TextfieldForm(label: 'Alamat Lengkap'),
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {},
@@ -81,44 +74,10 @@ class InputData extends StatelessWidget {
                   )),
             ),
             SizedBox(height: 10),
-            _buildTextField('Nominal Penjaminan'),
-            _buildTextField('Jenis Jaminan'),
+            TextfieldForm(label: 'Nominal Penjaminan'),
+            TextfieldForm(label: 'Jenis Jaminan'),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildTextField(String label) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 5),
-          TextField(
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.grey[200],
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide.none,
-              ),
-              hintText: 'TYPE HERE',
-              hintStyle: TextStyle(
-                color: Colors.grey,
-                fontSize: 14,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
