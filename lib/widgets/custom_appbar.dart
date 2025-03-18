@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -18,7 +19,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             left: 16,
             top: 19,
             child: GestureDetector(
-              onTap: onBack ?? () => Navigator.pop(context),
+              onTap: onBack ?? () => Get.back(),
               child: Icon(Icons.arrow_back, color: Colors.black),
             ),
           ),
@@ -42,7 +43,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             left: 0,
             bottom: 0,
             child: Container(
-              width: MediaQuery.of(context).size.width,
+              width: Get.width,
               height: 7,
               decoration: BoxDecoration(color: Color(0xFF83BBF5)),
             ),

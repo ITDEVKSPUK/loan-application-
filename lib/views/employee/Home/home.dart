@@ -1,36 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:loan_apllication/core/theme/color.dart';
+import 'package:get/get.dart';
+import 'package:loan_apllication/views/employee/Home/home_controller.dart';
 import 'package:loan_apllication/widgets/survey_box.dart';
 
-class Home extends StatefulWidget {
-  @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  final List<Map<String, String>> surveyList = [
-    {
-      'name': 'Azzam Aqila',
-      'date': '20th February 2036',
-      'location': 'Kudus, Jawa Utara',
-      'status': 'ACCEPTED',
-      'image': 'assets/images/bg.png',
-    },
-    {
-      'name': 'Nadira Salsabila',
-      'date': '15th March 2036',
-      'location': 'Semarang, Jawa Tengah',
-      'status': 'DECLINED',
-      'image': 'assets/images/bg.png',
-    },
-    {
-      'name': 'Rizky Fadillah',
-      'date': '10th April 2036',
-      'location': 'Jakarta, DKI Jakarta',
-      'status': 'UNREAD',
-      'image': 'assets/images/bg.png',
-    },
-  ];
+class Home extends StatelessWidget {
+  final HomeController controller = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -54,21 +28,21 @@ class _HomeState extends State<Home> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.all(10),
-              itemCount: surveyList.length,
-              itemBuilder: (context, index) {
-                final item = surveyList[index];
-                return SurveyBox(
-                  name: item['name']!,
-                  date: item['date']!,
-                  location: item['location']!,
-                  status: item['status']!,
-                  image: item['image']!,
-                  statusColor: getStatusColor(item['status']!),
-                );
-              },
-            ),
+            child: Obx(() => ListView.builder(
+                  padding: EdgeInsets.all(10),
+                  itemCount: controller.surveyList.length,
+                  itemBuilder: (context, index) {
+                    final item = controller.surveyList[index];
+                    return SurveyBox(
+                      name: item['name']!,
+                      date: item['date']!,
+                      location: item['location']!,
+                      status: item['status']!,
+                      image: item['image']!,
+                      statusColor: controller.getStatusColor(item['status']!),
+                    );
+                  },
+                )),
           ),
         ],
       ),
@@ -78,7 +52,14 @@ class _HomeState extends State<Home> {
           padding: EdgeInsets.all(13.0),
           child: GestureDetector(
             onTap: () {
-              // action
+              // Tambahkan survey baru
+              controller.surveyList.add({
+                'name': 'New User',
+                'date': '1st May 2036',
+                'location': 'Yogyakarta, DIY',
+                'status': 'PENDING',
+                'image': 'assets/images/bg.png',
+              });
             },
             child: Container(
               width: 60,
@@ -99,18 +80,5 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
-  }
-
-  Color getStatusColor(String status) {
-    switch (status) {
-      case 'ACCEPTED':
-        return AppColors.greenstatus;
-      case 'DECLINED':
-        return AppColors.redstatus;
-      case 'UNREAD':
-        return AppColors.orangestatus;
-      default:
-        return Colors.grey;
-    }
   }
 }
