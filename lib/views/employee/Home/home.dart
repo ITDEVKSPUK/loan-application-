@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loan_apllication/views/employee/Home/home_controller.dart';
+import 'package:loan_apllication/views/employee/inputuserdata/inputdata.dart';
 import 'package:loan_apllication/widgets/survey_box.dart';
 
 class Home extends StatelessWidget {
@@ -9,6 +10,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Container(
@@ -52,14 +54,7 @@ class Home extends StatelessWidget {
           padding: EdgeInsets.all(13.0),
           child: GestureDetector(
             onTap: () {
-              // Tambahkan survey baru
-              controller.surveyList.add({
-                'name': 'New User',
-                'date': '1st May 2036',
-                'location': 'Yogyakarta, DIY',
-                'status': 'PENDING',
-                'image': 'assets/images/bg.png',
-              });
+              Get.to(() => InputData());
             },
             child: Container(
               width: 60,
