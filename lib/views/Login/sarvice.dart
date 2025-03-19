@@ -33,10 +33,16 @@ class LoginService extends GetxService {
     // Enkripsi username dan password sebelum dikirim ke server
     final encryptedUsername = _encrypt(username);
     final encryptedPassword = _encrypt(password);
+    final encryptedSignature = _encrypt(jsonEncode({
+      "app_version": "ics-sandbox/v1",
+      "grantType": "client_credentials",
+      "ido": "000"
+    }));
 
     final body = {
       "username": encryptedUsername,
       "password": encryptedPassword,
+      "signature": encryptedSignature,
     };
 
     try {
