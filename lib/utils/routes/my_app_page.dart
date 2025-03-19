@@ -3,6 +3,7 @@ import 'package:loan_apllication/navigation/navbar/employee/dashboard_page_emplo
 import 'package:loan_apllication/splash_screen.dart';
 import 'package:loan_apllication/utils/routes/my_app_route.dart';
 import 'package:loan_apllication/views/Login/loginScreen.dart';
+import 'package:loan_apllication/views/employee/SurveyList/add_from.dart';
 import 'package:loan_apllication/views/employee/SurveyList/surveylisy_employee.dart';
 
 class MyAppPage {
@@ -12,5 +13,6 @@ class MyAppPage {
     GetPage(name: MyAppRoutes.loginScreen, page: () => LoginScreen()),
     GetPage(name: MyAppRoutes.dashboard, page: () => DashboardPageEmployee()),
     GetPage(name: MyAppRoutes.homeScreen, page: () => surveyList()),
+    GetPage(name: MyAppRoutes.addForm, page: () => AddForm()),
   ];
 }

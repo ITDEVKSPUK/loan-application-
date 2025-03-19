@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loan_apllication/core/theme/color.dart';
+import 'package:loan_apllication/utils/routes/my_app_route.dart';
 import 'package:loan_apllication/widgets/survey_box.dart';
 
 class surveyList extends StatefulWidget {
@@ -35,8 +37,10 @@ class _HomeState extends State<surveyList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.pureWhite,
       body: Column(
         children: [
+          Padding(padding: EdgeInsets.only(top: 20)),
           Container(
             width: double.infinity,
             height: 57,
@@ -78,7 +82,7 @@ class _HomeState extends State<surveyList> {
           padding: EdgeInsets.all(13.0),
           child: GestureDetector(
             onTap: () {
-              // action
+              Get.toNamed(MyAppRoutes.addForm);
             },
             child: Container(
               width: 60,
