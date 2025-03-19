@@ -4,8 +4,35 @@ import 'package:loan_apllication/views/employee/Home/home_controller.dart';
 import 'package:loan_apllication/views/employee/inputuserdata/inputdata.dart';
 import 'package:loan_apllication/widgets/survey_box.dart';
 
-class Home extends StatelessWidget {
-  final HomeController controller = Get.put(HomeController());
+class surveyList extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<surveyList> {
+  final List<Map<String, String>> surveyList = [
+    {
+      'name': 'Azzam Aqila',
+      'date': '20th February 2036',
+      'location': 'Kudus, Jawa Utara',
+      'status': 'ACCEPTED',
+      'image': 'assets/images/bg.png',
+    },
+    {
+      'name': 'Nadira Salsabila',
+      'date': '15th March 2036',
+      'location': 'Semarang, Jawa Tengah',
+      'status': 'DECLINED',
+      'image': 'assets/images/bg.png',
+    },
+    {
+      'name': 'Rizky Fadillah',
+      'date': '10th April 2036',
+      'location': 'Jakarta, DKI Jakarta',
+      'status': 'UNREAD',
+      'image': 'assets/images/bg.png',
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
