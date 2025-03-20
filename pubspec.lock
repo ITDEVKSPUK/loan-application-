@@ -199,15 +199,15 @@ packages:
       sha256: "3df61194eb431efc39c4ceba583b95633a403f46c9fd341e550ce0bfa50e9aa5"
       url: "https://pub.dev"
     source: hosted
-    version: "0.20.2"
-  js:
-    dependency: transitive
+    version: "4.0.2"
+  intl:
+    dependency: "direct main"
     description:
-      name: js
-      sha256: "53385261521cc4a0c4658fd0ad07a7d14591cf8fc33abbceae306ddb974888dc"
+      name: intl
+      sha256: "3df61194eb431efc39c4ceba583b95633a403f46c9fd341e550ce0bfa50e9aa5"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.2"
+    version: "0.20.2"
   leak_tracker:
     dependency: transitive
     description:

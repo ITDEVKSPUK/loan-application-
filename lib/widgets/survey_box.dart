@@ -100,7 +100,7 @@ class SurveyBox extends StatelessWidget {
             width: 54,
             height: 100,
             decoration: BoxDecoration(
-              color: statusColor, // Gunakan statusColor di sini
+              color: statusColor,
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(10),
                 bottomRight: Radius.circular(10),
