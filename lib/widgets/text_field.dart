@@ -14,7 +14,7 @@ class CustomTextField extends StatefulWidget {
   final Color borderColor; // Warna border baru
   final double borderWidth; // Ketebalan border baru
 
-  CustomTextField({
+  const CustomTextField({super.key, 
     required this.labelText,
     required this.controller,
     this.obscureText = false,

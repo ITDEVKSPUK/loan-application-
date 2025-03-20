@@ -4,9 +4,9 @@ class TextfieldForm extends StatelessWidget {
   final String label;
 
   const TextfieldForm({
-    Key? key,
+    super.key,
     required this.label,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

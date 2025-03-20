@@ -5,6 +5,8 @@ import 'package:loan_apllication/widgets/custom_appbar.dart';
 import 'package:loan_apllication/widgets/textfield_form.dart';
 
 class InputData extends StatelessWidget {
+  const InputData({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
