@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:loan_apllication/core/theme/color.dart';
 import 'package:loan_apllication/widgets/survey_box.dart';
 
-class Home extends StatefulWidget {
+class surveyList extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<surveyList> {
   final List<Map<String, String>> surveyList = [
     {
       'name': 'Azzam Aqila',
@@ -71,6 +71,32 @@ class _HomeState extends State<Home> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: Align(
+        alignment: Alignment.bottomRight,
+        child: Padding(
+          padding: EdgeInsets.all(13.0),
+          child: GestureDetector(
+            onTap: () {
+              // action
+            },
+            child: Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 4, 73, 130),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                  size: 40,
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

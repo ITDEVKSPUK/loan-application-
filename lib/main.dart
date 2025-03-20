@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loan_apllication/Bindings/bindings.dart';
 import 'package:loan_apllication/utils/routes/my_app_page.dart';
 import 'package:loan_apllication/utils/routes/my_app_route.dart';
 
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
+      initialBinding: MyAppBinding(),
       initialRoute: MyAppRoutes.splashScreen,
       getPages: MyAppPage.pages,
     );
