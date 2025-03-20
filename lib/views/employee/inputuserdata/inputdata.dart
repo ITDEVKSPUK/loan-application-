@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loan_apllication/core/theme/color.dart';
 import 'package:loan_apllication/widgets/custom_appbar.dart';
 import 'package:loan_apllication/widgets/textfield_form.dart';
 
@@ -11,7 +12,7 @@ class InputData extends StatelessWidget {
       appBar: CustomAppBar(
         title: 'Debitur Form',
         onBack: () {
-          Get.offAllNamed('/home'); 
+          Get.offAllNamed('/home');
         },
       ),
       body: SingleChildScrollView(
@@ -22,25 +23,30 @@ class InputData extends StatelessWidget {
             Center(
               child: Column(
                 children: [
-                  Container(
-                    width: 317,
-                    height: 180,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/rawktp.png'),
-                        fit: BoxFit.cover,
+                  GestureDetector(
+                    onTap: () {
+                      // Tambahkan fungsi untuk memilih gambar di sini
+                    },
+                    child: Container(
+                      width: 317,
+                      height: 180,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/rawktp.png'),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
                   SizedBox(height: 5),
                   Padding(
-                    padding: EdgeInsets.only(left: 6.0), 
+                    padding: EdgeInsets.only(left: 6.0),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'foto ktp (klik untuk mengganti foto)',
                         style: TextStyle(
-                          color: Color(0xFF666DFF),
+                          color: Color.fromARGB(255, 90, 137, 255),
                           fontSize: 14,
                           fontFamily: 'Outfit',
                           fontWeight: FontWeight.w400,
@@ -58,24 +64,70 @@ class InputData extends StatelessWidget {
             TextfieldForm(label: 'Pekerjaan'),
             TextfieldForm(label: 'Alamat Lengkap'),
             SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF666DFF),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: Text('Selengkapnya',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  )),
-            ),
-            SizedBox(height: 10),
             TextfieldForm(label: 'Nominal Penjaminan'),
             TextfieldForm(label: 'Jenis Jaminan'),
+            SizedBox(height: 20),
+            Text(
+              'Bukti Jaminan',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                // Tambahkan fungsi untuk memilih gambar di sini
+              },
+              child: Container(
+                width: double.infinity,
+                height: 135,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Color(0x7FD9D9D9),
+                    width: 5,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/upfile.png'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.greenstatus,
+                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                    'SAVE',
+                    style: TextStyle(fontSize: 16, color: AppColors.pureWhite),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.redstatus,
+                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                    'CLEAR',
+                    style: TextStyle(fontSize: 16, color: AppColors.pureWhite),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),

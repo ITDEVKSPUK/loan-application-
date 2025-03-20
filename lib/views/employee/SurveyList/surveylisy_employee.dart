@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loan_apllication/views/employee/Home/home_controller.dart';
+import 'package:loan_apllication/views/employee/SurveyList/home_controller.dart';
 import 'package:loan_apllication/views/employee/inputuserdata/inputdata.dart';
 import 'package:loan_apllication/widgets/survey_box.dart';
 
@@ -10,6 +10,7 @@ class surveyList extends StatefulWidget {
 }
 
 class _HomeState extends State<surveyList> {
+  final HomeController controller = Get.put(HomeController());
   final List<Map<String, String>> surveyList = [
     {
       'name': 'Azzam Aqila',
