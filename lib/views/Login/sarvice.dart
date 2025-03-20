@@ -1,5 +1,7 @@
 import 'dart:convert';
+
 import 'package:dio/dio.dart';
+import 'package:encrypt/encrypt.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:loan_apllication/views/Login/models.dart';
@@ -8,6 +10,19 @@ class LoginService extends GetxService {
   final Dio _dio = Dio();
   final storage = GetStorage();
 
+  // Gunakan kunci AES 32 byte (256-bit)
+  static final _key = Key.fromUtf8('35argan1n9k4MulyanRahayu85uki396');
+
+  // IV harus konsisten dengan enkripsi di server
+  static final _iv = IV.fromUtf8('J9ja8Yn8fYQllwAA');
+
+  final _encrypter = Encrypter(AES(_key, mode: AESMode.cbc));
+
+  String _encrypt(String text) {
+    final encrypted = _encrypter.encrypt(text, iv: _iv);
+    return encrypted.base64;
+  }
+
   Future<LoggedUser> login(String username, String password) async {
     final url = 'http://36.92.75.178:8001/system/users/logged';
 
@@ -15,9 +30,19 @@ class LoginService extends GetxService {
       "Content-Type": "application/json",
     };
 
+    // Enkripsi username dan password sebelum dikirim ke server
+    final encryptedUsername = _encrypt(username);
+    final encryptedPassword = _encrypt(password);
+    final encryptedSignature = _encrypt(jsonEncode({
+      "app_version": "ics-sandbox/v1",
+      "grantType": "client_credentials",
+      "ido": "000"
+    }));
+
     final body = {
-      "username": username,
-      "password": password,
+      "username": encryptedUsername,
+      "password": encryptedPassword,
+      "signature": encryptedSignature,
     };
 
     try {
@@ -31,16 +56,13 @@ class LoginService extends GetxService {
         // Capture Set-Cookie header
         final rawCookie = response.headers['set-cookie']?.first;
         if (rawCookie != null) {
-          // Extract only the session ID (before ";")
           final sessionId = rawCookie.split(';')[0];
-          
-          // Store session ID using GetStorage
           storage.write('dtsessionid', sessionId);
         }
 
         // Parse response data into LoggedUser model
         final responseData = response.data as Map<String, dynamic>;
-        
+
         // Add session ID to the response data if not included
         if (!responseData.containsKey('SessionID') && rawCookie != null) {
           responseData['SessionID'] = rawCookie.split(';')[0];
@@ -48,13 +70,14 @@ class LoginService extends GetxService {
 
         return LoggedUser.fromJson(responseData);
       } else {
-        throw Exception('Failed to login: ${response.statusCode}');
+        throw Exception('Login failed');
       }
     } catch (e) {
       if (e is DioException) {
         if (e.response != null) {
           final errorData = e.response!.data;
-          if (errorData is Map<String, dynamic> && errorData.containsKey('message')) {
+          if (errorData is Map<String, dynamic> &&
+              errorData.containsKey('message')) {
             throw Exception(errorData['message']);
           }
         }
