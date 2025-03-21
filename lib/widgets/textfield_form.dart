@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
 
-class TextfieldForm extends StatelessWidget {
+class TextfieldForm extends StatefulWidget {
   final String label;
+  final double width;
+  final double height;
+  final String hintText;
+  final TextEditingController controller;
 
   const TextfieldForm({
     Key? key,
     required this.label,
+    required this.controller,
+    this.width = 300,
+    this.height = 50,
+    this.hintText = 'TYPE HERE',
   }) : super(key: key);
 
+  @override
+  State<TextfieldForm> createState() => _TextfieldFormState();
+}
+
+class _TextfieldFormState extends State<TextfieldForm> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -16,7 +29,7 @@ class TextfieldForm extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            label,
+            widget.label,
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -25,8 +38,8 @@ class TextfieldForm extends StatelessWidget {
           ),
           SizedBox(height: 5),
           Container(
-            width: 300,
-            height: 50,
+            width: widget.width,
+            height: widget.height,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
@@ -41,9 +54,10 @@ class TextfieldForm extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: TextField(
+                controller: widget.controller,
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintText: 'TYPE HERE',
+                  hintText: widget.hintText,
                   hintStyle: TextStyle(
                     color: Colors.black.withOpacity(0.2),
                     fontSize: 13,

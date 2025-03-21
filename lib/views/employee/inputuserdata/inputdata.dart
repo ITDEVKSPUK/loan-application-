@@ -1,10 +1,14 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loan_apllication/core/theme/color.dart';
+import 'package:loan_apllication/views/employee/inputuserdata/formcontroller.dart';
 import 'package:loan_apllication/widgets/custom_appbar.dart';
 import 'package:loan_apllication/widgets/textfield_form.dart';
 
 class InputData extends StatelessWidget {
+  final controller = Get.put(InputDataController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,7 +16,7 @@ class InputData extends StatelessWidget {
       appBar: CustomAppBar(
         title: 'Debitur Form',
         onBack: () {
-          Get.offAllNamed('/home');
+          Get.offAllNamed('/dashboard');
         },
       ),
       body: SingleChildScrollView(
@@ -24,19 +28,22 @@ class InputData extends StatelessWidget {
               child: Column(
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      // Tambahkan fungsi untuk memilih gambar di sini
-                    },
-                    child: Container(
-                      width: 317,
-                      height: 180,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/rawktp.png'),
-                          fit: BoxFit.cover,
+                    onTap: controller.pickImageKtp,
+                    child: Obx(() {
+                      return Container(
+                        width: 317,
+                        height: 180,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: controller.fotoKtp.value != null
+                                ? FileImage(controller.fotoKtp.value!)
+                                : AssetImage('assets/images/rawktp.png')
+                                    as ImageProvider,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
-                    ),
+                      );
+                    }),
                   ),
                   SizedBox(height: 5),
                   Padding(
@@ -58,14 +65,14 @@ class InputData extends StatelessWidget {
                 ],
               ),
             ),
-            TextfieldForm(label: 'NIK'),
-            TextfieldForm(label: 'Nama Lengkap'),
-            TextfieldForm(label: 'No. Telpon'),
-            TextfieldForm(label: 'Pekerjaan'),
-            TextfieldForm(label: 'Alamat Lengkap'),
+            TextfieldForm(label: 'NIK', controller: controller.nikController),
+            TextfieldForm(label: 'Nama Lengkap', controller: controller.namaController),
+            TextfieldForm(label: 'No. Telpon', controller: controller.telpController),
+            TextfieldForm(label: 'Pekerjaan', controller: controller.pekerjaanController),
+            TextfieldForm(label: 'Alamat Lengkap', controller: controller.alamatController),
             SizedBox(height: 10),
-            TextfieldForm(label: 'Nominal Penjaminan'),
-            TextfieldForm(label: 'Jenis Jaminan'),
+            TextfieldForm(label: 'Nominal Penjaminan', controller: controller.nominalController),
+            TextfieldForm(label: 'Jenis Jaminan', controller: controller.jenisJaminanController),
             SizedBox(height: 20),
             Text(
               'Bukti Jaminan',
@@ -75,31 +82,33 @@ class InputData extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {
-                // Tambahkan fungsi untuk memilih gambar di sini
-              },
-              child: Container(
-                width: double.infinity,
-                height: 135,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Color(0x7FD9D9D9),
-                    width: 5,
+              onTap: controller.pickImageJaminan,
+              child: Obx(() {
+                return Container(
+                  width: double.infinity,
+                  height: 135,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Color(0x7FD9D9D9),
+                      width: 5,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    image: DecorationImage(
+                      image: controller.buktiJaminan.value != null
+                          ? FileImage(controller.buktiJaminan.value!)
+                          : AssetImage('assets/images/upfile.png') as ImageProvider,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/upfile.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
+                );
+              }),
             ),
             SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: controller.saveForm,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.greenstatus,
                     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
@@ -113,7 +122,7 @@ class InputData extends StatelessWidget {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: controller.clearForm,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.redstatus,
                     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
