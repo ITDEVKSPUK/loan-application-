@@ -13,7 +13,7 @@ class CustomText extends StatelessWidget {
   final TextOverflow? overflow;
 
   const CustomText({
-    Key? key,
+    super.key,
     required this.text,
     this.style,
     this.fontSize,
@@ -24,7 +24,7 @@ class CustomText extends StatelessWidget {
     this.textAlign,
     this.maxLines,
     this.overflow,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

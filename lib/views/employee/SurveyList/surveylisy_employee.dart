@@ -5,6 +5,8 @@ import 'package:loan_apllication/views/employee/inputuserdata/inputdata.dart';
 import 'package:loan_apllication/widgets/survey_box.dart';
 
 class surveyList extends StatefulWidget {
+  const surveyList({super.key});
+
   @override
   _HomeState createState() => _HomeState();
 }

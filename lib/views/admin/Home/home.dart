@@ -6,6 +6,8 @@ import 'package:loan_apllication/widgets/survey_box.dart';
 class Home extends StatelessWidget {
   final SurveyController controller = Get.put(SurveyController());
 
+  Home({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

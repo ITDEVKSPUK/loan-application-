@@ -8,7 +8,7 @@ class TextfieldForm extends StatefulWidget {
   final TextEditingController controller;
 
   const TextfieldForm({
-    Key? key,
+    super.key,
     required this.label,
     required this.controller,
     this.width = 300,

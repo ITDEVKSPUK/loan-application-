@@ -9,14 +9,14 @@ class SurveyBox extends StatelessWidget {
   final Color statusColor;
 
   const SurveyBox({
-    Key? key,
+    super.key,
     required this.name,
     required this.date,
     required this.location,
     required this.status,
     required this.image,
     required this.statusColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

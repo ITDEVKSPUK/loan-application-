@@ -24,7 +24,7 @@ class LoginService extends GetxService {
   }
 
   Future<LoggedUser> login(String username, String password) async {
-    final url = 'http://36.92.75.178:8001/system/users/logged';
+    const url = 'http://36.92.75.178:8001/system/users/logged';
 
     final headers = {
       "Content-Type": "application/json",
