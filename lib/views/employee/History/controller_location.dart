@@ -1,24 +1,45 @@
 import 'package:get/get.dart';
-import 'package:loan_apllication/views/employee/History/location_service.dart';
-import 'package:loan_apllication/views/employee/History/models_history_location.dart';
+import 'package:loan_apllication/API/service/get_location.dart';
+import 'package:loan_apllication/API/models/locations/models_location_prov.dart';
 
-class PostController extends GetxController {
-  var isLoading = true.obs;
-  var postList = <PostModel>[].obs;
+class LocationController extends GetxController {
+  var provinces = [].obs;
+  var regencies = [].obs;
+  var districts = [].obs;
+  var villages = [].obs;
+
+  var selectedProvinceId = ''.obs;
+  var selectedRegencyId = ''.obs;
+  var selectedDistrictId = ''.obs;
 
   @override
   void onInit() {
-    fetchPosts();
+    fetchProvinces();
     super.onInit();
   }
 
-  void fetchPosts() async {
+  void fetchProvinces() async {
     try {
-      isLoading(true);
-      var posts = await ApiService().fetchPosts();
-      postList.assignAll(posts);
-    } finally {
-      isLoading(false);
+      final data = await ApiService.fetchProvinces();
+      print('Fetched provinces: $data');
+      provinces.value = data;
+    } catch (e) {
+      print('Error fetching provinces: $e');
     }
+  }
+
+  void fetchRegencies(String provinceId) async {
+    regencies.value = await ApiService.fetchRegencies(provinceId);
+    districts.clear();
+    villages.clear();
+  }
+
+  void fetchDistricts(String regencyId) async {
+    districts.value = await ApiService.fetchDistricts(regencyId);
+    villages.clear();
+  }
+
+  void fetchVillages(String districtId) async {
+    villages.value = await ApiService.fetchVillages(districtId);
   }
 }
