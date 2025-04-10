@@ -11,6 +11,7 @@ class LocationController extends GetxController {
   var selectedProvinceId = ''.obs;
   var selectedRegencyId = ''.obs;
   var selectedDistrictId = ''.obs;
+  var selectedVillageId = ''.obs;
 
   @override
   void onInit() {

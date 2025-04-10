@@ -1,9 +1,9 @@
 class PostModel {
-  final String name;
+  final String province;
 
-  PostModel({required this.name});
+  PostModel({required this.province});
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
-    return PostModel(name : json['province']);
+    return PostModel(province : json['province']);
   }
 }

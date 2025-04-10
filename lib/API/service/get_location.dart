@@ -12,11 +12,11 @@ class ApiService {
 
   static Map<String, String> getHeaders() {
     return {
-      'Cookies': getToken(),
       'ICS-Wipala': 'sastra.astana.dwipangga',
       'ICS-Timestamp':
           DateTime.now().toUtc().toIso8601String().split('.').first + 'Z',
       'Content-Type': 'application/json',
+      "Cookie": getToken(),
     };
   }
 
@@ -27,7 +27,7 @@ class ApiService {
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
-        throw Exception('Failed to fetch provinces: ${response.statusCode}');
+        throw Exception('Failed to fetch provinces: ${getToken()}');
       }
     } catch (e) {
       print('Error fetching provinces: $e');

@@ -60,7 +60,7 @@ void showFilterBottomSheet(
                             DateTime? pickedDate = await showDatePicker(
                               context: context,
                               initialDate: DateTime.now(),
-                              firstDate: DateTime(2000),
+                              firstDate: DateTime.now(),
                               lastDate: DateTime(2100),
                             );
                             if (pickedDate != null) {
@@ -122,8 +122,8 @@ void showFilterBottomSheet(
                                 items: locationController.provinces
                                     .map<DropdownMenuItem<String>>((prov) {
                                   return DropdownMenuItem<String>(
-                                    value: prov['id'],
-                                    child: Text(prov['name']),
+                                    value: prov['pro_idn'].toString(),
+                                    child: Text(prov['province']),
                                   );
                                 }).toList(),
                                 onChanged: (value) {
@@ -146,8 +146,8 @@ void showFilterBottomSheet(
                                   items: locationController.regencies
                                       .map<DropdownMenuItem<String>>((kab) {
                                     return DropdownMenuItem<String>(
-                                      value: kab['id'],
-                                      child: Text(kab['name']),
+                                      value: kab['reg_idn'].toString(),
+                                      child: Text(kab['region']),
                                     );
                                   }).toList(),
                                   onChanged: (value) {
@@ -170,8 +170,8 @@ void showFilterBottomSheet(
                                   items: locationController.districts
                                       .map<DropdownMenuItem<String>>((kec) {
                                     return DropdownMenuItem<String>(
-                                      value: kec['id'],
-                                      child: Text(kec['name']),
+                                      value: kec['sec_idn'].toString(),
+                                      child: Text(kec['sector']),
                                     );
                                   }).toList(),
                                   onChanged: (value) {
@@ -186,17 +186,21 @@ void showFilterBottomSheet(
                                 DropdownButton<String>(
                                   isExpanded: true,
                                   hint: Text("Pilih Desa"),
+                                  value: locationController
+                                          .selectedVillageId.value.isEmpty
+                                      ? null
+                                      : locationController.selectedVillageId
+                                          .value, // ✅ TAMBAHKAN INI
                                   items: locationController.villages
-                                      .map<DropdownMenuItem<String>>((desa) {
+                                      .map<DropdownMenuItem<String>>((vil) {
                                     return DropdownMenuItem<String>(
-                                      value: desa['id'],
-                                      child: Text(desa['name']),
+                                      value: vil['vil_idn'].toString(),
+                                      child: Text(vil['village']),
                                     );
                                   }).toList(),
                                   onChanged: (value) {
-                                    setState(() {
-                                      selectedLocation = value!;
-                                    });
+                                    locationController.selectedVillageId.value =
+                                        value!; 
                                   },
                                 ),
                               ],
