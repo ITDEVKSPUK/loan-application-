@@ -5,6 +5,8 @@ import 'package:loan_apllication/widgets/survey_box.dart';
 import 'package:loan_apllication/widgets/filter_button.dart';
 
 class HistoryEmployee extends StatefulWidget {
+  const HistoryEmployee({super.key});
+
   @override
   State<HistoryEmployee> createState() => _HistoryEmployeeState();
 }

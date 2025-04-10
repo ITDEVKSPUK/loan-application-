@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loan_apllication/core/theme/color.dart';
-import 'package:loan_apllication/utils/routes/my_app_route.dart';
+import 'package:loan_apllication/views/employee/SurveyList/home_controller.dart';
+import 'package:loan_apllication/views/employee/inputuserdata/inputdata.dart';
 import 'package:loan_apllication/widgets/survey_box.dart';
 
 class surveyList extends StatefulWidget {
+  const surveyList({super.key});
+
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<surveyList> {
+  final HomeController controller = Get.put(HomeController());
   final List<Map<String, String>> surveyList = [
     {
       'name': 'Azzam Aqila',
@@ -58,21 +61,21 @@ class _HomeState extends State<surveyList> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.all(10),
-              itemCount: surveyList.length,
-              itemBuilder: (context, index) {
-                final item = surveyList[index];
-                return SurveyBox(
-                  name: item['name']!,
-                  date: item['date']!,
-                  location: item['location']!,
-                  status: item['status']!,
-                  image: item['image']!,
-                  statusColor: getStatusColor(item['status']!),
-                );
-              },
-            ),
+            child: Obx(() => ListView.builder(
+                  padding: EdgeInsets.all(10),
+                  itemCount: controller.surveyList.length,
+                  itemBuilder: (context, index) {
+                    final item = controller.surveyList[index];
+                    return SurveyBox(
+                      name: item['name']!,
+                      date: item['date']!,
+                      location: item['location']!,
+                      status: item['status']!,
+                      image: item['image']!,
+                      statusColor: controller.getStatusColor(item['status']!),
+                    );
+                  },
+                )),
           ),
         ],
       ),
@@ -103,18 +106,5 @@ class _HomeState extends State<surveyList> {
         ),
       ),
     );
-  }
-
-  Color getStatusColor(String status) {
-    switch (status) {
-      case 'ACCEPTED':
-        return AppColors.greenstatus;
-      case 'DECLINED':
-        return AppColors.redstatus;
-      case 'UNREAD':
-        return AppColors.orangestatus;
-      default:
-        return Colors.grey;
-    }
   }
 }

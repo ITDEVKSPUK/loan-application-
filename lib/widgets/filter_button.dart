@@ -5,8 +5,7 @@ import 'package:loan_apllication/core/theme/color.dart';
 class FilterButtons extends StatelessWidget {
   final Function(String) onFilterSelected;
 
-  const FilterButtons({required this.onFilterSelected, Key? key})
-      : super(key: key);
+  const FilterButtons({required this.onFilterSelected, super.key});
 
   @override
   Widget build(BuildContext context) {

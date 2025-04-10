@@ -9,14 +9,14 @@ class SurveyBox extends StatelessWidget {
   final Color statusColor;
 
   const SurveyBox({
-    Key? key,
+    super.key,
     required this.name,
     required this.date,
     required this.location,
     required this.status,
     required this.image,
     required this.statusColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +100,7 @@ class SurveyBox extends StatelessWidget {
             width: 54,
             height: 100,
             decoration: BoxDecoration(
-              color: statusColor, // Gunakan statusColor di sini
+              color: statusColor,
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(10),
                 bottomRight: Radius.circular(10),

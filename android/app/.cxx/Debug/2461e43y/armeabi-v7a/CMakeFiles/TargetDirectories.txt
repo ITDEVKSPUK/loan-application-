@@ -1,0 +1,2 @@
+D:/School/TA/loan_apllication/android/app/.cxx/Debug/2461e43y/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/School/TA/loan_apllication/android/app/.cxx/Debug/2461e43y/armeabi-v7a/CMakeFiles/rebuild_cache.dir
