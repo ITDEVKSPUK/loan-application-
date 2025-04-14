@@ -14,7 +14,7 @@ class TextfieldForm extends StatefulWidget {
     this.width = 300,
     this.height = 50,
     this.hintText = 'TYPE HERE',
-  }) : super(key: key);
+  });
 
   @override
   State<TextfieldForm> createState() => _TextfieldFormState();

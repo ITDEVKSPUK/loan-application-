@@ -70,6 +70,20 @@ class InputData extends StatelessWidget {
             TextfieldForm(label: 'No. Telpon', controller: controller.telpController),
             TextfieldForm(label: 'Pekerjaan', controller: controller.pekerjaanController),
             TextfieldForm(label: 'Alamat Lengkap', controller: controller.alamatController),
+            ElevatedButton(
+                  onPressed: controller.clearForm,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.redstatus,
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                    'Selengkapnya',
+                    style: TextStyle(fontSize: 16, color: AppColors.pureWhite),
+                  ),
+                ),
             SizedBox(height: 10),
             TextfieldForm(label: 'Nominal Penjaminan', controller: controller.nominalController),
             TextfieldForm(label: 'Jenis Jaminan', controller: controller.jenisJaminanController),
