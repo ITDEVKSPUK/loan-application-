@@ -53,7 +53,7 @@ class LoginService extends GetxService {
       );
 
       if (response.statusCode == 200) {
-        // Capture Set-Cookie header
+        storage.write('encryptedUsername', encryptedUsername);
         final rawCookie = response.headers['set-cookie']?.first;
         if (rawCookie != null) {
           final sessionId = rawCookie.split(';')[0];
