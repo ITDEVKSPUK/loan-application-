@@ -12,6 +12,8 @@ class Simulation_Employe extends StatefulWidget {
   _Simulation_EmployeState createState() => _Simulation_EmployeState();
 }
 
+
+
 class _Simulation_EmployeState extends State<Simulation_Employe> {
   final TextEditingController _loanAmountController = TextEditingController();
   final TextEditingController _loanTermController = TextEditingController();
@@ -21,7 +23,14 @@ class _Simulation_EmployeState extends State<Simulation_Employe> {
   double _totalInterest = 0.0;
   double _totalPayment = 0.0;
   String _loanType = 'Anuitas';
+  int finalMonthlyPayment = 0;
   List<Map<String, dynamic>> _repaymentSchedule = [];
+  final currencyFormat =
+      NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0);
+
+  double roundUpToNearestHundred(double value) {
+  return ((value + 99) ~/ 100) * 100;
+  }
 
   void _calculateLoan() {
     if (_loanAmountController.text.isEmpty ||
@@ -53,7 +62,7 @@ class _Simulation_EmployeState extends State<Simulation_Employe> {
     );
 
     setState(() {
-      _monthlyPayment = result['monthlyPayment'];
+     _monthlyPayment = roundUpToNearestHundred(result['monthlyPayment']);
       _totalInterest = result['totalInterest'];
       _totalPayment = result['totalPayment'];
       _repaymentSchedule = result['repaymentSchedule'];
@@ -214,11 +223,10 @@ class _Simulation_EmployeState extends State<Simulation_Employe> {
                       'Mulai Meminjam: ${DateFormat.yMMMMd().format(_startDate)}'),
                   const SizedBox(height: 20),
                   Text(
-                      'Angsuran per bulan: Rp ${NumberFormat.decimalPattern().format(NumberFormat.decimalPattern().parse(_monthlyPayment.toStringAsFixed(2)))}'),
+                      'Angsuran per bulan: ${currencyFormat.format(_monthlyPayment)}'),
+                  Text('Total Bunga: ${currencyFormat.format(_totalInterest)}'),
                   Text(
-                      'Total Bunga: Rp ${NumberFormat.decimalPattern().format(NumberFormat.decimalPattern().parse(_totalInterest.toStringAsFixed(2)))}'),
-                  Text(
-                      'Total yang Dibayarkan: Rp ${NumberFormat.decimalPattern().format(NumberFormat.decimalPattern().parse(_totalPayment.toStringAsFixed(2)))}'),
+                      'Total yang Dibayarkan: ${currencyFormat.format(_totalPayment)}'),
                   Text(
                       'Tanggal Lunas: ${DateFormat.yMMMMd().format(_startDate.add(Duration(days: 30 * int.parse(_loanTermController.text))))}'),
                   const SizedBox(height: 20),
@@ -268,4 +276,3 @@ class _Simulation_EmployeState extends State<Simulation_Employe> {
     );
   }
 }
-
