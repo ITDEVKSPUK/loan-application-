@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loan_apllication/views/employee/History/showfilterbuttom.dart';
 import 'package:loan_apllication/core/theme/color.dart';
 
 class FilterButtons extends StatelessWidget {
@@ -8,87 +9,52 @@ class FilterButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          Padding(padding: EdgeInsets.only(left: 10)),
-          SizedBox(
-            width: 109,
-            child: ElevatedButton(
-              onPressed: () => onFilterSelected('ACCEPTED'),
-              style: ElevatedButton.styleFrom(
-                foregroundColor: AppColors.black,
-                backgroundColor: AppColors.pureWhite,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(7),
-                ),
-              ),
-              child: Text('ACCEPTED', style: TextStyle(fontSize: 12)),
+    return Row(
+      children: [
+        SizedBox(
+          width: 310,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                _buildButton('ACCEPTED'),
+                SizedBox(width: 5),
+                _buildButton('DECLINED'),
+                SizedBox(width: 5),
+                _buildButton('UNREAD'),
+              ],
             ),
           ),
-          SizedBox(width: 5),
-          SizedBox(
-            width: 109,
-            child: ElevatedButton(
-              onPressed: () => onFilterSelected('DECLINED'),
-              style: ElevatedButton.styleFrom(
-                foregroundColor: AppColors.black,
-                backgroundColor: AppColors.pureWhite,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(7),
-                ),
-              ),
-              child: Text('DECLINED', style: TextStyle(fontSize: 12)),
+        ),
+        ElevatedButton(
+          onPressed: () => showFilterBottomSheet(context, onFilterSelected),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.pureWhite,
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
             ),
           ),
-          SizedBox(width: 5),
-          SizedBox(
-            width: 109,
-            child: ElevatedButton(
-              onPressed: () => onFilterSelected('UNREAD'),
-              style: ElevatedButton.styleFrom(
-                foregroundColor: AppColors.black,
-                backgroundColor: AppColors.pureWhite,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(7),
-                ),
-              ),
-              child: Text('UNREAD', style: TextStyle(fontSize: 12)),
-            ),
+          child: Icon(Icons.filter_list_alt,
+              size: 25, color: AppColors.blackLight),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildButton(String text) {
+    return SizedBox(
+      width: 109,
+      child: ElevatedButton(
+        onPressed: () => onFilterSelected(text),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.pureWhite,
+          foregroundColor: AppColors.black,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
           ),
-          SizedBox(width: 5),
-          SizedBox(
-            width: 109,
-            child: ElevatedButton(
-              onPressed: () => onFilterSelected('LOCATION'),
-              style: ElevatedButton.styleFrom(
-                foregroundColor: AppColors.black,
-                backgroundColor: AppColors.pureWhite,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(7),
-                ),
-              ),
-              child: Text('LOCATION', style: TextStyle(fontSize: 12)),
-            ),
-          ),
-          SizedBox(width: 5),
-          SizedBox(
-            width: 109,
-            child: ElevatedButton(
-              onPressed: () => onFilterSelected('DATE'),
-              style: ElevatedButton.styleFrom(
-                foregroundColor: AppColors.black,
-                backgroundColor: AppColors.pureWhite,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(7),
-                ),
-              ),
-              child: Text('DATE', style: TextStyle(fontSize: 12)),
-            ),
-          ),
-          Padding(padding: EdgeInsets.only(left: 10)),
-        ],
+        ),
+        child: Text(text, style: TextStyle(fontSize: 12)),
       ),
     );
   }

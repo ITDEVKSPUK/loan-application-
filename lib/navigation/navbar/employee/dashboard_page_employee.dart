@@ -6,8 +6,8 @@ import 'package:loan_apllication/core/theme/color.dart';
 import 'package:loan_apllication/navigation/controller/employee/controller_page_employe.dart';
 import 'package:loan_apllication/views/employee/History/history_employee.dart';
 import 'package:loan_apllication/views/employee/SurveyList/surveylisy_employee.dart';
-import 'package:loan_apllication/views/employee/Profile/profile_employee.dart';
 import 'package:loan_apllication/views/employee/Simulation_Calculator/simulation_employee.dart';
+import 'package:loan_apllication/views/employee/profile/profile_employee.dart';
 
 class DashboardPageEmployee extends StatelessWidget {
   const DashboardPageEmployee({super.key});
@@ -21,7 +21,7 @@ class DashboardPageEmployee extends StatelessWidget {
       surveyList(),
       HistoryEmployee(),
       Simulation_Employe(),
-      Profile_Employe(),
+      ProfileEmployee(),
     ];
 
     return Obx(() {

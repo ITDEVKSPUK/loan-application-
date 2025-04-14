@@ -18,6 +18,7 @@ class AppColors {
   static const Color cyanBlue = Color(0xFF009FE3);
   static const Color greyBlue = Color(0xFF99AAB5);
   static const Color pureWhite = Color(0xFFFFFFFF);
+  static const Color softBlue = Color(0xFFE9F3FD); // Warna baru
 
   // Warna Hitam
   static const Color black = Color(0xFF000000);
@@ -25,11 +26,10 @@ class AppColors {
   static const Color blackLight = Color(0xFF666666);
   static const Color blackDark = Color(0xFF999999);
 
-  //button status
+  // Button status
   static const Color redstatus = Color.fromRGBO(227, 31, 31, 1);
   static const Color greenstatus = Color.fromRGBO(102, 217, 150, 1);
   static const Color orangestatus = Color.fromRGBO(227, 135, 31, 1);
 
   static var primary;
-
 }
