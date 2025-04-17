@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:loan_apllication/views/employee/History/showfilterbuttom.dart';
 import 'package:loan_apllication/core/theme/color.dart';
+import 'package:loan_apllication/views/employee/History/showfilterbuttom.dart';
 
 class FilterButtons extends StatelessWidget {
   final Function(String) onFilterSelected;
@@ -11,21 +11,22 @@ class FilterButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SizedBox(
-          width: 310,
+        // Expanded biar scroll view bisa menyesuaikan lebar device
+        Expanded(
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
                 _buildButton('ACCEPTED'),
-                SizedBox(width: 5),
+                SizedBox(width: 8),
                 _buildButton('DECLINED'),
-                SizedBox(width: 5),
+                SizedBox(width: 8),
                 _buildButton('UNREAD'),
               ],
             ),
           ),
         ),
+        SizedBox(width: 8), // Jarak antara button dan filter icon
         ElevatedButton(
           onPressed: () => showFilterBottomSheet(context, onFilterSelected),
           style: ElevatedButton.styleFrom(
@@ -44,7 +45,7 @@ class FilterButtons extends StatelessWidget {
 
   Widget _buildButton(String text) {
     return SizedBox(
-      width: 109,
+      width: 109, // Ini masih fixed size, bisa diganti jika perlu fleksibel
       child: ElevatedButton(
         onPressed: () => onFilterSelected(text),
         style: ElevatedButton.styleFrom(
