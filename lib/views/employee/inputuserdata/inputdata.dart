@@ -66,7 +66,46 @@ class InputData extends StatelessWidget {
                 ],
               ),
             ),
-            TextfieldForm(label: 'NIK', controller: controller.nikController),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: TextfieldForm(
+                    label: 'NIK',
+                    controller: controller.nikController,
+                  ),
+                ),
+                SizedBox(width: 10),
+                Column(
+                  children: [
+                    SizedBox(height: 25),
+                    ElevatedButton(
+                      onPressed: () => showLocationBottomSheet(
+                        context,
+                        (value) => controller.alamatController.text = value,
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.casualbutton1,
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: Text(
+                        'Cek',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: AppColors.pureWhite,
+                          fontFamily: 'Outfit',
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+
+
             TextfieldForm(label: 'Nama Lengkap', controller: controller.namaController),
             TextfieldForm(label: 'No. Telpon', controller: controller.telpController),
             TextfieldForm(label: 'Pekerjaan', controller: controller.pekerjaanController),
