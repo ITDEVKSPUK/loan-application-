@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loan_apllication/core/theme/color.dart';
 import 'package:loan_apllication/views/employee/inputuserdata/formcontroller.dart';
+import 'package:loan_apllication/views/employee/inputuserdata/overlayalamat.dart';
 import 'package:loan_apllication/widgets/custom_appbar.dart';
 import 'package:loan_apllication/widgets/textfield_form.dart';
+import 'package:ocr_scan_text/ocr_scan_text.dart';
 
 class InputData extends StatelessWidget {
   final controller = Get.put(InputDataController());
@@ -65,15 +67,55 @@ class InputData extends StatelessWidget {
                 ],
               ),
             ),
-            TextfieldForm(label: 'NIK', controller: controller.nikController),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: TextfieldForm(
+                    label: 'NIK',
+                    controller: controller.nikController,
+                  ),
+                ),
+                SizedBox(width: 10),
+                Column(
+                  children: [
+                    SizedBox(height: 25),
+                    ElevatedButton(
+                      onPressed: () => showLocationBottomSheet(
+                        context,
+                        (value) => controller.alamatController.text = value,
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.casualbutton1,
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: Text(
+                        'Cek',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: AppColors.pureWhite,
+                          fontFamily: 'Outfit',
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+
+
             TextfieldForm(label: 'Nama Lengkap', controller: controller.namaController),
             TextfieldForm(label: 'No. Telpon', controller: controller.telpController),
             TextfieldForm(label: 'Pekerjaan', controller: controller.pekerjaanController),
             TextfieldForm(label: 'Alamat Lengkap', controller: controller.alamatController),
+            //button alamat
             ElevatedButton(
-                  onPressed: controller.clearForm,
+                  onPressed: () => showLocationBottomSheet(context, (value) => controller.alamatController.text = value),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.redstatus,
+                    backgroundColor: AppColors.casualbutton1,
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -81,7 +123,7 @@ class InputData extends StatelessWidget {
                   ),
                   child: Text(
                     'Selengkapnya',
-                    style: TextStyle(fontSize: 16, color: AppColors.pureWhite),
+                    style: TextStyle(fontSize: 16, color: AppColors.pureWhite, fontFamily: 'Outfit'),
                   ),
                 ),
             SizedBox(height: 10),
