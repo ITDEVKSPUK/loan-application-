@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:encrypt/encrypt.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:loan_apllication/views/Login/models.dart';
@@ -11,12 +11,12 @@ class LoginService extends GetxService {
   final storage = GetStorage();
 
   // Gunakan kunci AES 32 byte (256-bit)
-  static final _key = Key.fromUtf8('35argan1n9k4MulyanRahayu85uki396');
+  static final _key = encrypt.Key.fromUtf8('35argan1n9k4MulyanRahayu85uki396');
 
   // IV harus konsisten dengan enkripsi di server
-  static final _iv = IV.fromUtf8('J9ja8Yn8fYQllwAA');
+  static final _iv = encrypt.IV.fromUtf8('J9ja8Yn8fYQllwAA');
 
-  final _encrypter = Encrypter(AES(_key, mode: AESMode.cbc));
+  final _encrypter = encrypt.Encrypter(encrypt.AES(_key, mode: encrypt.AESMode.cbc));
 
   String _encrypt(String text) {
     final encrypted = _encrypter.encrypt(text, iv: _iv);
