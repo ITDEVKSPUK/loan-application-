@@ -6,7 +6,6 @@ import 'package:loan_apllication/views/employee/inputuserdata/formcontroller.dar
 import 'package:loan_apllication/views/employee/inputuserdata/overlayalamat.dart';
 import 'package:loan_apllication/widgets/custom_appbar.dart';
 import 'package:loan_apllication/widgets/textfield_form.dart';
-import 'package:ocr_scan_text/ocr_scan_text.dart';
 
 class InputData extends StatelessWidget {
   final controller = Get.put(InputDataController());
