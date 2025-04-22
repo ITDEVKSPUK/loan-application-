@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:loan_apllication/core/theme/color.dart';
 import 'package:loan_apllication/views/employee/Simulation_Calculator/loan_summary.dart';
 import 'package:loan_apllication/views/employee/Simulation_Calculator/simulation_controller.dart';
 import 'package:loan_apllication/widgets/app_button.dart';
-import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:loan_apllication/widgets/loan_input_form.dart';
 import 'package:loan_apllication/widgets/loan_start_date_picker.dart';
 import 'package:loan_apllication/widgets/loan_type_dropdown.dart';

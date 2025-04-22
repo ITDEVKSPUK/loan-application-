@@ -21,27 +21,24 @@ class LoanInputForm extends StatelessWidget {
     final controller = Get.put(SimulationController());
     return Column(
       children: [
-        Obx(
-          () => TextField(
-            controller: controller.loanAmountController,
-            keyboardType: TextInputType.number,
-            inputFormatters: [
-              MoneyInputFormatter(
-                thousandSeparator: ThousandSeparator.Period,
-                mantissaLength: 0,
+        Obx(() => TextField(
+              controller: controller.loanAmountController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                MoneyInputFormatter(
+                  thousandSeparator: ThousandSeparator.Period,
+                  mantissaLength: 0,
+                ),
+              ],
+              decoration: InputDecoration(
+                labelText: 'Jumlah Pinjaman',
+                prefixText: 'Rp ',
+                errorText: controller.isLoanAmountValid.value
+                    ? null
+                    : 'Minimal Rp 5.000.000',
+                border: const OutlineInputBorder(),
               ),
-            ],
-            onChanged: (_) => controller.validateLoanAmount(),
-            decoration: InputDecoration(
-              labelText: 'Jumlah Pinjaman',
-              prefixText: 'Rp ',
-              errorText: controller.isLoanAmountValid.value
-                  ? null
-                  : 'Minimal pinjaman Rp 5.000.000',
-              border: const OutlineInputBorder(),
-            ),
-          ),
-        ),
+            )),
         const SizedBox(height: 12),
         TextField(
           controller: loanTermController,
