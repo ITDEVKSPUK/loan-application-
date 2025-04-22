@@ -11,26 +11,28 @@ class FilterButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        // Expanded biar scroll view bisa menyesuaikan lebar device
+        // Bagian tombol scrollable horizontal
         Expanded(
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                SizedBox(width: 8),
+                const SizedBox(width: 8), // Padding awal
                 _buildButton('ALL'),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 _buildButton('ACCEPTED'),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 _buildButton('DECLINED'),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 _buildButton('UNREAD'),
-                
+                const SizedBox(width: 8),
               ],
             ),
           ),
         ),
-        SizedBox(width: 8), // Jarak antara button dan filter icon
+
+        // Tombol filter icon
+        const SizedBox(width: 8),
         ElevatedButton(
           onPressed: () => showFilterBottomSheet(context, onFilterSelected),
           style: ElevatedButton.styleFrom(
@@ -48,19 +50,17 @@ class FilterButtons extends StatelessWidget {
   }
 
   Widget _buildButton(String text) {
-    return SizedBox(
-      width: 109, // Ini masih fixed size, bisa diganti jika perlu fleksibel
-      child: ElevatedButton(
-        onPressed: () => onFilterSelected(text),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.pureWhite,
-          foregroundColor: AppColors.black,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
+    return ElevatedButton(
+      onPressed: () => onFilterSelected(text),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.pureWhite,
+        foregroundColor: AppColors.black,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
         ),
-        child: Text(text, style: TextStyle(fontSize: 12)),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
       ),
+      child: Text(text, style: const TextStyle(fontSize: 12)),
     );
   }
 }
