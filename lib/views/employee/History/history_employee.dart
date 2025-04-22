@@ -64,13 +64,18 @@ class _HistoryEmployeeState extends State<HistoryEmployee> {
     });
   }
 
-  void filterByStatus(String status) {
-    setState(() {
+void filterByStatus(String status) {
+  setState(() {
+    if (status == 'ALL') {
+      filteredList = historyEmployee;
+    } else {
       filteredList = historyEmployee
           .where((item) => item['status'] == status)
           .toList();
-    });
-  }
+    }
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
