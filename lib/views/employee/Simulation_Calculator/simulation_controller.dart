@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loan_apllication/views/employee/Simulation_Calculator/logic_calculator.dart';
+import 'dart:math' as math;
 
 class SimulationController extends GetxController {
   final loanAmountController = TextEditingController();
@@ -82,5 +82,130 @@ class SimulationController extends GetxController {
     loanTermController.dispose();
     interestRateController.dispose();
     super.onClose();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    loanAmountController.addListener(() {
+      validateLoanAmount();
+    });
+  }
+}
+
+
+class LoanCalculator {
+  static Map<String, dynamic> calculateLoan({
+    required double loanAmount,
+    required int loanTerm,
+    required double annualInterestRate,
+    required String loanType,
+  }) {
+    final double monthlyInterestRate = annualInterestRate / 12;
+    double monthlyPayment = 0.0;
+    double totalInterest = 0.0;
+    double totalPayment = 0.0;
+    List<Map<String, dynamic>> repaymentSchedule = [];
+
+    int roundUpToNearestHundred(int value) {
+      return ((value + 99) ~/ 100) * 100;
+    }
+
+    switch (loanType) {
+      case 'Flat':
+        double monthlyPrincipal = loanAmount / loanTerm;
+        double monthlyInterest = loanAmount * monthlyInterestRate;
+        monthlyPayment = monthlyPrincipal + monthlyInterest;
+
+        // ✅ Bulatkan ke atas kelipatan 100
+        monthlyPayment =
+            roundUpToNearestHundred(monthlyPayment.round()).toDouble();
+
+        totalInterest = (monthlyPayment * loanTerm) - loanAmount;
+        totalPayment = monthlyPayment * loanTerm;
+
+        double remainingBalance = loanAmount;
+
+        for (int i = 0; i < loanTerm; i++) {
+          repaymentSchedule.add({
+            'month': i + 1,
+            'totalPayment': monthlyPayment,
+            'interestPayment': monthlyInterest,
+            'principalPayment': monthlyPayment - monthlyInterest,
+            'remainingBalance':
+                remainingBalance - (monthlyPayment - monthlyInterest) * (i + 1),
+          });
+        }
+        break;
+
+      case 'Efektif':
+        double monthlyPrincipal = loanAmount / loanTerm;
+        double remainingBalance = loanAmount;
+
+        for (int i = 0; i < loanTerm; i++) {
+          double interestPayment = remainingBalance * monthlyInterestRate;
+          double totalMonthly = monthlyPrincipal + interestPayment;
+
+          // Bulatkan ke atas ke 100
+          totalMonthly =
+              roundUpToNearestHundred(totalMonthly.round()).toDouble();
+
+          repaymentSchedule.add({
+            'month': i + 1,
+            'totalPayment': totalMonthly,
+            'interestPayment': interestPayment,
+            'principalPayment': monthlyPrincipal,
+            'remainingBalance': remainingBalance - monthlyPrincipal,
+          });
+
+          remainingBalance -= monthlyPrincipal;
+          totalInterest += interestPayment;
+          totalPayment += totalMonthly;
+        }
+
+        monthlyPayment = repaymentSchedule[0]['totalPayment'];
+        break;
+
+      case 'Anuitas':
+        double remainingBalance = loanAmount;
+
+        monthlyPayment = loanAmount *
+            monthlyInterestRate /
+            (1 - math.pow((1 + monthlyInterestRate), -loanTerm));
+
+        // Bulatkan ke atas kelipatan 100
+        monthlyPayment =
+            roundUpToNearestHundred(monthlyPayment.round()).toDouble();
+
+        for (int i = 0; i < loanTerm; i++) {
+          double interestPayment = remainingBalance * monthlyInterestRate;
+          double principalPayment = monthlyPayment - interestPayment;
+
+          repaymentSchedule.add({
+            'month': i + 1,
+            'totalPayment': monthlyPayment,
+            'interestPayment': interestPayment,
+            'principalPayment': principalPayment,
+            'remainingBalance': remainingBalance - principalPayment,
+          });
+
+          remainingBalance -= principalPayment;
+          totalInterest += interestPayment;
+          totalPayment += monthlyPayment;
+        }
+
+        break;
+
+      default:
+        throw Exception('Invalid loan type: $loanType');
+    }
+
+    return {
+      'monthlyPayment': monthlyPayment,
+      'totalInterest': totalInterest,
+      'totalPayment': totalPayment,
+      'repaymentSchedule': repaymentSchedule,
+    };
   }
 }
