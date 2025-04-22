@@ -4,7 +4,7 @@ import 'package:loan_apllication/views/Login/controller.dart';
 class MyAppBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<LoginController>(() => LoginController(), fenix: true);
+    Get.lazyPut<LoginControllers>(() => LoginControllers(), fenix: true);
 
   }
 }
