@@ -66,4 +66,6 @@ class LocationController extends GetxController {
 
     villages.value = await ApiService.fetchVillages(districtId);
   }
+
+  void resetAll() {}
 }
