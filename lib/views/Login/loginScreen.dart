@@ -16,7 +16,7 @@ class LoginScreen extends StatelessWidget {
     final TextEditingController passwordController = TextEditingController();
 
     // Use GetX controller with lazy initialization
-    final LoginController loginController = Get.find<LoginController>();
+    final LoginControllers loginController = Get.find<LoginControllers>();
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loan_apllication/core/theme/color.dart';
+import 'package:loan_apllication/views/employee/SurveyList/home_controller.dart';
 import 'package:loan_apllication/widgets/searchbar.dart';
 import 'package:loan_apllication/widgets/survey_box.dart';
-import 'package:loan_apllication/widgets/filter_button.dart';
+import 'package:loan_apllication/widgets/History/filter_button.dart';
+
 
 class HistoryEmployee extends StatefulWidget {
   const HistoryEmployee({super.key});
@@ -12,39 +15,15 @@ class HistoryEmployee extends StatefulWidget {
 }
 
 class _HistoryEmployeeState extends State<HistoryEmployee> {
-  final List<Map<String, String>> historyEmployee = [
-    {
-      'name': 'Azzam Aqila',
-      'date': '20th February 2036',
-      'location': 'Kudus, Jawa Utara',
-      'status': 'ACCEPTED',
-      'image': 'assets/images/bg.png',
-    },
-    {
-      'name': 'Nadira Salsabila',
-      'date': '15th March 2036',
-      'location': 'Semarang, Jawa Tengah',
-      'status': 'UNREAD',
-      'image': 'assets/images/bg.png',
-    },
-    {
-      'name': 'Rizky Fadillah',
-      'date': '10th April 2036',
-      'location': 'Jakarta, DKI Jakarta',
-      'status': 'DECLINED',
-      'image': 'assets/images/bg.png',
-    },
-  ];
-
-  List<Map<String, String>> filteredList = [];
+  final HomeController _controller = Get.put(HomeController());
   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    filteredList = historyEmployee;
+    _controller.getHistory(); // Fetch history data
     searchController.addListener(() {
-      filterSearch(searchController.text);
+      _controller.filterSearch(searchController.text);
     });
   }
 
@@ -54,73 +33,46 @@ class _HistoryEmployeeState extends State<HistoryEmployee> {
     super.dispose();
   }
 
-  void filterSearch(String query) {
-    setState(() {
-      filteredList = historyEmployee
-          .where((item) =>
-              item['name']!.toLowerCase().contains(query.toLowerCase()) ||
-              item['status']!.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-    });
-  }
-
-  void filterByStatus(String status) {
-    setState(() {
-      filteredList = historyEmployee
-          .where((item) => item['status'] == status)
-          .toList();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.pureWhite,
       body: Column(
         children: [
-          Padding(
-              padding: EdgeInsets.only(
-            top: 30,
-          )),
+          const SizedBox(height: 30),
           CustomSearchBar(
             controller: searchController,
-            onChanged: filterSearch,
+            onChanged: (query) => _controller.filterSearch(query),
           ),
           FilterButtons(
-            onFilterSelected: filterByStatus,
+            onFilterSelected: (status) => _controller.filterByStatus(status),
           ),
           Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.all(10),
-              itemCount: filteredList.length,
-              itemBuilder: (context, index) {
-                final item = filteredList[index];
-                return SurveyBox(
-                  name: item['name']!,
-                  date: item['date']!,
-                  location: item['location']!,
-                  status: item['status']!,
-                  image: item['image']!,
-                  statusColor: getStatusColor(item['status']!),
+            child: Obx(() {
+              if (_controller.surveyList.isEmpty) {
+                return const Center(
+                  child: Text('No history found'),
                 );
-              },
-            ),
+              }
+              return ListView.builder(
+                padding: const EdgeInsets.all(10),
+                itemCount: _controller.filteredList.length,
+                itemBuilder: (context, index) {
+                  final item = _controller.filteredList[index];
+                  return SurveyBox(
+                    name: item.fullName,
+                    date: item.application.trxDate,
+                    location: item.village,
+                    status: "UNREAD",
+                    image: 'assets/images/bg.png',
+                    statusColor: _controller.getStatusColor("UNREAD"),
+                  );
+                },
+              );
+            }),
           ),
         ],
       ),
     );
-  }
-
-  Color getStatusColor(String status) {
-    switch (status) {
-      case 'ACCEPTED':
-        return AppColors.greenstatus;
-      case 'DECLINED':
-        return AppColors.redstatus;
-      case 'UNREAD':
-        return AppColors.orangestatus;
-      default:
-        return Colors.grey;
-    }
   }
 }

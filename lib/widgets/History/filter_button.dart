@@ -1,0 +1,66 @@
+import 'package:flutter/material.dart';
+import 'package:loan_apllication/core/theme/color.dart';
+import 'package:loan_apllication/widgets/History/showfilterbuttom.dart';
+
+class FilterButtons extends StatelessWidget {
+  final Function(String) onFilterSelected;
+
+  const FilterButtons({required this.onFilterSelected, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        // Expanded biar scroll view bisa menyesuaikan lebar device
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                SizedBox(width: 8),
+                _buildButton('ALL'),
+                SizedBox(width: 8),
+                _buildButton('ACCEPTED'),
+                SizedBox(width: 8),
+                _buildButton('DECLINED'),
+                SizedBox(width: 8),
+                _buildButton('UNREAD'),
+                
+              ],
+            ),
+          ),
+        ),
+        SizedBox(width: 8), // Jarak antara button dan filter icon
+        ElevatedButton(
+          onPressed: () => showFilterBottomSheet(context, onFilterSelected),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.pureWhite,
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          child: Icon(Icons.filter_list_alt,
+              size: 25, color: AppColors.blackLight),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildButton(String text) {
+    return SizedBox(
+      width: 109, // Ini masih fixed size, bisa diganti jika perlu fleksibel
+      child: ElevatedButton(
+        onPressed: () => onFilterSelected(text),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.pureWhite,
+          foregroundColor: AppColors.black,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        child: Text(text, style: TextStyle(fontSize: 12)),
+      ),
+    );
+  }
+}
