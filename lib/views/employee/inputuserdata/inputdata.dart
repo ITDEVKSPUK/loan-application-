@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loan_apllication/core/theme/color.dart';
 import 'package:loan_apllication/views/employee/inputuserdata/formcontroller.dart';
-import 'package:loan_apllication/views/employee/inputuserdata/overlayalamat.dart';
+import 'package:loan_apllication/widgets/overlayalamat.dart';
 import 'package:loan_apllication/widgets/custom_appbar.dart';
 import 'package:loan_apllication/widgets/textfield_form.dart';
-import 'package:ocr_scan_text/ocr_scan_text.dart';
+import 'package:flutter_scalable_ocr/flutter_scalable_ocr.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class InputData extends StatelessWidget {
   final controller = Get.put(InputDataController());
@@ -29,8 +30,55 @@ class InputData extends StatelessWidget {
             Center(
               child: Column(
                 children: [
+                  // Scan KTP pakai OCR
                   GestureDetector(
-                    onTap: controller.pickImageKtp,
+                    onTap: () async {
+                      final status = await Permission.camera.request();
+                      if (status.isGranted) {
+                        showDialog(
+                          context: context,
+                          builder: (_) {
+                            final scannedText = ValueNotifier<String>("");
+
+                            return AlertDialog(
+                              contentPadding: EdgeInsets.zero,
+                              content: Container(
+                                width: double.maxFinite,
+                                height: 400,
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: ScalableOCR(
+                                        paintboxCustom: Paint()
+                                          ..style = PaintingStyle.stroke
+                                          ..strokeWidth = 4.0
+                                          ..color = Colors.red,
+                                        boxLeftOff: 5,
+                                        boxBottomOff: 2.5,
+                                        boxRightOff: 5,
+                                        boxTopOff: 2.5,
+                                        getScannedText: (value) {
+                                          scannedText.value = value;
+                                        },
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        controller.nikController.text = scannedText.value;
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text("Gunakan Hasil Scan"),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        Get.snackbar("Izin Ditolak", "Aktifkan izin kamera untuk scan KTP.");
+                      }
+                    },
                     child: Obx(() {
                       return Container(
                         width: 317,
@@ -39,8 +87,7 @@ class InputData extends StatelessWidget {
                           image: DecorationImage(
                             image: controller.fotoKtp.value != null
                                 ? FileImage(controller.fotoKtp.value!)
-                                : AssetImage('assets/images/rawktp.png')
-                                    as ImageProvider,
+                                : AssetImage('assets/images/rawktp.png') as ImageProvider,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -53,7 +100,7 @@ class InputData extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'foto ktp (klik untuk mengganti foto)',
+                        'Scan KTP (klik untuk scan dan ambil NIK)',
                         style: TextStyle(
                           color: Color.fromARGB(255, 90, 137, 255),
                           fontSize: 14,
@@ -105,27 +152,27 @@ class InputData extends StatelessWidget {
                 ),
               ],
             ),
-
-
             TextfieldForm(label: 'Nama Lengkap', controller: controller.namaController),
             TextfieldForm(label: 'No. Telpon', controller: controller.telpController),
             TextfieldForm(label: 'Pekerjaan', controller: controller.pekerjaanController),
             TextfieldForm(label: 'Alamat Lengkap', controller: controller.alamatController),
-            //button alamat
             ElevatedButton(
-                  onPressed: () => showLocationBottomSheet(context, (value) => controller.alamatController.text = value),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.casualbutton1,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Text(
-                    'Selengkapnya',
-                    style: TextStyle(fontSize: 16, color: AppColors.pureWhite, fontFamily: 'Outfit'),
-                  ),
+              onPressed: () => showLocationBottomSheet(
+                context,
+                (value) => controller.alamatController.text = value,
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.casualbutton1,
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
+              ),
+              child: Text(
+                'Selengkapnya',
+                style: TextStyle(fontSize: 16, color: AppColors.pureWhite, fontFamily: 'Outfit'),
+              ),
+            ),
             SizedBox(height: 10),
             TextfieldForm(label: 'Nominal Penjaminan', controller: controller.nominalController),
             TextfieldForm(label: 'Jenis Jaminan', controller: controller.jenisJaminanController),
