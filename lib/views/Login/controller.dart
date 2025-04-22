@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:loan_apllication/utils/routes/my_app_route.dart';
-import 'package:loan_apllication/API/service/sarvice.dart';
+import 'package:loan_apllication/API/service/post_login.dart';
 
 class LoginControllers extends GetxController {
   final LoginService _loginService = LoginService();

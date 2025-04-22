@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loan_apllication/API/service/post_login.dart';
 import 'package:loan_apllication/core/theme/color.dart';
 import 'package:loan_apllication/utils/routes/my_app_route.dart';
 import 'package:loan_apllication/widgets/app_button.dart';
@@ -70,7 +71,8 @@ class _ProfileEmployeeState extends State<ProfileEmployee> {
                   CustomButton(
                     text: 'Log Out',
                     onPressed: () {
-                      Get.toNamed(MyAppRoutes.loginScreen);
+                      LoginService().logout();
+                      Get.offAllNamed(MyAppRoutes.loginScreen);
                     },
                     color: AppColors.lightBlue,
                     borderRadius: 15,
