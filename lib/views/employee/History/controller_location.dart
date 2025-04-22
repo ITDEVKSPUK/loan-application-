@@ -20,7 +20,7 @@ class LocationController extends GetxController {
 
   void fetchProvinces() async {
     try {
-      final data = await ApiService.fetchProvinces();
+      final data = await getlocation.fetchProvinces();
       provinces.value = data;
 
       print(">>> Province List IDs: ${data.map((e) => e['pro_idn']).toList()}");
@@ -40,7 +40,7 @@ class LocationController extends GetxController {
     selectedVillageId.value = '';
 
     // Fetch kabupaten berdasarkan provinsi baru
-    regencies.value = await ApiService.fetchRegencies(provinceId);
+    regencies.value = await getlocation.fetchRegencies(provinceId);
 
     // Kosongkan kecamatan dan desa
     districts.clear();
@@ -54,7 +54,7 @@ class LocationController extends GetxController {
     selectedDistrictId.value = '';
     selectedVillageId.value = '';
 
-    districts.value = await ApiService.fetchDistricts(regencyId);
+    districts.value = await getlocation.fetchDistricts(regencyId);
     villages.clear();
   }
 
@@ -64,7 +64,7 @@ class LocationController extends GetxController {
     // Reset desa sebelumnya
     selectedVillageId.value = '';
 
-    villages.value = await ApiService.fetchVillages(districtId);
+    villages.value = await getlocation.fetchVillages(districtId);
   }
 
   void resetAll() {}

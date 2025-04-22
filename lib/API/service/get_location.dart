@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:loan_apllication/API/dio/dio_client.dart';
 
-class ApiService {
+class getlocation {
   static final Dio _dio = DioClient.dio;
   static const baseUrl = '/sandbox.ics/v1.0/List';
 
