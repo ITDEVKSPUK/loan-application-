@@ -1,34 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loan_apllication/API/models/history_models.dart';
+import 'package:loan_apllication/API/service/post_history.dart';
 import 'package:loan_apllication/core/theme/color.dart';
 
 class HomeController extends GetxController {
-  var surveyList = [
-    {
-      'name': 'Azzam Aqila',
-      'date': '20th February 2036',
-      'location': 'Kudus, Jawa Utara',
-      'status': 'ACCEPTED',
-      'image': 'assets/images/bg.png',
-    },
-    {
-      'name': 'Nadira Salsabila',
-      'date': '15th March 2036',
-      'location': 'Semarang, Jawa Tengah',
-      'status': 'DECLINED',
-      'image': 'assets/images/bg.png',
-    },
-    {
-      'name': 'Rizky Fadillah',
-      'date': '10th April 2036',
-      'location': 'Jakarta, DKI Jakarta',
-      'status': 'UNREAD',
-      'image': 'assets/images/bg.png',
-    },
-  ].obs;
+  var surveyList = <HistoryModel>[].obs;
+  var filteredList = <HistoryModel>[].obs;
+
+  void getHistory() async {
+    final historyService = HistoryService();
+
+    try {
+      final response = await historyService.fetchHistoryDebitur(
+        officeId: '000',
+        fromDateTime: DateTime.parse('2025-01-01T00:00:00+07:00'),
+        toDateTime: DateTime.parse('2025-12-31T00:00:00+07:00'),
+      );
+
+      final List<dynamic> rawData = response.data['data'] ?? [];
+      surveyList.value = rawData.map((e) => HistoryModel.fromJson(e)).toList();
+      filteredList.value = surveyList; // Initialize filtered list
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  void filterSearch(String query) {
+    filteredList.value = surveyList
+        .where((item) =>
+            item.fullName.toLowerCase().contains(query.toLowerCase()) ||
+            item.application.purpose
+                .toLowerCase()
+                .contains(query.toLowerCase()))
+        .toList();
+  }
+
+  void filterByStatus(String status) {
+    filteredList.value =
+        surveyList.where((item) => "UNREAD" == status).toList();
+  }
 
   Color getStatusColor(String status) {
-    switch (status) {
+    switch (status.toUpperCase()) {
       case 'ACCEPTED':
         return AppColors.greenstatus;
       case 'DECLINED':

@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 import 'package:loan_apllication/core/theme/color.dart';
 import 'package:loan_apllication/navigation/controller/employee/controller_page_employe.dart';
 import 'package:loan_apllication/views/employee/History/history_employee.dart';
-import 'package:loan_apllication/views/employee/SurveyList/surveylisy_employee.dart';
 import 'package:loan_apllication/views/employee/Simulation_Calculator/simulation_employee.dart';
+import 'package:loan_apllication/views/employee/SurveyList/surveylisy_employee.dart';
 import 'package:loan_apllication/views/employee/profile/profile_employee.dart';
 
 class DashboardPageEmployee extends StatelessWidget {
@@ -18,7 +18,7 @@ class DashboardPageEmployee extends StatelessWidget {
         Get.put(ControllerPageEmploye());
 
     final List<Widget> menus = [
-      surveyList(),
+      SurveyList(),
       HistoryEmployee(),
       Simulation_Employe(),
       ProfileEmployee(),
@@ -62,4 +62,3 @@ class DashboardPageEmployee extends StatelessWidget {
     });
   }
 }
-
