@@ -13,50 +13,56 @@ class LoanCalculator {
     double totalPayment = 0.0;
     List<Map<String, dynamic>> repaymentSchedule = [];
 
+    int roundUpToNearestHundred(int value) {
+      return ((value + 99) ~/ 100) * 100;
+    }
+
     switch (loanType) {
       case 'Flat':
-        monthlyPayment = (loanAmount + (loanAmount * annualInterestRate * loanTerm / 12)) / loanTerm;
-        totalInterest = loanAmount * annualInterestRate * loanTerm / 12;
-        totalPayment = loanAmount + totalInterest;
-        for (int i = 0; i < loanTerm; i++) {
-          double interestPayment = loanAmount * monthlyInterestRate;
-          double principalPayment = monthlyPayment - interestPayment;
-          loanAmount -= principalPayment;
-          repaymentSchedule.add({
-            'month': i + 1,
-            'totalPayment': monthlyPayment,
-            'interestPayment': interestPayment,
-            'principalPayment': principalPayment,
-            'remainingBalance': loanAmount,
-          });
-        }
-        break;
-      case 'Efektif':
-        monthlyPayment = loanAmount * monthlyInterestRate / (1 - (1 / math.pow((1 + monthlyInterestRate), loanTerm)));
-        totalInterest = monthlyPayment * loanTerm - loanAmount;
+        double monthlyPrincipal = loanAmount / loanTerm;
+        double monthlyInterest = loanAmount * monthlyInterestRate;
+        monthlyPayment = monthlyPrincipal + monthlyInterest;
+
+        // ✅ Bulatkan ke atas kelipatan 100
+        monthlyPayment =
+            roundUpToNearestHundred(monthlyPayment.round()).toDouble();
+
+        totalInterest = (monthlyPayment * loanTerm) - loanAmount;
         totalPayment = monthlyPayment * loanTerm;
+
+        double remainingBalance = loanAmount;
+
         for (int i = 0; i < loanTerm; i++) {
-          double interestPayment = loanAmount * monthlyInterestRate;
-          double principalPayment = monthlyPayment - interestPayment;
-          loanAmount -= principalPayment;
           repaymentSchedule.add({
             'month': i + 1,
             'totalPayment': monthlyPayment,
-            'interestPayment': interestPayment,
-            'principalPayment': principalPayment,
-            'remainingBalance': loanAmount,
+            'interestPayment': monthlyInterest,
+            'principalPayment': monthlyPayment - monthlyInterest,
+            'remainingBalance':
+                remainingBalance - (monthlyPayment - monthlyInterest) * (i + 1),
           });
         }
         break;
+
+      case 'Efektif':
       case 'Anuitas':
       default:
-        monthlyPayment = loanAmount * monthlyInterestRate / (1 - (1 / math.pow((1 + monthlyInterestRate), loanTerm)));
+        monthlyPayment = loanAmount *
+            monthlyInterestRate /
+            (1 - (1 / math.pow((1 + monthlyInterestRate), loanTerm)));
+
+        // ✅ Bulatkan ke atas kelipatan 100
+        monthlyPayment =
+            roundUpToNearestHundred(monthlyPayment.round()).toDouble();
+
         totalInterest = monthlyPayment * loanTerm - loanAmount;
         totalPayment = monthlyPayment * loanTerm;
+
         for (int i = 0; i < loanTerm; i++) {
           double interestPayment = loanAmount * monthlyInterestRate;
           double principalPayment = monthlyPayment - interestPayment;
           loanAmount -= principalPayment;
+
           repaymentSchedule.add({
             'month': i + 1,
             'totalPayment': monthlyPayment,

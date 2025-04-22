@@ -6,14 +6,13 @@ import 'package:loan_apllication/views/Login/loginScreen.dart';
 import 'package:loan_apllication/views/employee/SurveyList/surveylisy_employee.dart';
 import 'package:loan_apllication/views/employee/inputuserdata/inputdata.dart';
 
-
 class MyAppPage {
   static final List<GetPage> pages = [
     //GetPage(name: name, page: page)
     GetPage(name: MyAppRoutes.splashScreen, page: () => SplashScreen()),
     GetPage(name: MyAppRoutes.loginScreen, page: () => LoginScreen()),
     GetPage(name: MyAppRoutes.dashboard, page: () => DashboardPageEmployee()),
-    GetPage(name: MyAppRoutes.homeScreen, page: () => surveyList()),
+    GetPage(name: MyAppRoutes.homeScreen, page: () => SurveyList()),
     GetPage(name: MyAppRoutes.inputDataScreen, page: () => InputData()),
   ];
 }
