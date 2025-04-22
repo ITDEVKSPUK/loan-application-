@@ -45,7 +45,55 @@ class LoanCalculator {
         break;
 
       case 'Efektif':
+        double monthlyPrincipal = loanAmount / loanTerm;
+        double remainingBalance = loanAmount;
+
+        for (int i = 0; i < loanTerm; i++) {
+          double interestPayment = remainingBalance * monthlyInterestRate;
+          double totalMonthly = monthlyPrincipal + interestPayment;
+
+          // Bulatkan ke atas ke 100
+          totalMonthly =
+              roundUpToNearestHundred(totalMonthly.round()).toDouble();
+
+          repaymentSchedule.add({
+            'month': i + 1,
+            'totalPayment': totalMonthly,
+            'interestPayment': interestPayment,
+            'principalPayment': monthlyPrincipal,
+            'remainingBalance': remainingBalance - monthlyPrincipal,
+          });
+
+          remainingBalance -= monthlyPrincipal;
+          totalInterest += interestPayment;
+          totalPayment += totalMonthly;
+        }
+
+        monthlyPayment = repaymentSchedule[0]['totalPayment'];
+        break;
+
       case 'Anuitas':
+        double remainingBalance = loanAmount;
+
+        for (int i = 0; i < loanTerm; i++) {
+          double interestPayment = remainingBalance * monthlyInterestRate;
+          double principalPayment = monthlyPayment - interestPayment;
+
+          repaymentSchedule.add({
+            'month': i + 1,
+            'totalPayment': monthlyPayment,
+            'interestPayment': interestPayment,
+            'principalPayment': principalPayment,
+            'remainingBalance': remainingBalance - principalPayment,
+          });
+
+          remainingBalance -= principalPayment;
+          totalInterest += interestPayment;
+          totalPayment += monthlyPayment;
+        }
+
+        break;
+
       default:
         monthlyPayment = loanAmount *
             monthlyInterestRate /
