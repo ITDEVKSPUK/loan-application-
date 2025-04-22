@@ -1,4 +1,4 @@
-class LoggedUser {
+class LoginModel {
   final String status;
   final String loginName;
   final String userName;
@@ -6,7 +6,7 @@ class LoggedUser {
   final AdditionalInfo additionalInfo;
   final String sessionId;
 
-  LoggedUser({
+  LoginModel({
     required this.status,
     required this.loginName,
     required this.userName,
@@ -15,14 +15,14 @@ class LoggedUser {
     required this.sessionId,
   });
 
-  factory LoggedUser.fromJson(Map<String, dynamic> json) {
-    return LoggedUser(
-      status: json['status'] ?? '',
-      loginName: json['LoginName'] ?? '',
-      userName: json['UserName'] ?? '',
-      additionalUser: AdditionalUser.fromJson(json['additionalUser'] ?? {}),
-      additionalInfo: AdditionalInfo.fromJson(json['additionalInfo'] ?? {}),
-      sessionId: json['SessionID'] ?? '',
+  factory LoginModel.fromJson(Map<String, dynamic> json) {
+    return LoginModel(
+      status: json['status'],
+      loginName: json['LoginName'],
+      userName: json['UserName'],
+      additionalUser: AdditionalUser.fromJson(json['additionalUser']),
+      additionalInfo: AdditionalInfo.fromJson(json['additionalInfo']),
+      sessionId: json['SessionID'],
     );
   }
 
@@ -49,8 +49,8 @@ class AdditionalUser {
 
   factory AdditionalUser.fromJson(Map<String, dynamic> json) {
     return AdditionalUser(
-      groupId: json['GroupId'] ?? '',
-      groupName: json['GroupName'] ?? '',
+      groupId: json['GroupId'],
+      groupName: json['GroupName'],
     );
   }
 
@@ -75,9 +75,9 @@ class AdditionalInfo {
 
   factory AdditionalInfo.fromJson(Map<String, dynamic> json) {
     return AdditionalInfo(
-      ido: json['Ido'] ?? '',
-      legalName: json['LegalName'] ?? '',
-      legalId: json['Legal_Id'] ?? '',
+      ido: json['Ido'],
+      legalName: json['LegalName'],
+      legalId: json['Legal_Id'],
     );
   }
 

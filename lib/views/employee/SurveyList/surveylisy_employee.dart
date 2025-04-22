@@ -3,41 +3,23 @@ import 'package:get/get.dart';
 import 'package:loan_apllication/core/theme/color.dart';
 import 'package:loan_apllication/utils/routes/my_app_route.dart';
 import 'package:loan_apllication/views/employee/SurveyList/home_controller.dart';
-import 'package:loan_apllication/views/employee/inputuserdata/inputdata.dart';
 import 'package:loan_apllication/widgets/survey_box.dart';
 
-class surveyList extends StatefulWidget {
-  const surveyList({super.key});
+class SurveyList extends StatefulWidget {
+  const SurveyList({super.key});
 
   @override
-  _HomeState createState() => _HomeState();
+  _SurveyListState createState() => _SurveyListState();
 }
 
-class _HomeState extends State<surveyList> {
+class _SurveyListState extends State<SurveyList> {
   final HomeController controller = Get.put(HomeController());
-  final List<Map<String, String>> surveyList = [
-    {
-      'name': 'Azzam Aqila',
-      'date': '20th February 2036',
-      'location': 'Kudus, Jawa Utara',
-      'status': 'ACCEPTED',
-      'image': 'assets/images/bg.png',
-    },
-    {
-      'name': 'Nadira Salsabila',
-      'date': '15th March 2036',
-      'location': 'Semarang, Jawa Tengah',
-      'status': 'DECLINED',
-      'image': 'assets/images/bg.png',
-    },
-    {
-      'name': 'Rizky Fadillah',
-      'date': '10th April 2036',
-      'location': 'Jakarta, DKI Jakarta',
-      'status': 'UNREAD',
-      'image': 'assets/images/bg.png',
-    },
-  ];
+
+  @override
+  void initState() {
+    super.initState();
+    controller.getHistory(); // Fetch dynamic history list
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +27,12 @@ class _HomeState extends State<surveyList> {
       backgroundColor: AppColors.pureWhite,
       body: Column(
         children: [
-          Padding(padding: EdgeInsets.only(top: 20)),
+          const SizedBox(height: 20),
           Container(
             width: double.infinity,
             height: 57,
-            decoration: BoxDecoration(color: Colors.white),
-            child: Center(
+            color: Colors.white,
+            child: const Center(
               child: Text(
                 'Survey List',
                 style: TextStyle(
@@ -63,32 +45,36 @@ class _HomeState extends State<surveyList> {
             ),
           ),
           Expanded(
-            child: Obx(() => ListView.builder(
-                  padding: EdgeInsets.all(10),
-                  itemCount: controller.surveyList.length,
-                  itemBuilder: (context, index) {
-                    final item = controller.surveyList[index];
-                    return SurveyBox(
-                      name: item['name']!,
-                      date: item['date']!,
-                      location: item['location']!,
-                      status: item['status']!,
-                      image: item['image']!,
-                      statusColor: controller.getStatusColor(item['status']!),
-                    );
-                  },
-                )),
+            child: Obx(() {
+              final list = controller.surveyList;
+              if (list.isEmpty) {
+                return const Center(child: Text('No survey data available.'));
+              }
+              return ListView.builder(
+                padding: const EdgeInsets.all(10),
+                itemCount: controller.surveyList.length,
+                itemBuilder: (context, index) {
+                  final item = controller.surveyList[index];
+                  return SurveyBox(
+                    name: item.fullName,
+                    date: item.application.trxDate.split('.').first,
+                    location: item.region,
+                    status: "UNREAD",
+                    image: 'assets/images/bg.png',
+                    statusColor: controller.getStatusColor("UNREAD"),
+                  );
+                },
+              );
+            }),
           ),
         ],
       ),
       floatingActionButton: Align(
         alignment: Alignment.bottomRight,
         child: Padding(
-          padding: EdgeInsets.all(13.0),
+          padding: const EdgeInsets.all(13.0),
           child: GestureDetector(
-            onTap: () {
-              Get.toNamed(MyAppRoutes.inputDataScreen);
-            },
+            onTap: () => Get.toNamed(MyAppRoutes.inputDataScreen),
             child: Container(
               width: 60,
               height: 60,
@@ -96,12 +82,8 @@ class _HomeState extends State<surveyList> {
                 color: const Color.fromARGB(255, 4, 73, 130),
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: Center(
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: 40,
-                ),
+              child: const Center(
+                child: Icon(Icons.add, color: Colors.white, size: 40),
               ),
             ),
           ),
