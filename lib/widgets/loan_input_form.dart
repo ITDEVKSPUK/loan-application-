@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:get/get.dart';
-import 'package:loan_apllication/views/employee/Simulation_Calculator/simulation_controller.dart';
+import 'package:loan_application/views/Simulation_Calculator/simulation_controller.dart';
 
 class LoanInputForm extends StatelessWidget {
   final TextEditingController loanAmountController;
