@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loan_apllication/API/service/post_login.dart';
-import 'package:loan_apllication/core/theme/color.dart';
-import 'package:loan_apllication/utils/routes/my_app_route.dart';
-import 'package:loan_apllication/widgets/app_button.dart';
-import 'package:loan_apllication/widgets/custom_text.dart';
+import 'package:loan_application/API/service/post_login.dart';
+import 'package:loan_application/core/theme/color.dart';
+import 'package:loan_application/utils/routes/my_app_route.dart';
+import 'package:loan_application/widgets/app_button.dart';
+import 'package:loan_application/widgets/custom_text.dart';
 
 class ProfileEmployee extends StatefulWidget {
   const ProfileEmployee({super.key});

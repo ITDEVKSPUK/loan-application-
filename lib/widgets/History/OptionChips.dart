@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:loan_apllication/core/theme/color.dart';
+import 'package:loan_application/core/theme/color.dart';
 
 class OptionChips extends StatelessWidget {
   final String title;

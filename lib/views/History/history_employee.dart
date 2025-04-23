@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loan_apllication/core/theme/color.dart';
-import 'package:loan_apllication/views/employee/SurveyList/home_controller.dart';
-import 'package:loan_apllication/widgets/searchbar.dart';
-import 'package:loan_apllication/widgets/survey_box.dart';
-import 'package:loan_apllication/widgets/History/filter_button.dart';
+import 'package:loan_application/core/theme/color.dart';
+import 'package:loan_application/views/SurveyList/home_controller.dart';
+import 'package:loan_application/widgets/History/filter_button.dart';
+import 'package:loan_application/widgets/searchbar.dart';
+import 'package:loan_application/widgets/survey_box.dart';
 
 
 class HistoryEmployee extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loan_apllication/views/employee/Simulation_Calculator/logic_calculator.dart';
+import 'package:loan_application/views/Simulation_Calculator/logic_calculator.dart';
 
 class SimulationController extends GetxController {
   final loanAmountController = TextEditingController();

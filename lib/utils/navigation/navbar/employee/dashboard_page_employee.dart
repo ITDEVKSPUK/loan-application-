@@ -2,12 +2,12 @@ import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loan_apllication/core/theme/color.dart';
-import 'package:loan_apllication/navigation/controller/employee/controller_page_employe.dart';
-import 'package:loan_apllication/views/employee/History/history_employee.dart';
-import 'package:loan_apllication/views/employee/Simulation_Calculator/simulation_employee.dart';
-import 'package:loan_apllication/views/employee/SurveyList/surveylisy_employee.dart';
-import 'package:loan_apllication/views/employee/profile/profile_employee.dart';
+import 'package:loan_application/core/theme/color.dart';
+import 'package:loan_application/utils/navigation/controller/employee/controller_page_employe.dart';
+import 'package:loan_application/views/History/history_employee.dart';
+import 'package:loan_application/views/Simulation_Calculator/simulation_employee.dart';
+import 'package:loan_application/views/SurveyList/surveylisy_employee.dart';
+import 'package:loan_application/views/profile/profile_employee.dart';
 
 class DashboardPageEmployee extends StatelessWidget {
   const DashboardPageEmployee({super.key});

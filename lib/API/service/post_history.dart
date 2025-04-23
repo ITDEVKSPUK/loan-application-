@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:loan_apllication/API/dio/dio_client.dart';
+import 'package:loan_application/API/dio/dio_client.dart';
 
 class HistoryService {
   final dio = DioClient.dio;

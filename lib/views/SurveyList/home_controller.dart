@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loan_apllication/API/models/history_models.dart';
-import 'package:loan_apllication/API/service/post_history.dart';
-import 'package:loan_apllication/core/theme/color.dart';
+import 'package:loan_application/API/models/history_models.dart';
+import 'package:loan_application/API/service/post_history.dart';
+import 'package:loan_application/core/theme/color.dart';
 
 class HomeController extends GetxController {
   var surveyList = <HistoryModel>[].obs;

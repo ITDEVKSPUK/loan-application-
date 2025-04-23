@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loan_apllication/core/theme/color.dart';
-import 'package:loan_apllication/views/employee/History/controller_location.dart';
-import 'package:loan_apllication/widgets/custom_text.dart';
+import 'package:loan_application/core/theme/color.dart';
+import 'package:loan_application/views/History/controller_location.dart';
+import 'package:loan_application/widgets/custom_text.dart';
 
 void showLocationBottomSheet(
     BuildContext context, Function(String) onLocationSelected) {
