@@ -6,11 +6,8 @@ import 'package:loan_apllication/views/employee/inputuserdata/formcontroller.dar
 import 'package:loan_apllication/widgets/overlayalamat.dart';
 import 'package:loan_apllication/widgets/custom_appbar.dart';
 import 'package:loan_apllication/widgets/textfield_form.dart';
-<<<<<<< HEAD
 import 'package:flutter_scalable_ocr/flutter_scalable_ocr.dart';
 import 'package:permission_handler/permission_handler.dart';
-=======
->>>>>>> 7c2f58886d508ab710fb76b1bed1b3bc8374ef6e
 
 class InputData extends StatelessWidget {
   final controller = Get.put(InputDataController());

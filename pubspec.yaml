@@ -44,11 +44,9 @@ dependencies:
   intl: ^0.20.2
   image_picker: ^1.0.4
   google_maps_flutter: ^2.1.1
-<<<<<<< HEAD
   flutter_scalable_ocr: 2.2.1
   permission_handler: 12.0.0
-=======
->>>>>>> 7c2f58886d508ab710fb76b1bed1b3bc8374ef6e
+  
 
 dev_dependencies:
   flutter_lints: ^5.0.0
