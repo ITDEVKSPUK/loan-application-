@@ -42,4 +42,22 @@ class LoginControllers extends GetxController {
       Get.offNamed(MyAppRoutes.dashboard);
     }
   }
+
+  Future<void> checkSession() async {
+    await Future.delayed(const Duration(seconds: 1)); // small splash delay
+
+    final sessionId = storage.read('session_id');
+    print('SessionID from storage: $sessionId');
+
+    if (sessionId != null) {
+      final sessionValid = await _loginService.checkSession();
+      if (sessionValid) {
+        Get.offNamed(MyAppRoutes.dashboard);
+        return;
+      }
+    }
+
+    // If session not valid or not found
+    Get.offNamed(MyAppRoutes.loginScreen);
+  }
 }
