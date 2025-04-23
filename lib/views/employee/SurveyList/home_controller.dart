@@ -20,7 +20,7 @@ class HomeController extends GetxController {
 
       final List<dynamic> rawData = response.data['data'] ?? [];
       surveyList.value = rawData.map((e) => HistoryModel.fromJson(e)).toList();
-      filteredList.value = surveyList; // Initialize filtered list
+      filteredList.value = surveyList;
     } catch (e) {
       print('Error: $e');
     }
