@@ -16,5 +16,7 @@ class MyAppPage {
     GetPage(name: MyAppRoutes.dashboard, page: () => DashboardPageEmployee()),
     GetPage(name: MyAppRoutes.homeScreen, page: () => SurveyList()),
     GetPage(name: MyAppRoutes.inputDataScreen, page: () => InputData()),
+    GetPage(name: MyAppRoutes.formAgunan, page: () => FullCreditFormPage()),
+    GetPage(name: MyAppRoutes.surveyDetail, page: () => SurveyDetail()),
   ];
 }
