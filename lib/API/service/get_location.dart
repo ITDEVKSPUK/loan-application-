@@ -8,7 +8,7 @@ class getlocation {
   static final headers = {
     'ICS-Wipala': 'sastra.astana.dwipangga',
     'ICS-Timestamp':
-        DateTime.now().toUtc().toIso8601String().split('.').first + 'Z',
+        '${DateTime.now().toUtc().toIso8601String().split('.').first}Z',
   };
 
   static Future<List<dynamic>> fetchProvinces() async {

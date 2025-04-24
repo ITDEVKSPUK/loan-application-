@@ -18,7 +18,7 @@ class HomeController extends GetxController {
         toDateTime: DateTime.parse('2025-12-31T00:00:00+07:00'),
       );
 
-      print( response.data);
+      print(response.data);
       // Parse the response into a HistoryResponse object
       final historyResponse = HistoryResponse.fromJson(response.data);
 
@@ -46,7 +46,7 @@ class HomeController extends GetxController {
 
   void filterByStatus(String status) {
     filteredList.value =
-        surveyList.where((item) => item.application.purpose == status).toList();
+        surveyList.where((item) => "UNREAD" == status).toList();
   }
 
   Color getStatusColor(String status) {
