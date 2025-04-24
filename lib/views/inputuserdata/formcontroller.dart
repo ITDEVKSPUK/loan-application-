@@ -1,12 +1,10 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_scalable_ocr/flutter_scalable_ocr.dart';
 
 class InputDataController extends GetxController {
-  // Controller untuk tiap TextField
   final nikController = TextEditingController();
   final namaController = TextEditingController();
   final telpController = TextEditingController();
@@ -15,23 +13,30 @@ class InputDataController extends GetxController {
   final nominalController = TextEditingController();
   final jenisJaminanController = TextEditingController();
 
-  // Gambar KTP & Jaminan
   Rx<File?> fotoKtp = Rx<File?>(null);
   Rx<File?> buktiJaminan = Rx<File?>(null);
 
-  final ImagePicker picker = ImagePicker();
+  final ImagePicker _picker = ImagePicker();
 
-  Future<void> pickImageKtp() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  get pickImageJaminan => null;
+
+  // Ambil dari Galeri
+  Future<void> pickImageFromGallery(bool isKtp) async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      fotoKtp.value = File(pickedFile.path);
+      if (isKtp) {
+        fotoKtp.value = File(pickedFile.path);
+      } else {
+        buktiJaminan.value = File(pickedFile.path);
+      }
     }
   }
 
-  Future<void> pickImageJaminan() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      buktiJaminan.value = File(pickedFile.path);
+  void setImageFromCamera(String path, bool isKtp) {
+    if (isKtp) {
+      fotoKtp.value = File(path);
+    } else {
+      buktiJaminan.value = File(path);
     }
   }
 
@@ -48,6 +53,10 @@ class InputDataController extends GetxController {
   }
 
   void saveForm() {
+    if (nikController.text.isEmpty || namaController.text.isEmpty) {
+      Get.snackbar("Gagal", "Pastikan semua data terisi");
+      return;
+    }
     final data = {
       "nik": nikController.text,
       "nama": namaController.text,
@@ -59,8 +68,6 @@ class InputDataController extends GetxController {
       "fotoKtp": fotoKtp.value?.path,
       "buktiJaminan": buktiJaminan.value?.path,
     };
-
-    // Terserah lo mau kirim ke API, SQLite, atau print dulu
     print("DATA YANG DISIMPAN: $data");
     Get.snackbar("Berhasil", "Data berhasil disimpan");
   }
