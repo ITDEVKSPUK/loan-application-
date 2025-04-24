@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:loan_apllication/API/service/get_location.dart';
+import 'package:loan_application/API/service/get_location.dart';
 
 class LocationController extends GetxController {
   var provinces = [].obs;

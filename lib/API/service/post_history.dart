@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:loan_apllication/API/dio/dio_client.dart';
+import 'package:loan_application/API/dio/dio_client.dart';
 
 class HistoryService {
   final dio = DioClient.dio;
@@ -23,7 +23,7 @@ class HistoryService {
     };
     try {
       final response = await dio.post(
-        '/sandbox.ics/v1.0/v1/survey/debitur/inquiry',
+        '/sandbox.ics/v1.0/v1/survey/report',
         data: body,
         options: Options(
           headers: headers,
@@ -32,7 +32,7 @@ class HistoryService {
       return response;
     } on DioException catch (e) {
       throw Exception(
-          'Failed to fetch history: ${e.response?.data ?? e.message}');
+          'Failed to fetch history: ${e.response?.data ?? e.message}${e.response?.statusCode}');
     }
   }
 }

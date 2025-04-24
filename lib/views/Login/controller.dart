@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:loan_apllication/utils/routes/my_app_route.dart';
-import 'package:loan_apllication/API/service/post_login.dart';
+import 'package:loan_application/utils/routes/my_app_route.dart';
+import 'package:loan_application/API/service/post_login.dart';
 
 class LoginControllers extends GetxController {
   final LoginService _loginService = LoginService();
@@ -41,5 +41,23 @@ class LoginControllers extends GetxController {
     if (isValid) {
       Get.offNamed(MyAppRoutes.dashboard);
     }
+  }
+
+  Future<void> checkSession() async {
+    await Future.delayed(const Duration(seconds: 1)); // small splash delay
+
+    final sessionId = storage.read('session_id');
+    print('SessionID from storage: $sessionId');
+
+    if (sessionId != null) {
+      final sessionValid = await _loginService.checkSession();
+      if (sessionValid) {
+        Get.offNamed(MyAppRoutes.dashboard);
+        return;
+      }
+    }
+
+    // If session not valid or not found
+    Get.offNamed(MyAppRoutes.loginScreen);
   }
 }

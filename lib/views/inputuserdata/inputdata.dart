@@ -1,13 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loan_apllication/core/theme/color.dart';
-import 'package:loan_apllication/views/employee/inputuserdata/formcontroller.dart';
-import 'package:loan_apllication/widgets/overlayalamat.dart';
-import 'package:loan_apllication/widgets/custom_appbar.dart';
-import 'package:loan_apllication/widgets/textfield_form.dart';
-import 'package:flutter_scalable_ocr/flutter_scalable_ocr.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:loan_application/core/theme/color.dart';
+import 'package:loan_application/views/inputuserdata/formcontroller.dart';
+import 'package:loan_application/views/inputuserdata/overlayalamat.dart';
+import 'package:loan_application/widgets/custom_appbar.dart';
+import 'package:loan_application/widgets/textfield_form.dart';
 
 class InputData extends StatelessWidget {
   final controller = Get.put(InputDataController());

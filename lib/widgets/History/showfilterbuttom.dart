@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:loan_apllication/core/theme/color.dart';
-import 'package:loan_apllication/views/employee/History/controller_location.dart';
-import 'package:loan_apllication/widgets/History/OptionChips.dart';
-import 'package:loan_apllication/widgets/History/dropdown.dart';
+import 'package:loan_application/core/theme/color.dart';
+import 'package:loan_application/views/History/controller_location.dart';
+import 'package:loan_application/widgets/History/OptionChips.dart';
+import 'package:loan_application/widgets/History/dropdown.dart';
 
 void showFilterBottomSheet(
     BuildContext context, Function(String) onFilterSelected) async {

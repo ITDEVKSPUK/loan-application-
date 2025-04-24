@@ -1,7 +1,7 @@
 class HistoryResponse {
-  final String responseCode;
-  final String responseDescription;
-  final List<HistoryModel> data;
+  String responseCode;
+  String responseDescription;
+  List<Datum> data;
 
   HistoryResponse({
     required this.responseCode,
@@ -11,68 +11,83 @@ class HistoryResponse {
 
   factory HistoryResponse.fromJson(Map<String, dynamic> json) {
     return HistoryResponse(
-      responseCode: json['responseCode'] as String,
-      responseDescription: json['responseDescription'] as String,
-      data: (json['data'] as List<dynamic>)
-          .map((item) => HistoryModel.fromJson(item as Map<String, dynamic>))
-          .toList(),
+      responseCode: json['responseCode'] ?? '',
+      responseDescription: json['responseDescription'] ?? '',
+      data: (json['data'] as List<dynamic>?)
+              ?.map((item) => Datum.fromJson(item))
+              .toList() ??
+          [],
     );
   }
 }
 
-class HistoryModel {
-  final int cifId;
-  final num idLegal;
-  final String officeId;
-  final String fullName;
-  final String region;
-  final String sector;
-  final String village;
-  final String scopeVillage;
-  final String address;
-  final Application application;
-  final Collateral collateral;
-  final AdditionalInfo additionalInfo;
+class Datum {
+  String idLegal;
+  String officeId;
+  String fullName;
+  String sectorCity;
+  String villages;
+  String address;
+  Application application;
+  Collateral collateral;
+  AdditionalInfo additionalInfo;
 
-  HistoryModel({
-    required this.cifId,
+  Datum({
     required this.idLegal,
     required this.officeId,
     required this.fullName,
-    required this.region,
-    required this.sector,
-    required this.village,
-    required this.scopeVillage,
+    required this.sectorCity,
+    required this.villages,
     required this.address,
     required this.application,
     required this.collateral,
     required this.additionalInfo,
   });
 
-  factory HistoryModel.fromJson(Map<String, dynamic> json) {
-    return HistoryModel(
-      cifId: json['cif_id'] as int,
-      idLegal: json['id_legal'] as num,
-      officeId: json['Office_ID'] as String,
-      fullName: json['full_name'] as String,
-      region: json['region'] as String,
-      sector: json['sector'] as String,
-      village: json['village'] as String,
-      scopeVillage: json['scope_village'] as String,
-      address: json['address'] as String,
-      application: Application.fromJson(json['application'] as Map<String, dynamic>),
-      collateral: Collateral.fromJson(json['collateral'] as Map<String, dynamic>),
-      additionalInfo: AdditionalInfo.fromJson(json['additionalinfo'] as Map<String, dynamic>),
+  factory Datum.fromJson(Map<String, dynamic> json) {
+    return Datum(
+      idLegal: json['id_legal'] ?? '',
+      officeId: json['Office_ID'] ?? '',
+      fullName: json['full_name'] ?? '',
+      sectorCity: json['sector_city'] ?? '',
+      villages: json['village'] ?? '',
+      address: json['address'] ?? '',
+      application: Application.fromJson(json['application'] ?? {}),
+      collateral: Collateral.fromJson(json['collateral'] ?? {}),
+      additionalInfo: AdditionalInfo.fromJson(json['additionalinfo'] ?? {}),
+    );
+  }
+}
+
+class AdditionalInfo {
+  String income;
+  String asset;
+  String expenses;
+  String installment;
+
+  AdditionalInfo({
+    required this.income,
+    required this.asset,
+    required this.expenses,
+    required this.installment,
+  });
+
+  factory AdditionalInfo.fromJson(Map<String, dynamic> json) {
+    return AdditionalInfo(
+      income: json['income'] ?? '0',
+      asset: json['asset'] ?? '0',
+      expenses: json['expenses'] ?? '0',
+      installment: json['installment'] ?? '0',
     );
   }
 }
 
 class Application {
-  final String trxSurvey;
-  final String trxDate;
-  final String applicationNo;
-  final String purpose;
-  final num plafond;
+  String trxSurvey;
+  DateTime trxDate;
+  String applicationNo;
+  String purpose;
+  String plafond;
 
   Application({
     required this.trxSurvey,
@@ -84,63 +99,41 @@ class Application {
 
   factory Application.fromJson(Map<String, dynamic> json) {
     return Application(
-      trxSurvey: json['trx_survey'] as String,
-      trxDate: json['trx_date'] as String,
-      applicationNo: json['application_no'] as String,
-      purpose: json['purpose'] as String,
-      plafond: json['plafond'] as num,
+      trxSurvey: json['trx_survey'] ?? '',
+      trxDate:
+          DateTime.parse(json['trx_date'] ?? DateTime.now().toIso8601String()),
+      applicationNo: json['application_no'] ?? '',
+      purpose: json['purpose'] ?? '',
+      plafond: json['plafond'] ?? '0',
     );
   }
 }
 
 class Collateral {
-  final String id;
-  final String idName;
-  final String addDescript;
-  final int idCatDocument;
-  final String documentType;
-  final num value;
+  String id;
+  String idName;
+  String additionalDescription;
+  int idCategoryDocument;
+  String documentType;
+  String value;
 
   Collateral({
     required this.id,
     required this.idName,
-    required this.addDescript,
-    required this.idCatDocument,
+    required this.additionalDescription,
+    required this.idCategoryDocument,
     required this.documentType,
     required this.value,
   });
 
   factory Collateral.fromJson(Map<String, dynamic> json) {
     return Collateral(
-      id: json['id'] as String,
-      idName: json['id_name'] as String,
-      addDescript: json['adddescript'] as String,
-      idCatDocument: json['id_catdocument'] as int,
-      documentType: json['document_type'] as String,
-      value: json['value'] as num,
-    );
-  }
-}
-
-class AdditionalInfo {
-  final num income;
-  final num asset;
-  final num expenses;
-  final num installment;
-
-  AdditionalInfo({
-    required this.income,
-    required this.asset,
-    required this.expenses,
-    required this.installment,
-  });
-
-  factory AdditionalInfo.fromJson(Map<String, dynamic> json) {
-    return AdditionalInfo(
-      income: json['income'] as num,
-      asset: json['asset'] as num,
-      expenses: json['expenses'] as num,
-      installment: json['installment'] as num,
+      id: json['id'] ?? '',
+      idName: json['id_name'] ?? '',
+      additionalDescription: json['adddescript'] ?? '',
+      idCategoryDocument: json['id_catdocument'] ?? 0,
+      documentType: json['document_type'] ?? '',
+      value: json['value'] ?? '0',
     );
   }
 }

@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:loan_apllication/API/dio/dio_client.dart';
-import 'package:loan_apllication/API/models/login_models.dart';
+import 'package:loan_application/API/dio/dio_client.dart';
+import 'package:loan_application/API/models/login_models.dart';
 
 class LoginService {
   final GetStorage storage = GetStorage();
