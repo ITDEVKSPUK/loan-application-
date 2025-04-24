@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/state_manager.dart';
 import 'package:loan_application/API/models/history_models.dart';
 import 'package:loan_application/API/service/post_history.dart';
 import 'package:loan_application/core/theme/color.dart';
 
 class HomeController extends GetxController {
-  var surveyList = <HistoryModel>[].obs;
-  var filteredList = <HistoryModel>[].obs;
+  var surveyList = <Datum>[].obs;
+  var filteredList = <Datum>[].obs;
 
   void getHistory() async {
     final historyService = HistoryService();
@@ -18,9 +18,17 @@ class HomeController extends GetxController {
         toDateTime: DateTime.parse('2025-12-31T00:00:00+07:00'),
       );
 
-      final List<dynamic> rawData = response.data['data'] ?? [];
-      surveyList.value = rawData.map((e) => HistoryModel.fromJson(e)).toList();
-      filteredList.value = surveyList;
+      print( response.data);
+      // Parse the response into a HistoryResponse object
+      final historyResponse = HistoryResponse.fromJson(response.data);
+
+      // Assign the parsed data to surveyList and filteredList
+      surveyList.value = historyResponse.data;
+      filteredList.value = historyResponse.data;
+
+      if (surveyList.isEmpty) {
+        debugPrint('No data found');
+      }
     } catch (e) {
       print('Error: $e');
     }
@@ -38,7 +46,7 @@ class HomeController extends GetxController {
 
   void filterByStatus(String status) {
     filteredList.value =
-        surveyList.where((item) => "UNREAD" == status).toList();
+        surveyList.where((item) => item.application.purpose == status).toList();
   }
 
   Color getStatusColor(String status) {
