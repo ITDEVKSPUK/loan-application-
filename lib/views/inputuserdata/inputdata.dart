@@ -3,13 +3,15 @@ import 'package:get/get.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/inputuserdata/formcontroller.dart';
+import 'package:loan_application/views/inputuserdata/overlayalamat.dart';
 import 'package:loan_application/views/inputuserdata/showImageSourcePicker.dart';
 import 'package:loan_application/widgets/custom_appbar.dart';
 import 'package:loan_application/widgets/textfield_form.dart';
-import 'package:loan_application/views/inputuserdata/overlayalamat.dart';
 
 class InputData extends StatelessWidget {
   final controller = Get.put(InputDataController());
+
+  InputData({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +42,6 @@ class InputData extends StatelessWidget {
                           image: DecorationImage(
                             image: controller.fotoKtp.value != null
                                 ? FileImage(controller.fotoKtp.value!)
-                                : AssetImage('assets/images/rawktp.png')
-                                    as ImageProvider,
                                 : AssetImage('assets/images/rawktp.png')
                                     as ImageProvider,
                             fit: BoxFit.cover,
@@ -94,8 +94,6 @@ class InputData extends StatelessWidget {
                         backgroundColor: AppColors.casualbutton1,
                         padding:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -115,8 +113,7 @@ class InputData extends StatelessWidget {
             ),
 
             TextfieldForm(
-                label: 'Nama Lengkap',
-                controller: controller.namaController),
+                label: 'Nama Lengkap', controller: controller.namaController),
             TextfieldForm(
                 label: 'No. Telpon', controller: controller.telpController),
             TextfieldForm(
@@ -128,8 +125,7 @@ class InputData extends StatelessWidget {
             // Tombol Selengkapnya
             ElevatedButton(
               onPressed: () => showLocationBottomSheet(
-                  context,
-                  (value) => controller.alamatController.text = value),
+                  context, (value) => controller.alamatController.text = value),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.casualbutton1,
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -151,11 +147,11 @@ class InputData extends StatelessWidget {
             Align(
               alignment: Alignment.centerRight,
               child: ElevatedButton(
-                onPressed: () => Get.toNamed(MyAppRoutes.homeScreen), // ganti sesuai route kamu
+                onPressed: () => Get.toNamed(
+                    MyAppRoutes.homeScreen), // ganti sesuai route kamu
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),

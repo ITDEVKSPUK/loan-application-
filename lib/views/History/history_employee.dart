@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:loan_application/core/theme/color.dart';
-import 'package:loan_application/views/SurveyList/home_controller.dart';
+import 'package:loan_application/views/home/home_controller.dart';
 import 'package:loan_application/widgets/History/filter_button.dart';
 import 'package:loan_application/widgets/searchbar.dart';
 import 'package:loan_application/widgets/survey_box.dart';

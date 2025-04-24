@@ -90,7 +90,7 @@ class LoanSummaryAndSchedule extends StatelessWidget {
                   DataCell(Text(formatCurrency(schedule['principalPayment']))),
                   DataCell(Text(formatCurrency(schedule['remainingBalance']))),
                 ]);
-              }).toList(),
+              }),
               DataRow(cells: [
                 const DataCell(Text('Total')),
                 DataCell(Text(formatCurrency(totalPaymentLocal))),
