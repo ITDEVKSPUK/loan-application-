@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
-import 'package:loan_application/views/SurveyList/home_controller.dart';
+import 'package:loan_application/views/home/home_controller.dart';
 import 'package:loan_application/widgets/survey_box.dart';
 
 class SurveyList extends StatefulWidget {

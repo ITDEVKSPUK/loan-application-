@@ -33,7 +33,7 @@ class CheckNik {
     String path = "/sandbox.ics/v1.0/inquiry-anggota";
     String verb = "POST";
     String timestamp =
-        DateTime.now().toUtc().toIso8601String().split('.').first + 'Z';
+        '${DateTime.now().toUtc().toIso8601String().split('.').first}Z';
     String payload =
         'path=$path&verb=$verb&token=$token&timestamp=$timestamp&body=';
 
@@ -45,7 +45,7 @@ class CheckNik {
       "ICS-Timestamp": timestamp,
       "ICS-Wipala": "sastra.astana.dwipangga",
       "ICS-Signature": icsSignature,
-      "Cookie": "$token",
+      "Cookie": token,
     };
 
     final body = {

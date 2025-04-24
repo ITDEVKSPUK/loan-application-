@@ -1,14 +1,17 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loan_application/core/theme/color.dart';
+import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 import 'package:loan_application/views/inputuserdata/overlayalamat.dart';
+import 'package:loan_application/views/inputuserdata/showImageSourcePicker.dart';
 import 'package:loan_application/widgets/custom_appbar.dart';
 import 'package:loan_application/widgets/textfield_form.dart';
 
 class InputData extends StatelessWidget {
   final controller = Get.put(InputDataController());
+
+  InputData({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +28,12 @@ class InputData extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Foto KTP
             Center(
               child: Column(
                 children: [
                   GestureDetector(
-                    onTap: controller.pickImageKtp,
+                    onTap: () => showImageSourcePicker(context, true),
                     child: Obx(() {
                       return Container(
                         width: 317,
@@ -66,6 +70,8 @@ class InputData extends StatelessWidget {
                 ],
               ),
             ),
+
+            // NIK dan tombol Cek
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -86,7 +92,8 @@ class InputData extends StatelessWidget {
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.casualbutton1,
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -95,7 +102,7 @@ class InputData extends StatelessWidget {
                         'Cek',
                         style: TextStyle(
                           fontSize: 16,
-                          color: AppColors.pureWhite,
+                          color: AppColors.black,
                           fontFamily: 'Outfit',
                         ),
                       ),
@@ -105,93 +112,61 @@ class InputData extends StatelessWidget {
               ],
             ),
 
+            TextfieldForm(
+                label: 'Nama Lengkap', controller: controller.namaController),
+            TextfieldForm(
+                label: 'No. Telpon', controller: controller.telpController),
+            TextfieldForm(
+                label: 'Pekerjaan', controller: controller.pekerjaanController),
+            TextfieldForm(
+                label: 'Alamat Lengkap',
+                controller: controller.alamatController),
 
-            TextfieldForm(label: 'Nama Lengkap', controller: controller.namaController),
-            TextfieldForm(label: 'No. Telpon', controller: controller.telpController),
-            TextfieldForm(label: 'Pekerjaan', controller: controller.pekerjaanController),
-            TextfieldForm(label: 'Alamat Lengkap', controller: controller.alamatController),
-            //button alamat
+            // Tombol Selengkapnya
             ElevatedButton(
-                  onPressed: () => showLocationBottomSheet(context, (value) => controller.alamatController.text = value),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.casualbutton1,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Text(
-                    'Selengkapnya',
-                    style: TextStyle(fontSize: 16, color: AppColors.pureWhite, fontFamily: 'Outfit'),
-                  ),
+              onPressed: () => showLocationBottomSheet(
+                  context, (value) => controller.alamatController.text = value),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.casualbutton1,
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-            SizedBox(height: 10),
-            TextfieldForm(label: 'Nominal Penjaminan', controller: controller.nominalController),
-            TextfieldForm(label: 'Jenis Jaminan', controller: controller.jenisJaminanController),
-            SizedBox(height: 20),
-            Text(
-              'Bukti Jaminan',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
+              ),
+              child: Text(
+                'Selengkapnya',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: AppColors.pureWhite,
+                    fontFamily: 'Outfit'),
               ),
             ),
-            GestureDetector(
-              onTap: controller.pickImageJaminan,
-              child: Obx(() {
-                return Container(
-                  width: double.infinity,
-                  height: 135,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Color(0x7FD9D9D9),
-                      width: 5,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                      image: controller.buktiJaminan.value != null
-                          ? FileImage(controller.buktiJaminan.value!)
-                          : AssetImage('assets/images/upfile.png') as ImageProvider,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                );
-              }),
-            ),
             SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  onPressed: controller.saveForm,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.greenstatus,
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Text(
-                    'SAVE',
-                    style: TextStyle(fontSize: 16, color: AppColors.pureWhite),
+
+            // Tombol Next di pojok kanan bawah dari area scroll
+            Align(
+              alignment: Alignment.centerRight,
+              child: ElevatedButton(
+                onPressed: () => Get.toNamed(
+                    MyAppRoutes.homeScreen), // ganti sesuai route kamu
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: controller.clearForm,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.redstatus,
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Text(
-                    'CLEAR',
-                    style: TextStyle(fontSize: 16, color: AppColors.pureWhite),
+                child: Text(
+                  'Next',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: AppColors.black,
+                    fontFamily: 'Outfit',
                   ),
                 ),
-              ],
+              ),
             ),
+            SizedBox(height: 30), // biar ga mepet banget ke bawah
           ],
         ),
       ),
