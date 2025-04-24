@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_scalable_ocr/flutter_scalable_ocr.dart';
-import 'package:loan_apllication/views/employee/inputuserdata/ocr_controller.dart';
+import 'package:loan_application/views/inputuserdata/ocr_controller.dart';
 
 class FormKtpSection extends StatelessWidget {
   FormKtpSection({super.key});

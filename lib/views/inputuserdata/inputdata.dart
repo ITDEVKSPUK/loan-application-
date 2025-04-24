@@ -1,11 +1,12 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_scalable_ocr/flutter_scalable_ocr.dart';
 import 'package:get/get.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 import 'package:loan_application/views/inputuserdata/overlayalamat.dart';
 import 'package:loan_application/widgets/custom_appbar.dart';
 import 'package:loan_application/widgets/textfield_form.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class InputData extends StatelessWidget {
   final controller = Get.put(InputDataController());
@@ -62,7 +63,8 @@ class InputData extends StatelessWidget {
                                     ),
                                     ElevatedButton(
                                       onPressed: () {
-                                        controller.nikController.text = scannedText.value;
+                                        controller.nikController.text =
+                                            scannedText.value;
                                         Navigator.of(context).pop();
                                       },
                                       child: Text("Gunakan Hasil Scan"),
@@ -74,7 +76,8 @@ class InputData extends StatelessWidget {
                           },
                         );
                       } else {
-                        Get.snackbar("Izin Ditolak", "Aktifkan izin kamera untuk scan KTP.");
+                        Get.snackbar("Izin Ditolak",
+                            "Aktifkan izin kamera untuk scan KTP.");
                       }
                     },
                     child: Obx(() {
@@ -85,7 +88,8 @@ class InputData extends StatelessWidget {
                           image: DecorationImage(
                             image: controller.fotoKtp.value != null
                                 ? FileImage(controller.fotoKtp.value!)
-                                : AssetImage('assets/images/rawktp.png') as ImageProvider,
+                                : AssetImage('assets/images/rawktp.png')
+                                    as ImageProvider,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -132,7 +136,8 @@ class InputData extends StatelessWidget {
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.casualbutton1,
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -150,10 +155,15 @@ class InputData extends StatelessWidget {
                 ),
               ],
             ),
-            TextfieldForm(label: 'Nama Lengkap', controller: controller.namaController),
-            TextfieldForm(label: 'No. Telpon', controller: controller.telpController),
-            TextfieldForm(label: 'Pekerjaan', controller: controller.pekerjaanController),
-            TextfieldForm(label: 'Alamat Lengkap', controller: controller.alamatController),
+            TextfieldForm(
+                label: 'Nama Lengkap', controller: controller.namaController),
+            TextfieldForm(
+                label: 'No. Telpon', controller: controller.telpController),
+            TextfieldForm(
+                label: 'Pekerjaan', controller: controller.pekerjaanController),
+            TextfieldForm(
+                label: 'Alamat Lengkap',
+                controller: controller.alamatController),
             ElevatedButton(
               onPressed: () => showLocationBottomSheet(
                 context,
@@ -168,12 +178,19 @@ class InputData extends StatelessWidget {
               ),
               child: Text(
                 'Selengkapnya',
-                style: TextStyle(fontSize: 16, color: AppColors.pureWhite, fontFamily: 'Outfit'),
+                style: TextStyle(
+                    fontSize: 16,
+                    color: AppColors.pureWhite,
+                    fontFamily: 'Outfit'),
               ),
             ),
             SizedBox(height: 10),
-            TextfieldForm(label: 'Nominal Penjaminan', controller: controller.nominalController),
-            TextfieldForm(label: 'Jenis Jaminan', controller: controller.jenisJaminanController),
+            TextfieldForm(
+                label: 'Nominal Penjaminan',
+                controller: controller.nominalController),
+            TextfieldForm(
+                label: 'Jenis Jaminan',
+                controller: controller.jenisJaminanController),
             SizedBox(height: 20),
             Text(
               'Bukti Jaminan',
@@ -197,7 +214,8 @@ class InputData extends StatelessWidget {
                     image: DecorationImage(
                       image: controller.buktiJaminan.value != null
                           ? FileImage(controller.buktiJaminan.value!)
-                          : AssetImage('assets/images/upfile.png') as ImageProvider,
+                          : AssetImage('assets/images/upfile.png')
+                              as ImageProvider,
                       fit: BoxFit.cover,
                     ),
                   ),

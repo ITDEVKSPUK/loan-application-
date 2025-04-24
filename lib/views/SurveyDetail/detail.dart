@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:loan_apllication/widgets/custom_appbar.dart';
+import 'package:loan_application/widgets/custom_appbar.dart';
 
 class SurveyDetail extends StatelessWidget {
   const SurveyDetail({Key? key}) : super(key: key);
