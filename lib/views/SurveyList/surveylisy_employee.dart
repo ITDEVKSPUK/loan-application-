@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/SurveyList/home_controller.dart';
@@ -57,8 +58,9 @@ class _SurveyListState extends State<SurveyList> {
                   final item = controller.surveyList[index];
                   return SurveyBox(
                     name: item.fullName,
-                    date: item.application.trxDate.split('.').first,
-                    location: item.region,
+                    date: DateFormat('yyyy-MM-dd')
+                        .format(item.application.trxDate),
+                    location: item.sectorCity,
                     status: "UNREAD",
                     image: 'assets/images/bg.png',
                     statusColor: controller.getStatusColor("UNREAD"),

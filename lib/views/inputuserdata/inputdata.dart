@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loan_application/core/theme/color.dart';
@@ -41,6 +40,8 @@ class InputData extends StatelessWidget {
                           image: DecorationImage(
                             image: controller.fotoKtp.value != null
                                 ? FileImage(controller.fotoKtp.value!)
+                                : AssetImage('assets/images/rawktp.png')
+                                    as ImageProvider,
                                 : AssetImage('assets/images/rawktp.png')
                                     as ImageProvider,
                             fit: BoxFit.cover,
@@ -91,6 +92,8 @@ class InputData extends StatelessWidget {
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.casualbutton1,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         padding:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         shape: RoundedRectangleBorder(
