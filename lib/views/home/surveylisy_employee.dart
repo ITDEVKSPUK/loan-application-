@@ -51,22 +51,28 @@ class _SurveyListState extends State<SurveyList> {
               if (list.isEmpty) {
                 return const Center(child: Text('No survey data available.'));
               }
-              return ListView.builder(
+                return ListView.builder(
                 padding: const EdgeInsets.all(10),
                 itemCount: controller.surveyList.length,
                 itemBuilder: (context, index) {
                   final item = controller.surveyList[index];
-                  return SurveyBox(
+                  return GestureDetector(
+                  onTap: () => Get.toNamed(
+                    MyAppRoutes.surveyDetail,
+                    arguments: item,
+                  ),
+                  child: SurveyBox(
                     name: item.fullName,
                     date: DateFormat('yyyy-MM-dd')
-                        .format(item.application.trxDate),
+                      .format(item.application.trxDate),
                     location: item.sectorCity,
                     status: "UNREAD",
                     image: 'assets/images/bg.png',
                     statusColor: controller.getStatusColor("UNREAD"),
+                  ),
                   );
                 },
-              );
+                );
             }),
           ),
         ],

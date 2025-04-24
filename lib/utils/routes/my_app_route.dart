@@ -7,4 +7,6 @@ class MyAppRoutes {
   static const inputDataScreen = "/inputdata";
   static const surveyListScreen = "/surveylist";
   static const formAgunan = "/formagunan";
+  static const surveyDetail = "/surveyDetail";
+
 }
