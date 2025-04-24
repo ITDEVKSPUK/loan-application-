@@ -74,7 +74,7 @@ class _SurveyListState extends State<SurveyList> {
         child: Padding(
           padding: const EdgeInsets.all(13.0),
           child: GestureDetector(
-            onTap: () => Get.toNamed(MyAppRoutes.inputDataScreen),
+            onTap: () => Get.toNamed(MyAppRoutes.formAgunan),
             child: Container(
               width: 60,
               height: 60,

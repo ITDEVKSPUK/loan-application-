@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class InputDataController extends GetxController {
+
+  
   // Controller untuk tiap TextField
   final nikController = TextEditingController();
   final namaController = TextEditingController();
