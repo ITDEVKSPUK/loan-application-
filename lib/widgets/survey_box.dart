@@ -7,6 +7,7 @@ class SurveyBox extends StatelessWidget {
   final String status;
   final String image;
   final Color statusColor;
+  final VoidCallback? onTap;
 
   const SurveyBox({
     super.key,
@@ -16,11 +17,14 @@ class SurveyBox extends StatelessWidget {
     required this.status,
     required this.image,
     required this.statusColor,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
       margin: EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -123,6 +127,7 @@ class SurveyBox extends StatelessWidget {
           ),
         ],
       ),
+      )
     );
   }
 }
