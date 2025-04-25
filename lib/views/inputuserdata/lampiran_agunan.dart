@@ -31,6 +31,7 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
           title: const Text("Form Pengajuan Kredit"),
           backgroundColor: AppColors.pureWhite,
           shadowColor: AppColors.pureWhite,
+          automaticallyImplyLeading: false,
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16),

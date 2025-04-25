@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:loan_application/core/theme/color.dart';
+import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/home/home_controller.dart';
 import 'package:loan_application/widgets/History/filter_button.dart';
 import 'package:loan_application/widgets/searchbar.dart';
@@ -15,15 +16,15 @@ class HistoryEmployee extends StatefulWidget {
 }
 
 class _HistoryEmployeeState extends State<HistoryEmployee> {
-  final HomeController _controller = Get.put(HomeController());
+  final HomeController controller = Get.put(HomeController());
   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _controller.getHistory(); // Fetch history data
+    controller.getHistory(); // Fetch history data
     searchController.addListener(() {
-      _controller.filterSearch(searchController.text);
+      controller.filterSearch(searchController.text);
     });
   }
 
@@ -42,34 +43,40 @@ class _HistoryEmployeeState extends State<HistoryEmployee> {
           const SizedBox(height: 30),
           CustomSearchBar(
             controller: searchController,
-            onChanged: (query) => _controller.filterSearch(query),
+            onChanged: (query) => controller.filterSearch(query),
           ),
           FilterButtons(
-            onFilterSelected: (status) => _controller.filterByStatus(status),
+            onFilterSelected: (status) => controller.filterByStatus(status),
           ),
           Expanded(
             child: Obx(() {
-              if (_controller.surveyList.isEmpty) {
+              if (controller.surveyList.isEmpty) {
                 return const Center(
                   child: Text('No history found'),
                 );
               }
               return ListView.builder(
                 padding: const EdgeInsets.all(10),
-                itemCount: _controller.filteredList.length,
+                itemCount: controller.surveyList.length,
                 itemBuilder: (context, index) {
-                  final item = _controller.filteredList[index];
-                  return SurveyBox(
+                  final item = controller.surveyList[index];
+                  return GestureDetector(
+                  onTap: () => Get.toNamed(
+                    MyAppRoutes.surveyDetail,
+                    arguments: item,
+                  ),
+                  child: SurveyBox(
                     name: item.fullName,
                     date: DateFormat('yyyy-MM-dd')
-                        .format(item.application.trxDate),
+                      .format(item.application.trxDate),
                     location: item.sectorCity,
                     status: "UNREAD",
                     image: 'assets/images/bg.png',
-                    statusColor: _controller.getStatusColor("UNREAD"),
+                    statusColor: controller.getStatusColor("UNREAD"),
+                  ),
                   );
                 },
-              );
+                );
             }),
           ),
         ],
