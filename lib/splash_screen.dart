@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:loan_apllication/utils/routes/my_app_route.dart';
-import 'package:loan_apllication/API/service/post_login.dart';
+import 'package:loan_application/API/service/post_login.dart';
+import 'package:loan_application/views/Login/controller.dart';
+
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,29 +15,12 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   final storage = GetStorage();
   final loginService = LoginService();
+  final LoginControllers controller = Get.put(LoginControllers());
 
   @override
   void initState() {
     super.initState();
-    _checkSession();
-  }
-
-  Future<void> _checkSession() async {
-    await Future.delayed(const Duration(seconds: 1)); // small splash delay
-
-    final sessionId = storage.read('session_id');
-    print('SessionID from storage: $sessionId');
-
-    if (sessionId != null) {
-      final sessionValid = await loginService.checkSession();
-      if (sessionValid) {
-        Get.offNamed(MyAppRoutes.dashboard);
-        return;
-      }
-    }
-
-    // If session not valid or not found
-    Get.offNamed(MyAppRoutes.loginScreen);
+    controller.checkSession();
   }
 
   @override

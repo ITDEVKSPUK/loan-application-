@@ -1,14 +1,14 @@
 import 'package:dio/dio.dart';
-import 'package:loan_apllication/API/dio/dio_client.dart';
+import 'package:loan_application/API/dio/dio_client.dart';
 
-class ApiService {
+class getlocation {
   static final Dio _dio = DioClient.dio;
   static const baseUrl = '/sandbox.ics/v1.0/List';
 
   static final headers = {
     'ICS-Wipala': 'sastra.astana.dwipangga',
     'ICS-Timestamp':
-        DateTime.now().toUtc().toIso8601String().split('.').first + 'Z',
+        '${DateTime.now().toUtc().toIso8601String().split('.').first}Z',
   };
 
   static Future<List<dynamic>> fetchProvinces() async {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:loan_apllication/core/theme/color.dart';
-import 'package:loan_apllication/widgets/History/showfilterbuttom.dart';
+import 'package:loan_application/core/theme/color.dart';
+import 'package:loan_application/widgets/History/showfilterbuttom.dart';
 
 class FilterButtons extends StatelessWidget {
   final Function(String) onFilterSelected;

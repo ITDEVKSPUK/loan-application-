@@ -2,10 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loan_apllication/core/theme/color.dart';
-import 'package:loan_apllication/views/Login/controller.dart';
-import 'package:loan_apllication/widgets/app_button.dart';
-import 'package:loan_apllication/widgets/text_field.dart';
+import 'package:loan_application/core/theme/color.dart';
+import 'package:loan_application/views/Login/controller.dart';
+import 'package:loan_application/widgets/app_button.dart';
+import 'package:loan_application/widgets/text_field.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
