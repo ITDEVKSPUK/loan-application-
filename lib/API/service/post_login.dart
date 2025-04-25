@@ -61,7 +61,7 @@ class LoginService {
 
   Future<bool> checkSession() async {
     final timestamp =
-        DateTime.now().toUtc().toIso8601String().split('.').first + 'Z';
+        '${DateTime.now().toUtc().toIso8601String().split('.').first}Z';
     try {
       final headers = {
         "ICS-Wipala": "sastra.astana.dwipangga",
