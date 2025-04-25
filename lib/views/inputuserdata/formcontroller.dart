@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -31,8 +32,6 @@ class InputDataController extends GetxController {
     }
   }
 
-  
-
   void setImageFromCamera(String path, bool isKtp) {
     if (isKtp) {
       fotoKtp.value = File(path);
@@ -40,8 +39,6 @@ class InputDataController extends GetxController {
       buktiJaminan.value = File(path);
     }
   }
-
-  
 
   void clearForm() {
     nikController.clear();
@@ -56,10 +53,10 @@ class InputDataController extends GetxController {
   }
 
   void saveForm() {
-  if (nikController.text.isEmpty || namaController.text.isEmpty) {
-    Get.snackbar("Gagal", "Pastikan semua data terisi");
-    return;
-  }
+    if (nikController.text.isEmpty || namaController.text.isEmpty) {
+      Get.snackbar("Gagal", "Pastikan semua data terisi");
+      return;
+    }
     final data = {
       "nik": nikController.text,
       "nama": namaController.text,

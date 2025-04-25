@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class TextfieldForm extends StatefulWidget {
   final String label;
@@ -6,14 +7,17 @@ class TextfieldForm extends StatefulWidget {
   final double height;
   final String hintText;
   final TextEditingController controller;
+  final TextInputType? keyboardType;
+  final TextInputFormatter? inputFormatter;
 
   const TextfieldForm({
+    
     super.key,
     required this.label,
     required this.controller,
     this.width = 300,
     this.height = 50,
-    this.hintText = 'TYPE HERE',
+    this.hintText = 'TYPE HERE', this.keyboardType, this.inputFormatter,
   });
 
   @override
@@ -54,6 +58,8 @@ class _TextfieldFormState extends State<TextfieldForm> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: TextField(
+                inputFormatters: widget.inputFormatter != null ? [widget.inputFormatter!] : [],
+                keyboardType: widget.keyboardType,
                 controller: widget.controller,
                 decoration: InputDecoration(
                   border: InputBorder.none,

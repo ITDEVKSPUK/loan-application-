@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 class CameraScreen extends StatefulWidget {
   final Function(String) onCapture;
 
-  const CameraScreen({Key? key, required this.onCapture}) : super(key: key);
+  const CameraScreen({super.key, required this.onCapture});
 
   @override
   _CameraScreenState createState() => _CameraScreenState();

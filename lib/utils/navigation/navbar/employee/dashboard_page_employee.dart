@@ -6,7 +6,7 @@ import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/navigation/controller/employee/controller_page_employe.dart';
 import 'package:loan_application/views/History/history_employee.dart';
 import 'package:loan_application/views/Simulation_Calculator/simulation_employee.dart';
-import 'package:loan_application/views/SurveyList/surveylisy_employee.dart';
+import 'package:loan_application/views/home/surveylisy_employee.dart';
 import 'package:loan_application/views/profile/profile_employee.dart';
 
 class DashboardPageEmployee extends StatelessWidget {

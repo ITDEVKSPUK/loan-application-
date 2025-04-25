@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:loan_application/core/theme/color.dart';
-import 'package:loan_application/views/SurveyList/home_controller.dart';
+import 'package:loan_application/views/home/home_controller.dart';
 import 'package:loan_application/widgets/History/filter_button.dart';
 import 'package:loan_application/widgets/searchbar.dart';
 import 'package:loan_application/widgets/survey_box.dart';
-
 
 class HistoryEmployee extends StatefulWidget {
   const HistoryEmployee({super.key});
@@ -61,8 +61,9 @@ class _HistoryEmployeeState extends State<HistoryEmployee> {
                   final item = _controller.filteredList[index];
                   return SurveyBox(
                     name: item.fullName,
-                    date: item.application.trxDate,
-                    location: item.village,
+                    date: DateFormat('yyyy-MM-dd')
+                        .format(item.application.trxDate),
+                    location: item.sectorCity,
                     status: "UNREAD",
                     image: 'assets/images/bg.png',
                     statusColor: _controller.getStatusColor("UNREAD"),
