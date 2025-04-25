@@ -148,7 +148,7 @@ class InputData extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: ElevatedButton(
                 onPressed: () => Get.toNamed(
-                    MyAppRoutes.homeScreen), // ganti sesuai route kamu
+                    MyAppRoutes.formAgunan), // ganti sesuai route kamu
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
