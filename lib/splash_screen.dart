@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/API/service/post_login.dart';
 import 'package:loan_application/views/Login/controller.dart';
 

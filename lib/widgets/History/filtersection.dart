@@ -21,8 +21,8 @@ class FilterSection extends StatelessWidget {
     this.selectedTextColor = Colors.white, // Warna teks saat tombol dipilih
     this.unselectedTextColor =
         Colors.black, // Warna teks saat tombol tidak dipilih
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

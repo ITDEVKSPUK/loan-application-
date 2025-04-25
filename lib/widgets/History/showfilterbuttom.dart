@@ -18,7 +18,7 @@ void showFilterBottomSheet(
   String selectedDate = '';
   String selectedDateText = '';
   String selectedLocation = '';
-  DateTime _startDate = DateTime.now();
+  DateTime startDate = DateTime.now();
 
   showModalBottomSheet(
     context: context,
@@ -95,13 +95,13 @@ void showFilterBottomSheet(
                               selectedDateText.isNotEmpty
                                   ? selectedDateText
                                   : DateFormat.yMMMMd('id_ID')
-                                      .format(_startDate),
+                                      .format(startDate),
                             ),
                             trailing: const Icon(Icons.calendar_today),
                             onTap: () {
                               showDatePicker(
                                 context: context,
-                                initialDate: _startDate,
+                                initialDate: startDate,
                                 firstDate: DateTime(2000),
                                 lastDate: DateTime(2100),
                                 builder: (context, child) {
@@ -123,7 +123,7 @@ void showFilterBottomSheet(
                               ).then((picked) {
                                 if (picked != null) {
                                   setState(() {
-                                    _startDate = picked;
+                                    startDate = picked;
                                     selectedDateText =
                                         DateFormat('d MMMM y', 'id_ID')
                                             .format(picked);
@@ -249,7 +249,7 @@ void showFilterBottomSheet(
                                     setState(() {
                                       selectedDate = '';
                                       selectedDateText = '';
-                                      _startDate = DateTime.now();
+                                      startDate = DateTime.now();
                                       selectedLocation = '';
                                       locationController.resetAll();
                                     });

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
-import 'package:loan_application/views/SurveyList/home_controller.dart';
+import 'package:loan_application/views/home/home_controller.dart';
 import 'package:loan_application/widgets/survey_box.dart';
 
 class SurveyList extends StatefulWidget {
@@ -51,22 +51,28 @@ class _SurveyListState extends State<SurveyList> {
               if (list.isEmpty) {
                 return const Center(child: Text('No survey data available.'));
               }
-              return ListView.builder(
+                return ListView.builder(
                 padding: const EdgeInsets.all(10),
                 itemCount: controller.surveyList.length,
                 itemBuilder: (context, index) {
                   final item = controller.surveyList[index];
-                  return SurveyBox(
+                  return GestureDetector(
+                  onTap: () => Get.toNamed(
+                    MyAppRoutes.surveyDetail,
+                    arguments: item,
+                  ),
+                  child: SurveyBox(
                     name: item.fullName,
                     date: DateFormat('yyyy-MM-dd')
-                        .format(item.application.trxDate),
+                      .format(item.application.trxDate),
                     location: item.sectorCity,
                     status: "UNREAD",
                     image: 'assets/images/bg.png',
                     statusColor: controller.getStatusColor("UNREAD"),
+                  ),
                   );
                 },
-              );
+                );
             }),
           ),
         ],
@@ -76,7 +82,7 @@ class _SurveyListState extends State<SurveyList> {
         child: Padding(
           padding: const EdgeInsets.all(13.0),
           child: GestureDetector(
-            onTap: () => Get.toNamed(MyAppRoutes.inputDataScreen),
+            onTap: () => Get.toNamed(MyAppRoutes.formAgunan),
             child: Container(
               width: 60,
               height: 60,
