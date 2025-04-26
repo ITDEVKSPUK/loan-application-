@@ -49,35 +49,42 @@ class _HistoryEmployeeState extends State<HistoryEmployee> {
             onFilterSelected: (status) => controller.filterByStatus(status),
           ),
           Expanded(
-            child: Obx(() {
-              if (controller.surveyList.isEmpty) {
-                return const Center(
-                  child: Text('No history found'),
-                );
-              }
-              return ListView.builder(
-                padding: const EdgeInsets.all(10),
-                itemCount: controller.surveyList.length,
-                itemBuilder: (context, index) {
-                  final item = controller.surveyList[index];
-                  return GestureDetector(
-                  onTap: () => Get.toNamed(
-                    MyAppRoutes.surveyDetail,
-                    arguments: item,
-                  ),
-                  child: SurveyBox(
-                    name: item.fullName,
-                    date: DateFormat('yyyy-MM-dd')
-                      .format(item.application.trxDate),
-                    location: item.sectorCity,
-                    status: "UNREAD",
-                    image: 'assets/images/bg.png',
-                    statusColor: controller.getStatusColor("UNREAD"),
-                  ),
+            child: RefreshIndicator(
+              color: AppColors.black, 
+              backgroundColor: Colors.white,
+              onRefresh: () async {
+                await Future(() => controller.getHistory());
+              },
+              child: Obx(() {
+                if (controller.surveyList.isEmpty) {
+                  return const Center(
+                    child: Text('No history found'),
                   );
-                },
+                }
+                return ListView.builder(
+                  padding: const EdgeInsets.all(10),
+                  itemCount: controller.surveyList.length,
+                  itemBuilder: (context, index) {
+                    final item = controller.surveyList[index];
+                    return GestureDetector(
+                      onTap: () => Get.toNamed(
+                        MyAppRoutes.surveyDetail,
+                        arguments: item,
+                      ),
+                      child: SurveyBox(
+                        name: item.fullName,
+                        date: DateFormat('yyyy-MM-dd')
+                            .format(item.application.trxDate),
+                        location: item.sectorCity,
+                        status: "UNREAD",
+                        image: 'assets/images/bg.png',
+                        statusColor: controller.getStatusColor("UNREAD"),
+                      ),
+                    );
+                  },
                 );
-            }),
+              }),
+            ),
           ),
         ],
       ),
