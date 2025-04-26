@@ -38,6 +38,7 @@ class CreditFormController extends GetxController {
       print("Error fetching agunan: $e");
     }
   }
+
   Future<void> fetchDocuments() async {
     try {
       var fetchedDocuments = await getDocAgun.fetchDocuments();
@@ -135,15 +136,14 @@ class CreditFormController extends GetxController {
     String cleanNumber(String text) => text.replaceAll(RegExp(r'[^0-9]'), '');
 
     return {
-      // "application": {
-      //   "plafond": cleanNumber(plafondController.text),
-      //   "purpose": selectedPurpose,
-      // },
-      // "collateral": {
-      //   "id_name": selectedCollateralType,
-      //   "adddescript": collateralDescriptionController.text,
-      //   "value": cleanNumber(collateralValueController.text),
-      // },
+      "application": {
+        "plafond": cleanNumber(plafondController.text),
+      },
+      "collateral": {
+        "adddescript": selectedAgunan.value,
+        "type": selectedDocument.value,
+        "value": cleanNumber(collateralValueController.text),
+      },
       "additionalinfo": {
         "income": cleanNumber(incomeController.text),
         "asset": cleanNumber(assetController.text),
@@ -171,4 +171,60 @@ class CreditFormController extends GetxController {
 
     // TODO: Kirim ke API (data dan file)
   }
+
+var selectedAgunanImages = <File>[].obs;
+var selectedDocumentImages = <File>[].obs;
+
+Future<void> pickAgunanImages(BuildContext context) async {
+  final source = await _chooseSource(context);
+  if (source == null) return;
+
+  if (source == ImageSource.gallery) {
+    final result = await ImagePicker().pickMultiImage();
+    if (result.isNotEmpty) {
+      selectedAgunanImages.addAll(result.map((e) => File(e.path)));
+    }
+  } else {
+    final single = await ImagePicker().pickImage(source: source);
+    if (single != null) selectedAgunanImages.add(File(single.path));
+  }
+}
+
+Future<void> pickDocumentImages(BuildContext context) async {
+  final source = await _chooseSource(context);
+  if (source == null) return;
+
+  if (source == ImageSource.gallery) {
+    final result = await ImagePicker().pickMultiImage();
+    if (result.isNotEmpty) {
+      selectedDocumentImages.addAll(result.map((e) => File(e.path)));
+    }
+  } else {
+    final single = await ImagePicker().pickImage(source: source);
+    if (single != null) selectedDocumentImages.add(File(single.path));
+  }
+}
+
+Future<ImageSource?> _chooseSource(BuildContext context) async {
+  return showModalBottomSheet<ImageSource>(
+    context: context,
+    builder: (ctx) => Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ListTile(
+          leading: const Icon(Icons.photo_library),
+          title: const Text('Galeri'),
+          onTap: () => Navigator.pop(ctx, ImageSource.gallery),
+        ),
+        ListTile(
+          leading: const Icon(Icons.camera_alt),
+          title: const Text('Kamera'),
+          onTap: () => Navigator.pop(ctx, ImageSource.camera),
+        ),
+      ],
+    ),
+  );
+}
+
+
 }
