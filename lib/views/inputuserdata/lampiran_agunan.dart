@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
+import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
 import 'package:loan_application/widgets/textfield_form.dart';
@@ -14,7 +16,8 @@ class FullCreditFormPage extends StatefulWidget {
 }
 
 class _FullCreditFormPageState extends State<FullCreditFormPage> {
-  final controller = CreditFormController();
+  final controller = Get.put(CreditFormController());
+
 
   @override
   void dispose() {
@@ -31,6 +34,7 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
           title: const Text("Form Pengajuan Kredit"),
           backgroundColor: AppColors.pureWhite,
           shadowColor: AppColors.pureWhite,
+          automaticallyImplyLeading: false,
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -41,25 +45,44 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
               const Text("📝 Tujuan Kredit & Jaminan",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               const SizedBox(height: 12),
-              DropdownButtonFormField<String>(
-                value: controller.selectedPurpose,
-                decoration: const InputDecoration(labelText: "Tujuan Kredit"),
-                items: ['MODAL KERJA', 'INVESTASI', 'KONSUMTIF']
-                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                    .toList(),
-                onChanged: (val) =>
-                    setState(() => controller.selectedPurpose = val!),
-              ),
+              Obx(() {
+                return DropdownButtonFormField<String>(
+                  value: controller.selectedAgunan.value.isEmpty
+                      ? null
+                      : controller.selectedAgunan.value,
+                  decoration: InputDecoration(labelText: "Category Agunan"),
+                  items: controller.agunanList.map((agunan) {
+                    return DropdownMenuItem<String>(
+                      value: agunan['ida'].toString(), 
+                      child: Text(
+                          agunan['descript']), 
+                    );
+                  }).toList(),
+                  onChanged: (val) {
+                    controller.selectedAgunan.value = val!;
+                  },
+                );
+              }),
               const SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                value: controller.selectedCollateralType,
-                decoration: const InputDecoration(labelText: "Jenis Jaminan"),
-                items: ['Mobil', 'Motor', 'Tanah', 'Lainnya']
-                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                    .toList(),
-                onChanged: (val) =>
-                    setState(() => controller.selectedCollateralType = val!),
-              ),
+              Obx(() {
+                return DropdownButtonFormField<String>(
+                  value: controller.selectedDocument.value.isEmpty
+                      ? null
+                      : controller.selectedDocument.value,
+                  decoration: InputDecoration(labelText: "Category Document"),
+                  items: controller.documentList.map((document) {
+                    return DropdownMenuItem<String>(
+                      value: document[
+                          'id_catdocument'].toString(), 
+                      child: Text(
+                          document['name']),
+                    );
+                  }).toList(),
+                  onChanged: (val) {
+                    controller.selectedDocument.value = val!;
+                  },
+                );
+              }),
               TextfieldForm(
                 label: 'Jumlah yang akan dipinjam',
                 hintText: 'Masukkan jumlah pinjaman',

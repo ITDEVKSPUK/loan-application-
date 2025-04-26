@@ -7,7 +7,6 @@ class SurveyBox extends StatelessWidget {
   final String status;
   final String image;
   final Color statusColor;
-  final VoidCallback? onTap;
 
   const SurveyBox({
     super.key,
@@ -17,15 +16,12 @@ class SurveyBox extends StatelessWidget {
     required this.status,
     required this.image,
     required this.statusColor,
-    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-      margin: EdgeInsets.only(bottom: 10),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -39,17 +35,18 @@ class SurveyBox extends StatelessWidget {
       ),
       child: Row(
         children: [
+          // Gambar
           Container(
             width: 100,
             height: 100,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10),
                 bottomLeft: Radius.circular(10),
               ),
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(10),
                 bottomLeft: Radius.circular(10),
               ),
@@ -59,53 +56,65 @@ class SurveyBox extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
+          // Informasi utama
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: TextStyle(
-                    color: Color(0xFF364F6B),
-                    fontSize: 14,
-                    fontFamily: 'Outfit',
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                Text(
-                  date,
-                  style: TextStyle(
-                    color: Color(0xFF364F6B).withOpacity(0.6),
-                    fontSize: 10,
-                    fontFamily: 'Outfit',
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                Row(
-                  children: [
-                    Icon(Icons.location_on, color: Color(0xFF00274F), size: 12),
-                    SizedBox(width: 5),
-                    Text(
-                      location,
-                      style: TextStyle(
-                        color: Color(0xFF00274F),
-                        fontSize: 10,
-                        fontFamily: 'Outfit',
-                        fontWeight: FontWeight.w400,
-                      ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      color: Color(0xFF364F6B),
+                      fontSize: 14,
+                      fontFamily: 'Outfit',
+                      fontWeight: FontWeight.w700,
                     ),
-                  ],
-                ),
-              ],
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    date,
+                    style: TextStyle(
+                      color: const Color(0xFF364F6B).withOpacity(0.6),
+                      fontSize: 10,
+                      fontFamily: 'Outfit',
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const Icon(Icons.location_on, color: Color(0xFF00274F), size: 12),
+                      const SizedBox(width: 5),
+                      Expanded(
+                        child: Text(
+                          location,
+                          style: const TextStyle(
+                            color: Color(0xFF00274F),
+                            fontSize: 10,
+                            fontFamily: 'Outfit',
+                            fontWeight: FontWeight.w400,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
+          // Status
           Container(
             width: 54,
             height: 100,
             decoration: BoxDecoration(
               color: statusColor,
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topRight: Radius.circular(10),
                 bottomRight: Radius.circular(10),
               ),
@@ -115,19 +124,20 @@ class SurveyBox extends StatelessWidget {
                 quarterTurns: 3,
                 child: Text(
                   status,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 14,
                     fontFamily: 'Outfit',
                     fontWeight: FontWeight.w700,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ),
           ),
         ],
       ),
-      )
     );
   }
 }
