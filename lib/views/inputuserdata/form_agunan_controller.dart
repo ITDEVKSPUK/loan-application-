@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loan_application/API/service/get_docagun.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
+import 'package:get/get.dart';
 
-class CreditFormController {
+class CreditFormController extends GetxController {
   final plafondController = TextEditingController();
   final collateralDescriptionController = TextEditingController();
   final collateralValueController = TextEditingController();
@@ -13,52 +15,90 @@ class CreditFormController {
   final expensesController = TextEditingController();
   final installmentController = TextEditingController();
 
-  String selectedPurpose = 'MODAL KERJA';
-  String selectedCollateralType = 'Mobil';
+  // // Selected options
+  // String selectedPurpose = 'MODAL KERJA';
+  // String selectedCollateralType = 'Mobil';
 
+  // Selected images for the PDF
   List<XFile> selectedImages = [];
 
-Future<void> pickImagesFromSource(BuildContext context, VoidCallback onImagesUpdated) async {
-  final picker = ImagePicker();
+  // Agunan and Document data
+  var agunanList = <dynamic>[].obs;
+  var documentList = <dynamic>[].obs;
+  var selectedAgunan = ''.obs;
+  var selectedDocument = ''.obs;
 
-  showModalBottomSheet(
-    context: context,
-    builder: (_) => SafeArea(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ListTile(
-            leading: const Icon(Icons.camera_alt),
-            title: const Text('Ambil dari Kamera'),
-            onTap: () async {
-              Navigator.pop(context);
-              final XFile? image = await picker.pickImage(source: ImageSource.camera);
-              if (image != null) {
-                selectedImages.add(image);
-                onImagesUpdated(); // Trigger UI update
-              }
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.photo_library),
-            title: const Text('Pilih dari Galeri'),
-            onTap: () async {
-              Navigator.pop(context);
-              final List<XFile>? images = await picker.pickMultiImage();
-              if (images != null) {
-                selectedImages.addAll(images);
-                onImagesUpdated(); // Trigger UI update
-              }
-            },
-          ),
-        ],
+  Future<void> fetchAgunan() async {
+    try {
+      var fetchedAgunan = await getDocAgun.fetchAgunan();
+      if (fetchedAgunan.isNotEmpty) {
+        agunanList.value = fetchedAgunan;
+      }
+    } catch (e) {
+      print("Error fetching agunan: $e");
+    }
+  }
+  Future<void> fetchDocuments() async {
+    try {
+      var fetchedDocuments = await getDocAgun.fetchDocuments();
+      if (fetchedDocuments.isNotEmpty) {
+        documentList.value = fetchedDocuments;
+      }
+    } catch (e) {
+      print("Error fetching documents: $e");
+    }
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchAgunan();
+    fetchDocuments();
+  }
+
+  // Picking images (from camera or gallery)
+  Future<void> pickImagesFromSource(
+      BuildContext context, VoidCallback onImagesUpdated) async {
+    final picker = ImagePicker();
+
+    showModalBottomSheet(
+      context: context,
+      builder: (_) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Ambil dari Kamera'),
+              onTap: () async {
+                Navigator.pop(context);
+                final XFile? image =
+                    await picker.pickImage(source: ImageSource.camera);
+                if (image != null) {
+                  selectedImages.add(image);
+                  onImagesUpdated(); // Trigger UI update
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Pilih dari Galeri'),
+              onTap: () async {
+                Navigator.pop(context);
+                final List<XFile>? images = await picker.pickMultiImage();
+                if (images != null) {
+                  selectedImages.addAll(images);
+                  onImagesUpdated(); // Trigger UI update
+                }
+              },
+            ),
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
-
-
+  // Generate PDF from selected images
   Future<File> generatePdfFromImages() async {
     final pdf = pw.Document();
     for (var image in selectedImages) {
@@ -79,6 +119,7 @@ Future<void> pickImagesFromSource(BuildContext context, VoidCallback onImagesUpd
     return file;
   }
 
+  // Dispose controllers
   void dispose() {
     plafondController.dispose();
     collateralDescriptionController.dispose();
@@ -89,19 +130,20 @@ Future<void> pickImagesFromSource(BuildContext context, VoidCallback onImagesUpd
     installmentController.dispose();
   }
 
+  // Convert form data to JSON for submission
   Map<String, dynamic> toJson() {
     String cleanNumber(String text) => text.replaceAll(RegExp(r'[^0-9]'), '');
 
     return {
-      "application": {
-        "plafond": cleanNumber(plafondController.text),
-        "purpose": selectedPurpose,
-      },
-      "collateral": {
-        "id_name": selectedCollateralType,
-        "adddescript": collateralDescriptionController.text,
-        "value": cleanNumber(collateralValueController.text),
-      },
+      // "application": {
+      //   "plafond": cleanNumber(plafondController.text),
+      //   "purpose": selectedPurpose,
+      // },
+      // "collateral": {
+      //   "id_name": selectedCollateralType,
+      //   "adddescript": collateralDescriptionController.text,
+      //   "value": cleanNumber(collateralValueController.text),
+      // },
       "additionalinfo": {
         "income": cleanNumber(incomeController.text),
         "asset": cleanNumber(assetController.text),
@@ -111,6 +153,7 @@ Future<void> pickImagesFromSource(BuildContext context, VoidCallback onImagesUpd
     };
   }
 
+  // Handle form submission
   Future<void> handleSubmit(BuildContext context) async {
     final formData = toJson();
     print("DATA TERKIRIM:");
@@ -125,8 +168,6 @@ Future<void> pickImagesFromSource(BuildContext context, VoidCallback onImagesUpd
 
     final pdfFile = await generatePdfFromImages();
     print("PDF berhasil dibuat: ${pdfFile.path}");
-
-   
 
     // TODO: Kirim ke API (data dan file)
   }
