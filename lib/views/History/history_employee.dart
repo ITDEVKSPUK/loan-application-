@@ -50,7 +50,7 @@ class _HistoryEmployeeState extends State<HistoryEmployee> {
           ),
           Expanded(
             child: RefreshIndicator(
-              color: AppColors.black, 
+              color: AppColors.black,
               backgroundColor: Colors.white,
               onRefresh: () async {
                 await Future(() => controller.getHistory());
@@ -63,9 +63,9 @@ class _HistoryEmployeeState extends State<HistoryEmployee> {
                 }
                 return ListView.builder(
                   padding: const EdgeInsets.all(10),
-                  itemCount: controller.surveyList.length,
+                  itemCount: controller.filteredList.length,
                   itemBuilder: (context, index) {
-                    final item = controller.surveyList[index];
+                    final item = controller.filteredList[index];
                     return GestureDetector(
                       onTap: () => Get.toNamed(
                         MyAppRoutes.surveyDetail,
