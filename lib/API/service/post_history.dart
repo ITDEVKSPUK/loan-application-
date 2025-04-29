@@ -29,6 +29,7 @@ class HistoryService {
           headers: headers,
         ),
       );
+      print('sekarang ${timestamp}');
       return response;
     } on DioException catch (e) {
       throw Exception(

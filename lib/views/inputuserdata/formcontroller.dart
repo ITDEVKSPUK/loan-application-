@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loan_application/API/models/anggota_models.dart';
+import 'package:loan_application/API/service/post_nik_check.dart';
 
 class InputDataController extends GetxController {
   final nikController = TextEditingController();
@@ -20,7 +22,32 @@ class InputDataController extends GetxController {
 
   get pickImageJaminan => null;
 
-  // Ambil dari Galeri
+  Future<void> fetchNikData() async {
+    if (nikController.text.isEmpty) {
+      Get.snackbar("Error", "NIK field cannot be empty");
+      return;
+    }
+
+    final checkNikService = CheckNik();
+
+    try {
+      final response = await checkNikService.fetchNIK();
+      if (response.data != null) {
+        final anggotaResponse = AnggotaResponse.fromJson(response.data);
+        namaController.text = anggotaResponse.owner?.fullName ?? '';
+        telpController.text = anggotaResponse.addres?.phone ?? '';
+        pekerjaanController.text =
+            anggotaResponse.addres?.deskripsiPekerjaan ?? '';
+        alamatController.text = anggotaResponse.addres?.addressLine1 ?? '';
+        Get.snackbar("Success", "NIK data fetched successfully");
+      } else {
+        Get.snackbar("Error", "No data found for the provided NIK");
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+  }
+
   Future<void> pickImageFromGallery(bool isKtp) async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
