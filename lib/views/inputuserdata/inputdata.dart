@@ -86,10 +86,7 @@ class InputData extends StatelessWidget {
                   children: [
                     SizedBox(height: 25),
                     ElevatedButton(
-                      onPressed: () => showLocationBottomSheet(
-                        context,
-                        (value) => controller.alamatController.text = value,
-                      ),
+                      onPressed: controller.fetchNikData,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.casualbutton1,
                         padding:

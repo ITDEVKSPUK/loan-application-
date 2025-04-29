@@ -3,13 +3,14 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:loan_application/API/dio/dio_client.dart';
 
 class CheckNik {
   final storage = GetStorage();
-  final String baseUrl =
-      "http://36.92.75.178:8001/sandbox.ics/v1.0/inquiry-anggota";
+  final String path = "/sandbox.ics/v1.0/inquiry-anggota";
   late final String secretKey;
-  final Dio dio = Dio();
+  final dio = DioClient.dio;
+
   CheckNik() {
     secretKey = storage.read("encryptedUsername");
   }
@@ -24,16 +25,13 @@ class CheckNik {
     return base64.encode(digest.bytes);
   }
 
-  Future<void> _fetchData() async {
-    const url = 'http://36.92.75.178:8001/sandbox.ics/v1.0/inquiry-anggota';
-
+  Future<Response> fetchNIK() async {
     final box = GetStorage();
 
-    String token = box.read("dtsessionid");
-    String path = "/sandbox.ics/v1.0/inquiry-anggota";
+    String token = box.read("session_id");
     String verb = "POST";
-    String timestamp =
-        '${DateTime.now().toUtc().toIso8601String().split('.').first}Z';
+    final timestamp =
+        '${DateTime.now().toUtc().toIso8601String().split('.').first}+00:00';
     String payload =
         'path=$path&verb=$verb&token=$token&timestamp=$timestamp&body=';
 
@@ -41,11 +39,9 @@ class CheckNik {
       payload: payload,
     );
     final headers = {
-      "Content-Type": "application/json",
-      "ICS-Timestamp": timestamp,
       "ICS-Wipala": "sastra.astana.dwipangga",
-      "ICS-Signature": icsSignature,
-      "Cookie": token,
+      "ICS-Timestamp": timestamp,
+      "ICS-Signature": 'sandbox.rus2025',
     };
 
     final body = {
@@ -55,23 +51,15 @@ class CheckNik {
     };
 
     try {
-      final response = await Dio().post(
-        url,
+      final response = await dio.post(
+        path,
         options: Options(headers: headers),
-        data: jsonEncode(body),
+        data: body,
       );
-    } catch (e) {
-      if (e is DioException) {
-        if (e.response != null) {
-          final errorData = e.response!.data;
-          if (errorData is Map<String, dynamic> &&
-              errorData.containsKey('message')) {
-            throw Exception(errorData['message']);
-          }
-        } else {
-          throw Exception('Network error: ${e.message}');
-        }
-      }
+      return response;
+    } on DioException catch (e) {
+      throw Exception(
+          'Failed to fetch nik: ${e.response?.data ?? e.message}${e.response?.statusCode}');
     }
   }
 }
