@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:loan_application/core/theme/color.dart';
 
 class TextfieldForm extends StatefulWidget {
   final String label;
@@ -8,16 +9,17 @@ class TextfieldForm extends StatefulWidget {
   final String hintText;
   final TextEditingController controller;
   final TextInputType? keyboardType;
-  final TextInputFormatter? inputFormatter;
+  final List<TextInputFormatter>? inputFormatters;
 
   const TextfieldForm({
-    
     super.key,
     required this.label,
     required this.controller,
     this.width = 300,
     this.height = 50,
-    this.hintText = 'TYPE HERE', this.keyboardType, this.inputFormatter,
+    this.hintText = 'KETIK DISINI',
+    this.keyboardType,
+    this.inputFormatters,
   });
 
   @override
@@ -28,48 +30,44 @@ class _TextfieldFormState extends State<TextfieldForm> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             widget.label,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               fontFamily: 'Outfit',
             ),
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 6),
           Container(
             width: widget.width,
             height: widget.height,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.pureWhite.withOpacity(0.05),
+              border: Border.all(color: AppColors.black.withOpacity(0.2)),
               borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0x3F000000),
-                  blurRadius: 4,
-                  offset: Offset(0, 4),
-                ),
-              ],
             ),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: TextField(
-                inputFormatters: widget.inputFormatter != null ? [widget.inputFormatter!] : [],
-                keyboardType: widget.keyboardType,
                 controller: widget.controller,
+                keyboardType: widget.keyboardType,
+                inputFormatters: widget.inputFormatters ?? [],
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: widget.hintText,
                   hintStyle: TextStyle(
-                    color: Colors.black.withOpacity(0.2),
+                    color: AppColors.black.withOpacity(0.2),
                     fontSize: 13,
                     fontFamily: 'Outfit',
                     fontWeight: FontWeight.w500,
                   ),
+                  contentPadding: const EdgeInsets.symmetric(
+                      vertical: 14),
                 ),
               ),
             ),

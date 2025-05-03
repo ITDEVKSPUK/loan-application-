@@ -9,7 +9,7 @@ import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart
 import 'package:loan_application/widgets/InputUserData/financial_form_section.dart';
 import 'package:loan_application/widgets/InputUserData/upload_agunan.dart';
 import 'package:loan_application/widgets/InputUserData/upload_document.dart';
-import 'package:loan_application/widgets/textfield_form.dart';
+import 'package:loan_application/widgets/InputUserData/textfield_form.dart';
 
 class FullCreditFormPage extends StatefulWidget {
   const FullCreditFormPage({super.key});
