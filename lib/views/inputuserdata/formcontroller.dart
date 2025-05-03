@@ -8,7 +8,10 @@ import 'package:loan_application/API/service/post_nik_check.dart';
 
 class InputDataController extends GetxController {
   final nikController = TextEditingController();
-  final namaController = TextEditingController();
+  final namaAwalController = TextEditingController();
+  final namaAkhirController = TextEditingController();
+  final namaPasanganController = TextEditingController();
+  final kotaAsalController = TextEditingController();
   final telpController = TextEditingController();
   final pekerjaanController = TextEditingController();
   final alamatController = TextEditingController();
@@ -34,8 +37,10 @@ class InputDataController extends GetxController {
       final response = await checkNikService.fetchNIK();
       if (response.data != null) {
         final anggotaResponse = AnggotaResponse.fromJson(response.data);
-        namaController.text = anggotaResponse.owner?.fullName ?? '';
+        namaAwalController.text = anggotaResponse.owner?. firtsName ?? '';
+        namaAkhirController.text = anggotaResponse.owner?. lastName ?? '';
         telpController.text = anggotaResponse.addres?.phone ?? '';
+        kotaAsalController.text = anggotaResponse.addres?.phone ?? '';
         pekerjaanController.text =
             anggotaResponse.addres?.deskripsiPekerjaan ?? '';
         alamatController.text = anggotaResponse.addres?.addressLine1 ?? '';
@@ -69,7 +74,10 @@ class InputDataController extends GetxController {
 
   void clearForm() {
     nikController.clear();
-    namaController.clear();
+    namaAwalController.clear();
+    namaAkhirController.clear();
+    namaPasanganController.clear();
+    kotaAsalController.clear();
     telpController.clear();
     pekerjaanController.clear();
     alamatController.clear();
@@ -80,13 +88,16 @@ class InputDataController extends GetxController {
   }
 
   void saveForm() {
-    if (nikController.text.isEmpty || namaController.text.isEmpty) {
-      Get.snackbar("Gagal", "Pastikan semua data terisi");
-      return;
-    }
+  if (nikController.text.isEmpty || namaAwalController.text.isEmpty) {
+    Get.snackbar("Gagal", "Pastikan semua data terisi");
+    return;
+  }
     final data = {
       "nik": nikController.text,
-      "nama": namaController.text,
+      "namaAwal": namaAwalController.text,
+      "namaAkhir": namaAkhirController.text,
+      "namaPasagan": namaPasanganController.text,
+      "kotaAsal": kotaAsalController.text,
       "telp": telpController.text,
       "pekerjaan": pekerjaanController.text,
       "alamat": alamatController.text,
@@ -102,7 +113,10 @@ class InputDataController extends GetxController {
   @override
   void onClose() {
     nikController.dispose();
-    namaController.dispose();
+    namaAwalController.dispose();
+    namaAkhirController.dispose();
+    namaPasanganController.dispose();
+    kotaAsalController.dispose();
     telpController.dispose();
     pekerjaanController.dispose();
     alamatController.dispose();
