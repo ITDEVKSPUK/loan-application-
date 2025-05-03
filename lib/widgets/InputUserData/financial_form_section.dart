@@ -23,6 +23,12 @@ class FinancialFormSection extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         TextfieldForm(
+          label: 'Tujuan Pinjaman',
+          hintText: 'Contoh: Modal Kerja',
+          controller: controller.purposeController,
+        ),
+        const SizedBox(height: 16),
+        TextfieldForm(
           label: 'Deskripsi Jaminan',
           hintText: 'Contoh: BPKB',
           controller: controller.collateralDescriptionController,
