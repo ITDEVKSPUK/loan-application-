@@ -7,7 +7,7 @@ class PersonalInfoWidget extends StatelessWidget {
   final String address;
   final String occupation;
 
-  const PersonalInfoWidget({
+  const PersonalInfoWidget({super.key, 
     required this.name,
     required this.phoneNumber,
     required this.nik,
@@ -17,7 +17,7 @@ class PersonalInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 317,
       height: 100,
       child: Stack(

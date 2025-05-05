@@ -56,6 +56,7 @@ class CheckNik {
         options: Options(headers: headers),
         data: body,
       );
+      print(response.data);
       return response;
     } on DioException catch (e) {
       throw Exception(

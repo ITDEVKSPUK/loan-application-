@@ -5,9 +5,11 @@ import 'package:loan_application/views/SurveyDetail/detail_controller.dart';
 class CollateralProofWidget extends StatelessWidget {
   final DetailController controller = Get.find<DetailController>();
 
+   CollateralProofWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Container(
+    return Obx(() => SizedBox(
           width: 317,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -56,7 +56,6 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
               Center(
                 child: ElevatedButton(
                   onPressed: () => controller.handleSubmit(context),
-                  child: const Text("Submit"),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 32, vertical: 12),
@@ -64,6 +63,7 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
+                  child: const Text("Submit"),
                 ),
               ),
               const SizedBox(height: 16),

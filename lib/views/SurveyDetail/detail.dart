@@ -10,6 +10,8 @@ import 'package:loan_application/widgets/custom_appbar.dart';
 class SurveyDetail extends StatelessWidget {
   final DetailController controller = Get.put(DetailController());
 
+   SurveyDetail({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +26,7 @@ class SurveyDetail extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Container(
+            SizedBox(
               width: 317,
               height: 198.02,
               child: Opacity(

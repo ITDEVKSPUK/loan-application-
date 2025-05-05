@@ -31,6 +31,7 @@ class Datum {
   Application application;
   Collateral collateral;
   AdditionalInfo additionalInfo;
+  Document document;
 
   Datum({
     required this.idLegal,
@@ -42,6 +43,7 @@ class Datum {
     required this.application,
     required this.collateral,
     required this.additionalInfo,
+    required this.document,
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) {
@@ -55,6 +57,87 @@ class Datum {
       application: Application.fromJson(json['application'] ?? {}),
       collateral: Collateral.fromJson(json['collateral'] ?? {}),
       additionalInfo: AdditionalInfo.fromJson(json['additionalinfo'] ?? {}),
+      document: Document.fromJson(json['document'] ?? {}),
+    );
+  }
+}
+
+class Document {
+  List<DocAsset> docAsset;
+  List<DocImg> docImg;
+  List<DocPerson> docPerson;
+
+  Document({
+    required this.docAsset,
+    required this.docImg,
+    required this.docPerson,
+  });
+
+  factory Document.fromJson(Map<String, dynamic> json) {
+    return Document(
+      docAsset: (json['doc-asset'] as List<dynamic>?)
+              ?.map((item) => DocAsset.fromJson(item))
+              .toList() ??
+          [],
+      docImg: (json['doc-img'] as List<dynamic>?)
+              ?.map((item) => DocImg.fromJson(item))
+              .toList() ??
+          [],
+      docPerson: (json['doc-person'] as List<dynamic>?)
+              ?.map((item) => DocPerson.fromJson(item))
+              .toList() ??
+          [],
+    );
+  }
+}
+
+class DocAsset {
+  String img0;
+  String doc;
+
+  DocAsset({
+    required this.img0,
+    required this.doc,
+  });
+
+  factory DocAsset.fromJson(Map<String, dynamic> json) {
+    return DocAsset(
+      img0: json['img-0'] ?? '',
+      doc: json['doc'] ?? '',
+    );
+  }
+}
+
+class DocImg {
+  String img0;
+  String doc;
+
+  DocImg({
+    required this.img0,
+    required this.doc,
+  });
+
+  factory DocImg.fromJson(Map<String, dynamic> json) {
+    return DocImg(
+      img0: json['img-0'] ?? '',
+      doc: json['doc'] ?? '',
+    );
+  }
+}
+
+class DocPerson {
+  String img0;
+  String doc;
+
+  DocPerson({
+    required this.img0,
+    required this.doc,
+  });
+
+  factory DocPerson.fromJson(Map<String, dynamic> json) {
+    return DocPerson(
+      img0: json['img-0'] ?? '',
+      doc: json['doc'] ?? '',
     );
   }
 }

@@ -86,7 +86,7 @@ class CreditFormController extends GetxController {
               title: const Text('Pilih dari Galeri'),
               onTap: () async {
                 Navigator.pop(context);
-                final List<XFile>? images = await picker.pickMultiImage();
+                final List<XFile> images = await picker.pickMultiImage();
                 if (images != null) {
                   selectedImages.addAll(images);
                   onImagesUpdated(); // Trigger UI update
@@ -121,6 +121,7 @@ class CreditFormController extends GetxController {
   }
 
   // Dispose controllers
+  @override
   void dispose() {
     plafondController.dispose();
     collateralDescriptionController.dispose();

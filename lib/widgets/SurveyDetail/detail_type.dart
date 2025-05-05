@@ -5,9 +5,11 @@ import 'package:loan_application/views/SurveyDetail/detail_controller.dart';
 class CollateralTypeWidget extends StatelessWidget {
   final DetailController controller = Get.find<DetailController>();
 
+  CollateralTypeWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 317,
       height: 60,
       child: Stack(
@@ -29,14 +31,14 @@ class CollateralTypeWidget extends StatelessWidget {
             left: 0,
             top: 30,
             child: Obx(() => Text(
-              controller.collateralType.value,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-                fontFamily: 'Outfit',
-                fontWeight: FontWeight.w300,
-              ),
-            )),
+                  controller.collateralType.value,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontFamily: 'Outfit',
+                    fontWeight: FontWeight.w300,
+                  ),
+                )),
           ),
         ],
       ),

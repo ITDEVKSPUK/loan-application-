@@ -37,12 +37,14 @@ class InputDataController extends GetxController {
       final response = await checkNikService.fetchNIK();
       if (response.data != null) {
         final anggotaResponse = AnggotaResponse.fromJson(response.data);
-        namaAwalController.text = anggotaResponse.owner?. firtsName ?? '';
-        namaAkhirController.text = anggotaResponse.owner?. lastName ?? '';
-        telpController.text = anggotaResponse.addres?.phone ?? '';
-        kotaAsalController.text = anggotaResponse.addres?.phone ?? '';
+        namaAwalController.text = anggotaResponse.owner?.firtsName ?? '';
+        namaAkhirController.text = anggotaResponse.owner?.lastName ?? '';
+        telpController.text = anggotaResponse.addres?.phone ?? '1';
+        kotaAsalController.text = anggotaResponse.addres?.phone ?? '2';
         pekerjaanController.text =
-            anggotaResponse.addres?.deskripsiPekerjaan ?? '';
+            anggotaResponse.addres?.deskripsiPekerjaan ?? '3';
+        namaPasanganController.text =
+            anggotaResponse.owner?.pasanganNama ?? '4';
         alamatController.text = anggotaResponse.addres?.addressLine1 ?? '';
         Get.snackbar("Success", "NIK data fetched successfully");
       } else {
@@ -88,10 +90,10 @@ class InputDataController extends GetxController {
   }
 
   void saveForm() {
-  if (nikController.text.isEmpty || namaAwalController.text.isEmpty) {
-    Get.snackbar("Gagal", "Pastikan semua data terisi");
-    return;
-  }
+    if (nikController.text.isEmpty || namaAwalController.text.isEmpty) {
+      Get.snackbar("Gagal", "Pastikan semua data terisi");
+      return;
+    }
     final data = {
       "nik": nikController.text,
       "namaAwal": namaAwalController.text,

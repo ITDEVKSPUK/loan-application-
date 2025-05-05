@@ -6,8 +6,8 @@ import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 import 'package:loan_application/views/inputuserdata/overlayalamat.dart';
 import 'package:loan_application/views/inputuserdata/showImageSourcePicker.dart';
-import 'package:loan_application/widgets/custom_appbar.dart';
 import 'package:loan_application/widgets/InputUserData/textfield_form.dart';
+import 'package:loan_application/widgets/custom_appbar.dart';
 
 class InputData extends StatelessWidget {
   final controller = Get.put(InputDataController());
@@ -122,7 +122,7 @@ class InputData extends StatelessWidget {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'[+\d\s]')),
               ],
-            ),
+            ),  
             TextfieldForm(
                 label: 'Kota lahir', controller: controller.kotaAsalController),
             TextfieldForm(
