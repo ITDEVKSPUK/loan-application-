@@ -46,34 +46,41 @@ class _SurveyListState extends State<SurveyList> {
             ),
           ),
           Expanded(
-            child: Obx(() {
-              final list = controller.surveyList;
-              if (list.isEmpty) {
-                return const Center(child: Text('No survey data available.'));
-              }
+            child: RefreshIndicator(
+              color: AppColors.black, 
+              backgroundColor: Colors.white,
+              onRefresh: () async {
+                await Future(() => controller.getHistory());
+              },
+              child: Obx(() {
+                final list = controller.surveyList;
+                if (list.isEmpty) {
+                  return const Center(child: Text('No survey data available.'));
+                }
                 return ListView.builder(
-                padding: const EdgeInsets.all(10),
-                itemCount: controller.surveyList.length,
-                itemBuilder: (context, index) {
-                  final item = controller.surveyList[index];
-                  return GestureDetector(
-                  onTap: () => Get.toNamed(
-                    MyAppRoutes.surveyDetail,
-                    arguments: item,
-                  ),
-                  child: SurveyBox(
-                    name: item.fullName,
-                    date: DateFormat('yyyy-MM-dd')
-                      .format(item.application.trxDate),
-                    location: item.sectorCity,
-                    status: "UNREAD",
-                    image: 'assets/images/bg.png',
-                    statusColor: controller.getStatusColor("UNREAD"),
-                  ),
-                  );
-                },
+                  padding: const EdgeInsets.all(10),
+                  itemCount: list.length,
+                  itemBuilder: (context, index) {
+                    final item = list[index];
+                    return GestureDetector(
+                      onTap: () => Get.toNamed(
+                        MyAppRoutes.surveyDetail,
+                        arguments: item,
+                      ),
+                      child: SurveyBox(
+                        name: item.fullName,
+                        date: DateFormat('yyyy-MM-dd')
+                            .format(item.application.trxDate),
+                        location: item.sectorCity,
+                        status: "UNREAD",
+                        image: 'assets/images/bg.png',
+                        statusColor: controller.getStatusColor("UNREAD"),
+                      ),
+                    );
+                  },
                 );
-            }),
+              }),
+            ),
           ),
         ],
       ),
@@ -82,7 +89,7 @@ class _SurveyListState extends State<SurveyList> {
         child: Padding(
           padding: const EdgeInsets.all(13.0),
           child: GestureDetector(
-            onTap: () => Get.toNamed(MyAppRoutes.formAgunan),
+            onTap: () => Get.toNamed(MyAppRoutes.inputDataScreen),
             child: Container(
               width: 60,
               height: 60,

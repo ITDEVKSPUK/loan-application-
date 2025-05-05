@@ -1,0 +1,80 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:loan_application/core/theme/color.dart';
+
+class TextfieldForm extends StatefulWidget {
+  final String label;
+  final double width;
+  final double height;
+  final String hintText;
+  final TextEditingController controller;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+  final VoidCallback? onTap;
+
+  const TextfieldForm({
+    super.key,
+    required this.label,
+    required this.controller,
+    this.width = 300,
+    this.height = 50,
+    this.hintText = 'KETIK DISINI',
+    this.keyboardType,
+    this.inputFormatters,
+    this.onTap,
+  });
+
+  @override
+  State<TextfieldForm> createState() => _TextfieldFormState();
+}
+
+class _TextfieldFormState extends State<TextfieldForm> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            widget.label,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Outfit',
+            ),
+          ),
+          const SizedBox(height: 6),
+          Container(
+            width: widget.width,
+            height: widget.height,
+            decoration: BoxDecoration(
+              color: AppColors.pureWhite.withOpacity(0.05),
+              border: Border.all(color: AppColors.black.withOpacity(0.2)),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: TextField(
+              controller: widget.controller,
+              keyboardType: widget.keyboardType,
+              inputFormatters: widget.inputFormatters ?? [],
+              readOnly: widget.onTap != null, // Only readOnly if onTap exists
+              onTap: widget.onTap, // Trigger onTap when available
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: widget.hintText,
+                hintStyle: TextStyle(
+                  color: AppColors.black.withOpacity(0.2),
+                  fontSize: 13,
+                  fontFamily: 'Outfit',
+                  fontWeight: FontWeight.w500,
+                ),
+                contentPadding: const EdgeInsets.symmetric(vertical: 14),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
