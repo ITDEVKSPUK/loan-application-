@@ -81,6 +81,8 @@ class InputData extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextfieldForm(
+                    width: double.infinity,
+                    height: 50,
                     label: 'NIK',
                     controller: controller.nikController,
                     keyboardType: TextInputType.number,
@@ -115,11 +117,18 @@ class InputData extends StatelessWidget {
               ],
             ),
             TextfieldForm(
-                label: 'Nama Awal', controller: controller.namaAwalController),
+                width: double.infinity,
+                height: 50,
+                label: 'Nama Awal',
+                controller: controller.namaAwalController),
             TextfieldForm(
+                width: double.infinity,
+                height: 50,
                 label: 'Nama Akhir',
                 controller: controller.namaAkhirController),
             TextfieldForm(
+              width: double.infinity,
+              height: 50,
               label: 'No. Telpon',
               controller: controller.telpController,
               keyboardType: TextInputType.phone,
@@ -143,49 +152,55 @@ class InputData extends StatelessWidget {
                   Obx(() => Row(
                         children: [
                           Expanded(
-                            child: ListTile(
-                              title: Text('Laki-laki'),
-                              leading: Radio<String>(
-                                value: 'Laki-laki',
-                                groupValue: controller.selectedGender.value,
-                                onChanged: (value) {
-                                  if (value != null) {
-                                    if (controller.selectedGender.value ==
-                                        value) {
-                                      controller.selectedGender.value = '';
-                                      controller.selectedGenderController.text =
-                                          '';
-                                    } else {
-                                      controller.selectedGender.value = value;
-                                      controller.selectedGenderController.text =
-                                          value;
+                            child: Row(
+                              children: [
+                                Radio<String>(
+                                  value: 'Laki-laki',
+                                  groupValue: controller.selectedGender.value,
+                                  onChanged: (value) {
+                                    if (value != null) {
+                                      if (controller.selectedGender.value ==
+                                          value) {
+                                        controller.selectedGender.value = '';
+                                        controller
+                                            .selectedGenderController.text = '';
+                                      } else {
+                                        controller.selectedGender.value = value;
+                                        controller.selectedGenderController
+                                            .text = value;
+                                      }
                                     }
-                                  }
-                                },
-                              ),
+                                  },
+                                ),
+                                const SizedBox(width: 4),
+                                Text('Laki-laki'),
+                              ],
                             ),
                           ),
                           Expanded(
-                            child: ListTile(
-                              title: Text('Perempuan'),
-                              leading: Radio<String>(
-                                value: 'Perempuan',
-                                groupValue: controller.selectedGender.value,
-                                onChanged: (value) {
-                                  if (value != null) {
-                                    if (controller.selectedGender.value ==
-                                        value) {
-                                      controller.selectedGender.value = '';
-                                      controller.selectedGenderController.text =
-                                          '';
-                                    } else {
-                                      controller.selectedGender.value = value;
-                                      controller.selectedGenderController.text =
-                                          value;
+                            child: Row(
+                              children: [
+                                Radio<String>(
+                                  value: 'Perempuan',
+                                  groupValue: controller.selectedGender.value,
+                                  onChanged: (value) {
+                                    if (value != null) {
+                                      if (controller.selectedGender.value ==
+                                          value) {
+                                        controller.selectedGender.value = '';
+                                        controller
+                                            .selectedGenderController.text = '';
+                                      } else {
+                                        controller.selectedGender.value = value;
+                                        controller.selectedGenderController
+                                            .text = value;
+                                      }
                                     }
-                                  }
-                                },
-                              ),
+                                  },
+                                ),
+                                const SizedBox(width: 4),
+                                Text('Perempuan'),
+                              ],
                             ),
                           ),
                         ],
@@ -204,11 +219,13 @@ class InputData extends StatelessWidget {
                 if (picked != null) {
                   controller.startDate.value = picked;
                   controller.tanggallahirController.text =
-                      DateFormat('dd-MM-yyyy').format(picked);
+                      DateFormat('yyyy-MM-dd').format(picked);
                 }
               },
               child: AbsorbPointer(
                 child: TextfieldForm(
+                  width: double.infinity,
+                  height: 50,
                   label: 'Tanggal Lahir',
                   hintText: 'PILIH TANGGAL LAHIR',
                   controller: controller.tanggallahirController,
@@ -217,13 +234,23 @@ class InputData extends StatelessWidget {
             ),
 
             TextfieldForm(
-                label: 'Kota lahir', controller: controller.kotaAsalController),
+                width: double.infinity,
+                height: 50,
+                label: 'Kota lahir',
+                controller: controller.kotaAsalController),
             TextfieldForm(
-                label: 'Pekerjaan', controller: controller.pekerjaanController),
+                width: double.infinity,
+                height: 50,
+                label: 'Pekerjaan',
+                controller: controller.pekerjaanController),
             TextfieldForm(
+                width: double.infinity,
+                height: 50,
                 label: 'Nama Pasangan',
                 controller: controller.namaPasanganController),
             TextfieldForm(
+              width: double.infinity,
+              height: 50,
               label: 'Nik Pasangan',
               controller: controller.nikpasaganController,
               keyboardType: TextInputType.phone,
@@ -232,6 +259,8 @@ class InputData extends StatelessWidget {
               ],
             ),
             TextfieldForm(
+                width: double.infinity,
+                height: 50,
                 label: 'Alamat Lengkap',
                 controller: controller.alamatController),
             ElevatedButton(

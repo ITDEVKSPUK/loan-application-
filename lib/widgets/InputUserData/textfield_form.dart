@@ -17,8 +17,8 @@ class TextfieldForm extends StatefulWidget {
     super.key,
     required this.label,
     required this.controller,
-    this.width = 300,
-    this.height = 50,
+    required this.width,
+    required this.height,
     this.hintText = 'KETIK DISINI',
     this.keyboardType,
     this.inputFormatters,
@@ -58,8 +58,9 @@ class _TextfieldFormState extends State<TextfieldForm> {
               controller: widget.controller,
               keyboardType: widget.keyboardType,
               inputFormatters: widget.inputFormatters ?? [],
-              readOnly: widget.onTap != null, // Only readOnly if onTap exists
-              onTap: widget.onTap, // Trigger onTap when available
+              readOnly: widget.onTap != null,
+              onTap: widget.onTap,
+              textAlignVertical: TextAlignVertical.center, // Tambahkan ini
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: widget.hintText,
@@ -69,7 +70,8 @@ class _TextfieldFormState extends State<TextfieldForm> {
                   fontFamily: 'Outfit',
                   fontWeight: FontWeight.w500,
                 ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 17),
               ),
             ),
           ),
