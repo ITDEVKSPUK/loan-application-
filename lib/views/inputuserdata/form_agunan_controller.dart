@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 
 class CreditFormController extends GetxController {
   final plafondController = TextEditingController();
+  final purposeController = TextEditingController();
   final collateralDescriptionController = TextEditingController();
   final collateralValueController = TextEditingController();
   final incomeController = TextEditingController();

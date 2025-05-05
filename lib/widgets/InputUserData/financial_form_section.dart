@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:get/get.dart';
 import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
-import 'package:loan_application/widgets/textfield_form.dart';
+import 'package:loan_application/widgets/InputUserData/textfield_form.dart';
 
 class FinancialFormSection extends StatelessWidget {
   final CreditFormController controller;
@@ -19,7 +19,14 @@ class FinancialFormSection extends StatelessWidget {
           hintText: 'Masukkan jumlah pinjaman',
           controller: controller.plafondController,
           keyboardType: TextInputType.number,
-          inputFormatter: MoneyInputFormatter(),
+         inputFormatters: [MoneyInputFormatter()],
+
+        ),
+        const SizedBox(height: 16),
+        TextfieldForm(
+          label: 'Tujuan Pinjaman',
+          hintText: 'Contoh: Modal Kerja',
+          controller: controller.purposeController,
         ),
         const SizedBox(height: 16),
         TextfieldForm(
@@ -32,7 +39,8 @@ class FinancialFormSection extends StatelessWidget {
           hintText: 'Masukkan nilai jaminan',
           controller: controller.collateralValueController,
           keyboardType: TextInputType.number,
-          inputFormatter: MoneyInputFormatter(),
+        inputFormatters: [MoneyInputFormatter()],
+
         ),
         const SizedBox(height: 24),
         const Text(
@@ -43,25 +51,28 @@ class FinancialFormSection extends StatelessWidget {
           label: 'Pendapatan per bulan',
           controller: controller.incomeController,
           keyboardType: TextInputType.number,
-          inputFormatter: MoneyInputFormatter(),
+         inputFormatters: [MoneyInputFormatter()],
+
         ),
         TextfieldForm(
           label: 'Total Aset',
           controller: controller.assetController,
           keyboardType: TextInputType.number,
-          inputFormatter: MoneyInputFormatter(),
+         inputFormatters: [MoneyInputFormatter()],
+
         ),
         TextfieldForm(
           label: 'Pengeluaran per bulan',
           controller: controller.expensesController,
           keyboardType: TextInputType.number,
-          inputFormatter: MoneyInputFormatter(),
+         inputFormatters: [MoneyInputFormatter()],
         ),
         TextfieldForm(
           label: 'Angsuran per bulan',
           controller: controller.installmentController,
           keyboardType: TextInputType.number,
-          inputFormatter: MoneyInputFormatter(),
+         inputFormatters: [MoneyInputFormatter()],
+
         ),
       ],
     );

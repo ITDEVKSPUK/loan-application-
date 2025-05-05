@@ -2,7 +2,7 @@ class AnggotaResponse {
   String? responseCode;
   String? responseDescription;
   Owner? owner;
-  Addres? addres;
+  Address? addres;
 
   AnggotaResponse({
     this.responseCode,
@@ -16,7 +16,7 @@ class AnggotaResponse {
       responseCode: json["responseCode"] as String?,
       responseDescription: json["responseDescription"] as String?,
       owner: json["owner"] != null ? Owner.fromJson(json["owner"]) : null,
-      addres: json["addres"] != null ? Addres.fromJson(json["addres"]) : null,
+      addres: json["addres"] != null ? Address.fromJson(json["addres"]) : null,
     );
   }
 
@@ -30,104 +30,148 @@ class AnggotaResponse {
   }
 }
 
-class Addres {
-  String? region;
-  String? sector;
-  String? village;
-  String? scopeVillage;
-  String? postalCode;
+class Address {
+  String? addressType;        
   String? addressLine1;
-  String? pemberiKerja;
-  String? deskripsiPekerjaan;
-  String? kodePekerjaan;
-  String? namaPerusahaan;
+  String? addressLine2;
+  String? region;              
+  String? sector;            
+  String? village;             
+  String? scopeVillage;        
+  String? postalCode;
+  String? city;
+  String? country;
   String? phone;
+  String? employer;
+  String? jobTitle;
+  String? companyName;
+  String? jobSector;
+  String? jobCode;
 
-  Addres({
+  Address({
+    this.addressType,
+    this.addressLine1,
+    this.addressLine2,
     this.region,
     this.sector,
     this.village,
     this.scopeVillage,
     this.postalCode,
-    this.addressLine1,
-    this.pemberiKerja,
-    this.deskripsiPekerjaan,
-    this.kodePekerjaan,
-    this.namaPerusahaan,
+    this.city,
+    this.country,
     this.phone,
+    this.employer,
+    this.jobTitle,
+    this.companyName,
+    this.jobSector,
+    this.jobCode,
   });
 
-  factory Addres.fromJson(Map<String, dynamic> json) {
-    return Addres(
-      region: json["region"] as String?,
-      sector: json["sector"] as String?,
-      village: json["village"] as String?,
-      scopeVillage: json["scope_village"] as String?,
-      postalCode: json["postal_code"] as String?,
-      addressLine1: json["address_line1"] as String?,
-      pemberiKerja: json["pemberi_kerja"] as String?,
-      deskripsiPekerjaan: json["deskripsi_pekerjaan"] as String?,
-      kodePekerjaan: json["kode_pekerjaan"] as String?,
-      namaPerusahaan: json["nama_perusahaan"] as String?,
-      phone: json["phone"] as String?,
+  factory Address.fromJson(Map<String, dynamic> json) {
+    return Address(
+      addressType: json["address_type"],
+      addressLine1: json["address_line1"],
+      addressLine2: json["address_line2"],
+      region: json["region"],
+      sector: json["sector"],
+      village: json["village"],
+      scopeVillage: json["scope_village"],
+      postalCode: json["postal_code"],
+      city: json["city"],
+      country: json["country"],
+      phone: json["phone"],
+      employer: json["employer"],
+      jobTitle: json["job_title"],
+      companyName: json["company_name"],
+      jobSector: json["job_sector"],
+      jobCode: json["job_code"],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      "address_type": addressType,
+      "address_line1": addressLine1,
+      "address_line2": addressLine2,
       "region": region,
       "sector": sector,
       "village": village,
       "scope_village": scopeVillage,
       "postal_code": postalCode,
-      "address_line1": addressLine1,
-      "pemberi_kerja": pemberiKerja,
-      "deskripsi_pekerjaan": deskripsiPekerjaan,
-      "kode_pekerjaan": kodePekerjaan,
-      "nama_perusahaan": namaPerusahaan,
+      "city": city,
+      "country": country,
       "phone": phone,
+      "employer": employer,
+      "job_title": jobTitle,
+      "company_name": companyName,
+      "job_sector": jobSector,
+      "job_code": jobCode,
     };
   }
 }
+
 
 class Owner {
   String? enikNo;
   int? cifId;
   String? fullName;
-  String? firtsName;
+  String? firstName;
   String? lastName;
-  String? cityBorn;
-  String? pasanganNama;
-  String? pasanganIdcard;
-  DateTime? dateBorn;
+  String? placeOfBirth;
+  String? dateOfBirth;
   int? gender;
+  String? idCardNumber;
+  String? motherName;
+  String? phoneNumber;
+  String? email;
+  String? nationality;
+  String? religion;
+  String? maritalStatus;
+  String? spouseName;
+  String? spouseIdCard;
+  String? occupation;
 
   Owner({
     this.enikNo,
     this.cifId,
     this.fullName,
-    this.firtsName,
+    this.firstName,
     this.lastName,
-    this.cityBorn,
-    this.pasanganNama,
-    this.pasanganIdcard,
-    this.dateBorn,
+    this.placeOfBirth,
+    this.dateOfBirth,
     this.gender,
+    this.idCardNumber,
+    this.motherName,
+    this.phoneNumber,
+    this.email,
+    this.nationality,
+    this.religion,
+    this.maritalStatus,
+    this.spouseName,
+    this.spouseIdCard,
+    this.occupation,
   });
 
   factory Owner.fromJson(Map<String, dynamic> json) {
     return Owner(
-      enikNo: json["enik_no"] as String?,
-      cifId: json["cif_id"] as int?,
-      fullName: json["full_name"] as String?,
-      firtsName: json["firts_name"] as String?,
-      lastName: json["last_name"] as String?,
-      cityBorn: json["city_born"] as String?,
-      pasanganNama: json["pasangan_nama"] as String?,
-      pasanganIdcard: json["pasangan_idcard"] as String?,
-      dateBorn:
-          json["date_born"] != null ? DateTime.parse(json["date_born"]) : null,
-      gender: json["gender"] as int?,
+      enikNo: json["enik_no"],
+      cifId: json["cif_id"],
+      fullName: json["full_name"],
+      firstName: json["first_name"],
+      lastName: json["last_name"],
+      placeOfBirth: json["place_of_birth"],
+      dateOfBirth: json["date_of_birth"],
+      gender: json["gender"],
+      idCardNumber: json["id_card_number"],
+      motherName: json["mother_name"],
+      phoneNumber: json["phone_number"],
+      email: json["email"],
+      nationality: json["nationality"],
+      religion: json["religion"],
+      maritalStatus: json["marital_status"],
+      spouseName: json["spouse_name"],
+      spouseIdCard: json["spouse_id_card"],
+      occupation: json["occupation"],
     );
   }
 
@@ -136,13 +180,23 @@ class Owner {
       "enik_no": enikNo,
       "cif_id": cifId,
       "full_name": fullName,
-      "firts_name": firtsName,
+      "first_name": firstName,
       "last_name": lastName,
-      "city_born": cityBorn,
-      "pasangan_nama": pasanganNama,
-      "pasangan_idcard": pasanganIdcard,
-      "date_born": dateBorn?.toIso8601String(),
+      "place_of_birth": placeOfBirth,
+      "date_of_birth": dateOfBirth,
       "gender": gender,
+      "id_card_number": idCardNumber,
+      "mother_name": motherName,
+      "phone_number": phoneNumber,
+      "email": email,
+      "nationality": nationality,
+      "religion": religion,
+      "marital_status": maritalStatus,
+      "spouse_name": spouseName,
+      "spouse_id_card": spouseIdCard,
+      "occupation": occupation,
     };
   }
 }
+
+
