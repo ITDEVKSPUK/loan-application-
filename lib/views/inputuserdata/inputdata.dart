@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/inputuserdata/formcontroller.dart';
@@ -13,6 +14,9 @@ class InputData extends StatelessWidget {
   final controller = Get.put(InputDataController());
 
   InputData({super.key});
+  DateTime startDate = DateTime.now();
+  String selectedDate = '';
+  String selectedDateText = '';
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +126,96 @@ class InputData extends StatelessWidget {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'[+\d\s]')),
               ],
-            ),  
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Jenis Kelamin',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      fontFamily: 'Outfit',
+                    ),
+                  ),
+                  Obx(() => Row(
+                        children: [
+                          Expanded(
+                            child: ListTile(
+                              title: Text('Laki-laki'),
+                              leading: Radio<String>(
+                                value: 'Laki-laki',
+                                groupValue: controller.selectedGender.value,
+                                onChanged: (value) {
+                                  if (value != null) {
+                                    if (controller.selectedGender.value ==
+                                        value) {
+                                      controller.selectedGender.value = '';
+                                      controller.selectedGenderController.text =
+                                          '';
+                                    } else {
+                                      controller.selectedGender.value = value;
+                                      controller.selectedGenderController.text =
+                                          value;
+                                    }
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: ListTile(
+                              title: Text('Perempuan'),
+                              leading: Radio<String>(
+                                value: 'Perempuan',
+                                groupValue: controller.selectedGender.value,
+                                onChanged: (value) {
+                                  if (value != null) {
+                                    if (controller.selectedGender.value ==
+                                        value) {
+                                      controller.selectedGender.value = '';
+                                      controller.selectedGenderController.text =
+                                          '';
+                                    } else {
+                                      controller.selectedGender.value = value;
+                                      controller.selectedGenderController.text =
+                                          value;
+                                    }
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: () async {
+                final DateTime? picked = await showDatePicker(
+                  context: context,
+                  initialDate: controller.startDate.value,
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime(2100),
+                );
+                if (picked != null) {
+                  controller.startDate.value = picked;
+                  controller.tanggallahirController.text =
+                      DateFormat('dd-MM-yyyy').format(picked);
+                }
+              },
+              child: AbsorbPointer(
+                child: TextfieldForm(
+                  label: 'Tanggal Lahir',
+                  hintText: 'PILIH TANGGAL LAHIR',
+                  controller: controller.tanggallahirController,
+                ),
+              ),
+            ),
+
             TextfieldForm(
                 label: 'Kota lahir', controller: controller.kotaAsalController),
             TextfieldForm(
@@ -130,6 +223,14 @@ class InputData extends StatelessWidget {
             TextfieldForm(
                 label: 'Nama Pasangan',
                 controller: controller.namaPasanganController),
+            TextfieldForm(
+              label: 'Nik Pasangan',
+              controller: controller.nikpasaganController,
+              keyboardType: TextInputType.phone,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[+\d\s]')),
+              ],
+            ),
             TextfieldForm(
                 label: 'Alamat Lengkap',
                 controller: controller.alamatController),

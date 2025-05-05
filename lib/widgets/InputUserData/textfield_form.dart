@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:loan_application/core/theme/color.dart';
 
 class TextfieldForm extends StatefulWidget {
@@ -10,6 +11,7 @@ class TextfieldForm extends StatefulWidget {
   final TextEditingController controller;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
+  final VoidCallback? onTap;
 
   const TextfieldForm({
     super.key,
@@ -20,6 +22,7 @@ class TextfieldForm extends StatefulWidget {
     this.hintText = 'KETIK DISINI',
     this.keyboardType,
     this.inputFormatters,
+    this.onTap,
   });
 
   @override
@@ -51,24 +54,22 @@ class _TextfieldFormState extends State<TextfieldForm> {
               border: Border.all(color: AppColors.black.withOpacity(0.2)),
               borderRadius: BorderRadius.circular(15),
             ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: TextField(
-                controller: widget.controller,
-                keyboardType: widget.keyboardType,
-                inputFormatters: widget.inputFormatters ?? [],
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: widget.hintText,
-                  hintStyle: TextStyle(
-                    color: AppColors.black.withOpacity(0.2),
-                    fontSize: 13,
-                    fontFamily: 'Outfit',
-                    fontWeight: FontWeight.w500,
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                      vertical: 14),
+            child: TextField(
+              controller: widget.controller,
+              keyboardType: widget.keyboardType,
+              inputFormatters: widget.inputFormatters ?? [],
+              readOnly: widget.onTap != null, // Only readOnly if onTap exists
+              onTap: widget.onTap, // Trigger onTap when available
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: widget.hintText,
+                hintStyle: TextStyle(
+                  color: AppColors.black.withOpacity(0.2),
+                  fontSize: 13,
+                  fontFamily: 'Outfit',
+                  fontWeight: FontWeight.w500,
                 ),
+                contentPadding: const EdgeInsets.symmetric(vertical: 14),
               ),
             ),
           ),

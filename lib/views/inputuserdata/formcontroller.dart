@@ -8,9 +8,12 @@ import 'package:loan_application/API/service/post_nik_check.dart';
 
 class InputDataController extends GetxController {
   final nikController = TextEditingController();
+  final selectedGenderController = TextEditingController();
+  final nikpasaganController = TextEditingController();
   final namaAwalController = TextEditingController();
   final namaAkhirController = TextEditingController();
   final namaPasanganController = TextEditingController();
+  final tanggallahirController = TextEditingController();
   final kotaAsalController = TextEditingController();
   final telpController = TextEditingController();
   final pekerjaanController = TextEditingController();
@@ -20,6 +23,10 @@ class InputDataController extends GetxController {
 
   Rx<File?> fotoKtp = Rx<File?>(null);
   Rx<File?> buktiJaminan = Rx<File?>(null);
+  RxString selectedGender = ''.obs;
+  final Rx<DateTime> startDate = DateTime.now().obs;
+  final RxString selectedDateText = ''.obs;
+  final RxString selectedDate = ''.obs;
 
   final ImagePicker _picker = ImagePicker();
 
@@ -37,14 +44,14 @@ class InputDataController extends GetxController {
       final response = await checkNikService.fetchNIK();
       if (response.data != null) {
         final anggotaResponse = AnggotaResponse.fromJson(response.data);
-        namaAwalController.text = anggotaResponse.owner?.firtsName ?? '';
+        namaAwalController.text = anggotaResponse.owner?.firstName ?? '';
         namaAkhirController.text = anggotaResponse.owner?.lastName ?? '';
-        telpController.text = anggotaResponse.addres?.phone ?? '1';
-        kotaAsalController.text = anggotaResponse.addres?.phone ?? '2';
-        pekerjaanController.text =
-            anggotaResponse.addres?.deskripsiPekerjaan ?? '3';
-        namaPasanganController.text =
-            anggotaResponse.owner?.pasanganNama ?? '4';
+        namaPasanganController.text = anggotaResponse.owner?.spouseName ?? '';
+        nikpasaganController.text = anggotaResponse.owner?.spouseIdCard ?? '';
+        tanggallahirController.text = anggotaResponse.owner?.dateOfBirth ?? '';
+        telpController.text = anggotaResponse.owner?.phoneNumber ?? '';
+        kotaAsalController.text = anggotaResponse.addres?.city ?? '';
+        pekerjaanController.text = anggotaResponse.owner?.occupation ?? '';
         alamatController.text = anggotaResponse.addres?.addressLine1 ?? '';
         Get.snackbar("Success", "NIK data fetched successfully");
       } else {
@@ -75,11 +82,14 @@ class InputDataController extends GetxController {
   }
 
   void clearForm() {
+    selectedGender.value = '';
     nikController.clear();
     namaAwalController.clear();
     namaAkhirController.clear();
     namaPasanganController.clear();
+    tanggallahirController.clear();
     kotaAsalController.clear();
+    nikpasaganController.clear();
     telpController.clear();
     pekerjaanController.clear();
     alamatController.clear();
@@ -90,15 +100,20 @@ class InputDataController extends GetxController {
   }
 
   void saveForm() {
-    if (nikController.text.isEmpty || namaAwalController.text.isEmpty) {
-      Get.snackbar("Gagal", "Pastikan semua data terisi");
+    if (nikController.text.isEmpty ||
+        namaAwalController.text.isEmpty ||
+        selectedGender.value.isEmpty) {
+      Get.snackbar("Gagal", "Pastikan semua data terisi termasuk gender");
       return;
     }
     final data = {
+      "gender": selectedGender.value,
       "nik": nikController.text,
       "namaAwal": namaAwalController.text,
       "namaAkhir": namaAkhirController.text,
       "namaPasagan": namaPasanganController.text,
+      "nikPasangan": nikpasaganController.text,
+      "tanggalLahir": tanggallahirController.text,
       "kotaAsal": kotaAsalController.text,
       "telp": telpController.text,
       "pekerjaan": pekerjaanController.text,
@@ -118,10 +133,12 @@ class InputDataController extends GetxController {
     namaAwalController.dispose();
     namaAkhirController.dispose();
     namaPasanganController.dispose();
+    nikpasaganController.dispose();
     kotaAsalController.dispose();
     telpController.dispose();
     pekerjaanController.dispose();
     alamatController.dispose();
+    selectedGenderController.dispose();
     nominalController.dispose();
     jenisJaminanController.dispose();
     super.onClose();

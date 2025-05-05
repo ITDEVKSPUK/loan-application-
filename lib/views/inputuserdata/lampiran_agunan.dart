@@ -33,7 +33,7 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
       child: Scaffold(
         backgroundColor: AppColors.pureWhite,
         appBar: AppBar(
-          title: const Text("Form Pengajuan Kredit"),
+          title: const Text("Lampiran Dokumen"),
           backgroundColor: AppColors.pureWhite,
           shadowColor: AppColors.pureWhite,
           automaticallyImplyLeading: false,
