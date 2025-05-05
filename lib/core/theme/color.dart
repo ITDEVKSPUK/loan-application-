@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   // Warna biru gelap
-  static const Color navyBlue = Color(0xFF001F3F); 
+  static const Color navyBlue = Color(0xFF001F3F);
   static const Color deepBlue = Color(0xFF003366);
   static const Color royalBlue = Color(0xFF004B8D);
   static const Color darkIndigo = Color(0xFF001A33); // Warna tambahan
@@ -27,12 +27,12 @@ class AppColors {
   static const Color blackDark = Color(0xFF999999);
 
   // Button status
-  static const Color redstatus = Color.fromRGBO(227, 31, 31, 1);
-  static const Color greenstatus = Color.fromRGBO(102, 217, 150, 1);
-  static const Color orangestatus = Color.fromRGBO(227, 135, 31, 1);
+  static const Color redstatus = Color(0xFFE31F1F); // RGB(227, 31, 31)
+  static const Color greenstatus = Color(0xFF66D996); // RGB(102, 217, 150)
+  static const Color orangestatus = Color(0xFFE3871F); // RGB(227, 135, 31)
 
   //ultities
-  static const Color casualbutton1 = Color.fromRGBO(90, 137, 255, 100);
+  static const Color casualbutton1 = Color(0xFF5A89FF);
 
   static var primary;
 }
