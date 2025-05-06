@@ -27,7 +27,7 @@ class Datum {
   String fullName;
   String sectorCity;
   String villages;
-  String address;
+  String address;  
   Application application;
   Collateral collateral;
   AdditionalInfo additionalInfo;
