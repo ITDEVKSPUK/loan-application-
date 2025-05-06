@@ -18,7 +18,8 @@ class InputData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(
+    child: Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         title: 'Debitur Form',
@@ -243,6 +244,7 @@ class InputData extends StatelessWidget {
           ],
         ),
       ),
+      )
     );
   }
 }
