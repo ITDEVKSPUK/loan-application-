@@ -1,45 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loan_application/views/SurveyDetail/detail_controller.dart';
+import 'package:loan_application/widgets/SurveyDetail/field_readonly.dart';
 
 class LoanAmountWidget extends StatelessWidget {
   final controller = Get.find<DetailController>();
 
+  String formatRupiah(String numberString) {
+    if (numberString.isEmpty) return 'Rp0';
+    final number = int.tryParse(numberString.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
+    return 'Rp${number.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]}.')}';
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Container(
-          width: 317,
-          height: 45,
-          child: Stack(
-            children: [
-              const Positioned(
-                left: 0,
-                top: 0,
-                child: Text(
-                  'Nominal Peminjaman',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontFamily: 'Outfit',
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 0,
-                top: 25,
-                child: Text(
-                  controller.loanAmount.value,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontFamily: 'Outfit',
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
-              ),
-            ],
+    return Obx(() => FieldReadonly(
+          label: 'Nominal Peminjaman',
+          width: double.infinity,
+          height: 50,
+          controller: TextEditingController(
+            text: formatRupiah(controller.loanAmount.value),
           ),
+          keyboardType: TextInputType.number,
         ));
   }
 }
