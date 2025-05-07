@@ -35,29 +35,33 @@ class HomeController extends GetxController {
     }
   }
 
-void filterSearch(String query) {
+  void filterSearch(String query) {
+    filteredList.value = surveyList.where((item) {
+      final queryLower = query.toLowerCase();
+      final fullName = item.fullName.toLowerCase();
+      final purpose = item.application.purpose.toLowerCase();
+      final date = DateFormat('yyyy-MM-dd')
+          .format(item.application.trxDate)
+          .toLowerCase();
+      return fullName.contains(queryLower) ||
+          purpose.contains(queryLower) ||
+          date.contains(queryLower);
+    }).toList();
+  }
+
+void filterByStatus(String status) {
+  print('FILTER BY STATUS: $status');
+
   filteredList.value = surveyList.where((item) {
-    final queryLower = query.toLowerCase();
-    final fullName = item.fullName.toLowerCase();
-    final purpose = item.application.purpose.toLowerCase();
-    final date = DateFormat('yyyy-MM-dd').format(item.application.trxDate).toLowerCase();
-    final address = item.sectorCity.toLowerCase();
-    return fullName.contains(queryLower) ||
-           purpose.contains(queryLower) ||
-           date.contains(queryLower) ||
-           address.contains(queryLower);
+    final statusText = item.status?.value ?? item.application.toString();
+    print('Actual item status: ${statusText.toUpperCase()}');
+
+    return status.toUpperCase() == 'ALL'
+        ? true
+        : statusText.toUpperCase() == status.toUpperCase();
   }).toList();
 }
 
-  void filterByStatus(String status) {
-    if (status == 'All') {
-      filteredList.value = surveyList;
-      return;
-    }
-    filteredList.value = surveyList
-        .where((item) => item.status?.value.toUpperCase() == status.toUpperCase())
-        .toList();
-  }
 
   Color getStatusColor(String status) {
     switch (status.toUpperCase()) {
@@ -65,7 +69,7 @@ void filterSearch(String query) {
         return AppColors.greenstatus;
       case 'DITOLAK':
         return AppColors.redstatus;
-      case 'PROSES':
+      case 'PROCES':
         return AppColors.orangestatus;
       default:
         return Colors.grey;

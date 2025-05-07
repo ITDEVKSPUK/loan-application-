@@ -48,6 +48,7 @@ class _HistoryEmployeeState extends State<HistoryEmployee> {
           FilterButtons(
             onFilterSelected: (status) => controller.filterByStatus(status),
           ),
+          
           Expanded(
             child: RefreshIndicator(
               color: AppColors.black,

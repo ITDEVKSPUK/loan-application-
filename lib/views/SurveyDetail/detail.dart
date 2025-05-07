@@ -96,6 +96,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
             LoanAmountWidget(),
             CollateralTypeWidget(),
             CollateralProofWidget(),
+            CollateralProofWidget(),
           ],
         ),
       ),

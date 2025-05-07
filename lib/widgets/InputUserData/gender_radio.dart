@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 
 class GenderRadioButtons extends StatelessWidget {
   final bool isReadOnly;
-  final int? genderFromApi; 
-  final RxString? gender; 
+  final int? genderFromApi;
+  final RxString? gender;
 
   const GenderRadioButtons({
     super.key,
@@ -37,12 +37,12 @@ class GenderRadioButtons extends StatelessWidget {
               ),
             ),
             Row(
-              children: ['Laki-laki', 'Perempuan'].map((String gender) {
-                final bool isSelected = genderValue.value == gender;
-                return Expanded(
+              children: [
+                Expanded(
                   child: RadioListTile<String>(
-                    title: Text(gender),
-                    value: gender,
+                    contentPadding: const EdgeInsets.only(right: 0),
+                    title: const Text('Laki-laki'),
+                    value: 'Laki-laki',
                     groupValue: genderValue.value,
                     onChanged: isReadOnly
                         ? null
@@ -53,8 +53,24 @@ class GenderRadioButtons extends StatelessWidget {
                           },
                     activeColor: Colors.blue,
                   ),
-                );
-              }).toList(),
+                ),
+                Expanded(
+                  child: RadioListTile<String>(
+                    contentPadding: const EdgeInsets.only(left: 0),
+                    title: const Text('Perempuan'),
+                    value: 'Perempuan',
+                    groupValue: genderValue.value,
+                    onChanged: isReadOnly
+                        ? null
+                        : (String? value) {
+                            if (value != null) {
+                              genderValue.value = value;
+                            }
+                          },
+                    activeColor: Colors.blue,
+                  ),
+                ),
+              ],
             ),
           ],
         ));
