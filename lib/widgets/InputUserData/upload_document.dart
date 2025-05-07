@@ -17,11 +17,25 @@ class UploadDocumentPicker extends StatelessWidget {
             value: controller.selectedDocument.value.isEmpty
                 ? null
                 : controller.selectedDocument.value,
-            decoration: const InputDecoration(labelText: "Kategori Dokumen"),
+            decoration: const InputDecoration(
+              labelText: "Kategori Dokumen",
+              labelStyle: TextStyle(
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            style: const TextStyle(
+              fontFamily: 'Montserrat',
+              fontSize: 14,
+              color: Colors.black,
+            ),
             items: controller.documentList.map((doc) {
               return DropdownMenuItem<String>(
                 value: doc['id_catdocument'].toString(),
-                child: Text(doc['name']),
+                child: Text(
+                  doc['name'],
+                  style: const TextStyle(fontFamily: 'Montserrat-Regular', fontSize: 14),
+                ),
               );
             }).toList(),
             onChanged: (val) => controller.selectedDocument.value = val!,
@@ -31,12 +45,23 @@ class UploadDocumentPicker extends StatelessWidget {
         ElevatedButton.icon(
           onPressed: () => controller.pickDocumentImages(context),
           icon: const Icon(Icons.upload_file),
-          label: const Text("Upload Dokumen"),
+          label: const Text(
+            "Upload Dokumen",
+            style: TextStyle(fontFamily: 'Montserrat'),
+          ),
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontFamily: 'Montserrat-Regular', fontSize: 14),
+          ),
         ),
         const SizedBox(height: 8),
         Obx(() {
           final images = controller.selectedDocumentImages;
-          if (images.isEmpty) return const Text("Belum ada gambar");
+          if (images.isEmpty) {
+            return const Text(
+              "Belum ada gambar",
+              style: TextStyle(fontFamily: 'Montserrat-Regular', fontSize: 14, color: Colors.grey),
+            );
+          }
 
           return SizedBox(
             height: 80,
@@ -47,8 +72,12 @@ class UploadDocumentPicker extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 8),
                 child: Stack(
                   children: [
-                    Image.file(images[index],
-                        width: 80, height: 80, fit: BoxFit.cover),
+                    Image.file(
+                      images[index],
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                    ),
                     Positioned(
                       top: 0,
                       right: 0,

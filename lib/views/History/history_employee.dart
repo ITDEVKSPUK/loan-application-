@@ -48,24 +48,28 @@ class _HistoryEmployeeState extends State<HistoryEmployee> {
           FilterButtons(
             onFilterSelected: (status) => controller.filterByStatus(status),
           ),
+          
           Expanded(
             child: RefreshIndicator(
-              color: AppColors.black, 
+              color: AppColors.black,
               backgroundColor: Colors.white,
               onRefresh: () async {
                 await Future(() => controller.getHistory());
               },
               child: Obx(() {
-                if (controller.surveyList.isEmpty) {
-                  return const Center(
-                    child: Text('No history found'),
-                  );
+                final list = controller.filteredList;
+                if (list.isEmpty) {
+                  return const Center(child: Text('No survey data available.'));
                 }
                 return ListView.builder(
                   padding: const EdgeInsets.all(10),
-                  itemCount: controller.surveyList.length,
+                  itemCount: list.length,
                   itemBuilder: (context, index) {
-                    final item = controller.surveyList[index];
+                    final item = list[index];
+                    final statusText = item.status?.value ??
+                        item.application.toString();
+                    final statusColor = controller.getStatusColor(statusText);
+
                     return GestureDetector(
                       onTap: () => Get.toNamed(
                         MyAppRoutes.surveyDetail,
@@ -76,9 +80,9 @@ class _HistoryEmployeeState extends State<HistoryEmployee> {
                         date: DateFormat('yyyy-MM-dd')
                             .format(item.application.trxDate),
                         location: item.sectorCity,
-                        status: "UNREAD",
                         image: 'assets/images/bg.png',
-                        statusColor: controller.getStatusColor("UNREAD"),
+                        status: statusText,
+                        statusColor: statusColor,
                       ),
                     );
                   },

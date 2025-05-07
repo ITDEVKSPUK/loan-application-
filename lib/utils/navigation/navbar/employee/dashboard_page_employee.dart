@@ -1,5 +1,3 @@
-import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
-import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loan_application/core/theme/color.dart';
@@ -27,38 +25,33 @@ class DashboardPageEmployee extends StatelessWidget {
     return Obx(() {
       return Scaffold(
           body: menus[dashboardController.selectedIndex.value],
-          bottomNavigationBar: CurvedNavigationBar(
-            index: dashboardController.selectedIndex.value,
-            onTap: (index) {
-              dashboardController.selectedIndex.value = index;
-            },
-            items: const [
-              CurvedNavigationBarItem(
-                child: Icon(
-                  Icons.library_books,
-                  size: 30,
+          bottomNavigationBar: BottomNavigationBar(
+              currentIndex: dashboardController.selectedIndex.value,
+              onTap: (index) {
+                dashboardController.selectedIndex.value = index;
+              },
+              type: BottomNavigationBarType.fixed,
+              backgroundColor: AppColors.navbar,
+              selectedItemColor: AppColors.pureWhite,
+              unselectedItemColor: AppColors.pureWhite.withOpacity(0.6),
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.library_books),
+                  label: 'SurveyList',
                 ),
-                label: 'SurveyList',
-              ),
-              CurvedNavigationBarItem(
-                child: Icon(Icons.history, size: 30),
-                label: 'History',
-              ),
-              CurvedNavigationBarItem(
-                child: Icon(Icons.calculate, size: 30),
-                label: 'Simulation',
-              ),
-              CurvedNavigationBarItem(
-                child: Icon(Icons.person, size: 30),
-                label: 'Profile',
-              ),
-            ],
-            color: AppColors.lightBlue,
-            buttonBackgroundColor: AppColors.pureWhite,
-            backgroundColor: AppColors.pureWhite,
-            animationCurve: Curves.easeInOut,
-            animationDuration: Duration(milliseconds: 600),
-          ));
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.history),
+                  label: 'History',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.calculate),
+                  label: 'Simulation',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: 'Profile',
+                ),
+              ]));
     });
   }
 }

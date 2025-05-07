@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:loan_application/core/theme/color.dart';
 
-class TextfieldForm extends StatefulWidget {
+class FieldReadonly extends StatefulWidget {
   final String label;
   final double width;
   final double height;
@@ -11,9 +10,8 @@ class TextfieldForm extends StatefulWidget {
   final TextEditingController controller;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
-  final VoidCallback? onTap;
 
-  const TextfieldForm({
+  const FieldReadonly({
     super.key,
     required this.label,
     required this.controller,
@@ -22,16 +20,17 @@ class TextfieldForm extends StatefulWidget {
     this.hintText = 'KETIK DISINI',
     this.keyboardType,
     this.inputFormatters,
-    this.onTap,
   });
 
   @override
-  State<TextfieldForm> createState() => _TextfieldFormState();
+  State<FieldReadonly> createState() => _FieldReadonlyState();
 }
 
-class _TextfieldFormState extends State<TextfieldForm> {
+class _FieldReadonlyState extends State<FieldReadonly> {
   @override
   Widget build(BuildContext context) {
+    final bool isEmpty = widget.controller.text.trim().isEmpty;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
@@ -58,12 +57,11 @@ class _TextfieldFormState extends State<TextfieldForm> {
               controller: widget.controller,
               keyboardType: widget.keyboardType,
               inputFormatters: widget.inputFormatters ?? [],
-              readOnly: widget.onTap != null,
-              onTap: widget.onTap,
-              textAlignVertical: TextAlignVertical.center, // Tambahkan ini
+              readOnly: true,
+              textAlignVertical: TextAlignVertical.center,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: widget.hintText,
+                hintText: isEmpty ? 'invalid data' : null,
                 hintStyle: TextStyle(
                   color: AppColors.black.withOpacity(0.2),
                   fontSize: 13,
@@ -72,6 +70,11 @@ class _TextfieldFormState extends State<TextfieldForm> {
                 ),
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 17),
+              ),
+              style: const TextStyle(
+                fontSize: 13,
+                fontFamily: 'Outfit',
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),

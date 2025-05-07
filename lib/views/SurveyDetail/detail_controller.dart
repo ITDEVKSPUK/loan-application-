@@ -10,7 +10,7 @@ class DetailController extends GetxController {
   var loanAmount = ''.obs;
   var collateralType = ''.obs;
   var collateralProofs = <CollateralProofModel>[].obs;
-
+  
   @override
   void onInit() {
     super.onInit();
