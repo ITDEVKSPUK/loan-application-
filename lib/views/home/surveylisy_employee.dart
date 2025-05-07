@@ -47,7 +47,7 @@ class _SurveyListState extends State<SurveyList> {
           ),
           Expanded(
             child: RefreshIndicator(
-              color: AppColors.black, 
+              color: AppColors.black,
               backgroundColor: Colors.white,
               onRefresh: () async {
                 await Future(() => controller.getHistory());
@@ -62,6 +62,7 @@ class _SurveyListState extends State<SurveyList> {
                   itemCount: list.length,
                   itemBuilder: (context, index) {
                     final item = list[index];
+                    final imgUrl = item.document?.docPerson?[index].img;
                     return GestureDetector(
                       onTap: () => Get.toNamed(
                         MyAppRoutes.surveyDetail,
@@ -73,7 +74,7 @@ class _SurveyListState extends State<SurveyList> {
                             .format(item.application.trxDate),
                         location: item.sectorCity,
                         status: "UNREAD",
-                        image: 'assets/images/bg.png',
+                        image: imgUrl != null ? imgUrl : 'assets/images/bg.png',
                         statusColor: controller.getStatusColor("UNREAD"),
                       ),
                     );

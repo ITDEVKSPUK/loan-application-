@@ -31,7 +31,7 @@ class Datum {
   Application application;
   Collateral collateral;
   AdditionalInfo additionalInfo;
-  Document document;
+  Document? document;
 
   Datum({
     required this.idLegal,
@@ -43,7 +43,7 @@ class Datum {
     required this.application,
     required this.collateral,
     required this.additionalInfo,
-    required this.document,
+    this.document,
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) {
@@ -57,7 +57,8 @@ class Datum {
       application: Application.fromJson(json['application'] ?? {}),
       collateral: Collateral.fromJson(json['collateral'] ?? {}),
       additionalInfo: AdditionalInfo.fromJson(json['additionalinfo'] ?? {}),
-      document: Document.fromJson(json['document'] ?? {}),
+      document:
+          json['document'] != null ? Document.fromJson(json['document']) : null,
     );
   }
 }
@@ -126,17 +127,17 @@ class DocImg {
 }
 
 class DocPerson {
-  String img0;
+  String img;
   String doc;
 
   DocPerson({
-    required this.img0,
+    required this.img,
     required this.doc,
   });
 
   factory DocPerson.fromJson(Map<String, dynamic> json) {
     return DocPerson(
-      img0: json['img-0'] ?? '',
+      img: json['img-0'] ?? '',
       doc: json['doc'] ?? '',
     );
   }
@@ -183,8 +184,7 @@ class Application {
   factory Application.fromJson(Map<String, dynamic> json) {
     return Application(
       trxSurvey: json['trx_survey'] ?? '',
-      trxDate:
-          DateTime.parse(json['trx_date'] ?? DateTime.now().toIso8601String()),
+      trxDate: DateTime.tryParse(json['trx_date'] ?? '') ?? DateTime.now(),
       applicationNo: json['application_no'] ?? '',
       purpose: json['purpose'] ?? '',
       plafond: json['plafond'] ?? '0',

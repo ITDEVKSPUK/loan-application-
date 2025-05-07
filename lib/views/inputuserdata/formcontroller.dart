@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loan_application/API/models/anggota_models.dart';
+import 'package:loan_application/API/models/cif_models.dart';
+import 'package:loan_application/API/service/post_create_CIF.dart';
 import 'package:loan_application/API/service/post_nik_check.dart';
 
 class InputDataController extends GetxController {
@@ -41,24 +43,69 @@ class InputDataController extends GetxController {
     final checkNikService = CheckNik();
 
     try {
-      final response = await checkNikService.fetchNIK();
+      final response = await checkNikService.fetchNIK(nikController.text);
       if (response.data != null) {
         final anggotaResponse = AnggotaResponse.fromJson(response.data);
-        namaAwalController.text = anggotaResponse.owner?.firstName ?? '';
+        namaAwalController.text = anggotaResponse.owner?.firstName ?? '1';
         namaAkhirController.text = anggotaResponse.owner?.lastName ?? '';
-        namaPasanganController.text = anggotaResponse.owner?.spouseName ?? '';
-        nikpasaganController.text = anggotaResponse.owner?.spouseIdCard ?? '';
-        tanggallahirController.text = anggotaResponse.owner?.dateOfBirth ?? '';
-        telpController.text = anggotaResponse.owner?.phoneNumber ?? '';
-        kotaAsalController.text = anggotaResponse.addres?.city ?? '';
-        pekerjaanController.text = anggotaResponse.owner?.occupation ?? '';
-        alamatController.text = anggotaResponse.addres?.addressLine1 ?? '';
+        namaPasanganController.text = anggotaResponse.owner?.pasanganNama ?? '';
+        nikpasaganController.text = anggotaResponse.owner?.pasanganIdcard ?? '';
+        tanggallahirController.text =
+            anggotaResponse.owner?.dateBorn.toString() ?? '';
+        telpController.text = anggotaResponse.address?.phone ?? '';
+        kotaAsalController.text = anggotaResponse.address?.region ?? '';
+        pekerjaanController.text = anggotaResponse.address?.kodePekerjaan ?? '';
+        alamatController.text = anggotaResponse.address?.addressLine1 ?? '';
+        selectedGender.value = anggotaResponse.owner?.gender.toString() ?? '';
         Get.snackbar("Success", "NIK data fetched successfully");
       } else {
         Get.snackbar("Error", "No data found for the provided NIK");
       }
     } catch (e) {
       Get.snackbar("Error", e.toString());
+    }
+  }
+
+  Future<void> saveForm() async {
+    if (nikController.text.isEmpty ||
+        namaAwalController.text.isEmpty ||
+        selectedGender.value.isEmpty) {
+      Get.snackbar("Gagal", "Pastikan semua data terisi termasuk gender");
+      return;
+    }
+
+    final createCIFService = CreateCIFService();
+
+    try {
+      final response = await createCIFService.createCIF(
+        idLegal: int.tryParse(nikController.text) ?? 0,
+        officeId: "000", // Replace with dynamic office ID if needed
+        enikNo: nikController.text,
+        enikType: "K05", // Replace with dynamic type if needed
+        firstName: namaAwalController.text,
+        lastName: namaAkhirController.text,
+        cityBorn: kotaAsalController.text,
+        pasanganNama: namaPasanganController.text,
+        pasanganIdCart: nikpasaganController.text,
+        region: kotaAsalController.text,
+        sector: pekerjaanController.text,
+        village: alamatController.text,
+        scopeVillage: "004-005",
+        addressLine1: alamatController.text,
+        pemberiKerja: pekerjaanController.text,
+        deskripsiPekerjaan: pekerjaanController.text,
+      );
+
+      if (response.statusCode == 200) {
+        Get.snackbar("Berhasil", "Data berhasil disimpan");
+        print("Response: ${response.data}");
+        final CifResponse cifResponse = CifResponse.fromJson(response.data);
+        setCif(cifResponse);
+      } else {
+        Get.snackbar("Gagal", "Gagal menyimpan data: ${response.statusCode}");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Terjadi kesalahan: $e");
     }
   }
 
@@ -99,34 +146,6 @@ class InputDataController extends GetxController {
     buktiJaminan.value = null;
   }
 
-  void saveForm() {
-    if (nikController.text.isEmpty ||
-        namaAwalController.text.isEmpty ||
-        selectedGender.value.isEmpty) {
-      Get.snackbar("Gagal", "Pastikan semua data terisi termasuk gender");
-      return;
-    }
-    final data = {
-      "gender": selectedGender.value,
-      "nik": nikController.text,
-      "namaAwal": namaAwalController.text,
-      "namaAkhir": namaAkhirController.text,
-      "namaPasagan": namaPasanganController.text,
-      "nikPasangan": nikpasaganController.text,
-      "tanggalLahir": tanggallahirController.text,
-      "kotaAsal": kotaAsalController.text,
-      "telp": telpController.text,
-      "pekerjaan": pekerjaanController.text,
-      "alamat": alamatController.text,
-      "nominal": nominalController.text,
-      "jenisJaminan": jenisJaminanController.text,
-      "fotoKtp": fotoKtp.value?.path,
-      "buktiJaminan": buktiJaminan.value?.path,
-    };
-    print("DATA YANG DISIMPAN: $data");
-    Get.snackbar("Berhasil", "Data berhasil disimpan");
-  }
-
   @override
   void onClose() {
     nikController.dispose();
@@ -143,4 +162,12 @@ class InputDataController extends GetxController {
     jenisJaminanController.dispose();
     super.onClose();
   }
+
+  Rx<CifResponse?> cifResponse = Rx<CifResponse?>(null);
+
+  void setCif(CifResponse data) {
+    cifResponse.value = data;
+  }
+
+  int? get cifId => cifResponse.value?.cifId;
 }

@@ -1,10 +1,12 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loan_application/API/service/get_docagun.dart';
-import 'package:pdf/widgets.dart' as pw;
+import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:get/get.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class CreditFormController extends GetxController {
   final plafondController = TextEditingController();
@@ -16,6 +18,7 @@ class CreditFormController extends GetxController {
   final expensesController = TextEditingController();
   final installmentController = TextEditingController();
 
+  final cifID = Get.put(InputDataController());
   // // Selected options
   // String selectedPurpose = 'MODAL KERJA';
   // String selectedCollateralType = 'Mobil';
@@ -34,6 +37,7 @@ class CreditFormController extends GetxController {
       var fetchedAgunan = await getDocAgun.fetchAgunan();
       if (fetchedAgunan.isNotEmpty) {
         agunanList.value = fetchedAgunan;
+        print(cifID.cifId);
       }
     } catch (e) {
       print("Error fetching agunan: $e");
@@ -174,59 +178,57 @@ class CreditFormController extends GetxController {
     // TODO: Kirim ke API (data dan file)
   }
 
-var selectedAgunanImages = <File>[].obs;
-var selectedDocumentImages = <File>[].obs;
+  var selectedAgunanImages = <File>[].obs;
+  var selectedDocumentImages = <File>[].obs;
 
-Future<void> pickAgunanImages(BuildContext context) async {
-  final source = await _chooseSource(context);
-  if (source == null) return;
+  Future<void> pickAgunanImages(BuildContext context) async {
+    final source = await _chooseSource(context);
+    if (source == null) return;
 
-  if (source == ImageSource.gallery) {
-    final result = await ImagePicker().pickMultiImage();
-    if (result.isNotEmpty) {
-      selectedAgunanImages.addAll(result.map((e) => File(e.path)));
+    if (source == ImageSource.gallery) {
+      final result = await ImagePicker().pickMultiImage();
+      if (result.isNotEmpty) {
+        selectedAgunanImages.addAll(result.map((e) => File(e.path)));
+      }
+    } else {
+      final single = await ImagePicker().pickImage(source: source);
+      if (single != null) selectedAgunanImages.add(File(single.path));
     }
-  } else {
-    final single = await ImagePicker().pickImage(source: source);
-    if (single != null) selectedAgunanImages.add(File(single.path));
   }
-}
 
-Future<void> pickDocumentImages(BuildContext context) async {
-  final source = await _chooseSource(context);
-  if (source == null) return;
+  Future<void> pickDocumentImages(BuildContext context) async {
+    final source = await _chooseSource(context);
+    if (source == null) return;
 
-  if (source == ImageSource.gallery) {
-    final result = await ImagePicker().pickMultiImage();
-    if (result.isNotEmpty) {
-      selectedDocumentImages.addAll(result.map((e) => File(e.path)));
+    if (source == ImageSource.gallery) {
+      final result = await ImagePicker().pickMultiImage();
+      if (result.isNotEmpty) {
+        selectedDocumentImages.addAll(result.map((e) => File(e.path)));
+      }
+    } else {
+      final single = await ImagePicker().pickImage(source: source);
+      if (single != null) selectedDocumentImages.add(File(single.path));
     }
-  } else {
-    final single = await ImagePicker().pickImage(source: source);
-    if (single != null) selectedDocumentImages.add(File(single.path));
   }
-}
 
-Future<ImageSource?> _chooseSource(BuildContext context) async {
-  return showModalBottomSheet<ImageSource>(
-    context: context,
-    builder: (ctx) => Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ListTile(
-          leading: const Icon(Icons.photo_library),
-          title: const Text('Galeri'),
-          onTap: () => Navigator.pop(ctx, ImageSource.gallery),
-        ),
-        ListTile(
-          leading: const Icon(Icons.camera_alt),
-          title: const Text('Kamera'),
-          onTap: () => Navigator.pop(ctx, ImageSource.camera),
-        ),
-      ],
-    ),
-  );
-}
-
-
+  Future<ImageSource?> _chooseSource(BuildContext context) async {
+    return showModalBottomSheet<ImageSource>(
+      context: context,
+      builder: (ctx) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            leading: const Icon(Icons.photo_library),
+            title: const Text('Galeri'),
+            onTap: () => Navigator.pop(ctx, ImageSource.gallery),
+          ),
+          ListTile(
+            leading: const Icon(Icons.camera_alt),
+            title: const Text('Kamera'),
+            onTap: () => Navigator.pop(ctx, ImageSource.camera),
+          ),
+        ],
+      ),
+    );
+  }
 }

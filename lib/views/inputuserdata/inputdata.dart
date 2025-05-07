@@ -146,7 +146,7 @@ class InputData extends StatelessWidget {
                             child: ListTile(
                               title: Text('Laki-laki'),
                               leading: Radio<String>(
-                                value: 'Laki-laki',
+                                value: '1',
                                 groupValue: controller.selectedGender.value,
                                 onChanged: (value) {
                                   if (value != null) {
@@ -169,19 +169,15 @@ class InputData extends StatelessWidget {
                             child: ListTile(
                               title: Text('Perempuan'),
                               leading: Radio<String>(
-                                value: 'Perempuan',
+                                value: '0',
                                 groupValue: controller.selectedGender.value,
                                 onChanged: (value) {
                                   if (value != null) {
                                     if (controller.selectedGender.value ==
                                         value) {
                                       controller.selectedGender.value = '';
-                                      controller.selectedGenderController.text =
-                                          '';
                                     } else {
                                       controller.selectedGender.value = value;
-                                      controller.selectedGenderController.text =
-                                          value;
                                     }
                                   }
                                 },
