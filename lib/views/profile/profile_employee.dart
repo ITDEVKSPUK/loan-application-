@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:loan_application/API/service/post_login.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
@@ -14,6 +15,15 @@ class ProfileEmployee extends StatefulWidget {
 }
 
 class _ProfileEmployeeState extends State<ProfileEmployee> {
+  final storage = GetStorage();
+  late String employeeName;
+
+  @override
+  void initState() {
+    super.initState();
+    employeeName = storage.read('employee_name') ?? 'User';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +65,7 @@ class _ProfileEmployeeState extends State<ProfileEmployee> {
                   ),
                   SizedBox(height: 10),
                   CustomText(
-                    text: 'User',
+                    text: employeeName,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Outfit',

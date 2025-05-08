@@ -40,6 +40,7 @@ class LoginService {
         final loginModel = LoginModel.fromJson(data);
         storage.write('login_model', loginModel.toJson());
         storage.write('session_id', loginModel.sessionId);
+        
         storage.write('encryptedUsername', _encrypt(username));
         print('Login Success: ${data['UserName']}');
 
