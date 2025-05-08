@@ -1,12 +1,17 @@
 import 'dart:io';
+import 'package:dio/dio.dart' as dio_pkg;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loan_application/API/dio/dio_client.dart';
 import 'package:loan_application/API/service/get_docagun.dart';
+import 'package:loan_application/views/inputuserdata/document_service.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:get/get.dart';
 
 class CreditFormController extends GetxController {
+  final dio_pkg.Dio dio = DioClient.dio;
   final plafondController = TextEditingController();
   final purposeController = TextEditingController();
   final collateralDescriptionController = TextEditingController();
@@ -16,10 +21,6 @@ class CreditFormController extends GetxController {
   final expensesController = TextEditingController();
   final installmentController = TextEditingController();
 
-  // // Selected options
-  // String selectedPurpose = 'MODAL KERJA';
-  // String selectedCollateralType = 'Mobil';
-
   // Selected images for the PDF
   List<XFile> selectedImages = [];
 
@@ -28,6 +29,9 @@ class CreditFormController extends GetxController {
   var documentList = <dynamic>[].obs;
   var selectedAgunan = ''.obs;
   var selectedDocument = ''.obs;
+  var selectedKTPImages = <File>[].obs;
+  var selectedAgunanImages = <File>[].obs;
+  var selectedDocumentImages = <File>[].obs;
 
   Future<void> fetchAgunan() async {
     try {
@@ -73,7 +77,7 @@ class CreditFormController extends GetxController {
               leading: const Icon(Icons.camera_alt),
               title: const Text('Ambil dari Kamera'),
               onTap: () async {
-                Navigator.pop(context);
+                Get.back();
                 final XFile? image =
                     await picker.pickImage(source: ImageSource.camera);
                 if (image != null) {
@@ -86,7 +90,7 @@ class CreditFormController extends GetxController {
               leading: const Icon(Icons.photo_library),
               title: const Text('Pilih dari Galeri'),
               onTap: () async {
-                Navigator.pop(context);
+                Get.back();
                 final List<XFile>? images = await picker.pickMultiImage();
                 if (images != null) {
                   selectedImages.addAll(images);
@@ -160,72 +164,128 @@ class CreditFormController extends GetxController {
     print("DATA TERKIRIM:");
     print(formData);
 
-    if (selectedImages.isEmpty) {
+    if (selectedAgunanImages.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Harap unggah gambar jaminan terlebih dahulu.")),
+        const SnackBar(
+            content: Text("Harap unggah gambar agunan terlebih dahulu.")),
       );
       return;
     }
-
-    final pdfFile = await generatePdfFromImages();
-    print("PDF berhasil dibuat: ${pdfFile.path}");
-
-    // TODO: Kirim ke API (data dan file)
-  }
-
-var selectedAgunanImages = <File>[].obs;
-var selectedDocumentImages = <File>[].obs;
-
-Future<void> pickAgunanImages(BuildContext context) async {
-  final source = await _chooseSource(context);
-  if (source == null) return;
-
-  if (source == ImageSource.gallery) {
-    final result = await ImagePicker().pickMultiImage();
-    if (result.isNotEmpty) {
-      selectedAgunanImages.addAll(result.map((e) => File(e.path)));
+    try {
+      await uploadDocuments(); // Pastikan fungsi ini dipanggil
+      Get.snackbar("Sukses", "Dokumen berhasil diunggah");
+    } catch (e) {
+      Get.snackbar("Error", "Upload gagal: ${e.toString()}");
     }
-  } else {
-    final single = await ImagePicker().pickImage(source: source);
-    if (single != null) selectedAgunanImages.add(File(single.path));
   }
-}
 
-Future<void> pickDocumentImages(BuildContext context) async {
-  final source = await _chooseSource(context);
-  if (source == null) return;
+  Future<void> pickKTPImages(BuildContext context) async {
+    final source = await _chooseSource(context);
+    if (source == null) return;
 
-  if (source == ImageSource.gallery) {
-    final result = await ImagePicker().pickMultiImage();
-    if (result.isNotEmpty) {
-      selectedDocumentImages.addAll(result.map((e) => File(e.path)));
+    if (source == ImageSource.gallery) {
+      final result = await ImagePicker().pickMultiImage();
+      if (result.isNotEmpty) {
+        selectedKTPImages.addAll(result.map((e) => File(e.path)));
+      }
+    } else {
+      final single = await ImagePicker().pickImage(source: source);
+      if (single != null) selectedKTPImages.add(File(single.path));
     }
-  } else {
-    final single = await ImagePicker().pickImage(source: source);
-    if (single != null) selectedDocumentImages.add(File(single.path));
   }
-}
 
-Future<ImageSource?> _chooseSource(BuildContext context) async {
-  return showModalBottomSheet<ImageSource>(
-    context: context,
-    builder: (ctx) => Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ListTile(
-          leading: const Icon(Icons.photo_library),
-          title: const Text('Galeri'),
-          onTap: () => Navigator.pop(ctx, ImageSource.gallery),
-        ),
-        ListTile(
-          leading: const Icon(Icons.camera_alt),
-          title: const Text('Kamera'),
-          onTap: () => Navigator.pop(ctx, ImageSource.camera),
-        ),
-      ],
-    ),
-  );
-}
+  Future<void> pickAgunanImages(BuildContext context) async {
+    final source = await _chooseSource(context);
+    if (source == null) return;
 
+    if (source == ImageSource.gallery) {
+      final result = await ImagePicker().pickMultiImage();
+      if (result.isNotEmpty) {
+        selectedAgunanImages.addAll(result.map((e) => File(e.path)));
+      }
+    } else {
+      final single = await ImagePicker().pickImage(source: source);
+      if (single != null) selectedAgunanImages.add(File(single.path));
+    }
+  }
 
+  Future<void> pickDocumentImages(BuildContext context) async {
+    final source = await _chooseSource(context);
+    if (source == null) return;
+
+    if (source == ImageSource.gallery) {
+      final result = await ImagePicker().pickMultiImage();
+      if (result.isNotEmpty) {
+        selectedDocumentImages.addAll(result.map((e) => File(e.path)));
+      }
+    } else {
+      final single = await ImagePicker().pickImage(source: source);
+      if (single != null) selectedDocumentImages.add(File(single.path));
+    }
+  }
+
+  Future<ImageSource?> _chooseSource(BuildContext context) async {
+    return showModalBottomSheet<ImageSource>(
+      context: context,
+      builder: (ctx) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            leading: const Icon(Icons.photo_library),
+            title: const Text('Galeri'),
+            onTap: () => Get.back(result: ImageSource.gallery),
+          ),
+          ListTile(
+            leading: const Icon(Icons.camera_alt),
+            title: const Text('Kamera'),
+            onTap: () => Get.back(result: ImageSource.camera),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> uploadDocuments() async {
+    try {
+      final timestamp =
+          '${DateTime.now().toUtc().toIso8601String().split('.').first}Z';
+
+      final requestBody = {
+        "Office_ID": "000",
+        "cif_id": 2,
+        "application": {"trx_survey": "100025000000002"}
+      };
+
+      if (selectedDocumentImages.isEmpty ||
+          selectedAgunanImages.isEmpty ||
+          selectedKTPImages.isEmpty) {
+        throw Exception("Gambar KTP, agunan, dan dokumen belum dipilih.");
+      }
+
+      Get.snackbar("Uploading", "Harap tunggu...",
+          snackPosition: SnackPosition.BOTTOM);
+
+      final DocumentService service = DocumentService();
+      final response = await service.uploadDocuments(
+        docImageKTP: selectedKTPImages[0],
+        docImageAgunan: selectedAgunanImages[0],
+        docImageDokumen: selectedDocumentImages[0],
+        requestBody: requestBody,
+        timestamp: timestamp,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print(
+            "✅ Upload sukses: ${response.statusCode} ${response.statusMessage}");
+        Get.snackbar("Sukses", "Dokumen berhasil diunggah");
+      } else {
+        print("⚠️ Upload gagal: ${response.statusCode}");
+        Get.snackbar(
+            "Error", "Upload gagal dengan status: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("❌ Upload gagal: $e");
+      Get.snackbar("Error", "Upload gagal: ${e.toString()}");
+    }
+  }
 }

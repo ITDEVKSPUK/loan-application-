@@ -50,7 +50,7 @@ class FinancialFormSection extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         const Text(
-          "📊 Info Keuangan",
+          "Info Keuangan",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         TextfieldForm(

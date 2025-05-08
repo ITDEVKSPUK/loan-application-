@@ -10,6 +10,7 @@ import 'package:loan_application/widgets/InputUserData/financial_form_section.da
 import 'package:loan_application/widgets/InputUserData/upload_agunan.dart';
 import 'package:loan_application/widgets/InputUserData/upload_document.dart';
 import 'package:loan_application/widgets/InputUserData/textfield_form.dart';
+import 'package:loan_application/widgets/InputUserData/upload_ktp.dart';
 
 class FullCreditFormPage extends StatefulWidget {
   const FullCreditFormPage({super.key});
@@ -44,27 +45,41 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              const Text("📝 Tujuan Kredit & Jaminan",
+              const Text("Tujuan Kredit & Jaminan",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              const SizedBox(height: 16),
+              UploadKTPPicker(controller: controller),
               const SizedBox(height: 12),
               UploadAgunanPicker(controller: controller),
               const SizedBox(height: 16),
               UploadDocumentPicker(controller: controller),
               const SizedBox(height: 16),
               FinancialFormSection(controller: controller),
-              const SizedBox(height: 24),
+              const SizedBox(height: 32),
               Center(
                 child: ElevatedButton(
-                  onPressed: () => controller.handleSubmit(context),
-                  child: const Text("Submit"),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 32, vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
+                    onPressed: () => controller.handleSubmit(context),
+                    child: const Text("Submit"),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white, // Warna teks dan ikon
+                      backgroundColor: Colors.blue, // Warna latar belakang
+                      disabledForegroundColor: Colors.grey
+                          .withOpacity(0.38), // Warna teks saat disabled
+                      disabledBackgroundColor: Colors.grey.withOpacity(
+                          0.12), // Warna latar belakang saat disabled
+                      shadowColor: Colors.black, // Warna bayangan
+                      elevation: 3, // Tinggi elevasi (bayangan)
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 32, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      minimumSize: const Size(200, 48), // Ukuran minimum tombol
+                      side: const BorderSide(
+                          color: Colors.blue, width: 2), // Border/garis tepi
+                      alignment:
+                          Alignment.center, // Perataan konten di dalam tombol
+                    )),
               ),
               const SizedBox(height: 16),
             ],
