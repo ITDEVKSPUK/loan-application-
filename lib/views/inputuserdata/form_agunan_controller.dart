@@ -7,8 +7,8 @@ import 'package:loan_application/API/service/get_docagun.dart';
 import 'package:loan_application/API/service/post_document.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:get/get.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class CreditFormController extends GetxController {
   final dio_pkg.Dio dio = DioClient.dio;
@@ -179,18 +179,47 @@ class CreditFormController extends GetxController {
     }
   }
 
+  Future<File> compressImage(File file) async {
+    final dir = await getTemporaryDirectory();
+    final targetPath =
+        '${dir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+    final result = await FlutterImageCompress.compressAndGetFile(
+      file.path,
+      targetPath,
+      quality: 60,
+    );
+
+    if (result == null) {
+      print("⚠️ Kompresi gagal, mengirim file asli");
+      return file;
+    }
+
+    return File(result.path);
+  }
+
   Future<void> pickKTPImages(BuildContext context) async {
     final source = await _chooseSource(context);
     if (source == null) return;
 
+    final picker = ImagePicker();
+
     if (source == ImageSource.gallery) {
-      final result = await ImagePicker().pickMultiImage();
+      final result = await picker.pickMultiImage();
       if (result.isNotEmpty) {
-        selectedKTPImages.addAll(result.map((e) => File(e.path)));
+        for (var e in result) {
+          final file = File(e.path);
+          final compressed = await compressImage(file);
+          selectedKTPImages.add(compressed);
+        }
       }
     } else {
-      final single = await ImagePicker().pickImage(source: source);
-      if (single != null) selectedKTPImages.add(File(single.path));
+      final single = await picker.pickImage(source: source);
+      if (single != null) {
+        final file = File(single.path);
+        final compressed = await compressImage(file);
+        selectedKTPImages.add(compressed);
+      }
     }
   }
 
@@ -198,14 +227,24 @@ class CreditFormController extends GetxController {
     final source = await _chooseSource(context);
     if (source == null) return;
 
+    final picker = ImagePicker();
+
     if (source == ImageSource.gallery) {
-      final result = await ImagePicker().pickMultiImage();
+      final result = await picker.pickMultiImage();
       if (result.isNotEmpty) {
-        selectedAgunanImages.addAll(result.map((e) => File(e.path)));
+        for (var e in result) {
+          final file = File(e.path);
+          final compressed = await compressImage(file);
+          selectedAgunanImages.add(compressed);
+        }
       }
     } else {
-      final single = await ImagePicker().pickImage(source: source);
-      if (single != null) selectedAgunanImages.add(File(single.path));
+      final single = await picker.pickImage(source: source);
+      if (single != null) {
+        final file = File(single.path);
+        final compressed = await compressImage(file);
+        selectedAgunanImages.add(compressed);
+      }
     }
   }
 
@@ -213,14 +252,24 @@ class CreditFormController extends GetxController {
     final source = await _chooseSource(context);
     if (source == null) return;
 
+    final picker = ImagePicker();
+
     if (source == ImageSource.gallery) {
-      final result = await ImagePicker().pickMultiImage();
+      final result = await picker.pickMultiImage();
       if (result.isNotEmpty) {
-        selectedDocumentImages.addAll(result.map((e) => File(e.path)));
+        for (var e in result) {
+          final file = File(e.path);
+          final compressed = await compressImage(file);
+          selectedDocumentImages.add(compressed);
+        }
       }
     } else {
-      final single = await ImagePicker().pickImage(source: source);
-      if (single != null) selectedDocumentImages.add(File(single.path));
+      final single = await picker.pickImage(source: source);
+      if (single != null) {
+        final file = File(single.path);
+        final compressed = await compressImage(file);
+        selectedDocumentImages.add(compressed);
+      }
     }
   }
 
