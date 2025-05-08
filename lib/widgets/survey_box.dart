@@ -123,7 +123,7 @@ class SurveyBox extends StatelessWidget {
               child: RotatedBox(
                 quarterTurns: 3,
                 child: Text(
-                  status,
+                  status.isEmpty ? 'No Status' : status, // Fallback to 'No Status' if empty
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 14,
