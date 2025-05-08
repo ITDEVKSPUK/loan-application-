@@ -57,29 +57,7 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
               const SizedBox(height: 32),
               Center(
                 child: ElevatedButton(
-                    onPressed: () => controller.handleSubmit(context),
-                    child: const Text("Submit"),
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white, // Warna teks dan ikon
-                      backgroundColor: Colors.blue, // Warna latar belakang
-                      disabledForegroundColor: Colors.grey
-                          .withOpacity(0.38), // Warna teks saat disabled
-                      disabledBackgroundColor: Colors.grey.withOpacity(
-                          0.12), // Warna latar belakang saat disabled
-                      shadowColor: Colors.black, // Warna bayangan
-                      elevation: 3, // Tinggi elevasi (bayangan)
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 32, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      minimumSize: const Size(200, 48), // Ukuran minimum tombol
-                      side: const BorderSide(
-                          color: Colors.blue, width: 2), // Border/garis tepi
-                      alignment:
-                          Alignment.center, // Perataan konten di dalam tombol
-                    )),
-                      onPressed:  () => controller.handleSubmit(context),
+                      onPressed: () => controller.handleSubmit(context),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.casualbutton1,
                         padding: const EdgeInsets.symmetric(
