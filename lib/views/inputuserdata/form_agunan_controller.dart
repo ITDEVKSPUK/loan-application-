@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loan_application/API/dio/dio_client.dart';
 import 'package:loan_application/API/service/get_docagun.dart';
-import 'package:loan_application/views/inputuserdata/document_service.dart';
+import 'package:loan_application/API/service/post_document.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
 import 'package:http_parser/http_parser.dart';
@@ -252,8 +252,8 @@ class CreditFormController extends GetxController {
 
       final requestBody = {
         "Office_ID": "000",
-        "cif_id": 2,
-        "application": {"trx_survey": "100025000000002"}
+        "cif_id": 6,
+        "application": {"trx_survey": "100025000000005"}
       };
 
       if (selectedDocumentImages.isEmpty ||

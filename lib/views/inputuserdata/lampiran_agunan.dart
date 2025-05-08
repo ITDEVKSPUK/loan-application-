@@ -1,15 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
 import 'package:loan_application/widgets/InputUserData/financial_form_section.dart';
 import 'package:loan_application/widgets/InputUserData/upload_agunan.dart';
 import 'package:loan_application/widgets/InputUserData/upload_document.dart';
-import 'package:loan_application/widgets/InputUserData/textfield_form.dart';
 import 'package:loan_application/widgets/InputUserData/upload_ktp.dart';
 import 'package:loan_application/widgets/custom_appbar.dart';
 
