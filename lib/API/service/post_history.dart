@@ -9,7 +9,7 @@ class HistoryService {
     required DateTime toDateTime,
   }) async {
     final timestamp =
-        '${DateTime.now().toUtc().toIso8601String().split('.').first}Z';
+        '${DateTime.now().toUtc().toIso8601String().split('.').first}+00:00';
 
     final headers = {
       'ICS-Wipala': 'sastra.astana.dwipangga',

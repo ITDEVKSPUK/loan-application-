@@ -48,7 +48,6 @@ class _SurveyListState extends State<SurveyList> {
           Expanded(
             child: RefreshIndicator(
               color: AppColors.black,
-              color: AppColors.black,
               backgroundColor: Colors.white,
               onRefresh: () async {
                 await Future(() => controller.getHistory());
@@ -63,9 +62,8 @@ class _SurveyListState extends State<SurveyList> {
                   itemCount: list.length,
                   itemBuilder: (context, index) {
                     final item = list[index];
-                    final imgUrl = item.document?.docPerson?[index].img;
-                    final statusText = item.status?.value ??
-                        item.application.toString();
+                    final statusText =
+                        item.status?.value ?? item.application.toString();
                     final statusColor = controller.getStatusColor(statusText);
 
                     return GestureDetector(
@@ -78,7 +76,9 @@ class _SurveyListState extends State<SurveyList> {
                         date: DateFormat('yyyy-MM-dd')
                             .format(item.application.trxDate),
                         location: item.sectorCity,
-                        image: imgUrl != null ? imgUrl : 'assets/images/bg.png',
+                        image: (item.document?.docPerson?.isNotEmpty ?? false)
+                            ? item.document!.docPerson[0].img
+                            : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoAx92ukQFM3pqKBWZweO8aBpVZS5COMYjVg&s',
                         status: statusText,
                         statusColor: statusColor,
                       ),

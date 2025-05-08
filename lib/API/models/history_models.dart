@@ -1,3 +1,5 @@
+import 'package:json_annotation/json_annotation.dart';
+
 class HistoryResponse {
   String responseCode;
   String responseDescription;
@@ -56,7 +58,7 @@ class Datum {
       sectorCity: json['sector_city'] ?? '',
       villages: json['village'] ?? '',
       address: json['address'] ?? '',
-      status: json['status'] != null ? Status.fromJson(json['status']) : null, 
+      status: json['status'] != null ? Status.fromJson(json['status']) : null,
       application: Application.fromJson(json['application'] ?? {}),
       collateral: Collateral.fromJson(json['collateral'] ?? {}),
       additionalInfo: AdditionalInfo.fromJson(json['additionalinfo'] ?? {}),
@@ -96,42 +98,45 @@ class Document {
 }
 
 class DocAsset {
-  String img0;
-  String doc;
+  @JsonKey(name: 'img-0')
+  final String img;
+  final String doc;
 
   DocAsset({
-    required this.img0,
+    required this.img,
     required this.doc,
   });
 
   factory DocAsset.fromJson(Map<String, dynamic> json) {
     return DocAsset(
-      img0: json['img-0'] ?? '',
+      img: json['img-0'] ?? '',
       doc: json['doc'] ?? '',
     );
   }
 }
 
 class DocImg {
-  String img0;
-  String doc;
+  @JsonKey(name: 'img-0')
+  final String img;
+  final String doc;
 
   DocImg({
-    required this.img0,
+    required this.img,
     required this.doc,
   });
 
   factory DocImg.fromJson(Map<String, dynamic> json) {
     return DocImg(
-      img0: json['img-0'] ?? '',
+      img: json['img-0'] ?? '',
       doc: json['doc'] ?? '',
     );
   }
 }
 
 class DocPerson {
-  String img;
-  String doc;
+  @JsonKey(name: 'img-0')
+  final String img;
+  final String doc;
 
   DocPerson({
     required this.img,

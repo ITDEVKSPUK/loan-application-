@@ -36,8 +36,8 @@ class CreateCIFService {
 
       // Construct the request body dynamically
       final requestBody = {
-        "id_legal": idLegal,
-        "Office_ID": officeId,
+        "id_legal": 3319123456,
+        "Office_ID": "000",
         "owner": {
           "enik_no": enikNo,
           "enik_type": enikType,
@@ -53,7 +53,7 @@ class CreateCIFService {
           "village": village,
           "scope_village": scopeVillage,
           "address_line1": addressLine1,
-          "postal_code": postalCode,
+          "postal_code": 55164,
           "pemberi_kerja": pemberiKerja,
           "deskripsi_pekerjaan": deskripsiPekerjaan,
         }
@@ -69,6 +69,7 @@ class CreateCIFService {
       // Check for success
       if (response.statusCode == 200) {
         print("CIF created successfully: ${response.data}");
+        print(requestBody);
       } else {
         print("Failed to create CIF: ${response.statusCode}");
       }

@@ -8,7 +8,6 @@ import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 import 'package:loan_application/views/inputuserdata/overlayalamat.dart';
 import 'package:loan_application/views/inputuserdata/showImageSourcePicker.dart';
 import 'package:loan_application/widgets/InputUserData/gender_radio.dart';
-import 'package:loan_application/widgets/custom_appbar.dart';
 import 'package:loan_application/widgets/InputUserData/textfield_form.dart';
 import 'package:loan_application/widgets/custom_appbar.dart';
 
@@ -20,7 +19,7 @@ class InputData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-    child: Scaffold(
+        child: Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         title: 'Debitur Form',
@@ -84,9 +83,7 @@ class InputData extends StatelessWidget {
                     label: 'NIK',
                     controller: controller.nikController,
                     keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -139,8 +136,7 @@ class InputData extends StatelessWidget {
             ),
 
             GenderRadioButtons(
-              gender: controller.selectedGender, 
-              
+              gender: controller.selectedGender,
             ),
 
             GestureDetector(
@@ -196,12 +192,17 @@ class InputData extends StatelessWidget {
             TextfieldForm(
                 width: double.infinity,
                 height: 50,
+                label: 'Detail Alamat',
+                controller: controller.detileAlamatController),
+            TextfieldForm(
+                width: double.infinity,
+                height: 50,
                 label: 'Alamat Lengkap',
                 controller: controller.alamatController),
 
             ElevatedButton(
-              onPressed: () => showLocationBottomSheet(context,
-                  (value) => controller.alamatController.text = value),
+              onPressed: () => showLocationBottomSheet(
+                  context, (value) => controller.alamatController.text = value),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.casualbutton1,
                 padding:
@@ -223,7 +224,19 @@ class InputData extends StatelessWidget {
             Align(
               alignment: Alignment.centerRight,
               child: ElevatedButton(
-                onPressed: () => Get.toNamed(MyAppRoutes.formAgunan),
+                onPressed: () {
+                  if (controller.validateForm()) {
+                    controller.saveForm();
+                    Get.toNamed(MyAppRoutes.formAgunan);
+                  } else {
+                    Get.snackbar(
+                      'Error',
+                      'Please fill all fields correctly.',
+                      backgroundColor: Colors.red,
+                      colorText: Colors.white,
+                    );
+                  }
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.casualbutton1,
                   padding:
@@ -246,7 +259,6 @@ class InputData extends StatelessWidget {
           ],
         ),
       ),
-      )
-    );
+    ));
   }
 }

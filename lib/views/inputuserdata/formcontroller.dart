@@ -22,6 +22,7 @@ class InputDataController extends GetxController {
   final alamatController = TextEditingController();
   final nominalController = TextEditingController();
   final jenisJaminanController = TextEditingController();
+  final detileAlamatController = TextEditingController();
 
   Rx<File?> fotoKtp = Rx<File?>(null);
   Rx<File?> buktiJaminan = Rx<File?>(null);
@@ -77,8 +78,14 @@ class InputDataController extends GetxController {
     final createCIFService = CreateCIFService();
 
     try {
+      final parts = alamatController.text.split('-');
+
+      final region = parts.length > 1 ? parts[1] : '';
+      final sector = parts.length > 2 ? parts[2] : '';
+      final village = parts.length > 3 ? parts[3] : '';
+
       final response = await createCIFService.createCIF(
-        idLegal: int.tryParse(nikController.text) ?? 0,
+        idLegal: 3319123456,
         officeId: "000", // Replace with dynamic office ID if needed
         enikNo: nikController.text,
         enikType: "K05", // Replace with dynamic type if needed
@@ -87,11 +94,13 @@ class InputDataController extends GetxController {
         cityBorn: kotaAsalController.text,
         pasanganNama: namaPasanganController.text,
         pasanganIdCart: nikpasaganController.text,
-        region: kotaAsalController.text,
-        sector: pekerjaanController.text,
-        village: alamatController.text,
+
+        //adreess
+        region: region,
+        sector: sector,
+        village: village,
         scopeVillage: "004-005",
-        addressLine1: alamatController.text,
+        addressLine1: detileAlamatController.text,
         pemberiKerja: pekerjaanController.text,
         deskripsiPekerjaan: pekerjaanController.text,
       );
@@ -170,4 +179,20 @@ class InputDataController extends GetxController {
   }
 
   int? get cifId => cifResponse.value?.cifId;
+  bool validateForm() {
+    if (nikController.text.isEmpty ||
+        namaAwalController.text.isEmpty ||
+        namaAkhirController.text.isEmpty ||
+        namaPasanganController.text.isEmpty ||
+        tanggallahirController.text.isEmpty ||
+        kotaAsalController.text.isEmpty ||
+        telpController.text.isEmpty ||
+        pekerjaanController.text.isEmpty ||
+        alamatController.text.isEmpty ||
+        selectedGender.value.isEmpty) {
+      Get.snackbar("Error", "All fields must be filled");
+      return false;
+    }
+    return true;
+  }
 }

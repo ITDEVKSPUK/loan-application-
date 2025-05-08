@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loan_application/views/SurveyDetail/detail_controller.dart';
-import 'package:loan_application/widgets/InputUserData/gender_radio.dart';
 import 'package:loan_application/widgets/SurveyDetail/detail_bukti.dart';
 import 'package:loan_application/widgets/SurveyDetail/detail_loan.dart';
 import 'package:loan_application/widgets/SurveyDetail/detail_type.dart';
@@ -15,8 +14,6 @@ class SurveyDetail extends StatefulWidget {
 
 class _SurveyDetailState extends State<SurveyDetail> {
   final DetailController controller = Get.put(DetailController());
-
-   SurveyDetail({super.key});
 
   @override
   Widget build(BuildContext context) {
