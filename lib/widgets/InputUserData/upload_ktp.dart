@@ -2,61 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
 
-class UploadDocumentPicker extends StatelessWidget {
+class UploadKTPPicker extends StatelessWidget {
   final CreditFormController controller;
 
-  const UploadDocumentPicker({super.key, required this.controller});
+  const UploadKTPPicker({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Obx(() {
-          return DropdownButtonFormField<String>(
-            value: controller.selectedDocument.value.isEmpty
-                ? null
-                : controller.selectedDocument.value,
-            decoration: InputDecoration(
-              labelText: "Kategori Dokumen",
-              labelStyle: TextStyle(color: Colors.blue.shade700),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Colors.blue.shade200),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Colors.blue.shade200),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Colors.blue.shade600, width: 2),
-              ),
-              filled: true,
-              fillColor: Colors.blue.shade50,
-            ),
-            dropdownColor: Colors.white,
-            icon: Icon(Icons.arrow_drop_down, color: Colors.blue.shade700),
-            items: controller.documentList.map((doc) {
-              return DropdownMenuItem<String>(
-                value: doc['id_catdocument'].toString(),
-                child: Text(
-                  doc['name'],
-                  style: const TextStyle(fontSize: 15),
-                ),
-              );
-            }).toList(),
-            onChanged: (val) {
-              if (val != null) controller.selectedDocument.value = val;
-            },
-          );
-        }),
+        const Text(
+          "Upload KTP",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 8),
+        const Text(
+          "Pastikan foto KTP jelas dan tidak terpotong",
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.black54,
+          ),
+        ),
         const SizedBox(height: 12),
         ElevatedButton.icon(
-          onPressed: () => controller.pickDocumentImages(context),
-          icon: const Icon(Icons.upload_file, color: Colors.white),
+          onPressed: () => controller.pickKTPImages(context),
+          icon: const Icon(Icons.camera_alt, color: Colors.white),
           label: const Text(
-            "Upload Dokumen",
+            "Upload Foto KTP",
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w600,
@@ -73,9 +50,10 @@ class UploadDocumentPicker extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         Obx(() {
-          final images = controller.selectedDocumentImages;
-          if (images.isEmpty)
-            return const Text("Belum ada dokumen yang dipilih.");
+          final images = controller.selectedKTPImages;
+          if (images.isEmpty) {
+            return const Text("Belum ada foto KTP yang dipilih.");
+          }
 
           return SizedBox(
             height: 90,
@@ -100,7 +78,7 @@ class UploadDocumentPicker extends StatelessWidget {
                       right: 0,
                       child: GestureDetector(
                         onTap: () =>
-                            controller.selectedDocumentImages.removeAt(index),
+                            controller.selectedKTPImages.removeAt(index),
                         child: Container(
                           decoration: const BoxDecoration(
                             color: Colors.black45,
