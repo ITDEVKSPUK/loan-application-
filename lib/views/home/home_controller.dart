@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
+import 'package:intl/intl.dart';
 import 'package:loan_application/API/models/history_models.dart';
 import 'package:loan_application/API/service/post_history.dart';
 import 'package:loan_application/core/theme/color.dart';
@@ -35,27 +36,40 @@ class HomeController extends GetxController {
   }
 
   void filterSearch(String query) {
-    filteredList.value = surveyList
-        .where((item) =>
-            item.fullName.toLowerCase().contains(query.toLowerCase()) ||
-            item.application.purpose
-                .toLowerCase()
-                .contains(query.toLowerCase()))
-        .toList();
+    filteredList.value = surveyList.where((item) {
+      final queryLower = query.toLowerCase();
+      final fullName = item.fullName.toLowerCase();
+      final purpose = item.application.purpose.toLowerCase();
+      final date = DateFormat('yyyy-MM-dd')
+          .format(item.application.trxDate)
+          .toLowerCase();
+      return fullName.contains(queryLower) ||
+          purpose.contains(queryLower) ||
+          date.contains(queryLower);
+    }).toList();
   }
 
-  void filterByStatus(String status) {
-    filteredList.value =
-        surveyList.where((item) => "UNREAD" == status).toList();
-  }
+void filterByStatus(String status) {
+  print('FILTER BY STATUS: $status');
+
+  filteredList.value = surveyList.where((item) {
+    final statusText = item.status?.value ?? item.application.toString();
+    print('Actual item status: ${statusText.toUpperCase()}');
+
+    return status.toUpperCase() == 'ALL'
+        ? true
+        : statusText.toUpperCase() == status.toUpperCase();
+  }).toList();
+}
+
 
   Color getStatusColor(String status) {
     switch (status.toUpperCase()) {
-      case 'ACCEPTED':
+      case 'DITERIMA':
         return AppColors.greenstatus;
-      case 'DECLINED':
+      case 'DITOLAK':
         return AppColors.redstatus;
-      case 'UNREAD':
+      case 'PROCES':
         return AppColors.orangestatus;
       default:
         return Colors.grey;

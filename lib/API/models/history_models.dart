@@ -28,6 +28,7 @@ class Datum {
   String sectorCity;
   String villages;
   String address;
+  Status? status;
   Application application;
   Collateral collateral;
   AdditionalInfo additionalInfo;
@@ -39,6 +40,7 @@ class Datum {
     required this.sectorCity,
     required this.villages,
     required this.address,
+    required this.status,
     required this.application,
     required this.collateral,
     required this.additionalInfo,
@@ -52,6 +54,7 @@ class Datum {
       sectorCity: json['sector_city'] ?? '',
       villages: json['village'] ?? '',
       address: json['address'] ?? '',
+      status: json['status'] != null ? Status.fromJson(json['status']) : null, 
       application: Application.fromJson(json['application'] ?? {}),
       collateral: Collateral.fromJson(json['collateral'] ?? {}),
       additionalInfo: AdditionalInfo.fromJson(json['additionalinfo'] ?? {}),
@@ -134,6 +137,32 @@ class Collateral {
       idCategoryDocument: json['id_catdocument'] ?? 0,
       documentType: json['document_type'] ?? '',
       value: json['value'] ?? '0',
+    );
+  }
+}
+
+class Status {
+  final String id;
+  final String value;
+  final String description;
+  final int attachedDocument;
+  final String mandatory;
+
+  Status({
+    required this.id,
+    required this.value,
+    required this.description,
+    required this.attachedDocument,
+    required this.mandatory,
+  });
+
+  factory Status.fromJson(Map<String, dynamic> json) {
+    return Status(
+      id: json['id'] ?? '',
+      value: json['value'] ?? '',
+      description: json['description'] ?? '',
+      attachedDocument: json['attachedDocument'] ?? 0,
+      mandatory: json['Mandatory'] ?? '',
     );
   }
 }

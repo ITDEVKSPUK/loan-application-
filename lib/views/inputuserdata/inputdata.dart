@@ -7,6 +7,7 @@ import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 import 'package:loan_application/views/inputuserdata/overlayalamat.dart';
 import 'package:loan_application/views/inputuserdata/showImageSourcePicker.dart';
+import 'package:loan_application/widgets/InputUserData/gender_radio.dart';
 import 'package:loan_application/widgets/custom_appbar.dart';
 import 'package:loan_application/widgets/InputUserData/textfield_form.dart';
 
@@ -14,22 +15,18 @@ class InputData extends StatelessWidget {
   final controller = Get.put(InputDataController());
 
   InputData({super.key});
-  DateTime startDate = DateTime.now();
-  String selectedDate = '';
-  String selectedDateText = '';
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(
+    child: Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         title: 'Debitur Form',
-        onBack: () {
-          Get.offAllNamed('/dashboard');
-        },
+        onBack: () => Get.offAllNamed('/dashboard'),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -47,7 +44,7 @@ class InputData extends StatelessWidget {
                           image: DecorationImage(
                             image: controller.fotoKtp.value != null
                                 ? FileImage(controller.fotoKtp.value!)
-                                : AssetImage('assets/images/rawktp.png')
+                                : const AssetImage('assets/images/rawktp.png')
                                     as ImageProvider,
                             fit: BoxFit.cover,
                           ),
@@ -55,8 +52,8 @@ class InputData extends StatelessWidget {
                       );
                     }),
                   ),
-                  SizedBox(height: 5),
-                  Padding(
+                  const SizedBox(height: 5),
+                  const Padding(
                     padding: EdgeInsets.only(left: 6.0),
                     child: Align(
                       alignment: Alignment.centerLeft,
@@ -71,7 +68,7 @@ class InputData extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
@@ -86,19 +83,21 @@ class InputData extends StatelessWidget {
                     label: 'NIK',
                     controller: controller.nikController,
                     keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Column(
                   children: [
-                    SizedBox(height: 25),
+                    const SizedBox(height: 25),
                     ElevatedButton(
                       onPressed: controller.fetchNikData,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.casualbutton1,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -116,6 +115,7 @@ class InputData extends StatelessWidget {
                 ),
               ],
             ),
+
             TextfieldForm(
                 width: double.infinity,
                 height: 50,
@@ -136,78 +136,12 @@ class InputData extends StatelessWidget {
                 FilteringTextInputFormatter.allow(RegExp(r'[+\d\s]')),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Jenis Kelamin',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      fontFamily: 'Outfit',
-                    ),
-                  ),
-                  Obx(() => Row(
-                        children: [
-                          Expanded(
-                            child: Row(
-                              children: [
-                                Radio<String>(
-                                  value: 'Laki-laki',
-                                  groupValue: controller.selectedGender.value,
-                                  onChanged: (value) {
-                                    if (value != null) {
-                                      if (controller.selectedGender.value ==
-                                          value) {
-                                        controller.selectedGender.value = '';
-                                        controller
-                                            .selectedGenderController.text = '';
-                                      } else {
-                                        controller.selectedGender.value = value;
-                                        controller.selectedGenderController
-                                            .text = value;
-                                      }
-                                    }
-                                  },
-                                ),
-                                const SizedBox(width: 4),
-                                Text('Laki-laki'),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: Row(
-                              children: [
-                                Radio<String>(
-                                  value: 'Perempuan',
-                                  groupValue: controller.selectedGender.value,
-                                  onChanged: (value) {
-                                    if (value != null) {
-                                      if (controller.selectedGender.value ==
-                                          value) {
-                                        controller.selectedGender.value = '';
-                                        controller
-                                            .selectedGenderController.text = '';
-                                      } else {
-                                        controller.selectedGender.value = value;
-                                        controller.selectedGenderController
-                                            .text = value;
-                                      }
-                                    }
-                                  },
-                                ),
-                                const SizedBox(width: 4),
-                                Text('Perempuan'),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )),
-                ],
-              ),
+
+            GenderRadioButtons(
+              gender: controller.selectedGender, 
+              
             ),
+
             GestureDetector(
               onTap: () async {
                 final DateTime? picked = await showDatePicker(
@@ -263,12 +197,14 @@ class InputData extends StatelessWidget {
                 height: 50,
                 label: 'Alamat Lengkap',
                 controller: controller.alamatController),
+
             ElevatedButton(
-              onPressed: () => showLocationBottomSheet(
-                  context, (value) => controller.alamatController.text = value),
+              onPressed: () => showLocationBottomSheet(context,
+                  (value) => controller.alamatController.text = value),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.casualbutton1,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -281,14 +217,16 @@ class InputData extends StatelessWidget {
                     fontFamily: 'Outfit'),
               ),
             ),
-            SizedBox(height: 20),
+
+            const SizedBox(height: 20),
             Align(
               alignment: Alignment.centerRight,
               child: ElevatedButton(
                 onPressed: () => Get.toNamed(MyAppRoutes.formAgunan),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.casualbutton1,
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -303,10 +241,11 @@ class InputData extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
           ],
         ),
       ),
+      )
     );
   }
 }

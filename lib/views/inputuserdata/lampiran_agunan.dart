@@ -11,6 +11,7 @@ import 'package:loan_application/widgets/InputUserData/upload_agunan.dart';
 import 'package:loan_application/widgets/InputUserData/upload_document.dart';
 import 'package:loan_application/widgets/InputUserData/textfield_form.dart';
 import 'package:loan_application/widgets/InputUserData/upload_ktp.dart';
+import 'package:loan_application/widgets/custom_appbar.dart';
 
 class FullCreditFormPage extends StatefulWidget {
   const FullCreditFormPage({super.key});
@@ -33,11 +34,9 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.pureWhite,
-        appBar: AppBar(
-          title: const Text("Lampiran Dokumen"),
-          backgroundColor: AppColors.pureWhite,
-          shadowColor: AppColors.pureWhite,
-          automaticallyImplyLeading: false,
+        appBar: CustomAppBar(
+          title: 'Lampiran Dokumen',
+          onBack: () => Get.back(), 
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -80,6 +79,24 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
                       alignment:
                           Alignment.center, // Perataan konten di dalam tombol
                     )),
+                      onPressed:  () => controller.handleSubmit(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.casualbutton1,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: Text(
+                        'Submit',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: AppColors.pureWhite,
+                          fontFamily: 'Outfit',
+                        ),
+                      ),
+                    ), 
               ),
               const SizedBox(height: 16),
             ],
