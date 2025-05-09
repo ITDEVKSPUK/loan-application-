@@ -35,6 +35,27 @@ class InputDataController extends GetxController {
 
   get pickImageJaminan => null;
 
+  Future<bool> checkNik() async {
+    final checkNikService = CheckNik();
+
+    try {
+      final response = await checkNikService.fetchNIK(nikController.text);
+      if (response.statusCode == 200) {
+        Get.snackbar("Success", "NIK is valid");
+        return true;
+      } else if (response.statusCode == 400) {
+        Get.snackbar("Error", "Invalid NIK");
+        return false;
+      } else {
+        Get.snackbar("Error", "Failed to validate NIK");
+        return false;
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+      return false;
+    }
+  }
+
   Future<void> fetchNikData() async {
     if (nikController.text.isEmpty) {
       Get.snackbar("Error", "NIK field cannot be empty");
@@ -45,25 +66,33 @@ class InputDataController extends GetxController {
 
     try {
       final response = await checkNikService.fetchNIK(nikController.text);
-      if (response.data != null) {
-        final anggotaResponse = AnggotaResponse.fromJson(response.data);
-        namaAwalController.text = anggotaResponse.owner?.firstName ?? '1';
+      bool status = response.data != null;
+
+      print(status);
+
+      final anggotaResponse = AnggotaResponse.fromJson(response.data);
+      if (status) {
+        print(">>> AnggotaResponse: ${anggotaResponse.toJson()}");
+        setCif(anggotaResponse.owner?.cifId ?? 0);
+        namaAwalController.text = anggotaResponse.owner?.firstName ?? '';
         namaAkhirController.text = anggotaResponse.owner?.lastName ?? '';
         namaPasanganController.text = anggotaResponse.owner?.pasanganNama ?? '';
         nikpasaganController.text = anggotaResponse.owner?.pasanganIdcard ?? '';
         tanggallahirController.text =
-            anggotaResponse.owner?.dateBorn.toString() ?? '';
+            anggotaResponse.owner?.dateBorn?.toString() ?? '';
         telpController.text = anggotaResponse.address?.phone ?? '';
         kotaAsalController.text = anggotaResponse.address?.region ?? '';
         pekerjaanController.text = anggotaResponse.address?.kodePekerjaan ?? '';
         alamatController.text = anggotaResponse.address?.addressLine1 ?? '';
-        selectedGender.value = anggotaResponse.owner?.gender.toString() ?? '';
+        selectedGender.value = anggotaResponse.owner?.gender?.toString() ?? '';
+
         Get.snackbar("Success", "NIK data fetched successfully");
       } else {
         Get.snackbar("Error", "No data found for the provided NIK");
       }
     } catch (e) {
       Get.snackbar("Error", e.toString());
+      print(e);
     }
   }
 
@@ -109,7 +138,7 @@ class InputDataController extends GetxController {
         Get.snackbar("Berhasil", "Data berhasil disimpan");
         print("Response: ${response.data}");
         final CifResponse cifResponse = CifResponse.fromJson(response.data);
-        setCif(cifResponse);
+        setCif(cifResponse.cifId);
       } else {
         Get.snackbar("Gagal", "Gagal menyimpan data: ${response.statusCode}");
       }
@@ -172,13 +201,13 @@ class InputDataController extends GetxController {
     super.onClose();
   }
 
-  Rx<CifResponse?> cifResponse = Rx<CifResponse?>(null);
+  RxInt cifResponse = 0.obs;
 
-  void setCif(CifResponse data) {
+  void setCif(int data) {
     cifResponse.value = data;
   }
 
-  int? get cifId => cifResponse.value?.cifId;
+  int? get cifId => cifResponse.value;
   bool validateForm() {
     if (nikController.text.isEmpty ||
         namaAwalController.text.isEmpty ||

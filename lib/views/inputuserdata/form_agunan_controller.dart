@@ -1,6 +1,8 @@
 import 'dart:io';
+
 import 'package:dio/dio.dart' as dio_pkg;
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loan_application/API/dio/dio_client.dart';
@@ -9,7 +11,6 @@ import 'package:loan_application/API/service/post_document.dart';
 import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class CreditFormController extends GetxController {
   final dio_pkg.Dio dio = DioClient.dio;
@@ -22,6 +23,7 @@ class CreditFormController extends GetxController {
   final expensesController = TextEditingController();
   final installmentController = TextEditingController();
 
+  final cifID = Get.put(InputDataController());
   // // Selected options
   // String selectedPurpose = 'MODAL KERJA';
   // String selectedCollateralType = 'Mobil';

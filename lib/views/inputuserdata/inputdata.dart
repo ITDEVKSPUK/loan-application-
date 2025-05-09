@@ -224,9 +224,13 @@ class InputData extends StatelessWidget {
             Align(
               alignment: Alignment.centerRight,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (controller.validateForm()) {
-                    controller.saveForm();
+                    final nikDataExists = await controller.checkNik();
+                    print(nikDataExists.toString());
+                    if (!nikDataExists) {
+                      controller.saveForm();
+                    }
                     Get.toNamed(MyAppRoutes.formAgunan);
                   } else {
                     Get.snackbar(
