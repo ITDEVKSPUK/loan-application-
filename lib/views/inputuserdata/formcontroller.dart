@@ -225,3 +225,4 @@ class InputDataController extends GetxController {
     return true;
   }
 }
+

@@ -19,7 +19,8 @@ class _SurveyDetailState extends State<SurveyDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(
+      child: Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         title: 'Debitur Detail',
@@ -101,6 +102,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
           ],
         ),
       ),
+      )
     );
   }
 }
