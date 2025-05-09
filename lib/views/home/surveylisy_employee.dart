@@ -76,7 +76,7 @@ class _SurveyListState extends State<SurveyList> {
                         date: DateFormat('yyyy-MM-dd')
                             .format(item.application.trxDate),
                         location: item.sectorCity,
-                        image: (item.document?.docPerson?.isNotEmpty ?? false)
+                        image: (item.document?.docPerson.isNotEmpty ?? false)
                             ? item.document!.docPerson[0].img
                             : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoAx92ukQFM3pqKBWZweO8aBpVZS5COMYjVg&s',
                         status: statusText,

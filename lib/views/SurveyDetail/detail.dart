@@ -8,6 +8,8 @@ import 'package:loan_application/widgets/SurveyDetail/field_readonly.dart';
 import 'package:loan_application/widgets/custom_appbar.dart';
 
 class SurveyDetail extends StatefulWidget {
+  const SurveyDetail({super.key});
+
   @override
   _SurveyDetailState createState() => _SurveyDetailState();
 }
@@ -30,7 +32,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
           children: [
             // Foto KTP
             Center(
-              child: Container(
+              child: SizedBox(
                 width: 317,
                 height: 198.02,
                 child: Opacity(

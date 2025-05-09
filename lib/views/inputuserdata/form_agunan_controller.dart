@@ -99,7 +99,7 @@ class CreditFormController extends GetxController {
               title: const Text('Pilih dari Galeri'),
               onTap: () async {
                 Get.back();
-                final List<XFile>? images = await picker.pickMultiImage();
+                final List<XFile> images = await picker.pickMultiImage();
                 if (images != null) {
                   selectedImages.addAll(images);
                   onImagesUpdated(); // Trigger UI update

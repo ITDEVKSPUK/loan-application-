@@ -20,7 +20,7 @@ class DocumentService {
       // Tambah file KTP
       formData.files.add(MapEntry(
         "doc-008",
-        MultipartFile(
+        MultipartFile.fromStream(
           docImageKTP.openRead(),
           await docImageKTP.length(),
           filename: "doc-008.jpg",
@@ -31,7 +31,7 @@ class DocumentService {
       // Tambah file Agunan
       formData.files.add(MapEntry(
         "doc-027",
-        MultipartFile(
+        MultipartFile.fromStream(
           docImageAgunan.openRead(),
           await docImageAgunan.length(),
           filename: "doc-027.jpg",
@@ -42,7 +42,7 @@ class DocumentService {
       // Tambah file Dokumen Agunan
       formData.files.add(MapEntry(
         "doc-005",
-        MultipartFile(
+        MultipartFile.fromStream(
           docImageDokumen.openRead(),
           await docImageDokumen.length(),
           filename: "doc-005.jpg",

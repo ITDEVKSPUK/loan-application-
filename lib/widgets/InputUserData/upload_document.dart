@@ -74,8 +74,9 @@ class UploadDocumentPicker extends StatelessWidget {
         const SizedBox(height: 12),
         Obx(() {
           final images = controller.selectedDocumentImages;
-          if (images.isEmpty)
+          if (images.isEmpty) {
             return const Text("Belum ada dokumen yang dipilih.");
+          }
 
           return SizedBox(
             height: 90,
