@@ -9,9 +9,9 @@ class DocumentService {
   final dio = DioClient.dio;
 
   Future<Response> uploadDocuments({
-    required File docImageKTP, // doc-008
-    required File docImageAgunan, // doc-027
-    required File docImageDokumen, // doc-005
+    required File docImageKTP, 
+    required File docImageAgunan, 
+    required File docImageDokumen, 
     required Map<String, dynamic> requestBody,
     required String timestamp,
   }) async {
@@ -57,7 +57,7 @@ class DocumentService {
       // Kirim request POST
       final response = await dio.post(
         "/sandbox.ics/v1.0/v1/survei/doc-upload?requestbody=$encodedRequestBody",
-        data: formData, // ✅ ini dia
+        data: formData,
         options: Options(
           headers: {
             "ICS-Wipala": "sastra.astana.dwipangga",
