@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loan_application/API/dio/dio_client.dart';
 import 'package:loan_application/API/service/get_docagun.dart';
+import 'package:loan_application/API/service/post_db_survey.dart';
 import 'package:loan_application/API/service/post_document.dart';
 import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 import 'package:path_provider/path_provider.dart';
@@ -146,47 +147,6 @@ class CreditFormController extends GetxController {
   }
 
   // Convert form data to JSON for submission
-  Map<String, dynamic> toJson() {
-    String cleanNumber(String text) => text.replaceAll(RegExp(r'[^0-9]'), '');
-
-    return {
-      "application": {
-        "plafond": cleanNumber(plafondController.text),
-      },
-      "collateral": {
-        "adddescript": selectedAgunan.value,
-        "type": selectedDocument.value,
-        "value": cleanNumber(collateralValueController.text),
-      },
-      "additionalinfo": {
-        "income": cleanNumber(incomeController.text),
-        "asset": cleanNumber(assetController.text),
-        "expenses": cleanNumber(expensesController.text),
-        "installment": cleanNumber(installmentController.text),
-      },
-    };
-  }
-
-  // Handle form submission
-  Future<void> handleSubmit(BuildContext context) async {
-    final formData = toJson();
-    print("DATA TERKIRIM:");
-    print(formData);
-
-    if (selectedAgunanImages.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text("Harap unggah gambar agunan terlebih dahulu.")),
-      );
-      return;
-    }
-    try {
-      await uploadDocuments(); // Pastikan fungsi ini dipanggil
-      Get.snackbar("Sukses", "Dokumen berhasil diunggah");
-    } catch (e) {
-      Get.snackbar("Error", "Upload gagal: ${e.toString()}");
-    }
-  }
 
   Future<File> compressImage(File file) async {
     final dir = await getTemporaryDirectory();
@@ -343,6 +303,78 @@ class CreditFormController extends GetxController {
       }
     } catch (e) {
       print("❌ Upload gagal: $e");
+      Get.snackbar("Error", "Upload gagal: ${e.toString()}");
+    }
+  }
+
+  Future<void> createSurvey() async {
+    final service = PostSurveyService();
+    final response = await service.postSurvey(
+      cifId: 3,
+      idLegal: 3319123456,
+      officeId: "000",
+      application: {
+        "trx_date":
+            '${DateTime.now().toUtc().toIso8601String().split('.').first}+00:00',
+        "application_no": "0",
+        "purpose": purposeController.text,
+        "plafond": plafondController.text,
+      },
+      collateral: {
+        "id": "600",
+        "id_name": "Mobil",
+        "adddescript": "Tanah Bangunan",
+        "id_catdocument": 1,
+        "document_type": "BPKB",
+        "value": 950000000
+      },
+      additionalInfo: {
+        "income": 15000000,
+        "asset": 2000000000,
+        "expenses": 16000000,
+        "installment": 30000000
+      },
+    );
+    print(response.data);
+  }
+
+  Map<String, dynamic> dataSurvey() {
+    String cleanNumber(String text) => text.replaceAll(RegExp(r'[^0-9]'), '');
+
+    return {
+      "application": {
+        "trx_date":
+            '${DateTime.now().toUtc().toIso8601String().split('.').first}+00:00',
+        "application_no": "0",
+        "purpose": purposeController.text,
+        "plafond": cleanNumber(plafondController.text),
+      },
+      "additionalinfo": {
+        "income": cleanNumber(incomeController.text),
+        "asset": cleanNumber(assetController.text),
+        "expenses": cleanNumber(expensesController.text),
+        "installment": cleanNumber(installmentController.text),
+      },
+    };
+  }
+
+  // Handle form submission
+  Future<void> handleSubmit(BuildContext context) async {
+    final formData = dataSurvey();
+    print("DATA TERKIRIM:");
+    print(formData);
+
+    if (selectedAgunanImages.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text("Harap unggah gambar agunan terlebih dahulu.")),
+      );
+      return;
+    }
+    try {
+      await uploadDocuments(); // Pastikan fungsi ini dipanggil
+      Get.snackbar("Sukses", "Dokumen berhasil diunggah");
+    } catch (e) {
       Get.snackbar("Error", "Upload gagal: ${e.toString()}");
     }
   }

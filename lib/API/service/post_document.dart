@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:loan_application/API/dio/dio_client.dart';
@@ -20,7 +21,7 @@ class DocumentService {
       // Tambah file KTP
       formData.files.add(MapEntry(
         "doc-008",
-        MultipartFile.fromStream(
+        MultipartFile(
           docImageKTP.openRead(),
           await docImageKTP.length(),
           filename: "doc-008.jpg",
@@ -31,7 +32,7 @@ class DocumentService {
       // Tambah file Agunan
       formData.files.add(MapEntry(
         "doc-027",
-        MultipartFile.fromStream(
+        MultipartFile(
           docImageAgunan.openRead(),
           await docImageAgunan.length(),
           filename: "doc-027.jpg",
@@ -42,7 +43,7 @@ class DocumentService {
       // Tambah file Dokumen Agunan
       formData.files.add(MapEntry(
         "doc-005",
-        MultipartFile.fromStream(
+        MultipartFile(
           docImageDokumen.openRead(),
           await docImageDokumen.length(),
           filename: "doc-005.jpg",
