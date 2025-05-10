@@ -126,6 +126,7 @@ class CreditFormController extends GetxController {
   }
 
   // Dispose controllers
+  
   void dispose() {
     plafondController.dispose();
     collateralDescriptionController.dispose();

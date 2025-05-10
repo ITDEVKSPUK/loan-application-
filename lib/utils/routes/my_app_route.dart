@@ -8,5 +8,6 @@ class MyAppRoutes {
   static const surveyListScreen = "/surveylist";
   static const formAgunan = "/formagunan";
   static const surveyDetail = "/surveyDetail";
+  static const dataPinjaman = "/data_pinjaman";
 
 }

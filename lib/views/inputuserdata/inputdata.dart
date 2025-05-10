@@ -19,7 +19,7 @@ class InputData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-    child: Scaffold(
+        child: Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         title: 'Debitur Form',
@@ -83,9 +83,7 @@ class InputData extends StatelessWidget {
                     label: 'NIK',
                     controller: controller.nikController,
                     keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -138,8 +136,7 @@ class InputData extends StatelessWidget {
             ),
 
             GenderRadioButtons(
-              gender: controller.selectedGender, 
-              
+              gender: controller.selectedGender,
             ),
 
             GestureDetector(
@@ -199,8 +196,8 @@ class InputData extends StatelessWidget {
                 controller: controller.alamatController),
 
             ElevatedButton(
-              onPressed: () => showLocationBottomSheet(context,
-                  (value) => controller.alamatController.text = value),
+              onPressed: () => showLocationBottomSheet(
+                  context, (value) => controller.alamatController.text = value),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.casualbutton1,
                 padding:
@@ -222,7 +219,7 @@ class InputData extends StatelessWidget {
             Align(
               alignment: Alignment.centerRight,
               child: ElevatedButton(
-                onPressed: () => Get.toNamed(MyAppRoutes.formAgunan),
+                onPressed: () => Get.toNamed(MyAppRoutes.dataPinjaman),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.casualbutton1,
                   padding:
@@ -245,7 +242,6 @@ class InputData extends StatelessWidget {
           ],
         ),
       ),
-      )
-    );
+    ));
   }
 }

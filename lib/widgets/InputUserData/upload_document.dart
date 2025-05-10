@@ -113,7 +113,7 @@ class UploadDocumentPicker extends StatelessWidget {
                     ),
                   ],
                 );
-              },
+              }
             ),
           );
         }),
