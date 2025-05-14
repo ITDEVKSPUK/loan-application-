@@ -62,8 +62,8 @@ class _SurveyListState extends State<SurveyList> {
                   itemCount: list.length,
                   itemBuilder: (context, index) {
                     final item = list[index];
-                    final statusText = item.status?.value ??
-                        item.application.toString();
+                    final statusText =
+                        item.status?.value ?? item.application.toString();
                     final statusColor = controller.getStatusColor(statusText);
 
                     return GestureDetector(
@@ -76,7 +76,9 @@ class _SurveyListState extends State<SurveyList> {
                         date: DateFormat('yyyy-MM-dd')
                             .format(item.application.trxDate),
                         location: item.sectorCity,
-                        image: 'assets/images/bg.png',
+                        image: (item.document?.docPerson.isNotEmpty ?? false)
+                            ? item.document!.docPerson[0].img
+                            : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoAx92ukQFM3pqKBWZweO8aBpVZS5COMYjVg&s',
                         status: statusText,
                         statusColor: statusColor,
                       ),
@@ -93,7 +95,7 @@ class _SurveyListState extends State<SurveyList> {
         child: Padding(
           padding: const EdgeInsets.all(13.0),
           child: GestureDetector(
-            onTap: () => Get.toNamed(MyAppRoutes.inputDataScreen),
+            onTap: () => Get.offNamed(MyAppRoutes.inputDataScreen),
             child: Container(
               width: 60,
               height: 60,

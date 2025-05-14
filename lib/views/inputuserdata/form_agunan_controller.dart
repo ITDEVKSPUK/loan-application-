@@ -1,14 +1,17 @@
 import 'dart:io';
+
 import 'package:dio/dio.dart' as dio_pkg;
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loan_application/API/dio/dio_client.dart';
 import 'package:loan_application/API/service/get_docagun.dart';
+import 'package:loan_application/API/service/post_db_survey.dart';
 import 'package:loan_application/API/service/post_document.dart';
-import 'package:pdf/widgets.dart' as pw;
+import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:get/get.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class CreditFormController extends GetxController {
   final dio_pkg.Dio dio = DioClient.dio;
@@ -20,6 +23,11 @@ class CreditFormController extends GetxController {
   final assetController = TextEditingController();
   final expensesController = TextEditingController();
   final installmentController = TextEditingController();
+
+  final cifID = Get.put(InputDataController());
+  // // Selected options
+  // String selectedPurpose = 'MODAL KERJA';
+  // String selectedCollateralType = 'Mobil';
 
   // Selected images for the PDF
   List<XFile> selectedImages = [];
@@ -38,6 +46,7 @@ class CreditFormController extends GetxController {
       var fetchedAgunan = await getDocAgun.fetchAgunan();
       if (fetchedAgunan.isNotEmpty) {
         agunanList.value = fetchedAgunan;
+        print(cifID.cifId);
       }
     } catch (e) {
       print("Error fetching agunan: $e");
@@ -91,11 +100,9 @@ class CreditFormController extends GetxController {
               title: const Text('Pilih dari Galeri'),
               onTap: () async {
                 Get.back();
-                final List<XFile>? images = await picker.pickMultiImage();
-                if (images != null) {
-                  selectedImages.addAll(images);
-                  onImagesUpdated(); // Trigger UI update
-                }
+                final List<XFile> images = await picker.pickMultiImage();
+                selectedImages.addAll(images);
+                onImagesUpdated(); // Trigger UI update
               },
             ),
           ],
@@ -126,7 +133,7 @@ class CreditFormController extends GetxController {
   }
 
   // Dispose controllers
-  
+  @override
   void dispose() {
     plafondController.dispose();
     collateralDescriptionController.dispose();
@@ -138,47 +145,6 @@ class CreditFormController extends GetxController {
   }
 
   // Convert form data to JSON for submission
-  Map<String, dynamic> toJson() {
-    String cleanNumber(String text) => text.replaceAll(RegExp(r'[^0-9]'), '');
-
-    return {
-      "application": {
-        "plafond": cleanNumber(plafondController.text),
-      },
-      "collateral": {
-        "adddescript": selectedAgunan.value,
-        "type": selectedDocument.value,
-        "value": cleanNumber(collateralValueController.text),
-      },
-      "additionalinfo": {
-        "income": cleanNumber(incomeController.text),
-        "asset": cleanNumber(assetController.text),
-        "expenses": cleanNumber(expensesController.text),
-        "installment": cleanNumber(installmentController.text),
-      },
-    };
-  }
-
-  // Handle form submission
-  Future<void> handleSubmit(BuildContext context) async {
-    final formData = toJson();
-    print("DATA TERKIRIM:");
-    print(formData);
-
-    if (selectedAgunanImages.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text("Harap unggah gambar agunan terlebih dahulu.")),
-      );
-      return;
-    }
-    try {
-      await uploadDocuments(); // Pastikan fungsi ini dipanggil
-      Get.snackbar("Sukses", "Dokumen berhasil diunggah");
-    } catch (e) {
-      Get.snackbar("Error", "Upload gagal: ${e.toString()}");
-    }
-  }
 
   Future<File> compressImage(File file) async {
     final dir = await getTemporaryDirectory();
@@ -302,10 +268,10 @@ class CreditFormController extends GetxController {
 
       final requestBody = {
         "Office_ID": "000",
-        "cif_id": 6,
-        "application": {"trx_survey": "100025000000005"}
+        "cif_id": cifID.cifId,
+        "application": {"trx_survey": surveyId}
       };
-
+      print('surveyId: $surveyId cifID: ${cifID.cifId}');
       if (selectedDocumentImages.isEmpty ||
           selectedAgunanImages.isEmpty ||
           selectedKTPImages.isEmpty) {
@@ -338,4 +304,77 @@ class CreditFormController extends GetxController {
       Get.snackbar("Error", "Upload gagal: ${e.toString()}");
     }
   }
+
+  Future<void> createSurvey() async {
+    String cleanNumber(String text) => text.replaceAll(RegExp(r'[^0-9]'), '');
+    final service = PostSurveyService();
+    final response = await service.postSurvey(
+      cifId: cifID.cifId ?? 0,
+      idLegal: 3319123456,
+      officeId: "000",
+      application: {
+        "trx_date":
+            '${DateTime.now().toUtc().toIso8601String().split('.').first}+00:00',
+        "application_no": "0",
+        "purpose": purposeController.text,
+        "plafond": cleanNumber(plafondController.text),
+      },
+      collateral: {
+        "id": "600",
+        "id_name": "Mobil",
+        "adddescript": "Tanah Bangunan",
+        "id_catdocument": 1,
+        "document_type": "BPKB",
+        "value": 950000000
+      },
+      additionalInfo: {
+        "income": cleanNumber(incomeController.text),
+        "asset": cleanNumber(assetController.text),
+        "expenses": cleanNumber(expensesController.text),
+        "installment": cleanNumber(installmentController.text),
+      },
+    );
+    print(response.data);
+
+    setSurveyId(response.data['trx_idx']);
+    print(surveyId);
+  }
+
+  Future<void> handleSubmit(BuildContext context) async {
+    if (selectedAgunanImages.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text("Harap unggah gambar agunan terlebih dahulu.")),
+      );
+      return;
+    }
+    try {
+      await uploadDocuments(); // Pastikan fungsi ini dipanggil
+      Get.snackbar("Sukses", "Dokumen berhasil diunggah");
+    } catch (e) {
+      Get.snackbar("Error", "Upload gagal: ${e.toString()}");
+    }
+  }
+
+  bool validateForm() {
+    if (plafondController.text.trim().isEmpty ||
+        purposeController.text.trim().isEmpty ||
+        collateralDescriptionController.text.trim().isEmpty ||
+        collateralValueController.text.trim().isEmpty ||
+        incomeController.text.trim().isEmpty ||
+        assetController.text.trim().isEmpty ||
+        expensesController.text.trim().isEmpty ||
+        installmentController.text.trim().isEmpty) {
+      return false;
+    }
+    return true;
+  }
+
+  RxString trxSurveyRespons = "".obs;
+
+  void setSurveyId(String data) {
+    trxSurveyRespons.value = data;
+  }
+
+  String? get surveyId => trxSurveyRespons.value;
 }

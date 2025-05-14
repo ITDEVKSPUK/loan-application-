@@ -6,6 +6,8 @@ import 'package:loan_application/widgets/SurveyDetail/field_readonly.dart';
 class LoanAmountWidget extends StatelessWidget {
   final controller = Get.find<DetailController>();
 
+   LoanAmountWidget({super.key});
+
   String formatRupiah(String numberString) {
     if (numberString.isEmpty) return 'Rp0';
     final number = int.tryParse(numberString.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;

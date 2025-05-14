@@ -1,3 +1,5 @@
+import 'package:json_annotation/json_annotation.dart';
+
 class HistoryResponse {
   String responseCode;
   String responseDescription;
@@ -32,6 +34,7 @@ class Datum {
   Application application;
   Collateral collateral;
   AdditionalInfo additionalInfo;
+  Document? document;
 
   Datum({
     required this.idLegal,
@@ -44,6 +47,7 @@ class Datum {
     required this.application,
     required this.collateral,
     required this.additionalInfo,
+    this.document,
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) {
@@ -54,10 +58,95 @@ class Datum {
       sectorCity: json['sector_city'] ?? '',
       villages: json['village'] ?? '',
       address: json['address'] ?? '',
-      status: json['status'] != null ? Status.fromJson(json['status']) : null, 
+      status: json['status'] != null ? Status.fromJson(json['status']) : null,
       application: Application.fromJson(json['application'] ?? {}),
       collateral: Collateral.fromJson(json['collateral'] ?? {}),
       additionalInfo: AdditionalInfo.fromJson(json['additionalinfo'] ?? {}),
+      document:
+          json['document'] != null ? Document.fromJson(json['document']) : null,
+    );
+  }
+}
+
+class Document {
+  List<DocAsset> docAsset;
+  List<DocImg> docImg;
+  List<DocPerson> docPerson;
+
+  Document({
+    required this.docAsset,
+    required this.docImg,
+    required this.docPerson,
+  });
+
+  factory Document.fromJson(Map<String, dynamic> json) {
+    return Document(
+      docAsset: (json['doc-asset'] as List<dynamic>?)
+              ?.map((item) => DocAsset.fromJson(item))
+              .toList() ??
+          [],
+      docImg: (json['doc-img'] as List<dynamic>?)
+              ?.map((item) => DocImg.fromJson(item))
+              .toList() ??
+          [],
+      docPerson: (json['doc-person'] as List<dynamic>?)
+              ?.map((item) => DocPerson.fromJson(item))
+              .toList() ??
+          [],
+    );
+  }
+}
+
+class DocAsset {
+  @JsonKey(name: 'img-0')
+  final String img;
+  final String doc;
+
+  DocAsset({
+    required this.img,
+    required this.doc,
+  });
+
+  factory DocAsset.fromJson(Map<String, dynamic> json) {
+    return DocAsset(
+      img: json['img-0'] ?? '',
+      doc: json['doc'] ?? '',
+    );
+  }
+}
+
+class DocImg {
+  @JsonKey(name: 'img-0')
+  final String img;
+  final String doc;
+
+  DocImg({
+    required this.img,
+    required this.doc,
+  });
+
+  factory DocImg.fromJson(Map<String, dynamic> json) {
+    return DocImg(
+      img: json['img-0'] ?? '',
+      doc: json['doc'] ?? '',
+    );
+  }
+}
+
+class DocPerson {
+  @JsonKey(name: 'img-0')
+  final String img;
+  final String doc;
+
+  DocPerson({
+    required this.img,
+    required this.doc,
+  });
+
+  factory DocPerson.fromJson(Map<String, dynamic> json) {
+    return DocPerson(
+      img: json['img-0'] ?? '',
+      doc: json['doc'] ?? '',
     );
   }
 }
@@ -103,8 +192,7 @@ class Application {
   factory Application.fromJson(Map<String, dynamic> json) {
     return Application(
       trxSurvey: json['trx_survey'] ?? '',
-      trxDate:
-          DateTime.parse(json['trx_date'] ?? DateTime.now().toIso8601String()),
+      trxDate: DateTime.tryParse(json['trx_date'] ?? '') ?? DateTime.now(),
       applicationNo: json['application_no'] ?? '',
       purpose: json['purpose'] ?? '',
       plafond: json['plafond'] ?? '0',

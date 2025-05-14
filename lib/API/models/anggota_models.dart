@@ -1,135 +1,46 @@
 class AnggotaResponse {
-  String? responseCode;
-  String? responseDescription;
-  Owner? owner;
-  Address? addres;
+  final String responseCode;
+  final String responseDescription;
+  final Owner? owner;
+  final Address? address;
 
   AnggotaResponse({
-    this.responseCode,
-    this.responseDescription,
+    required this.responseCode,
+    required this.responseDescription,
     this.owner,
-    this.addres,
+    this.address,
   });
 
   factory AnggotaResponse.fromJson(Map<String, dynamic> json) {
     return AnggotaResponse(
-      responseCode: json["responseCode"] as String?,
-      responseDescription: json["responseDescription"] as String?,
-      owner: json["owner"] != null ? Owner.fromJson(json["owner"]) : null,
-      addres: json["addres"] != null ? Address.fromJson(json["addres"]) : null,
+      responseCode: json['responseCode'] ?? '',
+      responseDescription: json['responseDescription'] ?? '',
+      owner: json['owner'] != null ? Owner.fromJson(json['owner']) : null,
+      address: json['addres'] != null ? Address.fromJson(json['addres']) : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "responseCode": responseCode,
-      "responseDescription": responseDescription,
-      "owner": owner?.toJson(),
-      "addres": addres?.toJson(),
+      'responseCode': responseCode,
+      'responseDescription': responseDescription,
+      'owner': owner?.toJson(),
+      'addres': address?.toJson(),
     };
   }
 }
-
-class Address {
-  String? addressType;        
-  String? addressLine1;
-  String? addressLine2;
-  String? region;              
-  String? sector;            
-  String? village;             
-  String? scopeVillage;        
-  String? postalCode;
-  String? city;
-  String? country;
-  String? phone;
-  String? employer;
-  String? jobTitle;
-  String? companyName;
-  String? jobSector;
-  String? jobCode;
-
-  Address({
-    this.addressType,
-    this.addressLine1,
-    this.addressLine2,
-    this.region,
-    this.sector,
-    this.village,
-    this.scopeVillage,
-    this.postalCode,
-    this.city,
-    this.country,
-    this.phone,
-    this.employer,
-    this.jobTitle,
-    this.companyName,
-    this.jobSector,
-    this.jobCode,
-  });
-
-  factory Address.fromJson(Map<String, dynamic> json) {
-    return Address(
-      addressType: json["address_type"],
-      addressLine1: json["address_line1"],
-      addressLine2: json["address_line2"],
-      region: json["region"],
-      sector: json["sector"],
-      village: json["village"],
-      scopeVillage: json["scope_village"],
-      postalCode: json["postal_code"],
-      city: json["city"],
-      country: json["country"],
-      phone: json["phone"],
-      employer: json["employer"],
-      jobTitle: json["job_title"],
-      companyName: json["company_name"],
-      jobSector: json["job_sector"],
-      jobCode: json["job_code"],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      "address_type": addressType,
-      "address_line1": addressLine1,
-      "address_line2": addressLine2,
-      "region": region,
-      "sector": sector,
-      "village": village,
-      "scope_village": scopeVillage,
-      "postal_code": postalCode,
-      "city": city,
-      "country": country,
-      "phone": phone,
-      "employer": employer,
-      "job_title": jobTitle,
-      "company_name": companyName,
-      "job_sector": jobSector,
-      "job_code": jobCode,
-    };
-  }
-}
-
 
 class Owner {
-  String? enikNo;
-  int? cifId;
-  String? fullName;
-  String? firstName;
-  String? lastName;
-  String? placeOfBirth;
-  String? dateOfBirth;
-  int? gender;
-  String? idCardNumber;
-  String? motherName;
-  String? phoneNumber;
-  String? email;
-  String? nationality;
-  String? religion;
-  String? maritalStatus;
-  String? spouseName;
-  String? spouseIdCard;
-  String? occupation;
+  final String? enikNo;
+  final int? cifId;
+  final String? fullName;
+  final String? firstName;
+  final String? lastName;
+  final String? cityBorn;
+  final String? pasanganNama;
+  final String? pasanganIdcard;
+  final DateTime? dateBorn;
+  final int? gender;
 
   Owner({
     this.enikNo,
@@ -137,66 +48,102 @@ class Owner {
     this.fullName,
     this.firstName,
     this.lastName,
-    this.placeOfBirth,
-    this.dateOfBirth,
+    this.cityBorn,
+    this.pasanganNama,
+    this.pasanganIdcard,
+    this.dateBorn,
     this.gender,
-    this.idCardNumber,
-    this.motherName,
-    this.phoneNumber,
-    this.email,
-    this.nationality,
-    this.religion,
-    this.maritalStatus,
-    this.spouseName,
-    this.spouseIdCard,
-    this.occupation,
   });
 
   factory Owner.fromJson(Map<String, dynamic> json) {
     return Owner(
-      enikNo: json["enik_no"],
-      cifId: json["cif_id"],
-      fullName: json["full_name"],
-      firstName: json["first_name"],
-      lastName: json["last_name"],
-      placeOfBirth: json["place_of_birth"],
-      dateOfBirth: json["date_of_birth"],
-      gender: json["gender"],
-      idCardNumber: json["id_card_number"],
-      motherName: json["mother_name"],
-      phoneNumber: json["phone_number"],
-      email: json["email"],
-      nationality: json["nationality"],
-      religion: json["religion"],
-      maritalStatus: json["marital_status"],
-      spouseName: json["spouse_name"],
-      spouseIdCard: json["spouse_id_card"],
-      occupation: json["occupation"],
+      enikNo: json['enik_no'] ?? '',
+      cifId: json['cif_id'] ?? 0,
+      fullName: json['full_name'] ?? '',
+      firstName: json['firts_name'] ?? '',
+      lastName: json['last_name'] ?? '',
+      cityBorn: json['city_born'] ?? '',
+      pasanganNama: json['pasangan_nama'] ?? '',
+      pasanganIdcard: json['pasangan_idcard'] ?? '',
+      dateBorn: json['date_born'] != null
+          ? DateTime.tryParse(json['date_born'])
+          : null,
+      gender: json['gender'] ?? 0,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "enik_no": enikNo,
-      "cif_id": cifId,
-      "full_name": fullName,
-      "first_name": firstName,
-      "last_name": lastName,
-      "place_of_birth": placeOfBirth,
-      "date_of_birth": dateOfBirth,
-      "gender": gender,
-      "id_card_number": idCardNumber,
-      "mother_name": motherName,
-      "phone_number": phoneNumber,
-      "email": email,
-      "nationality": nationality,
-      "religion": religion,
-      "marital_status": maritalStatus,
-      "spouse_name": spouseName,
-      "spouse_id_card": spouseIdCard,
-      "occupation": occupation,
+      'enik_no': enikNo,
+      'cif_id': cifId,
+      'full_name': fullName,
+      'firts_name': firstName,
+      'last_name': lastName,
+      'city_born': cityBorn,
+      'pasangan_nama': pasanganNama,
+      'pasangan_idcard': pasanganIdcard,
+      'date_born': dateBorn?.toIso8601String(),
+      'gender': gender,
     };
   }
 }
 
+class Address {
+  final String? region;
+  final String? sector;
+  final String? village;
+  final String? scopeVillage;
+  final String? postalCode;
+  final String? addressLine1;
+  final String? pemberiKerja;
+  final String? deskripsiPekerjaan;
+  final String? kodePekerjaan;
+  final String? namaPerusahaan;
+  final String? phone;
 
+  Address({
+    this.region,
+    this.sector,
+    this.village,
+    this.scopeVillage,
+    this.postalCode,
+    this.addressLine1,
+    this.pemberiKerja,
+    this.deskripsiPekerjaan,
+    this.kodePekerjaan,
+    this.namaPerusahaan,
+    this.phone,
+  });
+
+  factory Address.fromJson(Map<String, dynamic> json) {
+    return Address(
+      region: json['region'] ?? '',
+      sector: json['sector'] ?? '',
+      village: json['village'] ?? '',
+      scopeVillage: json['scope_village'] ?? '',
+      postalCode: json['postal_code'] ?? '',
+      addressLine1: json['address_line1'] ?? '',
+      pemberiKerja: json['pemberi_kerja'] ?? '',
+      deskripsiPekerjaan: json['deskripsi_pekerjaan'] ?? '',
+      kodePekerjaan: json['kode_pekerjaan'] ?? '',
+      namaPerusahaan: json['nama_perusahaan'] ?? '',
+      phone: json['phone'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'region': region,
+      'sector': sector,
+      'village': village,
+      'scope_village': scopeVillage,
+      'postal_code': postalCode,
+      'address_line1': addressLine1,
+      'pemberi_kerja': pemberiKerja,
+      'deskripsi_pekerjaan': deskripsiPekerjaan,
+      'kode_pekerjaan': kodePekerjaan,
+      'nama_perusahaan': namaPerusahaan,
+      'phone': phone,
+    };
+  }
+}
