@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
-import 'package:loan_application/widgets/InputUserData/financial_form_section.dart';
 import 'package:loan_application/widgets/InputUserData/upload_agunan.dart';
 import 'package:loan_application/widgets/InputUserData/upload_document.dart';
 import 'package:loan_application/widgets/InputUserData/upload_ktp.dart';

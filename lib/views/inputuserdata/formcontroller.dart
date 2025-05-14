@@ -40,7 +40,7 @@ class InputDataController extends GetxController {
 
     try {
       final response = await checkNikService.fetchNIK(nikController.text);
-      if (response.statusCode == 200) {
+      if (response.data['responseCode'] == "00") {
         Get.snackbar("Success", "NIK is valid");
         return true;
       } else if (response.statusCode == 400) {
@@ -66,7 +66,8 @@ class InputDataController extends GetxController {
 
     try {
       final response = await checkNikService.fetchNIK(nikController.text);
-      bool status = response.data != null;
+      bool status =
+          response.data != null && response.data['responseCode'] == "00";
 
       print(status);
 
@@ -74,6 +75,7 @@ class InputDataController extends GetxController {
       if (status) {
         print(">>> AnggotaResponse: ${anggotaResponse.toJson()}");
         setCif(anggotaResponse.owner?.cifId ?? 0);
+        print(cifId);
         namaAwalController.text = anggotaResponse.owner?.firstName ?? '';
         namaAkhirController.text = anggotaResponse.owner?.lastName ?? '';
         namaPasanganController.text = anggotaResponse.owner?.pasanganNama ?? '';
@@ -225,4 +227,3 @@ class InputDataController extends GetxController {
     return true;
   }
 }
-

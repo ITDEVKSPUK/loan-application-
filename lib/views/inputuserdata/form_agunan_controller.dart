@@ -101,10 +101,8 @@ class CreditFormController extends GetxController {
               onTap: () async {
                 Get.back();
                 final List<XFile> images = await picker.pickMultiImage();
-                if (images != null) {
-                  selectedImages.addAll(images);
-                  onImagesUpdated(); // Trigger UI update
-                }
+                selectedImages.addAll(images);
+                onImagesUpdated(); // Trigger UI update
               },
             ),
           ],
@@ -270,10 +268,10 @@ class CreditFormController extends GetxController {
 
       final requestBody = {
         "Office_ID": "000",
-        "cif_id": 6,
-        "application": {"trx_survey": "100025000000005"}
+        "cif_id": cifID.cifId,
+        "application": {"trx_survey": surveyId}
       };
-
+      print('surveyId: $surveyId cifID: ${cifID.cifId}');
       if (selectedDocumentImages.isEmpty ||
           selectedAgunanImages.isEmpty ||
           selectedKTPImages.isEmpty) {
@@ -308,9 +306,10 @@ class CreditFormController extends GetxController {
   }
 
   Future<void> createSurvey() async {
+    String cleanNumber(String text) => text.replaceAll(RegExp(r'[^0-9]'), '');
     final service = PostSurveyService();
     final response = await service.postSurvey(
-      cifId: 3,
+      cifId: cifID.cifId ?? 0,
       idLegal: 3319123456,
       officeId: "000",
       application: {
@@ -318,7 +317,7 @@ class CreditFormController extends GetxController {
             '${DateTime.now().toUtc().toIso8601String().split('.').first}+00:00',
         "application_no": "0",
         "purpose": purposeController.text,
-        "plafond": plafondController.text,
+        "plafond": cleanNumber(plafondController.text),
       },
       collateral: {
         "id": "600",
@@ -329,41 +328,19 @@ class CreditFormController extends GetxController {
         "value": 950000000
       },
       additionalInfo: {
-        "income": 15000000,
-        "asset": 2000000000,
-        "expenses": 16000000,
-        "installment": 30000000
-      },
-    );
-    print(response.data);
-  }
-
-  Map<String, dynamic> dataSurvey() {
-    String cleanNumber(String text) => text.replaceAll(RegExp(r'[^0-9]'), '');
-
-    return {
-      "application": {
-        "trx_date":
-            '${DateTime.now().toUtc().toIso8601String().split('.').first}+00:00',
-        "application_no": "0",
-        "purpose": purposeController.text,
-        "plafond": cleanNumber(plafondController.text),
-      },
-      "additionalinfo": {
         "income": cleanNumber(incomeController.text),
         "asset": cleanNumber(assetController.text),
         "expenses": cleanNumber(expensesController.text),
         "installment": cleanNumber(installmentController.text),
       },
-    };
+    );
+    print(response.data);
+
+    setSurveyId(response.data['trx_idx']);
+    print(surveyId);
   }
 
-  // Handle form submission
   Future<void> handleSubmit(BuildContext context) async {
-    final formData = dataSurvey();
-    print("DATA TERKIRIM:");
-    print(formData);
-
     if (selectedAgunanImages.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -378,4 +355,26 @@ class CreditFormController extends GetxController {
       Get.snackbar("Error", "Upload gagal: ${e.toString()}");
     }
   }
+
+  bool validateForm() {
+    if (plafondController.text.trim().isEmpty ||
+        purposeController.text.trim().isEmpty ||
+        collateralDescriptionController.text.trim().isEmpty ||
+        collateralValueController.text.trim().isEmpty ||
+        incomeController.text.trim().isEmpty ||
+        assetController.text.trim().isEmpty ||
+        expensesController.text.trim().isEmpty ||
+        installmentController.text.trim().isEmpty) {
+      return false;
+    }
+    return true;
+  }
+
+  RxString trxSurveyRespons = "".obs;
+
+  void setSurveyId(String data) {
+    trxSurveyRespons.value = data;
+  }
+
+  String? get surveyId => trxSurveyRespons.value;
 }

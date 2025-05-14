@@ -36,6 +36,7 @@ class PostSurveyService {
       );
       return response;
     } catch (e) {
+      print("Error posting survey: $e");
       rethrow;
     }
   }

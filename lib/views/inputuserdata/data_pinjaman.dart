@@ -36,7 +36,14 @@ class _DataPinjamanState extends State<DataPinjaman> {
               const SizedBox(height: 16),
               Center(
                 child: ElevatedButton(
-                  onPressed: () => Get.toNamed(MyAppRoutes.formAgunan),
+                  onPressed: () {
+                    if (controller.validateForm()) {
+                      controller.createSurvey();
+                      Get.toNamed(MyAppRoutes.formAgunan);
+                    } else {
+                      Get.snackbar("Error", "Please fill all fields correctly");
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.casualbutton1,
                     padding: const EdgeInsets.symmetric(
