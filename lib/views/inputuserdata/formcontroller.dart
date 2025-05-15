@@ -144,3 +144,4 @@ class InputDataController extends GetxController {
     super.onClose();
   }
 }
+

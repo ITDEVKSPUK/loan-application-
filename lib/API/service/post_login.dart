@@ -41,6 +41,7 @@ class LoginService {
         storage.write('login_model', loginModel.toJson());
         storage.write('session_id', loginModel.sessionId);
         storage.write('encryptedUsername', _encrypt(username));
+        storage.write('UserName', loginModel.userName); 
         print('Login Success: ${data['UserName']}');
 
         final uri = Uri.parse('http://36.92.75.178:8001');
