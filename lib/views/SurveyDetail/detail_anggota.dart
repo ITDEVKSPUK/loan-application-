@@ -1,0 +1,168 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:loan_application/API/models/inquiry_anggota_models.dart';
+import 'package:loan_application/core/theme/color.dart';
+import 'package:loan_application/utils/routes/my_app_route.dart';
+import 'package:loan_application/views/SurveyDetail/iqy_anggota_controller.dart';
+import 'package:loan_application/widgets/SurveyDetail/field_readonly.dart';
+import 'package:loan_application/widgets/custom_appbar.dart';
+
+class SurveyDetail extends StatefulWidget {
+  const SurveyDetail({super.key});
+
+  @override
+  _SurveyDetailState createState() => _SurveyDetailState();
+}
+
+class _SurveyDetailState extends State<SurveyDetail> {
+  final IqyAnggotaController iqyAnggotaController =
+      Get.put(IqyAnggotaController());
+
+  late String cifId;
+  late String trxSurvey;
+  @override
+  void initState() {
+    super.initState();
+    final arguments = Get.arguments as Map<String, dynamic>;
+    cifId = arguments['cifId'] ?? '';
+    trxSurvey = arguments['trxSurvey'] ?? '';
+    print("wwww : cifId=$cifId, trxSurvey=$trxSurvey");
+    iqyAnggotaController.getSurveyListanggota(id_search: cifId.toString());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: CustomAppBar(
+        title: 'Debitur Detail',
+        onBack: () => Get.offAllNamed('/dashboard'),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Foto KTP
+            Center(
+              child: Container(
+                width: 317,
+                height: 198.02,
+                child: Opacity(
+                  opacity: 0.53,
+                  child: Image.asset(
+                    'assets/images/rawktp.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Data Pribadi
+            Obx(() => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //sudah
+                    FieldReadonly(
+                      label: 'NIK',
+                      width: double.infinity,
+                      height: 50,
+                      value: iqyAnggotaController.enik_no.value,
+                      keyboardType: TextInputType.number,
+                    ),
+                    //sudah
+                    FieldReadonly(
+                      label: 'Nama',
+                      width: double.infinity,
+                      height: 50,
+                      value: iqyAnggotaController.full_name.value,
+                      keyboardType: TextInputType.text,
+                    ),
+                    //belum
+                    FieldReadonly(
+                      label: 'No. Telpon',
+                      width: double.infinity,
+                      height: 50,
+                      value: iqyAnggotaController.phone.value,
+                      keyboardType: TextInputType.text,
+                    ),
+                    //sudah
+                    FieldReadonly(
+                      label: 'Alamat Lengkap',
+                      width: double.infinity,
+                      height: 50,
+                      value: iqyAnggotaController.sector_city.value,
+                      keyboardType: TextInputType.text,
+                    ),
+                    //sudah
+                    FieldReadonly(
+                      label: 'Kota Lahir',
+                      width: double.infinity,
+                      height: 50,
+                      value: iqyAnggotaController.address_line1.value,
+                      keyboardType: TextInputType.text,
+                    ),
+                    //belum
+                    FieldReadonly(
+                      label: 'Tanggal Lahir',
+                      width: double.infinity,
+                      height: 50,
+                      value: iqyAnggotaController.date_born.value,
+                      keyboardType: TextInputType.text,
+                    ),
+                    //belum
+                    FieldReadonly(
+                      label: 'Pekerjaan',
+                      width: double.infinity,
+                      height: 50,
+                      value: iqyAnggotaController.deskripsiPekerjaan.value,
+                      keyboardType: TextInputType.text,
+                    ),
+                    FieldReadonly(
+                      label: 'Nama pasangan',
+                      width: double.infinity,
+                      height: 50,
+                      value: iqyAnggotaController.pasangan_nama.value,
+                      keyboardType: TextInputType.text,
+                    ),
+                    FieldReadonly(
+                      label: 'Gender',
+                      width: double.infinity,
+                      height: 50,
+                      value: iqyAnggotaController.gender.value,
+                      keyboardType: TextInputType.text,
+                    ),
+                  ],
+                )),
+            const SizedBox(height: 30),
+            Align(
+              alignment: Alignment.centerRight,
+              child: ElevatedButton(
+                onPressed: () => Get.toNamed(MyAppRoutes.detaildocumen,
+                    arguments: trxSurvey), // Pass the trx_survey value
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.casualbutton1,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: Text(
+                  'Selanjutnya',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: AppColors.pureWhite,
+                    fontFamily: 'Outfit',
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 30),
+          ],
+        ),
+      ),
+    );
+  }
+}
