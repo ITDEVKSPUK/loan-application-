@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:loan_application/core/theme/color.dart';
 
 class SurveyBox extends StatelessWidget {
   final String name;
+  final String aged;
+  final String plafond;
   final String date;
   final String location;
+  final String trx_survey;
   final String status;
   final String image;
   final Color statusColor;
@@ -11,7 +15,10 @@ class SurveyBox extends StatelessWidget {
   const SurveyBox({
     super.key,
     required this.name,
+    required this.aged,
+    required this.plafond,
     required this.date,
+    required this.trx_survey,
     required this.location,
     required this.status,
     required this.image,
@@ -23,7 +30,7 @@ class SurveyBox extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.pureWhite,
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
@@ -63,11 +70,12 @@ class SurveyBox extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                // Di dalam Column(...) yang ada di child dari Expanded(...)
                 children: [
                   Text(
                     name,
                     style: const TextStyle(
-                      color: Color(0xFF364F6B),
+                      color: AppColors.black,
                       fontSize: 14,
                       fontFamily: 'Outfit',
                       fontWeight: FontWeight.w700,
@@ -75,25 +83,96 @@ class SurveyBox extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  Text(
-                    date,
-                    style: TextStyle(
-                      color: const Color(0xFF364F6B).withOpacity(0.6),
-                      fontSize: 10,
-                      fontFamily: 'Outfit',
-                      fontWeight: FontWeight.w400,
-                    ),
+                  Row(
+                    children: [
+                      const Icon(Icons.calendar_today,
+                          color: AppColors.black, size: 12),
+                      const SizedBox(width: 5),
+                      Text(
+                        date,
+                        style: TextStyle(
+                          color: AppColors.black.withOpacity(0.6),
+                          fontSize: 10,
+                          fontFamily: 'Outfit',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      const Icon(Icons.location_on, color: Color(0xFF00274F), size: 12),
+                      const Icon(Icons.person,
+                          color: AppColors.black, size: 12),
+                      const SizedBox(width: 5),
+                      Expanded(
+                        child: Text(
+                          aged,
+                          style: const TextStyle(
+                            color: AppColors.black,
+                            fontSize: 10,
+                            fontFamily: 'Outfit',
+                            fontWeight: FontWeight.w400,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const Icon(Icons.account_balance,
+                          color: AppColors.black, size: 12),
+                      const SizedBox(width: 5),
+                      Expanded(
+                        child: Text(
+                          plafond,
+                          style: const TextStyle(
+                            color: AppColors.black,
+                            fontSize: 10,
+                            fontFamily: 'Outfit',
+                            fontWeight: FontWeight.w400,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const Icon(Icons.assignment,
+                          color: AppColors.black, size: 12),
+                      const SizedBox(width: 5),
+                      Expanded(
+                        child: Text(
+                          trx_survey,
+                          style: const TextStyle(
+                            color: AppColors.black,
+                            fontSize: 10,
+                            fontFamily: 'Outfit',
+                            fontWeight: FontWeight.w400,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const Icon(Icons.location_on,
+                          color: AppColors.black, size: 12),
                       const SizedBox(width: 5),
                       Expanded(
                         child: Text(
                           location,
                           style: const TextStyle(
-                            color: Color(0xFF00274F),
+                            color: AppColors.black,
                             fontSize: 10,
                             fontFamily: 'Outfit',
                             fontWeight: FontWeight.w400,
@@ -123,9 +202,9 @@ class SurveyBox extends StatelessWidget {
               child: RotatedBox(
                 quarterTurns: 3,
                 child: Text(
-                  status.isEmpty ? 'No Status' : status, // Fallback to 'No Status' if empty
+                  status.isEmpty ? 'No Status' : status,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: AppColors.pureWhite,
                     fontSize: 14,
                     fontFamily: 'Outfit',
                     fontWeight: FontWeight.w700,

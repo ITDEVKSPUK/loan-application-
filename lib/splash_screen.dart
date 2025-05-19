@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
                 SizedBox(height: 5),
                 Text(
-                  'KSP UTAMA KARYA',
+                  'KSP UTAMA KARYA GRUP',
                   style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Outfit',

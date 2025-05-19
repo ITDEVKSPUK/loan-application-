@@ -48,7 +48,6 @@ class _HistoryEmployeeState extends State<HistoryEmployee> {
           FilterButtons(
             onFilterSelected: (status) => controller.filterByStatus(status),
           ),
-          
           Expanded(
             child: RefreshIndicator(
               color: AppColors.black,
@@ -66,20 +65,24 @@ class _HistoryEmployeeState extends State<HistoryEmployee> {
                   itemCount: list.length,
                   itemBuilder: (context, index) {
                     final item = list[index];
-                    final statusText = item.status?.value ??
-                        item.application.toString();
+                    final statusText =
+                        item.status?.value ?? item.application.toString();
                     final statusColor = controller.getStatusColor(statusText);
 
                     return GestureDetector(
                       onTap: () => Get.toNamed(
                         MyAppRoutes.surveyDetail,
-                        arguments: item,
+                        arguments: item.cif_id
+                            .toString(), // Convert to String for navigation
                       ),
                       child: SurveyBox(
                         name: item.fullName,
+                        aged: item.aged,
+                        location: item.sectorCity,
+                        plafond: item.application.plafond,
+                        trx_survey: item.application.trxSurvey,
                         date: DateFormat('yyyy-MM-dd')
                             .format(item.application.trxDate),
-                        location: item.sectorCity,
                         image: 'assets/images/bg.png',
                         status: statusText,
                         statusColor: statusColor,

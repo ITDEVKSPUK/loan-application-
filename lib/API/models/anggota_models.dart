@@ -122,7 +122,6 @@ class Owner {
   int? gender;
   String? idCardNumber;
   String? motherName;
-  String? phoneNumber;
   String? email;
   String? nationality;
   String? religion;
@@ -130,6 +129,8 @@ class Owner {
   String? spouseName;
   String? spouseIdCard;
   String? occupation;
+  String phone;
+  String deskripsiPekerjaan;
 
   Owner({
     this.enikNo,
@@ -142,7 +143,6 @@ class Owner {
     this.gender,
     this.idCardNumber,
     this.motherName,
-    this.phoneNumber,
     this.email,
     this.nationality,
     this.religion,
@@ -150,6 +150,8 @@ class Owner {
     this.spouseName,
     this.spouseIdCard,
     this.occupation,
+    required this.phone,
+    required this.deskripsiPekerjaan,
   });
 
   factory Owner.fromJson(Map<String, dynamic> json) {
@@ -164,7 +166,6 @@ class Owner {
       gender: json["gender"],
       idCardNumber: json["id_card_number"],
       motherName: json["mother_name"],
-      phoneNumber: json["phone_number"],
       email: json["email"],
       nationality: json["nationality"],
       religion: json["religion"],
@@ -172,6 +173,8 @@ class Owner {
       spouseName: json["spouse_name"],
       spouseIdCard: json["spouse_id_card"],
       occupation: json["occupation"],
+      phone: json['phone'] ?? '',
+      deskripsiPekerjaan: json['deskripsi_pekerjaan'] ?? '',
     );
   }
 
@@ -187,7 +190,7 @@ class Owner {
       "gender": gender,
       "id_card_number": idCardNumber,
       "mother_name": motherName,
-      "phone_number": phoneNumber,
+      "phone": phone,
       "email": email,
       "nationality": nationality,
       "religion": religion,

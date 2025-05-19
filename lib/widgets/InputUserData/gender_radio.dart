@@ -14,8 +14,8 @@ class GenderRadioButtons extends StatelessWidget {
   });
 
   String _mapGender(int? value) {
-    if (value == 0) return 'Perempuan';
-    return 'Laki-laki';
+    if (value == 0) return '0';
+    return '1';
   }
 
   @override
@@ -42,7 +42,7 @@ class GenderRadioButtons extends StatelessWidget {
                   child: RadioListTile<String>(
                     contentPadding: const EdgeInsets.only(right: 0),
                     title: const Text('Laki-laki'),
-                    value: 'Laki-laki',
+                    value: '1',
                     groupValue: genderValue.value,
                     onChanged: isReadOnly
                         ? null
@@ -58,7 +58,7 @@ class GenderRadioButtons extends StatelessWidget {
                   child: RadioListTile<String>(
                     contentPadding: const EdgeInsets.only(left: 0),
                     title: const Text('Perempuan'),
-                    value: 'Perempuan',
+                    value: '0',
                     groupValue: genderValue.value,
                     onChanged: isReadOnly
                         ? null

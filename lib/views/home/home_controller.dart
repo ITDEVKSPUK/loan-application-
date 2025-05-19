@@ -35,37 +35,42 @@ class HomeController extends GetxController {
     }
   }
 
-  void filterSearch(String query) {
-    filteredList.value = surveyList.where((item) {
-      final queryLower = query.toLowerCase();
-      final fullName = item.fullName.toLowerCase();
-      final purpose = item.application.purpose.toLowerCase();
-      final date = DateFormat('yyyy-MM-dd')
-          .format(item.application.trxDate)
-          .toLowerCase();
-      return fullName.contains(queryLower) ||
-          purpose.contains(queryLower) ||
-          date.contains(queryLower);
-    }).toList();
-  }
-
-void filterByStatus(String status) {
-  print('FILTER BY STATUS: $status');
-
+void filterSearch(String query) {
   filteredList.value = surveyList.where((item) {
-    final statusText = item.status?.value ?? item.application.toString();
-    print('Actual item status: ${statusText.toUpperCase()}');
+    final queryLower = query.toLowerCase();
+    final fullName = item.fullName.toLowerCase();
+    final purpose = item.application.purpose.toLowerCase();
+    final trx_survey = item.application.trxSurvey.toString().toLowerCase();
+    final aged = item.aged.toString().toLowerCase();
+    final date = DateFormat('yyyy-MM-dd')
+        .format(item.application.trxDate)
+        .toLowerCase();
 
-    return status.toUpperCase() == 'ALL'
-        ? true
-        : statusText.toUpperCase() == status.toUpperCase();
+    return fullName.contains(queryLower) ||
+        purpose.contains(queryLower) ||
+        trx_survey.contains(queryLower) ||
+        aged.contains(queryLower) ||
+        date.contains(queryLower);
   }).toList();
 }
 
 
+  void filterByStatus(String status) {
+    print('FILTER BY STATUS: $status');
+
+    filteredList.value = surveyList.where((item) {
+      final statusText = item.status?.value ?? item.application.toString();
+      print('Actual item status: ${statusText.toUpperCase()}');
+
+      return status.toUpperCase() == 'ALL'
+          ? true
+          : statusText.toUpperCase() == status.toUpperCase();
+    }).toList();
+  }
+
   Color getStatusColor(String status) {
     switch (status.toUpperCase()) {
-      case 'DITERIMA':
+      case 'DISETUJUI':
         return AppColors.greenstatus;
       case 'DITOLAK':
         return AppColors.redstatus;

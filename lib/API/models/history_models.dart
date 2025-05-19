@@ -1,7 +1,7 @@
 class HistoryResponse {
-  String responseCode;
-  String responseDescription;
-  List<Datum> data;
+  final String responseCode;
+  final String responseDescription;
+  final List<Datum> data;
 
   HistoryResponse({
     required this.responseCode,
@@ -22,28 +22,31 @@ class HistoryResponse {
 }
 
 class Datum {
-  String idLegal;
-  String officeId;
-  String fullName;
-  String sectorCity;
-  String villages;
-  String address;
-  Status? status;
-  Application application;
-  Collateral collateral;
-  AdditionalInfo additionalInfo;
+  final String idLegal;
+  final String officeId;
+  final String fullName;
+  final String aged;
+  final String surveyAged;
+  final String sectorCity;
+  final Application application;
+  final Collateral collateral;
+  final Document? document;
+  final Status status;
+  final int cif_id;
 
   Datum({
     required this.idLegal,
     required this.officeId,
     required this.fullName,
+    required this.aged,
+    required this.surveyAged,
     required this.sectorCity,
-    required this.villages,
-    required this.address,
-    required this.status,
     required this.application,
     required this.collateral,
-    required this.additionalInfo,
+    this.document,
+    required this.status,
+    required this.cif_id,
+   
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) {
@@ -51,46 +54,27 @@ class Datum {
       idLegal: json['id_legal'] ?? '',
       officeId: json['Office_ID'] ?? '',
       fullName: json['full_name'] ?? '',
+      aged: json['aged'] ?? '',
+      surveyAged: json['surveyaged'] ?? '',
       sectorCity: json['sector_city'] ?? '',
-      villages: json['village'] ?? '',
-      address: json['address'] ?? '',
-      status: json['status'] != null ? Status.fromJson(json['status']) : null, 
       application: Application.fromJson(json['application'] ?? {}),
       collateral: Collateral.fromJson(json['collateral'] ?? {}),
-      additionalInfo: AdditionalInfo.fromJson(json['additionalinfo'] ?? {}),
-    );
-  }
-}
-
-class AdditionalInfo {
-  String income;
-  String asset;
-  String expenses;
-  String installment;
-
-  AdditionalInfo({
-    required this.income,
-    required this.asset,
-    required this.expenses,
-    required this.installment,
-  });
-
-  factory AdditionalInfo.fromJson(Map<String, dynamic> json) {
-    return AdditionalInfo(
-      income: json['income'] ?? '0',
-      asset: json['asset'] ?? '0',
-      expenses: json['expenses'] ?? '0',
-      installment: json['installment'] ?? '0',
+      document:
+          json['document'] != null ? Document.fromJson(json['document']) : null,
+      status: Status.fromJson(json['status'] ?? {}),
+      cif_id: int.tryParse(json['cif_id']?.toString() ?? '0') ?? 0,
+      
     );
   }
 }
 
 class Application {
-  String trxSurvey;
-  DateTime trxDate;
-  String applicationNo;
-  String purpose;
-  String plafond;
+  final String trxSurvey;
+  final DateTime trxDate;
+  final String applicationNo;
+  final String purpose;
+  final String plafond;
+ 
 
   Application({
     required this.trxSurvey,
@@ -107,24 +91,24 @@ class Application {
           DateTime.parse(json['trx_date'] ?? DateTime.now().toIso8601String()),
       applicationNo: json['application_no'] ?? '',
       purpose: json['purpose'] ?? '',
-      plafond: json['plafond'] ?? '0',
+      plafond: json['plafond'] ?? '',
     );
   }
 }
 
 class Collateral {
-  String id;
-  String idName;
-  String additionalDescription;
-  int idCategoryDocument;
-  String documentType;
-  String value;
+  final String id;
+  final String idName;
+  final String addDescript;
+  final int idCatDocument;
+  final String documentType;
+  final String value;
 
   Collateral({
     required this.id,
     required this.idName,
-    required this.additionalDescription,
-    required this.idCategoryDocument,
+    required this.addDescript,
+    required this.idCatDocument,
     required this.documentType,
     required this.value,
   });
@@ -133,10 +117,56 @@ class Collateral {
     return Collateral(
       id: json['id'] ?? '',
       idName: json['id_name'] ?? '',
-      additionalDescription: json['adddescript'] ?? '',
-      idCategoryDocument: json['id_catdocument'] ?? 0,
+      addDescript: json['adddescript'] ?? '',
+      idCatDocument: json['id_catdocument'] ?? 0,
       documentType: json['document_type'] ?? '',
-      value: json['value'] ?? '0',
+      value: json['value'] ?? '',
+    );
+  }
+}
+
+class Document {
+  final List<DocumentItem> docAsset;
+  final List<DocumentItem> docImg;
+  final List<DocumentItem> docPerson;
+
+  Document({
+    required this.docAsset,
+    required this.docImg,
+    required this.docPerson,
+  });
+
+  factory Document.fromJson(Map<String, dynamic> json) {
+    return Document(
+      docAsset: (json['doc-asset'] as List<dynamic>?)
+              ?.map((item) => DocumentItem.fromJson(item))
+              .toList() ??
+          [],
+      docImg: (json['doc-img'] as List<dynamic>?)
+              ?.map((item) => DocumentItem.fromJson(item))
+              .toList() ??
+          [],
+      docPerson: (json['doc-person'] as List<dynamic>?)
+              ?.map((item) => DocumentItem.fromJson(item))
+              .toList() ??
+          [],
+    );
+  }
+}
+
+class DocumentItem {
+  final String img;
+  final String doc;
+
+  DocumentItem({
+    required this.img,
+    required this.doc,
+  });
+
+  factory DocumentItem.fromJson(Map<String, dynamic> json) {
+    return DocumentItem(
+      img: json['img-0'] ?? '',
+      doc: json['doc'] ?? '',
     );
   }
 }
@@ -144,25 +174,31 @@ class Collateral {
 class Status {
   final String id;
   final String value;
-  final String description;
-  final int attachedDocument;
-  final String mandatory;
+  final String? approved;
+  final String? approvedDate;
+  final String? description;
+  final int? attachedDocument;
+  final String? mandatory;
 
   Status({
     required this.id,
     required this.value,
-    required this.description,
-    required this.attachedDocument,
-    required this.mandatory,
+    this.approved,
+    this.approvedDate,
+    this.description,
+    this.attachedDocument,
+    this.mandatory,
   });
 
   factory Status.fromJson(Map<String, dynamic> json) {
     return Status(
       id: json['id'] ?? '',
       value: json['value'] ?? '',
-      description: json['description'] ?? '',
-      attachedDocument: json['attachedDocument'] ?? 0,
-      mandatory: json['Mandatory'] ?? '',
+      approved: json['approved'],
+      approvedDate: json['approved_date'],
+      description: json['description'],
+      attachedDocument: json['attachedDocument'],
+      mandatory: json['Mandatory'],
     );
   }
 }

@@ -23,7 +23,7 @@ class InputDataController extends GetxController {
 
   Rx<File?> fotoKtp = Rx<File?>(null);
   Rx<File?> buktiJaminan = Rx<File?>(null);
-  RxString selectedGender = ''.obs;
+  RxString selectedGender = ''.obs; 
   final Rx<DateTime> startDate = DateTime.now().obs;
   final RxString selectedDateText = ''.obs;
   final RxString selectedDate = ''.obs;
@@ -49,7 +49,7 @@ class InputDataController extends GetxController {
         namaPasanganController.text = anggotaResponse.owner?.spouseName ?? '';
         nikpasaganController.text = anggotaResponse.owner?.spouseIdCard ?? '';
         tanggallahirController.text = anggotaResponse.owner?.dateOfBirth ?? '';
-        telpController.text = anggotaResponse.owner?.phoneNumber ?? '';
+        telpController.text = anggotaResponse.owner?.phone ?? '';
         kotaAsalController.text = anggotaResponse.addres?.city ?? '';
         pekerjaanController.text = anggotaResponse.owner?.occupation ?? '';
         alamatController.text = anggotaResponse.addres?.addressLine1 ?? '';
