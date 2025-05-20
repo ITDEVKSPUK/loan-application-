@@ -8,6 +8,7 @@ import 'package:loan_application/views/SurveyDetail/detail_document.dart';
 import 'package:loan_application/views/SurveyDetail/detail_survey.dart';
 import 'package:loan_application/views/SurveyDetail/update_survey/update_suevey.dart';
 import 'package:loan_application/views/home/surveylisy_employee.dart';
+import 'package:loan_application/views/inputuserdata/data_pinjaman.dart';
 import 'package:loan_application/views/inputuserdata/inputdata.dart';
 import 'package:loan_application/views/inputuserdata/lampiran_agunan.dart';
 
@@ -23,6 +24,7 @@ class MyAppPage {
     GetPage(name: MyAppRoutes.detailanggota, page: () => DatailAnggota()),
     GetPage(name: MyAppRoutes.detaildocumen, page: () => DetailDocument()),
     GetPage(name: MyAppRoutes.updateSurvey, page: () => UpdateSuevey()),
+    GetPage(name: MyAppRoutes.dataPinjaman, page: () => DataPinjaman()),
     GetPage(name: MyAppRoutes.detailsurvey, page: () => DetailSurvey())
   ];
 }

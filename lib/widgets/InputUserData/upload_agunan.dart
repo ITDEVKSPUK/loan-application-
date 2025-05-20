@@ -17,78 +17,104 @@ class UploadAgunanPicker extends StatelessWidget {
             value: controller.selectedAgunan.value.isEmpty
                 ? null
                 : controller.selectedAgunan.value,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: "Kategori Agunan",
-              labelStyle: TextStyle(
-                fontFamily: 'Montserrat',
-                fontWeight: FontWeight.w500,
+              labelStyle: TextStyle(color: Colors.blue.shade700),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: Colors.blue.shade200),
               ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: Colors.blue.shade200),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: Colors.blue.shade600, width: 2),
+              ),
+              filled: true,
+              fillColor: Colors.blue.shade50,
             ),
-            style: const TextStyle(
-              fontFamily: 'Montserrat',
-              fontSize: 14,
-              color: Colors.black,
-            ),
+            dropdownColor: Colors.white,
+            icon: Icon(Icons.arrow_drop_down, color: Colors.blue.shade700),
             items: controller.agunanList.map((agunan) {
               return DropdownMenuItem<String>(
                 value: agunan['ida'].toString(),
                 child: Text(
                   agunan['descript'],
-                  style: const TextStyle(fontFamily: 'Montserrat-Regular', fontSize: 14),
+                  style: const TextStyle(fontSize: 15),
                 ),
               );
             }).toList(),
-            onChanged: (val) => controller.selectedAgunan.value = val!,
+            onChanged: (val) {
+              if (val != null) controller.selectedAgunan.value = val;
+            },
           );
         }),
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
         ElevatedButton.icon(
           onPressed: () => controller.pickAgunanImages(context),
-          icon: const Icon(Icons.camera_alt),
+          icon: const Icon(Icons.camera_alt, color: Colors.white),
           label: const Text(
             "Upload Foto Agunan",
-            style: TextStyle(fontFamily: 'Montserrat'),
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
           ),
           style: ElevatedButton.styleFrom(
-            textStyle: const TextStyle(fontFamily: 'Montserrat-Regular', fontSize: 14),
+            backgroundColor: Colors.blue.shade600,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            elevation: 2,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
         Obx(() {
           final images = controller.selectedAgunanImages;
           if (images.isEmpty) {
-            return const Text(
-              "Belum ada gambar",
-              style: TextStyle(fontFamily: 'Montserrat-Regular', fontSize: 14, color: Colors.grey),
-            );
+            return const Text("Belum ada gambar yang dipilih.");
           }
 
           return SizedBox(
-            height: 80,
-            child: ListView.builder(
+            height: 90,
+            child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: images.length,
-              itemBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: Stack(
+              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              itemBuilder: (context, index) {
+                return Stack(
                   children: [
-                    Image.file(
-                      images[index],
-                      width: 80,
-                      height: 80,
-                      fit: BoxFit.cover,
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.file(
+                        images[index],
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                     Positioned(
                       top: 0,
                       right: 0,
                       child: GestureDetector(
-                        onTap: () => images.removeAt(index),
-                        child: const Icon(Icons.cancel, color: Colors.red),
+                        onTap: () =>
+                            controller.selectedAgunanImages.removeAt(index),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.black45,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.close,
+                              color: Colors.white, size: 20),
+                        ),
                       ),
                     ),
                   ],
-                ),
-              ),
+                );
+              },
             ),
           );
         }),

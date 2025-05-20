@@ -43,7 +43,6 @@ class LoginService {
         storage.write('encryptedUsername', _encrypt(username));
         storage.write('UserName', loginModel.userName); 
         print('Login Success: ${data['UserName']}');
-
         final uri = Uri.parse('http://36.92.75.178:8001');
         final cookies = await DioClient.cookieJar.loadForRequest(uri);
         print(

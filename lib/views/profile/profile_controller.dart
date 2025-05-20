@@ -26,15 +26,13 @@ class ProfileController extends GetxController {
         loginName.value = model.loginName;
         groupName.value = model.additionalUser.groupName;
         legalName.value = model.additionalInfo.legalName;
-        status.value = model.status;
+        // status.value = model.status;
         print('Loaded user data from login_model: ${model.userName}');
       } catch (e) {
         print('Error parsing login_model: $e');
-        // Fallback jika ada error parsing
         fallbackLoadData();
       }
     } else {
-      // Fallback: coba ambil username langsung
       fallbackLoadData();
     }
   }

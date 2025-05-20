@@ -25,7 +25,7 @@ class CheckNik {
     return base64.encode(digest.bytes);
   }
 
-  Future<Response> fetchNIK() async {
+  Future<Response> fetchNIK(String nik) async {
     final box = GetStorage();
 
     String token = box.read("session_id");
@@ -47,7 +47,7 @@ class CheckNik {
     final body = {
       "id_legal": 3319123456,
       "Office_ID": "000",
-      "id_search": {"value": "3315194203940003", "type": "smart"}
+      "id_search": {"value": nik, "type": "smart"}
     };
 
     try {
@@ -56,6 +56,7 @@ class CheckNik {
         options: Options(headers: headers),
         data: body,
       );
+      print(response.data);
       return response;
     } on DioException catch (e) {
       throw Exception(

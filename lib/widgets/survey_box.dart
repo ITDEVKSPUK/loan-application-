@@ -29,6 +29,8 @@ class SurveyBox extends StatelessWidget {
   Widget build(BuildContext context) {
     final isNetworkImage = image.startsWith('http');
 
+    final isNetworkImage = image.startsWith('http');
+
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(

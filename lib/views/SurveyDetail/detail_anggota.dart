@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loan_application/API/models/inquiry_anggota_models.dart';
+import 'package:loan_application/API/models/history_models.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/SurveyDetail/iqy_anggota_controller.dart';
@@ -23,9 +23,9 @@ class _DatailAnggotaState extends State<DatailAnggota> {
   @override
   void initState() {
     super.initState();
-    final arguments = Get.arguments as Map<String, dynamic>;
-    cifId = arguments['cifId'] ?? '';
-    trxSurvey = arguments['trxSurvey'] ?? '';
+    final Datum arguments = Get.arguments;
+    cifId = arguments.cifID?.toString() ?? '';
+    trxSurvey = arguments.application.trxSurvey?.toString() ?? '';
     print("wwww : cifId=$cifId, trxSurvey=$trxSurvey");
     iqyAnggotaController.getSurveyListanggota(id_search: cifId.toString());
   }

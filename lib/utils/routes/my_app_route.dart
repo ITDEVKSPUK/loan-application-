@@ -12,5 +12,6 @@ class MyAppRoutes {
   static const detaildocumen = "/detailDocument";
   static const updateSurvey = "/updateSurvey";
   static const detailsurvey = "/detailsurvey";
+  static const dataPinjaman = "/data_pinjaman";
 
 }
