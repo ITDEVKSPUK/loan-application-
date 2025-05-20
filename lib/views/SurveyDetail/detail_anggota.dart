@@ -7,14 +7,14 @@ import 'package:loan_application/views/SurveyDetail/iqy_anggota_controller.dart'
 import 'package:loan_application/widgets/SurveyDetail/field_readonly.dart';
 import 'package:loan_application/widgets/custom_appbar.dart';
 
-class SurveyDetail extends StatefulWidget {
-  const SurveyDetail({super.key});
+class DatailAnggota extends StatefulWidget {
+  const DatailAnggota({super.key});
 
   @override
-  _SurveyDetailState createState() => _SurveyDetailState();
+  _DatailAnggotaState createState() => _DatailAnggotaState();
 }
 
-class _SurveyDetailState extends State<SurveyDetail> {
+class _DatailAnggotaState extends State<DatailAnggota> {
   final IqyAnggotaController iqyAnggotaController =
       Get.put(IqyAnggotaController());
 
@@ -43,23 +43,6 @@ class _SurveyDetailState extends State<SurveyDetail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Foto KTP
-            Center(
-              child: Container(
-                width: 317,
-                height: 198.02,
-                child: Opacity(
-                  opacity: 0.53,
-                  child: Image.asset(
-                    'assets/images/rawktp.png',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Data Pribadi
             Obx(() => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -91,7 +74,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
                     FieldReadonly(
                       label: 'Alamat Lengkap',
                       width: double.infinity,
-                      height: 50,
+                      height: 58,
                       value: iqyAnggotaController.sector_city.value,
                       keyboardType: TextInputType.text,
                     ),
@@ -139,7 +122,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
             Align(
               alignment: Alignment.centerRight,
               child: ElevatedButton(
-                onPressed: () => Get.toNamed(MyAppRoutes.detaildocumen,
+                onPressed: () => Get.toNamed(MyAppRoutes.detailsurvey,
                     arguments: trxSurvey), // Pass the trx_survey value
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.casualbutton1,

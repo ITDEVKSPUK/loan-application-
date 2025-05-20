@@ -7,7 +7,6 @@ import 'package:loan_application/API/service/post_inqury_survey.dart';
 import 'package:loan_application/API/service/put_update_survey.dart';
 
 class UpdateSurveyController extends GetxController {
-  // Text controllers untuk semua field yang dapat diedit
   final purposeController = TextEditingController();
   final plafondController = TextEditingController();
   final incomeController = TextEditingController();
@@ -35,18 +34,33 @@ class UpdateSurveyController extends GetxController {
     required this.putUpdateSurvey,
   });
 
-  /// Format angka ke format Rupiah (contoh: 1000000 -> 1.000.000)
+  /// Format angka ke format Rupiah untuk tampilan (contoh: 1000000 -> 1.000.000)
   String formatRupiah(String numberString) {
-    if (numberString.isEmpty) return '0';
+    if (numberString.isEmpty || numberString == '0' || numberString == '0.00') {
+      return '0';
+    }
     final number =
-        int.tryParse(numberString.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
-    return number.toString().replaceAllMapped(
+        double.tryParse(numberString.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0.0;
+    if (number == 0) return '0';
+    return number.toInt().toString().replaceAllMapped(
         RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]}.');
   }
 
-  /// Menghapus format Rupiah (contoh: 1.000.000 -> 1000000)
+  /// Format angka untuk API dengan dua desimal (contoh: 1000000 -> "1000000.00")
+  String formatForApi(String numberString) {
+    if (numberString.isEmpty || numberString == '0') return '0.00';
+    final number =
+        double.tryParse(numberString.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0.0;
+    return number.toStringAsFixed(2);
+  }
+
+  /// Menghapus format Rupiah untuk parsing (contoh: 1.000.000 -> 1000000)
   String unformatRupiah(String formatted) {
-    return formatted.replaceAll('.', '');
+    if (formatted.isEmpty || formatted == '0') return '0';
+    final cleaned = formatted
+        .replaceAll(RegExp(r'[^0-9]'), '')
+        .replaceFirst(RegExp(r'^0+'), '');
+    return cleaned.isEmpty ? '0' : cleaned;
   }
 
   /// Memuat data survey dari API inquiry
@@ -59,7 +73,6 @@ class UpdateSurveyController extends GetxController {
         throw Exception('No valid trxSurvey provided in arguments');
       }
 
-      // Panggil API inquiry
       final inquiryData = await postInqury.fetchInqury(
         officeId: '000',
         trxSurvey: inquiryTrxSurvey,
@@ -124,6 +137,31 @@ class UpdateSurveyController extends GetxController {
       if (purposeController.text.isEmpty) {
         throw Exception('Tujuan Pinjaman wajib diisi');
       }
+      if (collateralNameController.text.isEmpty) {
+        throw Exception('Category Agunan wajib diisi');
+      }
+
+      // Parse and validate numeric fields
+      final plafond =
+          double.tryParse(unformatRupiah(plafondController.text)) ?? 0.0;
+      final value =
+          double.tryParse(unformatRupiah(valueController.text)) ?? 0.0;
+      final income =
+          double.tryParse(unformatRupiah(incomeController.text)) ?? 0.0;
+      final asset =
+          double.tryParse(unformatRupiah(assetController.text)) ?? 0.0;
+      final expenses =
+          double.tryParse(unformatRupiah(expenseController.text)) ?? 0.0;
+      final installment =
+          double.tryParse(unformatRupiah(installmentController.text)) ?? 0.0;
+
+      if (plafond <= 0) {
+        throw Exception('Plafond harus lebih besar dari 0');
+      }
+      if (value <= 0) {
+        throw Exception('Nilai agunan harus lebih besar dari 0');
+      }
+
       final putModelsUpdate = PutModelsUpdate(
         cifId: int.tryParse(cifIdController.text) ?? 0,
         idLegal: int.tryParse(idLegalController.text) ?? 0,
@@ -133,27 +171,26 @@ class UpdateSurveyController extends GetxController {
           trxSurvey: trxSurveyController.text,
           applicationNo: applicationNoController.text,
           purpose: purposeController.text,
-          plafond: int.tryParse(unformatRupiah(plafondController.text)) ?? 0,
+          plafond: formatForApi(plafond.toString()),
         ),
         collateral: Collateral(
           id: collateralIdController.text,
           idName: collateralNameController.text,
           addDescript: collateralAddDescController.text,
           idCatDocument: int.tryParse(collateralCatDocController.text) ?? 0,
-          value: int.tryParse(unformatRupiah(valueController.text)) ?? 0,
+          value: formatForApi(value.toString()),
         ),
         additionalInfo: AdditionalInfo(
-          income: int.tryParse(unformatRupiah(incomeController.text)) ?? 0,
-          asset: int.tryParse(unformatRupiah(assetController.text)) ?? 0,
-          expenses: int.tryParse(unformatRupiah(expenseController.text)) ?? 0,
-          installment:
-              int.tryParse(unformatRupiah(installmentController.text)) ?? 0,
+          income: formatForApi(income.toString()),
+          asset: formatForApi(asset.toString()),
+          expenses: formatForApi(expenses.toString()),
+          installment: formatForApi(installment.toString()),
         ),
       );
 
       print('Data to be sent: ${jsonEncode(putModelsUpdate.toJson())}');
+      print('Collateral id_name being sent: ${collateralNameController.text}');
 
-      // Kirim data ke server
       final response = await putUpdateSurvey.putUpdateSurvey(
         surveyId: surveyId,
         surveyData: putModelsUpdate.toJson(),
@@ -203,27 +240,5 @@ class UpdateSurveyController extends GetxController {
     } finally {
       isLoading.value = false;
     }
-  }
-
-  @override
-  void onClose() {
-    purposeController.dispose();
-    plafondController.dispose();
-    incomeController.dispose();
-    assetController.dispose();
-    expenseController.dispose();
-    installmentController.dispose();
-    valueController.dispose();
-    cifIdController.dispose();
-    idLegalController.dispose();
-    officeIdController.dispose();
-    applicationNoController.dispose();
-    trxDateController.dispose();
-    trxSurveyController.dispose();
-    collateralIdController.dispose();
-    collateralNameController.dispose();
-    collateralAddDescController.dispose();
-    collateralCatDocController.dispose();
-    super.onClose();
   }
 }

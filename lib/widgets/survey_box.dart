@@ -27,6 +27,8 @@ class SurveyBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isNetworkImage = image.startsWith('http');
+
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
@@ -57,10 +59,17 @@ class SurveyBox extends StatelessWidget {
                 topLeft: Radius.circular(10),
                 bottomLeft: Radius.circular(10),
               ),
-              child: Image.asset(
-                image,
-                fit: BoxFit.cover,
-              ),
+              child: isNetworkImage
+                  ? Image.network(
+                      image,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.broken_image),
+                    )
+                  : Image.asset(
+                      image,
+                      fit: BoxFit.cover,
+                    ),
             ),
           ),
           const SizedBox(width: 10),

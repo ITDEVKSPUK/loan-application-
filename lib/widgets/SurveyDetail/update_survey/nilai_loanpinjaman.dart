@@ -12,13 +12,13 @@ class LoanAngkaPinjaman_Update extends StatelessWidget {
     return Column(
       children: [
         FieldEditable(
-          label: 'Plafon Pinjaman',
-          controller: controller.plafondController,
+          label: 'Nilai Jaminan',
+          controller: controller.valueController,
           keyboardType: TextInputType.number,
         ),
         FieldEditable(
-          label: 'Nominal Peminjaman',
-          controller: controller.valueController,
+          label: 'Nominal Pinjaman',
+          controller: controller.plafondController,
           keyboardType: TextInputType.number,
         ),
         FieldEditable(

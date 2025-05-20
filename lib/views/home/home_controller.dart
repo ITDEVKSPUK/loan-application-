@@ -35,25 +35,24 @@ class HomeController extends GetxController {
     }
   }
 
-void filterSearch(String query) {
-  filteredList.value = surveyList.where((item) {
-    final queryLower = query.toLowerCase();
-    final fullName = item.fullName.toLowerCase();
-    final purpose = item.application.purpose.toLowerCase();
-    final trx_survey = item.application.trxSurvey.toString().toLowerCase();
-    final aged = item.aged.toString().toLowerCase();
-    final date = DateFormat('yyyy-MM-dd')
-        .format(item.application.trxDate)
-        .toLowerCase();
+  void filterSearch(String query) {
+    filteredList.value = surveyList.where((item) {
+      final queryLower = query.toLowerCase();
+      final fullName = item.fullName.toLowerCase();
+      final purpose = item.application.purpose.toLowerCase();
+      final trx_survey = item.application.trxSurvey.toString().toLowerCase();
+      final aged = item.aged.toString().toLowerCase();
+      final date = DateFormat('yyyy-MM-dd')
+          .format(item.application.trxDate)
+          .toLowerCase();
 
-    return fullName.contains(queryLower) ||
-        purpose.contains(queryLower) ||
-        trx_survey.contains(queryLower) ||
-        aged.contains(queryLower) ||
-        date.contains(queryLower);
-  }).toList();
-}
-
+      return fullName.contains(queryLower) ||
+          purpose.contains(queryLower) ||
+          trx_survey.contains(queryLower) ||
+          aged.contains(queryLower) ||
+          date.contains(queryLower);
+    }).toList();
+  }
 
   void filterByStatus(String status) {
     print('FILTER BY STATUS: $status');

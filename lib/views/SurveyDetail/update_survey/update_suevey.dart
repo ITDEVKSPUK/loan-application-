@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loan_application/API/service/put_update_survey.dart';
 import 'package:loan_application/views/SurveyDetail/update_survey/update_survey_controller.dart';
-import 'package:loan_application/widgets/SurveyDetail/detail_bukti_agunan.dart';
 import 'package:loan_application/widgets/SurveyDetail/update_survey/fieldeditingtab.dart';
 import 'package:loan_application/widgets/SurveyDetail/update_survey/nilai_loanpinjaman.dart';
-import 'package:loan_application/widgets/SurveyDetail/update_survey/nilai_pinjamUpdate.dart';
 import 'package:loan_application/widgets/custom_appbar.dart';
 
 class UpdateSuevey extends StatefulWidget {
@@ -58,7 +56,6 @@ class _UpdateSueveyState extends State<UpdateSuevey> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Category_agunan(),
                   const SizedBox(height: 20),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,12 +66,11 @@ class _UpdateSueveyState extends State<UpdateSuevey> {
                         keyboardType: TextInputType.text,
                       ),
                       FieldEditable(
-                          label: 'Deskripsi Pinjaman',
+                          label: 'Category Document',
                           controller:
                               updateController.collateralAddDescController,
                           keyboardType: TextInputType.text),
                       LoanAngkaPinjaman_Update(),
-                      NilaiPinjamanUpdate(),
                     ],
                   ),
                 ],
