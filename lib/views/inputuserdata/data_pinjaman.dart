@@ -3,35 +3,25 @@ import 'package:get/get.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
-import 'package:loan_application/widgets/InputUserData/upload_agunan.dart';
-import 'package:loan_application/widgets/InputUserData/upload_document.dart';
-import 'package:loan_application/widgets/InputUserData/upload_ktp.dart';
-import 'package:loan_application/widgets/custom_appbar.dart';
+import 'package:loan_application/widgets/InputUserData/financial_form_section.dart';
 
-class FullCreditFormPage extends StatefulWidget {
-  const FullCreditFormPage({super.key});
+class DataPinjaman extends StatefulWidget {
+  const DataPinjaman({super.key});
 
   @override
-  State<FullCreditFormPage> createState() => _FullCreditFormPageState();
+  State<DataPinjaman> createState() => _DataPinjamanState();
 }
 
-class _FullCreditFormPageState extends State<FullCreditFormPage> {
-  final controller = Get.put(CreditFormController());
+final controller = Get.put(CreditFormController());
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
+class _DataPinjamanState extends State<DataPinjaman> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: AppColors.pureWhite,
-        appBar: CustomAppBar(
-          title: 'Lampiran Dokumen',
-          onBack: () => Get.back(),
+        appBar: AppBar(
+          title: const Text("Data Pinjaman"),
+          backgroundColor: Colors.blue,
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -42,17 +32,17 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
               const Text("Tujuan Kredit & Jaminan",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               const SizedBox(height: 16),
-              UploadKTPPicker(controller: controller),
-              const SizedBox(height: 12),
-              UploadAgunanPicker(controller: controller),
-              const SizedBox(height: 16),
-              UploadDocumentPicker(controller: controller),
+              FinancialFormSection(controller: controller),
               const SizedBox(height: 16),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    controller.handleSubmit(context);
-                    Get.toNamed(MyAppRoutes.homeScreen);
+                    if (controller.validateForm()) {
+                      controller.createSurvey();
+                      Get.toNamed(MyAppRoutes.formAgunan);
+                    } else {
+                      Get.snackbar("Error", "Please fill all fields correctly");
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.casualbutton1,
@@ -63,7 +53,7 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
                     ),
                   ),
                   child: Text(
-                    'Submit',
+                    'Save & Next',
                     style: TextStyle(
                       fontSize: 16,
                       color: AppColors.pureWhite,
@@ -72,7 +62,7 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              // Add your fee   orm fields here
             ],
           ),
         ),

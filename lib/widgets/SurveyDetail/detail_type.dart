@@ -6,6 +6,8 @@ import 'package:loan_application/widgets/SurveyDetail/field_readonly.dart';
 class CollateralTypeWidget extends StatelessWidget {
   final InqurySurveyController controller = Get.find<InqurySurveyController>();
 
+  CollateralTypeWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Obx(() => FieldReadonly(

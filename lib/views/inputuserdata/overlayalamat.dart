@@ -71,6 +71,31 @@ void showLocationBottomSheet(
                                 onChanged: (value) {
                                   locationController.selectedProvinceId.value =
                                       value!;
+
+                                  final selectedItem =
+                                      locationController.provinces.firstWhere(
+                                    (element) =>
+                                        element['pro_idn'].toString() ==
+                                        value.toString(),
+                                    orElse: () => null,
+                                  );
+
+                                  if (selectedItem != null) {
+                                    locationController.selectedProvinceName
+                                        .value = selectedItem['province'] ?? '';
+                                    print(
+                                        'Nama region terpilih: ${locationController.selectedProvinceName.value}');
+                                  } else {
+                                    locationController
+                                        .selectedProvinceName.value = '';
+                                    print(
+                                        'prov dengan sec_idn $value tidak ditemukan!');
+                                  }
+
+                                  // Simpan nama sektor ke selectedDistrictName
+                                  locationController.selectedRegencyName.value =
+                                      selectedItem['province'] ?? '';
+
                                   locationController.fetchRegencies(value);
                                 },
                               ),
@@ -91,6 +116,30 @@ void showLocationBottomSheet(
                                   onChanged: (value) {
                                     locationController.selectedRegencyId.value =
                                         value!;
+                                    final selectedItem =
+                                        locationController.regencies.firstWhere(
+                                      (element) =>
+                                          element['reg_idn'].toString() ==
+                                          value.toString(),
+                                      orElse: () => null,
+                                    );
+
+                                    if (selectedItem != null) {
+                                      locationController.selectedRegencyName
+                                          .value = selectedItem['region'] ?? '';
+                                      print(
+                                          'Nama region terpilih: ${locationController.selectedRegencyName.value}');
+                                    } else {
+                                      locationController
+                                          .selectedRegencyName.value = '';
+                                      print(
+                                          'region dengan sec_idn $value tidak ditemukan!');
+                                    }
+
+                                    // Simpan nama sektor ke selectedDistrictName
+                                    locationController.selectedRegencyName
+                                        .value = selectedItem['region'] ?? '';
+
                                     locationController.fetchDistricts(value);
                                   },
                                 ),
@@ -99,22 +148,56 @@ void showLocationBottomSheet(
                               // Dropdown untuk Kecamatan
                               if (locationController.districts.isNotEmpty) ...[
                                 DropdownFilter(
-                                  title: 'Kecamatan',
-                                  items: locationController.districts,
-                                  value: locationController
-                                          .selectedDistrictId.value.isEmpty
-                                      ? null
-                                      : locationController
-                                          .selectedDistrictId.value,
-                                  labelKey:
-                                      'sector', // Nama key label di dalam item
-                                  idKey: 'sec_idn', // Nama key id di dalam item
-                                  onChanged: (value) {
-                                    locationController
-                                        .selectedDistrictId.value = value!;
-                                    locationController.fetchVillages(value);
-                                  },
-                                ),
+                                    title: 'Kecamatan',
+                                    items: locationController.districts,
+                                    value: locationController
+                                            .selectedDistrictId.value.isEmpty
+                                        ? null
+                                        : locationController
+                                            .selectedDistrictId.value,
+                                    labelKey:
+                                        'sector', // Nama key label di dalam item
+                                    idKey:
+                                        'sec_idn', // Nama key id di dalam item
+                                    onChanged: (value) {
+                                      // Simpan ID yang dipilih
+                                      locationController
+                                          .selectedDistrictId.value = value!;
+                                      print(
+                                          'Isi districts: ${locationController.districts}');
+
+                                      // Temukan nama sektor (label) berdasarkan ID
+                                      final selectedItem = locationController
+                                          .districts
+                                          .firstWhere(
+                                        (element) =>
+                                            element['sec_idn'].toString() ==
+                                            value.toString(),
+                                        orElse: () => null,
+                                      );
+
+                                      if (selectedItem != null) {
+                                        locationController
+                                                .selectedDistrictName.value =
+                                            selectedItem['sector'] ?? '';
+                                        print(
+                                            'Nama sektor terpilih: ${locationController.selectedDistrictName.value}');
+                                      } else {
+                                        locationController
+                                            .selectedDistrictName.value = '';
+                                        print(
+                                            'District dengan sec_idn $value tidak ditemukan!');
+                                      }
+
+                                      // Simpan nama sektor ke selectedDistrictName
+                                      locationController.selectedDistrictName
+                                          .value = selectedItem['sector'] ?? '';
+
+                                      print(locationController
+                                          .selectedDistrictName.value);
+                                      // Lanjutkan ambil data desa
+                                      locationController.fetchVillages(value);
+                                    }),
                               ],
 
                               // Dropdown untuk Desa
@@ -133,6 +216,30 @@ void showLocationBottomSheet(
                                   onChanged: (value) {
                                     locationController.selectedVillageId.value =
                                         value!;
+                                    final selectedItem =
+                                        locationController.villages.firstWhere(
+                                      (element) =>
+                                          element['vil_idn'].toString() ==
+                                          value.toString(),
+                                      orElse: () => null,
+                                    );
+
+                                    if (selectedItem != null) {
+                                      locationController
+                                              .selectedVillageName.value =
+                                          selectedItem['village'] ?? '';
+                                      print(
+                                          'Nama region terpilih: ${locationController.selectedVillageName.value}');
+                                    } else {
+                                      locationController
+                                          .selectedVillageName.value = '';
+                                      print(
+                                          'desa dengan sec_idn $value tidak ditemukan!');
+                                    }
+
+                                    // Simpan nama sektor ke selectedDistrictName
+                                    locationController.selectedVillageName
+                                        .value = selectedItem['village'] ?? '';
                                   },
                                 ),
                               ],
@@ -153,6 +260,12 @@ void showLocationBottomSheet(
                               locationController.selectedRegencyId.value = '';
                               locationController.selectedDistrictId.value = '';
                               locationController.selectedVillageId.value = '';
+                              locationController.selectedProvinceName.value =
+                                  '';
+                              locationController.selectedRegencyName.value = '';
+                              locationController.selectedDistrictName.value =
+                                  '';
+                              locationController.selectedVillageName.value = '';
                               locationController.regencies.clear();
                               locationController.districts.clear();
                               locationController.villages.clear();
@@ -178,10 +291,10 @@ void showLocationBottomSheet(
                           child: ElevatedButton(
                             onPressed: () {
                               final selected = [
-                                locationController.selectedProvinceId.value,
-                                locationController.selectedRegencyId.value,
-                                locationController.selectedDistrictId.value,
-                                locationController.selectedVillageId.value,
+                                locationController.selectedProvinceName.value,
+                                locationController.selectedRegencyName.value,
+                                locationController.selectedDistrictName.value,
+                                locationController.selectedVillageName.value,
                               ].where((e) => e.isNotEmpty).join('-');
 
                               onLocationSelected(selected);

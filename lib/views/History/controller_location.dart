@@ -8,9 +8,13 @@ class LocationController extends GetxController {
   var villages = [].obs;
 
   var selectedProvinceId = ''.obs;
+  var selectedProvinceName = ''.obs;
   var selectedRegencyId = ''.obs;
+  var selectedRegencyName = ''.obs;
   var selectedDistrictId = ''.obs;
+  var selectedDistrictName = ''.obs;
   var selectedVillageId = ''.obs;
+  var selectedVillageName = ''.obs;
 
   @override
   void onInit() {

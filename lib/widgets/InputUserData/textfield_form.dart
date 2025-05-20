@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:loan_application/core/theme/color.dart';
 
 class TextfieldForm extends StatefulWidget {

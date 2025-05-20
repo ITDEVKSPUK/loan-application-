@@ -6,6 +6,8 @@ import 'package:loan_application/widgets/SurveyDetail/field_readonly.dart';
 class NilaiPinjaman extends StatelessWidget {
   final controller = Get.find<InqurySurveyController>();
 
+   NilaiPinjaman({Key? key}) : super(key: key);
+
   String formatRupiah(String numberString) {
     if (numberString.isEmpty) return 'Rp0';
     final number =

@@ -71,9 +71,8 @@ class _HistoryEmployeeState extends State<HistoryEmployee> {
 
                     return GestureDetector(
                       onTap: () => Get.toNamed(
-                        MyAppRoutes.surveyDetail,
-                        arguments: item.cif_id
-                            .toString(), // Convert to String for navigation
+                        MyAppRoutes.surveyDetail,arguments: item
+// Convert to String for navigation
                       ),
                       child: SurveyBox(
                         name: item.fullName,

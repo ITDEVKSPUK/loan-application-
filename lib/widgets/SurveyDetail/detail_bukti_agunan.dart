@@ -5,9 +5,10 @@ import 'package:loan_application/views/SurveyDetail/inqury_survey_controller.dar
 class Category_agunan extends StatelessWidget {
   final InqurySurveyController controller = Get.find<InqurySurveyController>();
 
+
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Container(
+    return Obx(() => SizedBox(
           width: 317,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
