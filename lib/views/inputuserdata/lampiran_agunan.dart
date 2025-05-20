@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loan_application/core/theme/color.dart';
+import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
 import 'package:loan_application/widgets/InputUserData/upload_agunan.dart';
 import 'package:loan_application/widgets/InputUserData/upload_document.dart';
@@ -49,7 +50,10 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
               const SizedBox(height: 16),
               Center(
                 child: ElevatedButton(
-                  onPressed: () => controller.handleSubmit(context),
+                  onPressed: () {
+                    controller.handleSubmit(context);
+                    Get.toNamed(MyAppRoutes.homeScreen);
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.casualbutton1,
                     padding: const EdgeInsets.symmetric(

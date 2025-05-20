@@ -23,10 +23,11 @@ class InputDataController extends GetxController {
   final nominalController = TextEditingController();
   final jenisJaminanController = TextEditingController();
   final detileAlamatController = TextEditingController();
+  final postalCodeController = TextEditingController();
 
   Rx<File?> fotoKtp = Rx<File?>(null);
   Rx<File?> buktiJaminan = Rx<File?>(null);
-  RxString selectedGender = ''.obs; 
+  RxString selectedGender = ''.obs;
   final Rx<DateTime> startDate = DateTime.now().obs;
   final RxString selectedDateText = ''.obs;
   final RxString selectedDate = ''.obs;
@@ -83,9 +84,12 @@ class InputDataController extends GetxController {
         tanggallahirController.text =
             anggotaResponse.owner?.dateBorn?.toString() ?? '';
         telpController.text = anggotaResponse.address?.phone ?? '';
-        kotaAsalController.text = anggotaResponse.address?.region ?? '';
-        pekerjaanController.text = anggotaResponse.address?.kodePekerjaan ?? '';
-        alamatController.text = anggotaResponse.address?.addressLine1 ?? '';
+        kotaAsalController.text = anggotaResponse.owner?.cityBorn ?? '';
+        pekerjaanController.text =
+            anggotaResponse.address?.deskripsiPekerjaan ?? '';
+        postalCodeController.text = anggotaResponse.address?.postalCode ?? '';
+        detileAlamatController.text =
+            anggotaResponse.address?.addressDetile ?? '';
         selectedGender.value = anggotaResponse.owner?.gender?.toString() ?? '';
 
         Get.snackbar("Success", "NIK data fetched successfully");
@@ -117,9 +121,10 @@ class InputDataController extends GetxController {
 
       final response = await createCIFService.createCIF(
         idLegal: 3319123456,
-        officeId: "000", // Replace with dynamic office ID if needed
+        officeId: "000",
+        //ownwer
         enikNo: nikController.text,
-        enikType: "K05", // Replace with dynamic type if needed
+        enikType: "K05",
         firstName: namaAwalController.text,
         lastName: namaAkhirController.text,
         cityBorn: kotaAsalController.text,
@@ -133,7 +138,9 @@ class InputDataController extends GetxController {
         scopeVillage: "004-005",
         addressLine1: detileAlamatController.text,
         pemberiKerja: pekerjaanController.text,
+        postalCode: postalCodeController.text,
         deskripsiPekerjaan: pekerjaanController.text,
+        phone: telpController.text,
       );
 
       if (response.statusCode == 200) {
@@ -179,28 +186,13 @@ class InputDataController extends GetxController {
     nikpasaganController.clear();
     telpController.clear();
     pekerjaanController.clear();
+
+    postalCodeController.clear();
     alamatController.clear();
     nominalController.clear();
     jenisJaminanController.clear();
     fotoKtp.value = null;
     buktiJaminan.value = null;
-  }
-
-  @override
-  void onClose() {
-    nikController.dispose();
-    namaAwalController.dispose();
-    namaAkhirController.dispose();
-    namaPasanganController.dispose();
-    nikpasaganController.dispose();
-    kotaAsalController.dispose();
-    telpController.dispose();
-    pekerjaanController.dispose();
-    alamatController.dispose();
-    selectedGenderController.dispose();
-    nominalController.dispose();
-    jenisJaminanController.dispose();
-    super.onClose();
   }
 
   RxInt cifResponse = 0.obs;

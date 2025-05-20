@@ -149,6 +149,11 @@ class InputData extends StatelessWidget {
               TextfieldForm(
                   width: double.infinity,
                   height: 50,
+                  label: 'Kode POS',
+                  controller: controller.postalCodeController),
+              TextfieldForm(
+                  width: double.infinity,
+                  height: 50,
                   label: 'Alamat Lengkap',
                   controller: controller.alamatController),
               ElevatedButton(
@@ -181,6 +186,7 @@ class InputData extends StatelessWidget {
                       if (!nikDataExists) {
                         controller.saveForm();
                       }
+                      controller.clearForm();
                       Get.toNamed(MyAppRoutes.dataPinjaman);
                     } else {
                       Get.snackbar(

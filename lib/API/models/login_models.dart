@@ -29,7 +29,7 @@ class LoginModel {
   Map<String, dynamic> toJson() {
     return {
       'status': status,
-      'LoginName': loginName,
+      'LoginName': loginName,  
       'UserName': userName,
       'additionalUser': additionalUser.toJson(),
       'additionalInfo': additionalInfo.toJson(),

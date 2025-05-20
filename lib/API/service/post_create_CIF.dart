@@ -24,6 +24,7 @@ class CreateCIFService {
     required String addressLine1,
     String? postalCode,
     required String pemberiKerja,
+    required String phone,
     required String deskripsiPekerjaan,
   }) async {
     try {
@@ -53,9 +54,10 @@ class CreateCIFService {
           "village": village,
           "scope_village": scopeVillage,
           "address_line1": addressLine1,
-          "postal_code": 55164,
+          "postal_code": postalCode,
           "pemberi_kerja": pemberiKerja,
           "deskripsi_pekerjaan": deskripsiPekerjaan,
+          "phone": phone,
         }
       };
 

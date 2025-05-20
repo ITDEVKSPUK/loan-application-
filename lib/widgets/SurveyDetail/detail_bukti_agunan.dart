@@ -5,7 +5,6 @@ import 'package:loan_application/views/SurveyDetail/inqury_survey_controller.dar
 class Category_agunan extends StatelessWidget {
   final InqurySurveyController controller = Get.find<InqurySurveyController>();
 
-   CollateralProofWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

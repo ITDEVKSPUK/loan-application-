@@ -133,16 +133,6 @@ class CreditFormController extends GetxController {
   }
 
   // Dispose controllers
-  @override
-  void dispose() {
-    plafondController.dispose();
-    collateralDescriptionController.dispose();
-    collateralValueController.dispose();
-    incomeController.dispose();
-    assetController.dispose();
-    expensesController.dispose();
-    installmentController.dispose();
-  }
 
   // Convert form data to JSON for submission
 

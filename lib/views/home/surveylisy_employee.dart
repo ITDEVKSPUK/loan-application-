@@ -19,7 +19,7 @@ class _SurveyListState extends State<SurveyList> {
   @override
   void initState() {
     super.initState();
-    controller.getHistory();
+    controller.getHistory(); // Fetch dynamic history list
   }
 
   @override
@@ -69,14 +69,10 @@ class _SurveyListState extends State<SurveyList> {
                     return GestureDetector(
                       onTap: () => Get.toNamed(
                         MyAppRoutes.surveyDetail,
-                        arguments:{ 'cifId': item.cif_id.toString(),
-                            'trxSurvey': item.application.trxSurvey,}
+                        arguments: item,
                       ),
                       child: SurveyBox(
                         name: item.fullName,
-                        aged: item.aged,
-                        plafond: item.application.plafond,
-                        trx_survey: item.application.trxSurvey,
                         date: DateFormat('yyyy-MM-dd')
                             .format(item.application.trxDate),
                         location: item.sectorCity,
@@ -85,6 +81,9 @@ class _SurveyListState extends State<SurveyList> {
                             : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoAx92ukQFM3pqKBWZweO8aBpVZS5COMYjVg&s',
                         status: statusText,
                         statusColor: statusColor,
+                        trx_survey: item.application.trxSurvey,
+                        plafond: item.application.plafond,
+                        aged: '${item.aged} Years',
                       ),
                     );
                   },

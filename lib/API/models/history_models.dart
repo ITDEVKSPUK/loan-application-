@@ -26,17 +26,18 @@ class HistoryResponse {
 class Datum {
   final String idLegal;
   final String officeId;
+  final int cifID;
   final String fullName;
   final String aged;
   final String surveyAged;
   final String sectorCity;
   final Application application;
   final Collateral collateral;
-  final Document? document;
+  final DocumentDetails? document;
   final Status status;
-  final int cif_id;
 
   Datum({
+    required this.cifID,
     required this.idLegal,
     required this.officeId,
     required this.fullName,
@@ -47,43 +48,47 @@ class Datum {
     required this.collateral,
     this.document,
     required this.status,
-    required this.cif_id,
-   
+    required address,
+    required villages,
+    required AdditionalInfo additionalInfo,
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) {
     return Datum(
-      idLegal: json['id_legal'] ?? '',
-      officeId: json['Office_ID'] ?? '',
-      fullName: json['full_name'] ?? '',
-      aged: json['aged'] ?? '',
-      surveyAged: json['surveyaged'] ?? '',
-      sectorCity: json['sector_city'] ?? '',
-      villages: json['village'] ?? '',
-      address: json['address'] ?? '',
-      status: json['status'] != null ? Status.fromJson(json['status']) : null,
-      application: Application.fromJson(json['application'] ?? {}),
-      collateral: Collateral.fromJson(json['collateral'] ?? {}),
-      additionalInfo: AdditionalInfo.fromJson(json['additionalinfo'] ?? {}),
-      document:
-          json['document'] != null ? Document.fromJson(json['document']) : null,
-    );
+        idLegal: json['id_legal'] ?? '',
+        officeId: json['Office_ID'] ?? '',
+        fullName: json['full_name'] ?? '',
+        aged: json['aged'] ?? '',
+        surveyAged: json['surveyaged'] ?? '',
+        sectorCity: json['sector_city'] ?? '',
+        villages: json['village'] ?? '',
+        address: json['address'] ?? '',
+        status: json['status'] != null
+            ? Status.fromJson(json['status'])
+            : Status(id: '', value: ''),
+        application: Application.fromJson(json['application'] ?? {}),
+        collateral: Collateral.fromJson(json['collateral'] ?? {}),
+        additionalInfo: AdditionalInfo.fromJson(json['additionalinfo'] ?? {}),
+        document: json['document'] != null
+            ? DocumentDetails.fromJson(json['document'])
+            : null,
+        cifID: json['cif_id']);
   }
 }
 
-class Document {
+class DocumentDetails {
   List<DocAsset> docAsset;
   List<DocImg> docImg;
   List<DocPerson> docPerson;
 
-  Document({
+  DocumentDetails({
     required this.docAsset,
     required this.docImg,
     required this.docPerson,
   });
 
-  factory Document.fromJson(Map<String, dynamic> json) {
-    return Document(
+  factory DocumentDetails.fromJson(Map<String, dynamic> json) {
+    return DocumentDetails(
       docAsset: (json['doc-asset'] as List<dynamic>?)
               ?.map((item) => DocAsset.fromJson(item))
               .toList() ??
@@ -165,6 +170,8 @@ class AdditionalInfo {
     required this.asset,
     required this.expenses,
     required this.installment,
+    DocumentDetails? document,
+    required Status status,
   });
 
   factory AdditionalInfo.fromJson(Map<String, dynamic> json) {
@@ -173,11 +180,10 @@ class AdditionalInfo {
       asset: json['asset'] ?? '0',
       expenses: json['expenses'] ?? '0',
       installment: json['installment'] ?? '0',
-      document:
-          json['document'] != null ? Document.fromJson(json['document']) : null,
+      document: json['document'] != null
+          ? DocumentDetails.fromJson(json['document'])
+          : null,
       status: Status.fromJson(json['status'] ?? {}),
-      cif_id: int.tryParse(json['cif_id']?.toString() ?? '0') ?? 0,
-      
     );
   }
 }
@@ -188,7 +194,6 @@ class Application {
   final String applicationNo;
   final String purpose;
   final String plafond;
- 
 
   Application({
     required this.trxSurvey,
