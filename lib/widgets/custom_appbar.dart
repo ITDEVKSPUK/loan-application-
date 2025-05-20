@@ -1,36 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loan_application/core/theme/color.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final VoidCallback? onBack;
+  final List<Widget>? actions;
 
-  const CustomAppBar({super.key, required this.title, this.onBack});
+  const CustomAppBar({
+    super.key,
+    required this.title,
+    this.onBack,
+    this.actions,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
       height: preferredSize.height,
-      decoration: BoxDecoration(color: Colors.white),
-      child: Stack(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          bottom: BorderSide(color: AppColors.casualbutton1, width: 7),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Positioned(
-            left: 16,
-            top: 19,
-            child: GestureDetector(
-              onTap: onBack ?? () => Get.back(),
-              child: Icon(Icons.arrow_back, color: Colors.black),
-            ),
+          // Tombol Back
+          IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: onBack ?? () => Get.back(),
           ),
-          Positioned(
-            top: 19,
-            left: 0,
-            right: 0,
+
+          // Judul di tengah
+          Expanded(
             child: Center(
               child: Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.black,
                   fontSize: 18,
                   fontFamily: 'Montserrat',
@@ -39,14 +48,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
           ),
-          Positioned(
-            left: 0,
-            bottom: 0,
-            child: Container(
-              width: Get.width,
-              height: 7,
-              decoration: BoxDecoration(color: Color(0xFF83BBF5)),
-            ),
+
+          // Actions (misal tombol edit)
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: actions ?? [const SizedBox(width: 48)], // agar tetap sejajar meski kosong
           ),
         ],
       ),
@@ -54,5 +60,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(73);
+  Size get preferredSize => const Size.fromHeight(73);
 }

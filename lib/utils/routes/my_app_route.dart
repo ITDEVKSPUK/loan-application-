@@ -1,4 +1,5 @@
 
+
 class MyAppRoutes {
   static const splashScreen = "/";
   static const loginScreen = "/login";
@@ -8,6 +9,8 @@ class MyAppRoutes {
   static const surveyListScreen = "/surveylist";
   static const formAgunan = "/formagunan";
   static const surveyDetail = "/surveyDetail";
+  static const detaildocumen = "/detail_doc";
+  static const updateSurvey = "/updateSurvey";
   static const dataPinjaman = "/data_pinjaman";
 
 }

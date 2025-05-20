@@ -19,7 +19,7 @@ class _SurveyListState extends State<SurveyList> {
   @override
   void initState() {
     super.initState();
-    controller.getHistory(); // Fetch dynamic history list
+    controller.getHistory();
   }
 
   @override
@@ -69,10 +69,14 @@ class _SurveyListState extends State<SurveyList> {
                     return GestureDetector(
                       onTap: () => Get.toNamed(
                         MyAppRoutes.surveyDetail,
-                        arguments: item,
+                        arguments:{ 'cifId': item.cif_id.toString(),
+                            'trxSurvey': item.application.trxSurvey,}
                       ),
                       child: SurveyBox(
                         name: item.fullName,
+                        aged: item.aged,
+                        plafond: item.application.plafond,
+                        trx_survey: item.application.trxSurvey,
                         date: DateFormat('yyyy-MM-dd')
                             .format(item.application.trxDate),
                         location: item.sectorCity,

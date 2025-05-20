@@ -41,6 +41,25 @@ class Owner {
   final String? pasanganIdcard;
   final DateTime? dateBorn;
   final int? gender;
+  String? enikNo;
+  int? cifId;
+  String? fullName;
+  String? firstName;
+  String? lastName;
+  String? placeOfBirth;
+  String? dateOfBirth;
+  int? gender;
+  String? idCardNumber;
+  String? motherName;
+  String? email;
+  String? nationality;
+  String? religion;
+  String? maritalStatus;
+  String? spouseName;
+  String? spouseIdCard;
+  String? occupation;
+  String phone;
+  String deskripsiPekerjaan;
 
   Owner({
     this.enikNo,
@@ -53,6 +72,17 @@ class Owner {
     this.pasanganIdcard,
     this.dateBorn,
     this.gender,
+    this.idCardNumber,
+    this.motherName,
+    this.email,
+    this.nationality,
+    this.religion,
+    this.maritalStatus,
+    this.spouseName,
+    this.spouseIdCard,
+    this.occupation,
+    required this.phone,
+    required this.deskripsiPekerjaan,
   });
 
   factory Owner.fromJson(Map<String, dynamic> json) {
@@ -69,6 +99,25 @@ class Owner {
           ? DateTime.tryParse(json['date_born'])
           : null,
       gender: json['gender'] ?? 0,
+      enikNo: json["enik_no"],
+      cifId: json["cif_id"],
+      fullName: json["full_name"],
+      firstName: json["first_name"],
+      lastName: json["last_name"],
+      placeOfBirth: json["place_of_birth"],
+      dateOfBirth: json["date_of_birth"],
+      gender: json["gender"],
+      idCardNumber: json["id_card_number"],
+      motherName: json["mother_name"],
+      email: json["email"],
+      nationality: json["nationality"],
+      religion: json["religion"],
+      maritalStatus: json["marital_status"],
+      spouseName: json["spouse_name"],
+      spouseIdCard: json["spouse_id_card"],
+      occupation: json["occupation"],
+      phone: json['phone'] ?? '',
+      deskripsiPekerjaan: json['deskripsi_pekerjaan'] ?? '',
     );
   }
 
@@ -144,6 +193,24 @@ class Address {
       'kode_pekerjaan': kodePekerjaan,
       'nama_perusahaan': namaPerusahaan,
       'phone': phone,
+      "enik_no": enikNo,
+      "cif_id": cifId,
+      "full_name": fullName,
+      "first_name": firstName,
+      "last_name": lastName,
+      "place_of_birth": placeOfBirth,
+      "date_of_birth": dateOfBirth,
+      "gender": gender,
+      "id_card_number": idCardNumber,
+      "mother_name": motherName,
+      "phone": phone,
+      "email": email,
+      "nationality": nationality,
+      "religion": religion,
+      "marital_status": maritalStatus,
+      "spouse_name": spouseName,
+      "spouse_id_card": spouseIdCard,
+      "occupation": occupation,
     };
   }
 }

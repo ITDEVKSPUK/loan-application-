@@ -26,7 +26,7 @@ class InputDataController extends GetxController {
 
   Rx<File?> fotoKtp = Rx<File?>(null);
   Rx<File?> buktiJaminan = Rx<File?>(null);
-  RxString selectedGender = ''.obs;
+  RxString selectedGender = ''.obs; 
   final Rx<DateTime> startDate = DateTime.now().obs;
   final RxString selectedDateText = ''.obs;
   final RxString selectedDate = ''.obs;
