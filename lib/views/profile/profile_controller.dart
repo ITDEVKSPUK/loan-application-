@@ -30,11 +30,9 @@ class ProfileController extends GetxController {
         print('Loaded user data from login_model: ${model.userName}');
       } catch (e) {
         print('Error parsing login_model: $e');
-        // Fallback jika ada error parsing
         fallbackLoadData();
       }
     } else {
-      // Fallback: coba ambil username langsung
       fallbackLoadData();
     }
   }

@@ -8,9 +8,10 @@ class MyAppRoutes {
   static const inputDataScreen = "/inputdata";
   static const surveyListScreen = "/surveylist";
   static const formAgunan = "/formagunan";
-  static const surveyDetail = "/surveyDetail";
-  static const detaildocumen = "/detail_doc";
+  static const detailanggota = "/detailanggota";
+  static const detaildocumen = "/detailDocument";
   static const updateSurvey = "/updateSurvey";
+  static const detailsurvey = "/detailsurvey";
   static const dataPinjaman = "/data_pinjaman";
 
 }

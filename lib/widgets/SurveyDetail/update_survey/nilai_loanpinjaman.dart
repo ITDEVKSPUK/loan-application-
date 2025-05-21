@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loan_application/core/theme/color.dart';
-import 'package:loan_application/views/SurveyDetail/update_survey/update_survey_controller.dart';
+import 'package:loan_application/views/SurveyDetail/inqury_survey_controller.dart';
 import 'package:loan_application/widgets/SurveyDetail/update_survey/fieldeditingtab.dart';
 
 class LoanAngkaPinjaman_Update extends StatelessWidget {
-  final UpdateSurveyController controller = Get.find<UpdateSurveyController>();
+  final SurveyController controller = Get.find<SurveyController>();
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         FieldEditable(
-          label: 'Plafon Pinjaman',
-          controller: controller.plafondController,
+          label: 'Nilai Jaminan',
+          controller: controller.valueController,
           keyboardType: TextInputType.number,
         ),
         FieldEditable(
-          label: 'Nominal Peminjaman',
-          controller: controller.valueController,
+          label: 'Nominal Pinjaman',
+          controller: controller.plafondController,
           keyboardType: TextInputType.number,
         ),
         FieldEditable(

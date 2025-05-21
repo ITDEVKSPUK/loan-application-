@@ -102,8 +102,9 @@ class InputData extends StatelessWidget {
                   );
                   if (picked != null) {
                     controller.startDate.value = picked;
+                    // Format date as dd-MMMM-yyyy (e.g., 12-Oktober-2005)
                     controller.tanggallahirController.text =
-                        DateFormat('yyyy-MM-dd').format(picked);
+                        DateFormat('dd-MMMM', 'id_ID').format(picked);
                   }
                 },
                 child: AbsorbPointer(
@@ -153,7 +154,7 @@ class InputData extends StatelessWidget {
                   controller: controller.postalCodeController),
               TextfieldForm(
                   width: double.infinity,
-                  height: 50,
+                  height: 58,
                   label: 'Alamat Lengkap',
                   controller: controller.alamatController),
               ElevatedButton(

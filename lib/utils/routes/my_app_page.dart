@@ -4,7 +4,8 @@ import 'package:loan_application/utils/navigation/navbar/employee/dashboard_page
 import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/Login/loginScreen.dart';
 import 'package:loan_application/views/SurveyDetail/detail_anggota.dart';
-import 'package:loan_application/views/SurveyDetail/detail_documen.dart';
+import 'package:loan_application/views/SurveyDetail/detail_document.dart';
+import 'package:loan_application/views/SurveyDetail/detail_survey.dart';
 import 'package:loan_application/views/SurveyDetail/update_survey/update_suevey.dart';
 import 'package:loan_application/views/home/surveylisy_employee.dart';
 import 'package:loan_application/views/inputuserdata/data_pinjaman.dart';
@@ -20,9 +21,10 @@ class MyAppPage {
     GetPage(name: MyAppRoutes.homeScreen, page: () => SurveyList()),
     GetPage(name: MyAppRoutes.inputDataScreen, page: () => InputData()),
     GetPage(name: MyAppRoutes.formAgunan, page: () => FullCreditFormPage()),
-    GetPage(name: MyAppRoutes.surveyDetail, page: () => SurveyDetail()),
-    GetPage(name: MyAppRoutes.detaildocumen, page: () => DetailDocumen()),
-    GetPage(name: MyAppRoutes.updateSurvey, page: () => UpdateSuevey()),
+    GetPage(name: MyAppRoutes.detailanggota, page: () => DatailAnggota()),
+    GetPage(name: MyAppRoutes.detaildocumen, page: () => DetailDocument()),
+    GetPage(name: MyAppRoutes.updateSurvey, page: () => UpdateSurvey()),
     GetPage(name: MyAppRoutes.dataPinjaman, page: () => DataPinjaman()),
+    GetPage(name: MyAppRoutes.detailsurvey, page: () => DetailSurvey())
   ];
 }

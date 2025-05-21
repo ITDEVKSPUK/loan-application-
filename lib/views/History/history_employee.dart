@@ -70,10 +70,8 @@ class _HistoryEmployeeState extends State<HistoryEmployee> {
                     final statusColor = controller.getStatusColor(statusText);
 
                     return GestureDetector(
-                      onTap: () => Get.toNamed(
-                        MyAppRoutes.surveyDetail,arguments: item
-// Convert to String for navigation
-                      ),
+                      onTap: () => Get.offAllNamed(MyAppRoutes.detailanggota,
+                          arguments: item),
                       child: SurveyBox(
                         name: item.fullName,
                         aged: item.aged,
@@ -82,7 +80,9 @@ class _HistoryEmployeeState extends State<HistoryEmployee> {
                         trx_survey: item.application.trxSurvey,
                         date: DateFormat('yyyy-MM-dd')
                             .format(item.application.trxDate),
-                        image: 'assets/images/bg.png',
+                        image: (item.document?.docPerson.isNotEmpty ?? false)
+                            ? item.document!.docPerson[0].img
+                            : 'https://salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png',
                         status: statusText,
                         statusColor: statusColor,
                       ),

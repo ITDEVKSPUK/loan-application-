@@ -4,7 +4,7 @@ import 'package:loan_application/views/SurveyDetail/inqury_survey_controller.dar
 import 'package:loan_application/widgets/SurveyDetail/field_readonly.dart';
 
 class CollateralTypeWidget extends StatelessWidget {
-  final InqurySurveyController controller = Get.find<InqurySurveyController>();
+  final SurveyController controller = Get.find<SurveyController>();
 
   CollateralTypeWidget({super.key});
 
@@ -14,7 +14,7 @@ class CollateralTypeWidget extends StatelessWidget {
           label: 'Category Agunan',
           width: double.infinity,
           height: 50,
-          value: controller.plafond.value,
+          value: controller.adddescript.value,
           keyboardType: TextInputType.text,
         ));
   }

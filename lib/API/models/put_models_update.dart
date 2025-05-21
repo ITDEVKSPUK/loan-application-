@@ -43,7 +43,7 @@ class Application {
   final String trxSurvey;
   final String applicationNo;
   final String purpose;
-  final int plafond;
+  final String plafond; // Changed to String
 
   Application({
     required this.trxDate,
@@ -59,7 +59,7 @@ class Application {
       trxSurvey: json['trx_survey'] ?? '',
       applicationNo: json['application_no'] ?? '',
       purpose: json['purpose'] ?? '',
-      plafond: json['plafond'] ?? 0,
+      plafond: json['plafond']?.toString() ?? '0.00',
     );
   }
 
@@ -79,7 +79,7 @@ class Collateral {
   final String idName;
   final String addDescript;
   final int idCatDocument;
-  final int value;
+  final String value; // Changed to String
 
   Collateral({
     required this.id,
@@ -95,7 +95,7 @@ class Collateral {
       idName: json['id_name'] ?? '',
       addDescript: json['adddescript'] ?? '',
       idCatDocument: json['id_catdocument'] ?? 0,
-      value: json['value'] ?? 0,
+      value: json['value']?.toString() ?? '0.00',
     );
   }
 
@@ -111,10 +111,10 @@ class Collateral {
 }
 
 class AdditionalInfo {
-  final int income;
-  final int asset;
-  final int expenses;
-  final int installment;
+  final String income; // Changed to String
+  final String asset; // Changed to String
+  final String expenses; // Changed to String
+  final String installment; // Changed to String
 
   AdditionalInfo({
     required this.income,
@@ -125,10 +125,10 @@ class AdditionalInfo {
 
   factory AdditionalInfo.fromJson(Map<String, dynamic> json) {
     return AdditionalInfo(
-      income: json['income'] ?? 0,
-      asset: json['asset'] ?? 0,
-      expenses: json['expenses'] ?? 0,
-      installment: json['installment'] ?? 0,
+      income: json['income']?.toString() ?? '0.00',
+      asset: json['asset']?.toString() ?? '0.00',
+      expenses: json['expenses']?.toString() ?? '0.00',
+      installment: json['installment']?.toString() ?? '0.00',
     );
   }
 

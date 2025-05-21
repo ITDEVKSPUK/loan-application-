@@ -35,27 +35,27 @@ class DocumentService {
         ),
       ));
 
-      // // Tambah file Agunan
-      // formData.files.add(MapEntry(
-      //   "doc-027",
-      //   MultipartFile.fromStream(
-      //     () => docImageAgunan.openRead(),
-      //     await docImageAgunan.length(),
-      //     filename: "doc-027.jpg",
-      //     contentType: MediaType("image", "jpeg"),
-      //   ),
-      // ));
+      // Tambah file Agunan
+      formData.files.add(MapEntry(
+        "doc-027",
+        MultipartFile.fromStream(
+          () => docImageAgunan.openRead(),
+          await docImageAgunan.length(),
+          filename: "doc-027.jpg",
+          contentType: MediaType("image", "jpeg"),
+        ),
+      ));
 
-      // // Tambah file Dokumen Agunan
-      // formData.files.add(MapEntry(
-      //   "doc-005",
-      //   MultipartFile.fromStream(
-      //     () => docImageDokumen.openRead(),
-      //     await docImageDokumen.length(),
-      //     filename: "doc-005.jpg",
-      //     contentType: MediaType("image", "jpeg"),
-      //   ),
-      // ));
+      // Tambah file Dokumen Agunan
+      formData.files.add(MapEntry(
+        "doc-005",
+        MultipartFile.fromStream(
+          () => docImageDokumen.openRead(),
+          await docImageDokumen.length(),
+          filename: "doc-005.jpg",
+          contentType: MediaType("image", "jpeg"),
+        ),
+      ));
 
       // Encode requestbody ke query string
       final encodedRequestBody = Uri.encodeComponent(jsonEncode(requestBody));

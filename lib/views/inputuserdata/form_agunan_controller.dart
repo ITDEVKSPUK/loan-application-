@@ -267,7 +267,8 @@ class CreditFormController extends GetxController {
           selectedKTPImages.isEmpty) {
         throw Exception("Gambar KTP, agunan, dan dokumen belum dipilih.");
       }
-
+      print(cifID.cifId);
+      print(surveyId);
       Get.snackbar("Uploading", "Harap tunggu...",
           snackPosition: SnackPosition.BOTTOM);
 

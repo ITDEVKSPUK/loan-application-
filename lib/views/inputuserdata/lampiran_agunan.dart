@@ -52,7 +52,7 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     controller.handleSubmit(context);
-                    Get.toNamed(MyAppRoutes.homeScreen);
+                    Get.toNamed(MyAppRoutes.dashboard);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.casualbutton1,

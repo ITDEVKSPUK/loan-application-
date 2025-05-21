@@ -1,72 +1,311 @@
+import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loan_application/API/models/history_models.dart';
-import 'package:loan_application/API/models/inqury_survey_models.dart';
+import 'package:loan_application/API/models/put_models_update.dart';
 import 'package:loan_application/API/service/post_inqury_survey.dart';
+import 'package:loan_application/API/service/put_update_survey.dart';
 
-class InqurySurveyController extends GetxController {
-  var plafond = ''.obs;
-  var purpose = ''.obs;
-  var adddescript = ''.obs;
-  var value = ''.obs;
-  var income = ''.obs;
-  var asset = ''.obs;
-  var expenses = ''.obs;
-  var installment = ''.obs;
-  var inquiryModel = Rxn<InquirySurveyModel>();
-  var collateralProofs = <CollateralProofModel>[].obs;
-  var isLoading = false.obs;
-  var errorMessage = ''.obs;
-  
+class SurveyController extends GetxController {
+  // Controllers for UpdateSurvey
+  final purposeController = TextEditingController();
+  final plafondController = TextEditingController();
+  final incomeController = TextEditingController();
+  final assetController = TextEditingController();
+  final expenseController = TextEditingController();
+  final installmentController = TextEditingController();
+  final valueController = TextEditingController();
+  final cifIdController = TextEditingController();
+  final idLegalController = TextEditingController();
+  final officeIdController = TextEditingController();
+  final applicationNoController = TextEditingController();
+  final trxDateController = TextEditingController();
+  final trxSurveyController = TextEditingController();
+  final collateralIdController = TextEditingController();
+  final collateralNameController = TextEditingController();
+  final collateralAddDescController = TextEditingController();
+  final collateralCatDocController = TextEditingController();
 
-  void getSurveyList({required String trxSurvey}) async {
+  // Observables for DetailSurvey
+  final purpose = ''.obs;
+  final adddescript = ''.obs;
+  final inquiryModel = Rx<dynamic>(null);
+  final isLoading = false.obs;
+  String surveyId = '';
+
+  final PutUpdateSurvey putUpdateSurvey;
+  final PostInqury postInqury = PostInqury();
+
+  SurveyController({required this.putUpdateSurvey});
+
+  @override
+  void onClose() {
+    // Dispose controllers to prevent memory leaks
+    purposeController.dispose();
+    plafondController.dispose();
+    incomeController.dispose();
+    assetController.dispose();
+    expenseController.dispose();
+    installmentController.dispose();
+    valueController.dispose();
+    cifIdController.dispose();
+    idLegalController.dispose();
+    officeIdController.dispose();
+    applicationNoController.dispose();
+    trxDateController.dispose();
+    trxSurveyController.dispose();
+    collateralIdController.dispose();
+    collateralNameController.dispose();
+    collateralAddDescController.dispose();
+    collateralCatDocController.dispose();
+    super.onClose();
+  }
+
+  /// Format angka ke format Rupiah untuk tampilan (contoh: 1000000 -> 1.000.000)
+  String formatRupiah(String numberString) {
+    if (numberString.isEmpty || numberString == '0' || numberString == '0.00') {
+      return '0';
+    }
+    final number =
+        double.tryParse(numberString.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0.0;
+    if (number == 0) return '0';
+    return number.toInt().toString().replaceAllMapped(
+        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]}.');
+  }
+
+  /// Format angka untuk API dengan dua desimal (contoh: 1000000 -> "1000000.00")
+  String formatForApi(String numberString) {
+    if (numberString.isEmpty || numberString == '0') return '0.00';
+    final number =
+        double.tryParse(numberString.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0.0;
+    return number.toStringAsFixed(2);
+  }
+
+  /// Menghapus format Rupiah untuk parsing (contoh: 1.000.000 -> 1000000)
+  String unformatRupiah(String formatted) {
+    if (formatted.isEmpty || formatted == '0') return '0';
+    final cleaned = formatted
+        .replaceAll(RegExp(r'[^0-9]'), '')
+        .replaceFirst(RegExp(r'^0+'), '');
+    return cleaned.isEmpty ? '0' : cleaned;
+  }
+
+  /// Fetch survey data for DetailSurvey
+  Future<void> getSurveyList({required String trxSurvey}) async {
     isLoading.value = true;
-    errorMessage.value = '';
-    final inquryService = PostInqury();
-
     try {
-      final inquryResponse = await inquryService.fetchInqury(
+      print('Fetching survey list with trxSurvey: $trxSurvey');
+      final inquiryData = await postInqury.fetchInqury(
         officeId: '000',
         trxSurvey: trxSurvey,
       );
+      print('Inquiry data received: ${inquiryData.toJson()}');
 
-      inquiryModel.value = inquryResponse;
-      plafond.value = inquryResponse.application.plafond;
-      purpose.value = inquryResponse.application.purpose;
-      adddescript.value = inquryResponse.collateral.adddescript;
-      value.value = inquryResponse.collateral.value;
-      expenses.value = inquryResponse.additionalInfo.expenses;
-      income.value = inquryResponse.additionalInfo.income;
-      asset.value = inquryResponse.additionalInfo.asset;
-      installment.value = inquryResponse.additionalInfo.installment;
-
-      collateralProofs.add(CollateralProofModel(
-        date: inquryResponse.application.trxDate.toString(),
-        location: inquryResponse.sectorCity,
-        type: inquryResponse.collateral.documentType,
-        imagePath: 'assets/images/sample.png',
-      ));
+      inquiryModel.value = inquiryData;
+      purpose.value = inquiryData.application.purpose ?? '';
+      adddescript.value = inquiryData.collateral.adddescript ?? '';
     } catch (e) {
-      errorMessage.value = 'Gagal mengambil data: $e';
-      Get.snackbar('Error', errorMessage.value);
+      print('Error fetching survey list: $e');
+      Get.snackbar(
+        'Error',
+        'Gagal memuat data survey: $e',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     } finally {
       isLoading.value = false;
     }
   }
-}
 
-class CollateralProofModel {
-  final String date;
-  final String location;
-  final String type;
-  final String imagePath;
-  final String sector_city;
+  /// Load survey data into controllers for UpdateSurvey
+  Future<void> loadSurveyData(dynamic trxSurvey) async {
+    isLoading.value = true;
+    try {
+      final String inquiryTrxSurvey = trxSurvey['trxSurvey']?.toString() ?? '';
+      print('Received trxSurvey: $inquiryTrxSurvey');
+      if (inquiryTrxSurvey.isEmpty) {
+        throw Exception('No valid trxSurvey provided in arguments');
+      }
 
-  CollateralProofModel({
-    required this.date,
-    required this.location,
-    required this.type,
-    required this.imagePath,
-    this.sector_city = '',
-  });
+      final inquiryData = await postInqury.fetchInqury(
+        officeId: '000',
+        trxSurvey: inquiryTrxSurvey,
+      );
+      print('Inquiry data received: ${inquiryData.toJson()}');
+
+      surveyId = inquiryData.application.trxSurvey ?? '';
+      if (surveyId.isEmpty) {
+        throw Exception('Invalid or missing surveyId in inquiry response');
+      }
+      print('Survey ID set: $surveyId');
+
+      cifIdController.text = inquiryData.cifId.toString();
+      idLegalController.text = inquiryData.idLegal.toString();
+      officeIdController.text = inquiryData.officeId ?? '';
+      applicationNoController.text =
+          inquiryData.application.applicationNo ?? '';
+      trxDateController.text = inquiryData.application.trxDate ?? '';
+      trxSurveyController.text = inquiryData.application.trxSurvey ?? '';
+      purposeController.text = inquiryData.application.purpose ?? '';
+      plafondController.text =
+          formatRupiah(inquiryData.application.plafond.toString());
+      collateralIdController.text = inquiryData.collateral.id ?? '';
+      collateralNameController.text = inquiryData.collateral.idName ?? '';
+      collateralAddDescController.text =
+          inquiryData.collateral.adddescript ?? '';
+      collateralCatDocController.text =
+          inquiryData.collateral.idCatDocument.toString();
+      valueController.text =
+          formatRupiah(inquiryData.collateral.value.toString());
+      incomeController.text =
+          formatRupiah(inquiryData.additionalInfo.income.toString());
+      assetController.text =
+          formatRupiah(inquiryData.additionalInfo.asset.toString());
+      expenseController.text =
+          formatRupiah(inquiryData.additionalInfo.expenses.toString());
+      installmentController.text =
+          formatRupiah(inquiryData.additionalInfo.installment.toString());
+
+      // Update observables for DetailSurvey
+      inquiryModel.value = inquiryData;
+      purpose.value = inquiryData.application.purpose ?? '';
+      adddescript.value = inquiryData.collateral.adddescript ?? '';
+    } catch (e) {
+      print('Error loading survey data: $e');
+      Get.snackbar(
+        'Error',
+        'Gagal memuat data survey: $e',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      surveyId = '';
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /// Save survey data and refresh DetailSurvey
+  Future<void> saveSurvey() async {
+    try {
+      isLoading.value = true;
+      print('Attempting to save survey with surveyId: $surveyId');
+      if (surveyId.isEmpty || surveyId == 'null') {
+        throw Exception('Invalid or missing surveyId');
+      }
+      if (purposeController.text.isEmpty) {
+        throw Exception('Tujuan Pinjaman wajib diisi');
+      }
+      if (collateralNameController.text.isEmpty) {
+        throw Exception('Category Agunan wajib diisi');
+      }
+
+      // Parse and validate numeric fields
+      final plafond =
+          double.tryParse(unformatRupiah(plafondController.text)) ?? 0.0;
+      final value =
+          double.tryParse(unformatRupiah(valueController.text)) ?? 0.0;
+      final income =
+          double.tryParse(unformatRupiah(incomeController.text)) ?? 0.0;
+      final asset =
+          double.tryParse(unformatRupiah(assetController.text)) ?? 0.0;
+      final expenses =
+          double.tryParse(unformatRupiah(expenseController.text)) ?? 0.0;
+      final installment =
+          double.tryParse(unformatRupiah(installmentController.text)) ?? 0.0;
+
+      if (plafond <= 0) {
+        throw Exception('Plafond harus lebih besar dari 0');
+      }
+      if (value <= 0) {
+        throw Exception('Nilai agunan harus lebih besar dari 0');
+      }
+
+      final putModelsUpdate = PutModelsUpdate(
+        cifId: int.tryParse(cifIdController.text) ?? 0,
+        idLegal: int.tryParse(idLegalController.text) ?? 0,
+        officeId: officeIdController.text,
+        application: Application(
+          trxDate: trxDateController.text,
+          trxSurvey: trxSurveyController.text,
+          applicationNo: applicationNoController.text,
+          purpose: purposeController.text,
+          plafond: formatForApi(plafond.toString()),
+        ),
+        collateral: Collateral(
+          id: collateralIdController.text,
+          idName: collateralNameController.text,
+          addDescript: collateralAddDescController.text,
+          idCatDocument: int.tryParse(collateralCatDocController.text) ?? 0,
+          value: formatForApi(value.toString()),
+        ),
+        additionalInfo: AdditionalInfo(
+          income: formatForApi(income.toString()),
+          asset: formatForApi(asset.toString()),
+          expenses: formatForApi(expenses.toString()),
+          installment: formatForApi(installment.toString()),
+        ),
+      );
+
+      print('Data to be sent: ${jsonEncode(putModelsUpdate.toJson())}');
+      print('Collateral id_name being sent: ${collateralNameController.text}');
+
+      final response = await putUpdateSurvey.putUpdateSurvey(
+        surveyId: surveyId,
+        surveyData: putModelsUpdate.toJson(),
+      );
+
+      print('API response: $response');
+
+      // Update observables for DetailSurvey
+      purpose.value = purposeController.text;
+      adddescript.value = collateralAddDescController.text;
+
+      Get.snackbar(
+        'Sukses',
+        'Data survey berhasil diperbarui',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+
+      // Navigate back to DetailSurvey and refresh data
+      Get.back();
+      await getSurveyList(trxSurvey: surveyId);
+    } on DioException catch (e) {
+      String errorMessage = 'Failed to update survey';
+      if (e.response != null) {
+        errorMessage +=
+            ': ${e.response?.statusCode} - ${e.response?.data?['message'] ?? 'Unknown error'}';
+        print('Dio error details:');
+        print('Status code: ${e.response?.statusCode}');
+        print('Response data: ${e.response?.data}');
+        print('Request URL: ${e.requestOptions.uri}');
+        print('Request headers: ${e.requestOptions.headers}');
+        print('Request data: ${e.requestOptions.data}');
+      } else {
+        errorMessage += ': ${e.message}';
+      }
+      print('Dio error: $errorMessage');
+      Get.snackbar(
+        'Error',
+        errorMessage,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } catch (e) {
+      print('Unexpected error: $e');
+      Get.snackbar(
+        'Error',
+        'Gagal memperbarui survey: $e',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }
