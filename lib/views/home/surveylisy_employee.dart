@@ -78,7 +78,7 @@ class _SurveyListState extends State<SurveyList> {
                         location: item.sectorCity,
                         image: (item.document?.docPerson.isNotEmpty ?? false)
                             ? item.document!.docPerson[0].img
-                            : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoAx92ukQFM3pqKBWZweO8aBpVZS5COMYjVg&s',
+                            : 'https://salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png',
                         status: statusText,
                         statusColor: statusColor,
                         trx_survey: item.application.trxSurvey,
