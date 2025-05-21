@@ -4,6 +4,8 @@ import 'package:loan_application/API/models/history_models.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/SurveyDetail/iqy_anggota_controller.dart';
+import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
+import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 import 'package:loan_application/widgets/SurveyDetail/field_readonly.dart';
 import 'package:loan_application/widgets/custom_appbar.dart';
 
@@ -122,8 +124,14 @@ class _DatailAnggotaState extends State<DatailAnggota> {
             Align(
               alignment: Alignment.centerRight,
               child: ElevatedButton(
-                onPressed: () => Get.toNamed(MyAppRoutes.detailsurvey,
-                    arguments: trxSurvey), // Pass the trx_survey value
+                onPressed: () {
+                  final creditFormController = Get.put(CreditFormController());
+                  creditFormController.setSurveyId(trxSurvey);
+                  final inputDataController = Get.put(InputDataController());
+                  inputDataController.setCif(int.tryParse(cifId) ?? 0);
+
+                  Get.toNamed(MyAppRoutes.detailsurvey, arguments: trxSurvey);
+                }, // Pass the trx_survey value
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.casualbutton1,
                   padding:

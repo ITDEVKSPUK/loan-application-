@@ -153,7 +153,7 @@ class InputData extends StatelessWidget {
                   controller: controller.postalCodeController),
               TextfieldForm(
                   width: double.infinity,
-                  height: 50,
+                  height: 58,
                   label: 'Alamat Lengkap',
                   controller: controller.alamatController),
               ElevatedButton(

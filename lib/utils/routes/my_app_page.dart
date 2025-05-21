@@ -23,7 +23,7 @@ class MyAppPage {
     GetPage(name: MyAppRoutes.formAgunan, page: () => FullCreditFormPage()),
     GetPage(name: MyAppRoutes.detailanggota, page: () => DatailAnggota()),
     GetPage(name: MyAppRoutes.detaildocumen, page: () => DetailDocument()),
-    GetPage(name: MyAppRoutes.updateSurvey, page: () => UpdateSuevey()),
+    GetPage(name: MyAppRoutes.updateSurvey, page: () => UpdateSurvey()),
     GetPage(name: MyAppRoutes.dataPinjaman, page: () => DataPinjaman()),
     GetPage(name: MyAppRoutes.detailsurvey, page: () => DetailSurvey())
   ];

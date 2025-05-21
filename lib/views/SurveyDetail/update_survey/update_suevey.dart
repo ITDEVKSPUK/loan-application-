@@ -1,37 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loan_application/API/service/put_update_survey.dart';
-import 'package:loan_application/views/SurveyDetail/update_survey/update_survey_controller.dart';
+import 'package:loan_application/core/theme/color.dart';
+import 'package:loan_application/utils/routes/my_app_route.dart';
+import 'package:loan_application/views/SurveyDetail/inqury_survey_controller.dart';
 import 'package:loan_application/widgets/SurveyDetail/update_survey/fieldeditingtab.dart';
 import 'package:loan_application/widgets/SurveyDetail/update_survey/nilai_loanpinjaman.dart';
 import 'package:loan_application/widgets/custom_appbar.dart';
 
-class UpdateSuevey extends StatefulWidget {
+class UpdateSurvey extends StatefulWidget {
   @override
-  State<UpdateSuevey> createState() => _UpdateSueveyState();
+  State<UpdateSurvey> createState() => _UpdateSurveyState();
 }
 
-class _UpdateSueveyState extends State<UpdateSuevey> {
+class _UpdateSurveyState extends State<UpdateSurvey> {
   @override
   void initState() {
     super.initState();
-    Get.put(
-        UpdateSurveyController(putUpdateSurvey: Get.put(PutUpdateSurvey())));
-    final trxSurvey = Get.arguments;
-    Get.find<UpdateSurveyController>().loadSurveyData(trxSurvey);
-    print("trx survey (update): $trxSurvey");
-  }
-
-  @override
-  void dispose() {
-    Get.delete<UpdateSurveyController>();
-    super.dispose();
+    // Defer loadSurveyData until after the build phase
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final trxSurvey = Get.arguments;
+      Get.find<SurveyController>().loadSurveyData(trxSurvey);
+      print("trx survey (update): $trxSurvey");
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final UpdateSurveyController updateController =
-        Get.find<UpdateSurveyController>();
+    final SurveyController controller = Get.find<SurveyController>();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -40,10 +35,11 @@ class _UpdateSueveyState extends State<UpdateSuevey> {
         actions: [
           Obx(() => IconButton(
                 icon: const Icon(Icons.save),
-                onPressed: updateController.isLoading.value
+                onPressed: controller.isLoading.value
                     ? null
                     : () {
-                        updateController.saveSurvey();
+                        controller.saveSurvey();
+                        // Navigation back to DetailSurvey is handled in saveSurvey
                       },
               )),
         ],
@@ -62,21 +58,45 @@ class _UpdateSueveyState extends State<UpdateSuevey> {
                     children: [
                       FieldEditable(
                         label: 'Tujuan Pinjaman',
-                        controller: updateController.purposeController,
+                        controller: controller.purposeController,
                         keyboardType: TextInputType.text,
                       ),
                       FieldEditable(
-                          label: 'Category Document',
-                          controller:
-                              updateController.collateralAddDescController,
-                          keyboardType: TextInputType.text),
+                        label: 'Category Document',
+                        controller: controller.collateralAddDescController,
+                        keyboardType: TextInputType.text,
+                      ),
                       LoanAngkaPinjaman_Update(),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: ElevatedButton(
+                          onPressed: () => Get.toNamed(
+                            MyAppRoutes.formAgunan,
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.casualbutton1,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Text(
+                            'Selanjutnya',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: AppColors.pureWhite,
+                              fontFamily: 'Outfit',
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ],
               ),
             ),
-            Obx(() => updateController.isLoading.value
+            Obx(() => controller.isLoading.value
                 ? Container(
                     color: Colors.black.withOpacity(0.5),
                     child: const Center(child: CircularProgressIndicator()),

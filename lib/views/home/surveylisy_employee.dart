@@ -69,8 +69,7 @@ class _SurveyListState extends State<SurveyList> {
                     return GestureDetector(
                       onTap: () => Get.toNamed(
                         MyAppRoutes.detailanggota,
-                        arguments:{ 'cifId': item.cif_id.toString(),
-                            'trxSurvey': item.application.trxSurvey,}
+                        arguments: item,
                       ),
                       child: SurveyBox(
                         name: item.fullName,

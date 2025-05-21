@@ -70,10 +70,8 @@ class _HistoryEmployeeState extends State<HistoryEmployee> {
                     final statusColor = controller.getStatusColor(statusText);
 
                     return GestureDetector(
-                      onTap: () => Get.toNamed(
-                        MyAppRoutes.detailanggota,arguments: item
-// Convert to String for navigation
-                      ),
+                      onTap: () => Get.offAllNamed(MyAppRoutes.detailanggota,
+                          arguments: item),
                       child: SurveyBox(
                         name: item.fullName,
                         aged: item.aged,
@@ -82,12 +80,12 @@ class _HistoryEmployeeState extends State<HistoryEmployee> {
                         trx_survey: item.application.trxSurvey,
                         date: DateFormat('yyyy-MM-dd')
                             .format(item.application.trxDate),
-                       image: (item.document?.docPerson.isNotEmpty ?? false)
+                        image: (item.document?.docPerson.isNotEmpty ?? false)
                             ? item.document!.docPerson[0].img
                             : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoAx92ukQFM3pqKBWZweO8aBpVZS5COMYjVg&s',
                         status: statusText,
                         statusColor: statusColor,
-                      ),  
+                      ),
                     );
                   },
                 );

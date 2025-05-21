@@ -15,7 +15,8 @@ class PostSurveyService {
   }) async {
     final headers = {
       'ICS-Wipala': 'sastra.astana.dwipangga',
-      'ICS-Timestamp': DateTime.now().toUtc().toIso8601String(),
+      'ICS-Timestamp':
+          '${DateTime.now().toUtc().toIso8601String().split('.').first}+00:00',
       'ICS-Signature': 'sandbox.rus2025',
     };
 

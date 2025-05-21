@@ -24,7 +24,7 @@ class HomeController extends GetxController {
       final historyResponse = HistoryResponse.fromJson(response.data);
 
       // Assign the parsed data to surveyList and filteredList
-      surveyList.value = historyResponse.data;
+      surveyList.value = historyResponse.data;  
       filteredList.value = historyResponse.data;
 
       if (surveyList.isEmpty) {

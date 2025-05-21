@@ -143,7 +143,7 @@ class _DetailDocumentState extends State<DetailDocument> {
               Center(
                 child: GestureDetector(
                   onTap: () => documentController
-                      .showFullScreenImage(documentController.fotoTanah.value),
+                      .showFullScreenImage(documentController.img_agun.value),
                   child: Container(
                     width: 317,
                     height: 200,
@@ -151,11 +151,11 @@ class _DetailDocumentState extends State<DetailDocument> {
                       color: Colors.grey.shade200,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: documentController.fotoTanah.value.isNotEmpty
+                    child: documentController.img_agun.value.isNotEmpty
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(8),
                             child: Image.network(
-                              documentController.fotoTanah.value,
+                              documentController.img_agun.value,
                               fit: BoxFit.cover,
                               width: double.infinity,
                               height: double.infinity,
@@ -201,7 +201,7 @@ class _DetailDocumentState extends State<DetailDocument> {
               Center(
                 child: GestureDetector(
                   onTap: () => documentController
-                      .showFullScreenImage(documentController.fotoSurat.value),
+                      .showFullScreenImage(documentController.img_doc.value),
                   child: Container(
                     width: 317,
                     height: 200,
@@ -209,11 +209,11 @@ class _DetailDocumentState extends State<DetailDocument> {
                       color: Colors.grey.shade200,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: documentController.fotoSurat.value.isNotEmpty
+                    child: documentController.img_doc.value.isNotEmpty
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(8),
                             child: Image.network(
-                              documentController.fotoSurat.value,
+                              documentController.img_doc.value,
                               fit: BoxFit.cover,
                               width: double.infinity,
                               height: double.infinity,
