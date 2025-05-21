@@ -30,6 +30,7 @@ class SurveyBox extends StatelessWidget {
     final isNetworkImage = image.startsWith('http');
 
     return Container(
+      height: 110, // tinggi ditambah agar tidak overflow
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         color: AppColors.pureWhite,
@@ -43,27 +44,23 @@ class SurveyBox extends StatelessWidget {
         ],
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Gambar
-          Container(
-            width: 100,
-            height: 100,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10),
-                bottomLeft: Radius.circular(10),
-              ),
+          ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(10),
+              bottomLeft: Radius.circular(10),
             ),
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(10),
-                bottomLeft: Radius.circular(10),
-              ),
+            child: Container(
+              width: 100,
+              color: Colors.grey[200],
               child: isNetworkImage
                   ? Image.network(
                       image,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image),
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.broken_image),
                     )
                   : Image.asset(
                       image,
@@ -71,14 +68,16 @@ class SurveyBox extends StatelessWidget {
                     ),
             ),
           ),
+
           const SizedBox(width: 10),
-          // Informasi utama
-          Expanded(
+
+          // Konten utama
+          Flexible(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: 6.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                // Di dalam Column(...) yang ada di child dari Expanded(...)
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     name,
@@ -91,136 +90,66 @@ class SurveyBox extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  Row(
-                    children: [
-                      const Icon(Icons.calendar_today,
-                          color: AppColors.black, size: 12),
-                      const SizedBox(width: 5),
-                      Text(
-                        date,
-                        style: TextStyle(
-                          color: AppColors.black.withOpacity(0.6),
-                          fontSize: 10,
-                          fontFamily: 'Outfit',
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      const Icon(Icons.person,
-                          color: AppColors.black, size: 12),
-                      const SizedBox(width: 5),
-                      Expanded(
-                        child: Text(
-                          aged,
-                          style: const TextStyle(
-                            color: AppColors.black,
-                            fontSize: 10,
-                            fontFamily: 'Outfit',
-                            fontWeight: FontWeight.w400,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      const Icon(Icons.account_balance,
-                          color: AppColors.black, size: 12),
-                      const SizedBox(width: 5),
-                      Expanded(
-                        child: Text(
-                          plafond,
-                          style: const TextStyle(
-                            color: AppColors.black,
-                            fontSize: 10,
-                            fontFamily: 'Outfit',
-                            fontWeight: FontWeight.w400,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      const Icon(Icons.assignment,
-                          color: AppColors.black, size: 12),
-                      const SizedBox(width: 5),
-                      Expanded(
-                        child: Text(
-                          trx_survey,
-                          style: const TextStyle(
-                            color: AppColors.black,
-                            fontSize: 10,
-                            fontFamily: 'Outfit',
-                            fontWeight: FontWeight.w400,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      const Icon(Icons.location_on,
-                          color: AppColors.black, size: 12),
-                      const SizedBox(width: 5),
-                      Expanded(
-                        child: Text(
-                          location,
-                          style: const TextStyle(
-                            color: AppColors.black,
-                            fontSize: 10,
-                            fontFamily: 'Outfit',
-                            fontWeight: FontWeight.w400,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
+                  buildInfoRow(Icons.calendar_today, date),
+                  buildInfoRow(Icons.person, aged),
+                  buildInfoRow(Icons.account_balance, plafond),
+                  buildInfoRow(Icons.assignment, trx_survey),
+                  buildInfoRow(Icons.location_on, location),
                 ],
               ),
             ),
           ),
-          // Status
-          Container(
-            width: 54,
-            height: 100,
-            decoration: BoxDecoration(
-              color: statusColor,
-              borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(10),
-                bottomRight: Radius.circular(10),
-              ),
+
+          // Status box
+          ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(10),
+              bottomRight: Radius.circular(10),
             ),
-            child: Center(
-              child: RotatedBox(
-                quarterTurns: 3,
-                child: Text(
-                  status.isEmpty ? 'No Status' : status,
-                  style: const TextStyle(
-                    color: AppColors.pureWhite,
-                    fontSize: 14,
-                    fontFamily: 'Outfit',
-                    fontWeight: FontWeight.w700,
+            child: Container(
+              width: 54,
+              color: statusColor,
+              child: Center(
+                child: RotatedBox(
+                  quarterTurns: 3,
+                  child: Text(
+                    status.isEmpty ? 'No Status' : status,
+                    style: const TextStyle(
+                      color: AppColors.pureWhite,
+                      fontSize: 14,
+                      fontFamily: 'Outfit',
+                      fontWeight: FontWeight.w700,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildInfoRow(IconData icon, String text) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 2),
+      child: Row(
+        children: [
+          Icon(icon, color: AppColors.black, size: 12),
+          const SizedBox(width: 5),
+          Expanded(
+            child: Text(
+              text,
+              style: const TextStyle(
+                color: AppColors.black,
+                fontSize: 10,
+                fontFamily: 'Outfit',
+                fontWeight: FontWeight.w400,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],

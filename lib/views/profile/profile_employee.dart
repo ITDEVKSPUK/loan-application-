@@ -150,10 +150,10 @@ class _ProfileEmployeeState extends State<ProfileEmployee> {
                             LoginService().logout();
                             Get.offAllNamed(MyAppRoutes.loginScreen);
                           },
-                          color: AppColors.lightBlue,
+                          color: AppColors.deepBlue,
                           borderRadius: 15,
                           textStyle: const TextStyle(
-                            color: AppColors.black,
+                            color: AppColors.pureWhite,
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Outfit',
