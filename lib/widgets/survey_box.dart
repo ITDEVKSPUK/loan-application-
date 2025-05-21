@@ -30,7 +30,7 @@ class SurveyBox extends StatelessWidget {
     final isNetworkImage = image.startsWith('http');
 
     return Container(
-      height: 110, // tinggi ditambah agar tidak overflow
+      height: 120, // tinggi ditambah agar tidak overflow
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         color: AppColors.pureWhite,
