@@ -1,8 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:loan_application/API/models/anggota_models.dart';
 import 'package:loan_application/API/models/cif_models.dart';
 import 'package:loan_application/API/service/post_create_CIF.dart';
@@ -65,6 +65,26 @@ class InputDataController extends GetxController {
 
     final checkNikService = CheckNik();
 
+    String formatDate(String? dateString) {
+      if (dateString == null || dateString.isEmpty) {
+        return 'Tidak Ada';
+      }
+
+      try {
+        // Handle ISO format or other date formats
+        final DateTime parsedDate = dateString.contains('T')
+            ? DateTime.parse(dateString)
+            : DateFormat('yyyy-MM-dd').parse(dateString);
+
+        // Format to Indonesian format: dd-MMMM-yyyy
+        final DateFormat formatter = DateFormat('dd-MMMM-yyyy', 'id_ID');
+        return formatter.format(parsedDate);
+      } catch (e) {
+        print('Error formatting date: $e');
+        return dateString;
+      }
+    }
+
     try {
       final response = await checkNikService.fetchNIK(nikController.text);
       bool status =
@@ -81,8 +101,9 @@ class InputDataController extends GetxController {
         namaAkhirController.text = anggotaResponse.owner?.lastName ?? '';
         namaPasanganController.text = anggotaResponse.owner?.pasanganNama ?? '';
         nikpasaganController.text = anggotaResponse.owner?.pasanganIdcard ?? '';
+        // Format the date before setting it
         tanggallahirController.text =
-            anggotaResponse.owner?.dateBorn?.toString() ?? '';
+            formatDate(anggotaResponse.owner?.dateBorn?.toString());
         telpController.text = anggotaResponse.address?.phone ?? '';
         kotaAsalController.text = anggotaResponse.owner?.cityBorn ?? '';
         pekerjaanController.text =
@@ -122,7 +143,6 @@ class InputDataController extends GetxController {
       final response = await createCIFService.createCIF(
         idLegal: 3319123456,
         officeId: "000",
-        //ownwer
         enikNo: nikController.text,
         enikType: "K05",
         firstName: namaAwalController.text,
@@ -130,8 +150,6 @@ class InputDataController extends GetxController {
         cityBorn: kotaAsalController.text,
         pasanganNama: namaPasanganController.text,
         pasanganIdCart: nikpasaganController.text,
-
-        //adreess
         region: region,
         sector: sector,
         village: village,
@@ -186,7 +204,6 @@ class InputDataController extends GetxController {
     nikpasaganController.clear();
     telpController.clear();
     pekerjaanController.clear();
-
     postalCodeController.clear();
     alamatController.clear();
     nominalController.clear();
@@ -202,6 +219,7 @@ class InputDataController extends GetxController {
   }
 
   int? get cifId => cifResponse.value;
+
   bool validateForm() {
     if (nikController.text.isEmpty ||
         namaAwalController.text.isEmpty ||
