@@ -29,198 +29,201 @@ class InputData extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: TextfieldForm(
-                      width: double.infinity,
-                      height: 50,
-                      label: 'NIK',
-                      controller: controller.nikController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    children: [
-                      const SizedBox(height: 25),
-                      ElevatedButton(
-                        onPressed: controller.fetchNikData,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.casualbutton1,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: Text(
-                          'Cek',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: AppColors.pureWhite,
-                            fontFamily: 'Outfit',
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              TextfieldForm(
-                  width: double.infinity,
-                  height: 50,
-                  label: 'Nama Awal',
-                  controller: controller.namaAwalController),
-              TextfieldForm(
-                  width: double.infinity,
-                  height: 50,
-                  label: 'Nama Akhir',
-                  controller: controller.namaAkhirController),
-              TextfieldForm(
-                width: double.infinity,
-                height: 50,
-                label: 'No. Telpon',
-                controller: controller.telpController,
-                keyboardType: TextInputType.phone,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[+\d\s]')),
-                ],
-              ),
-              GenderRadioButtons(
-                gender: controller.selectedGender,
-              ),
-              GestureDetector(
-                onTap: () async {
-                  final DateTime? picked = await showDatePicker(
-                    context: context,
-                    initialDate: controller.startDate.value,
-                    firstDate: DateTime(1900),
-                    lastDate: DateTime(2100),
-                  );
-                  if (picked != null) {
-                    controller.startDate.value = picked;
-                    // Format date as dd-MMMM-yyyy (e.g., 12-Oktober-2005)
-                    controller.tanggallahirController.text =
-                        DateFormat('dd-MMMM', 'id_ID').format(picked);
-                  }
-                },
-                child: AbsorbPointer(
-                  child: TextfieldForm(
-                    width: double.infinity,
-                    height: 50,
-                    label: 'Tanggal Lahir',
-                    hintText: 'PILIH TANGGAL LAHIR',
-                    controller: controller.tanggallahirController,
-                  ),
-                ),
-              ),
-              TextfieldForm(
-                  width: double.infinity,
-                  height: 50,
-                  label: 'Kota lahir',
-                  controller: controller.kotaAsalController),
-              TextfieldForm(
-                  width: double.infinity,
-                  height: 50,
-                  label: 'Pekerjaan',
-                  controller: controller.pekerjaanController),
-              TextfieldForm(
-                  width: double.infinity,
-                  height: 50,
-                  label: 'Nama Pasangan',
-                  controller: controller.namaPasanganController),
-              TextfieldForm(
-                width: double.infinity,
-                height: 50,
-                label: 'Nik Pasangan',
-                controller: controller.nikpasaganController,
-                keyboardType: TextInputType.phone,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[+\d\s]')),
-                ],
-              ),
-              TextfieldForm(
-                  width: double.infinity,
-                  height: 50,
-                  label: 'Detail Alamat',
-                  controller: controller.detileAlamatController),
-              TextfieldForm(
-                  width: double.infinity,
-                  height: 50,
-                  label: 'Kode POS',
-                  controller: controller.postalCodeController),
-              TextfieldForm(
-                  width: double.infinity,
-                  height: 58,
-                  label: 'Alamat Lengkap',
-                  controller: controller.alamatController),
-              ElevatedButton(
-                onPressed: () => showLocationBottomSheet(context,
-                    (value) => controller.alamatController.text = value),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.casualbutton1,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: Text(
-                  'Selengkapnya',
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: AppColors.pureWhite,
-                      fontFamily: 'Outfit'),
-                ),
-              ),
+              _buildNikFieldWithButton(),
+              _buildTextFields(),
+              _buildAlamatSection(context),
               const SizedBox(height: 20),
-              Align(
-                alignment: Alignment.centerRight,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    if (controller.validateForm()) {
-                      final nikDataExists = await controller.checkNik();
-                      print(nikDataExists.toString());
-                      if (!nikDataExists) {
-                        controller.saveForm();
-                      }
-                      controller.clearForm();
-                      Get.toNamed(MyAppRoutes.dataPinjaman);
-                    } else {
-                      Get.snackbar(
-                        'Error',
-                        'Please fill all fields correctly.',
-                        backgroundColor: Colors.red,
-                        colorText: Colors.white,
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.casualbutton1,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Text(
-                    'Selanjutnya',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: AppColors.pureWhite,
-                      fontFamily: 'Outfit',
-                    ),
-                  ),
-                ),
-              ),
+              _buildSubmitButton(context),
               const SizedBox(height: 30),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildNikFieldWithButton() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(
+          child: TextfieldForm(
+            width: double.infinity,
+            height: 50,
+            label: 'NIK',
+            controller: controller.nikController,
+            keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          ),
+        ),
+        const SizedBox(width: 10),
+        Column(
+          children: [
+            const SizedBox(height: 25),
+            ElevatedButton(
+              onPressed: controller.fetchNikData,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.casualbutton1,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text(
+                'Cek',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: AppColors.pureWhite,
+                  fontFamily: 'Outfit',
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTextFields() {
+    return Column(
+      children: [
+        TextfieldForm(
+            width: double.infinity,
+            height: 50,
+            label: 'Nama Awal',
+            controller: controller.namaAwalController),
+        TextfieldForm(
+            width: double.infinity,
+            height: 50,
+            label: 'Nama Akhir',
+            controller: controller.namaAkhirController),
+        TextfieldForm(
+          width: double.infinity,
+          height: 50,
+          label: 'No. Telpon',
+          controller: controller.telpController,
+          keyboardType: TextInputType.phone,
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'[+\d\s]')),
+          ],
+        ),
+        GenderRadioButtons(gender: controller.selectedGender),
+        GestureDetector(
+          onTap: () => _selectDate(),
+          child: AbsorbPointer(
+            child: TextfieldForm(
+              width: double.infinity,
+              height: 50,
+              label: 'Tanggal Lahir',
+              hintText: 'PILIH TANGGAL LAHIR',
+              controller: controller.tanggallahirController,
+            ),
+          ),
+        ),
+        TextfieldForm(
+            width: double.infinity,
+            height: 50,
+            label: 'Kota lahir',
+            controller: controller.kotaAsalController),
+        TextfieldForm(
+            width: double.infinity,
+            height: 50,
+            label: 'Pekerjaan',
+            controller: controller.pekerjaanController),
+        TextfieldForm(
+            width: double.infinity,
+            height: 50,
+            label: 'Nama Pasangan',
+            controller: controller.namaPasanganController),
+        TextfieldForm(
+          width: double.infinity,
+          height: 50,
+          label: 'Nik Pasangan',
+          controller: controller.nikpasaganController,
+          keyboardType: TextInputType.phone,
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'[+\d\s]')),
+          ],
+        ),
+        TextfieldForm(
+            width: double.infinity,
+            height: 50,
+            label: 'Detail Alamat',
+            controller: controller.detileAlamatController),
+        TextfieldForm(
+            width: double.infinity,
+            height: 50,
+            label: 'Kode POS',
+            controller: controller.postalCodeController),
+        TextfieldForm(
+            width: double.infinity,
+            height: 58,
+            label: 'Alamat Lengkap',
+            controller: controller.alamatController),
+      ],
+    );
+  }
+
+  Widget _buildAlamatSection(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () => showLocationBottomSheet(
+        context,
+        (value) => controller.alamatController.text = value,
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.casualbutton1,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+      child: Text(
+        'Selengkapnya',
+        style: TextStyle(
+          fontSize: 16,
+          color: AppColors.pureWhite,
+          fontFamily: 'Outfit',
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSubmitButton(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: ElevatedButton(
+        onPressed: () => controller.onSubmit(context),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.casualbutton1,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        child: Text(
+          'Selanjutnya',
+          style: TextStyle(
+            fontSize: 16,
+            color: AppColors.pureWhite,
+            fontFamily: 'Outfit',
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _selectDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: Get.context!,
+      initialDate: controller.startDate.value,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+      controller.startDate.value = picked;
+      controller.tanggallahirController.text =
+          DateFormat('dd-MMMM', 'id_ID').format(picked);
+    }
   }
 }

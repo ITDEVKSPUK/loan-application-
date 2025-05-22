@@ -15,7 +15,6 @@ class LoginScreen extends StatelessWidget {
     final TextEditingController usernameController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
 
-    // Use GetX controller with lazy initialization
     final LoginControllers loginController = Get.find<LoginControllers>();
     return Container(
       decoration: BoxDecoration(
@@ -87,7 +86,7 @@ class LoginScreen extends StatelessWidget {
                           width: 350,
                         ),
                         SizedBox(height: 20),
-                        // Show error message if any
+                        // Show error message 
                         Obx(() => loginController.errorMessage.isNotEmpty
                             ? Padding(
                                 padding: EdgeInsets.only(bottom: 10),

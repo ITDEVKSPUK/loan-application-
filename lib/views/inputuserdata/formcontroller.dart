@@ -7,6 +7,7 @@ import 'package:loan_application/API/models/anggota_models.dart';
 import 'package:loan_application/API/models/cif_models.dart';
 import 'package:loan_application/API/service/post_create_CIF.dart';
 import 'package:loan_application/API/service/post_nik_check.dart';
+import 'package:loan_application/utils/routes/my_app_route.dart';
 
 class InputDataController extends GetxController {
   final nikController = TextEditingController();
@@ -236,4 +237,23 @@ class InputDataController extends GetxController {
     }
     return true;
   }
+
+  Future<void> onSubmit(BuildContext context) async {
+  if (validateForm()) {
+    final nikDataExists = await checkNik();
+    if (!nikDataExists) {
+      saveForm();
+    }
+    clearForm();
+    Get.toNamed(MyAppRoutes.dataPinjaman);
+  } else {
+    Get.snackbar(
+      'Error',
+      'Please fill all fields correctly.',
+      backgroundColor: Colors.red,
+      colorText: Colors.white,
+    );
+  }
+}
+
 }
