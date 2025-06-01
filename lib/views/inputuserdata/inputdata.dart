@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
+import 'package:loan_application/views/History/controller_location.dart';
 import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 import 'package:loan_application/views/inputuserdata/overlayalamat.dart';
 import 'package:loan_application/widgets/InputUserData/gender_radio.dart';
@@ -12,6 +13,7 @@ import 'package:loan_application/widgets/custom_appbar.dart';
 
 class InputData extends StatelessWidget {
   final controller = Get.put(InputDataController());
+  final locationController = Get.put(LocationController());
 
   InputData({super.key});
 
@@ -158,8 +160,10 @@ class InputData extends StatelessWidget {
                   label: 'Alamat Lengkap',
                   controller: controller.alamatController),
               ElevatedButton(
-                onPressed: () => showLocationBottomSheet(context,
-                    (value) => controller.alamatController.text = value),
+                onPressed: () => showLocationBottomSheet(
+                    context,
+                    (value) => controller.alamatController.text = value,
+                    locationController),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.casualbutton1,
                   padding:
