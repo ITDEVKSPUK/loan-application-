@@ -3,7 +3,7 @@
     <application
         android:label="loan_apllication"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/logo_ksp">
         <!-- <uses-permission android:name="android.permission.CAMERA"/>```                                                                                                                                                                                                      
         <provider
             android:name="androidx.core.content.FileProvider"

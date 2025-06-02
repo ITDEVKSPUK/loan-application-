@@ -19,12 +19,6 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
   final controller = Get.put(CreditFormController());
 
   @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
