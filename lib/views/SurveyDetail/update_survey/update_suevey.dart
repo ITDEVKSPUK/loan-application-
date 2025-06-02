@@ -70,9 +70,9 @@ class _UpdateSurveyState extends State<UpdateSurvey> {
                       Align(
                         alignment: Alignment.centerRight,
                         child: ElevatedButton(
-                          onPressed: () => Get.toNamed(
-                            MyAppRoutes.formAgunan,
-                          ),
+                          onPressed: controller.isLoading.value
+                              ? null
+                              : () => controller.saveAndNext(),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.casualbutton1,
                             padding: const EdgeInsets.symmetric(
@@ -81,13 +81,20 @@ class _UpdateSurveyState extends State<UpdateSurvey> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          child: Text(
-                            'Selanjutnya',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: AppColors.pureWhite,
-                              fontFamily: 'Outfit',
-                            ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'Selanjutnya',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: AppColors.pureWhite,
+                                    fontFamily: 'Outfit'),
+                              ),
+                              const SizedBox(width: 8),
+                              const Icon(Icons.arrow_forward_outlined,
+                                  color: Colors.white),
+                            ],
                           ),
                         ),
                       ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/inputuserdata/formcontroller.dart';
@@ -56,13 +55,20 @@ class InputData extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        child: Text(
-                          'Cek',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: AppColors.pureWhite,
-                            fontFamily: 'Outfit',
-                          ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'CEK',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: AppColors.pureWhite,
+                                  fontFamily: 'Outfit'),
+                            ),
+                            const SizedBox(width: 5),
+                            const Icon(Icons.auto_awesome_sharp,
+                                color: Colors.white),
+                          ],
                         ),
                       ),
                     ],
@@ -93,20 +99,8 @@ class InputData extends StatelessWidget {
                 gender: controller.selectedGender,
               ),
               GestureDetector(
-                onTap: () async {
-                  final DateTime? picked = await showDatePicker(
-                    context: context,
-                    initialDate: controller.startDate.value,
-                    firstDate: DateTime(1900),
-                    lastDate: DateTime(2100),
-                  );
-                  if (picked != null) {
-                    controller.startDate.value = picked;
-                    // Format date as dd-MMMM-yyyy (e.g., 12-Oktober-2005)
-                    controller.tanggallahirController.text =
-                        DateFormat('dd-MMMM', 'id_ID').format(picked);
-                  }
-                },
+                onTap: () =>
+                    controller.pickDate(context), // Moved to controller
                 child: AbsorbPointer(
                   child: TextfieldForm(
                     width: double.infinity,
@@ -114,6 +108,7 @@ class InputData extends StatelessWidget {
                     label: 'Tanggal Lahir',
                     hintText: 'PILIH TANGGAL LAHIR',
                     controller: controller.tanggallahirController,
+                    readOnly: true,
                   ),
                 ),
               ),
@@ -143,20 +138,27 @@ class InputData extends StatelessWidget {
                 ],
               ),
               TextfieldForm(
-                  width: double.infinity,
-                  height: 50,
-                  label: 'Detail Alamat',
-                  controller: controller.detileAlamatController),
+                width: double.infinity,
+                height: 50,
+                label: 'Detail Alamat',
+                controller: controller.detileAlamatController,
+                hintText: 'Nama Jalan, Gedung, No. Rumah / Detail Lainnya',
+              ),
               TextfieldForm(
                   width: double.infinity,
                   height: 50,
                   label: 'Kode POS',
                   controller: controller.postalCodeController),
               TextfieldForm(
-                  width: double.infinity,
-                  height: 58,
-                  label: 'Alamat Lengkap',
-                  controller: controller.alamatController),
+                width: double.infinity,
+                height: 58,
+                label: 'Alamat',
+                controller: controller.alamatController,
+                readOnly: true,
+                hintText: controller.alamatController.text.isEmpty
+                    ? 'Provinsi, Kota, Kecamatan, Desa'
+                    : '',
+              ),
               ElevatedButton(
                 onPressed: () => showLocationBottomSheet(context,
                     (value) => controller.alamatController.text = value),
@@ -168,36 +170,27 @@ class InputData extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: Text(
-                  'Selengkapnya',
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: AppColors.pureWhite,
-                      fontFamily: 'Outfit'),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.location_on, color: Colors.white),
+                    const SizedBox(width: 5),
+                    Text(
+                      'Selengkapnya',
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: AppColors.pureWhite,
+                          fontFamily: 'Outfit'),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 20),
               Align(
                 alignment: Alignment.centerRight,
                 child: ElevatedButton(
-                  onPressed: () async {
-                    if (controller.validateForm()) {
-                      final nikDataExists = await controller.checkNik();
-                      print(nikDataExists.toString());
-                      if (!nikDataExists) {
-                        controller.saveForm();
-                      }
-                      controller.clearForm();
-                      Get.toNamed(MyAppRoutes.dataPinjaman);
-                    } else {
-                      Get.snackbar(
-                        'Error',
-                        'Please fill all fields correctly.',
-                        backgroundColor: Colors.red,
-                        colorText: Colors.white,
-                      );
-                    }
-                  },
+                  onPressed: () =>
+                      controller.handleNextButton(), // Moved to controller
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.casualbutton1,
                     padding: const EdgeInsets.symmetric(
@@ -206,13 +199,20 @@ class InputData extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: Text(
-                    'Selanjutnya',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: AppColors.pureWhite,
-                      fontFamily: 'Outfit',
-                    ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Selanjutnya',
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: AppColors.pureWhite,
+                            fontFamily: 'Outfit'),
+                      ),
+                      const SizedBox(width: 8),
+                      const Icon(Icons.arrow_forward_outlined,
+                          color: Colors.white),
+                    ],
                   ),
                 ),
               ),

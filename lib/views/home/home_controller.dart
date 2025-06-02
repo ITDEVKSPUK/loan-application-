@@ -69,11 +69,11 @@ class HomeController extends GetxController {
 
   Color getStatusColor(String status) {
     switch (status.toUpperCase()) {
-      case 'DISETUJUI':
+      case 'APPROVED':
         return AppColors.greenstatus;
       case 'DITOLAK':
         return AppColors.redstatus;
-      case 'PROCES':
+      case 'PROGRESS':
         return AppColors.orangestatus;
       default:
         return Colors.grey;

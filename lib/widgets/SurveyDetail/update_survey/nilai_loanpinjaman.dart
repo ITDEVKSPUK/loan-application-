@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_multi_formatter/formatters/money_input_enums.dart';
+import 'package:flutter_multi_formatter/formatters/money_input_formatter.dart';
 import 'package:get/get.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/views/SurveyDetail/inqury_survey_controller.dart';
@@ -12,13 +14,13 @@ class LoanAngkaPinjaman_Update extends StatelessWidget {
     return Column(
       children: [
         FieldEditable(
-          label: 'Nilai Jaminan',
-          controller: controller.valueController,
+          label: 'Nominal Pinjaman',
+          controller: controller.plafondController,
           keyboardType: TextInputType.number,
         ),
         FieldEditable(
-          label: 'Nominal Pinjaman',
-          controller: controller.plafondController,
+          label: 'Taksiran Nilai Jaminan',
+          controller: controller.valueController,
           keyboardType: TextInputType.number,
         ),
         FieldEditable(

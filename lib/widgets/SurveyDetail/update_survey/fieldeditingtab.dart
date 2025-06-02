@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_multi_formatter/formatters/money_input_enums.dart';
+import 'package:flutter_multi_formatter/formatters/money_input_formatter.dart';
 import 'package:loan_application/core/theme/color.dart';
 
 class FieldEditable extends StatelessWidget {
@@ -41,7 +44,16 @@ class FieldEditable extends StatelessWidget {
               ),
               child: TextField(
                 controller: controller,
-                keyboardType: keyboardType,
+                keyboardType: keyboardType ?? TextInputType.text,
+                inputFormatters: keyboardType == TextInputType.number
+                    ? [
+                        FilteringTextInputFormatter.digitsOnly,
+                        MoneyInputFormatter(
+                          thousandSeparator: ThousandSeparator.Period,
+                          mantissaLength: 0,
+                        ),
+                      ]
+                    : [],
                 textAlignVertical: TextAlignVertical.center,
                 decoration: InputDecoration(
                   border: InputBorder.none,

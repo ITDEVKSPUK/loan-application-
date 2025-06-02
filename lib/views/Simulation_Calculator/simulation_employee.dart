@@ -4,9 +4,9 @@ import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/views/Simulation_Calculator/loan_summary.dart';
 import 'package:loan_application/views/Simulation_Calculator/simulation_controller.dart';
 import 'package:loan_application/widgets/app_button.dart';
-import 'package:loan_application/widgets/loan_input_form.dart';
-import 'package:loan_application/widgets/loan_start_date_picker.dart';
-import 'package:loan_application/widgets/loan_type_dropdown.dart';
+import 'package:loan_application/widgets/simulation%20calculator/loan_input_form.dart';
+import 'package:loan_application/widgets/simulation%20calculator/loan_start_date_picker.dart';
+import 'package:loan_application/widgets/simulation%20calculator/loan_type_dropdown.dart';
 
 class Simulation_Employe extends StatelessWidget {
   const Simulation_Employe({super.key});

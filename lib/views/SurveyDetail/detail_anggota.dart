@@ -80,6 +80,13 @@ class _DatailAnggotaState extends State<DatailAnggota> {
                       value: iqyAnggotaController.sector_city.value,
                       keyboardType: TextInputType.text,
                     ),
+                    FieldReadonly(
+                      label: 'Detail Alamat',
+                      width: double.infinity,
+                      height: 58,
+                      value: iqyAnggotaController.sector_city.value,
+                      keyboardType: TextInputType.text,
+                    ),
                     //sudah
                     FieldReadonly(
                       label: 'Kota Lahir',
@@ -140,17 +147,23 @@ class _DatailAnggotaState extends State<DatailAnggota> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: Text(
-                  'Selanjutnya',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: AppColors.pureWhite,
-                    fontFamily: 'Outfit',
-                  ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Selanjutnya',
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: AppColors.pureWhite,
+                          fontFamily: 'Outfit'),
+                    ),
+                    const SizedBox(width: 8),
+                    const Icon(Icons.arrow_forward_outlined,
+                        color: Colors.white),
+                  ],
                 ),
               ),
             ),
-            const SizedBox(height: 30),
           ],
         ),
       ),

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:loan_application/API/models/put_models_update.dart';
 import 'package:loan_application/API/service/post_inqury_survey.dart';
 import 'package:loan_application/API/service/put_update_survey.dart';
+import 'package:loan_application/utils/routes/my_app_route.dart';
 
 class SurveyController extends GetxController {
   // Controllers for UpdateSurvey
@@ -37,29 +38,6 @@ class SurveyController extends GetxController {
   final PostInqury postInqury = PostInqury();
 
   SurveyController({required this.putUpdateSurvey});
-
-  @override
-  void onClose() {
-    // Dispose controllers to prevent memory leaks
-    purposeController.dispose();
-    plafondController.dispose();
-    incomeController.dispose();
-    assetController.dispose();
-    expenseController.dispose();
-    installmentController.dispose();
-    valueController.dispose();
-    cifIdController.dispose();
-    idLegalController.dispose();
-    officeIdController.dispose();
-    applicationNoController.dispose();
-    trxDateController.dispose();
-    trxSurveyController.dispose();
-    collateralIdController.dispose();
-    collateralNameController.dispose();
-    collateralAddDescController.dispose();
-    collateralCatDocController.dispose();
-    super.onClose();
-  }
 
   /// Format angka ke format Rupiah untuk tampilan (contoh: 1000000 -> 1.000.000)
   String formatRupiah(String numberString) {
@@ -186,7 +164,7 @@ class SurveyController extends GetxController {
     }
   }
 
-  /// Save survey data and refresh DetailSurvey
+  /// Save survey data and navigate back to DetailSurvey
   Future<void> saveSurvey() async {
     try {
       isLoading.value = true;
@@ -273,6 +251,128 @@ class SurveyController extends GetxController {
       // Navigate back to DetailSurvey and refresh data
       Get.back();
       await getSurveyList(trxSurvey: surveyId);
+    } on DioException catch (e) {
+      String errorMessage = 'Failed to update survey';
+      if (e.response != null) {
+        errorMessage +=
+            ': ${e.response?.statusCode} - ${e.response?.data?['message'] ?? 'Unknown error'}';
+        print('Dio error details:');
+        print('Status code: ${e.response?.statusCode}');
+        print('Response data: ${e.response?.data}');
+        print('Request URL: ${e.requestOptions.uri}');
+        print('Request headers: ${e.requestOptions.headers}');
+        print('Request data: ${e.requestOptions.data}');
+      } else {
+        errorMessage += ': ${e.message}';
+      }
+      print('Dio error: $errorMessage');
+      Get.snackbar(
+        'Error',
+        errorMessage,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } catch (e) {
+      print('Unexpected error: $e');
+      Get.snackbar(
+        'Error',
+        'Gagal memperbarui survey: $e',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /// Save survey data and navigate to Form Agunan
+  Future<void> saveAndNext() async {
+    try {
+      isLoading.value = true;
+      print('Attempting to save survey with surveyId: $surveyId');
+      if (surveyId.isEmpty || surveyId == 'null') {
+        throw Exception('Invalid or missing surveyId');
+      }
+      if (purposeController.text.isEmpty) {
+        throw Exception('Tujuan Pinjaman wajib diisi');
+      }
+      if (collateralNameController.text.isEmpty) {
+        throw Exception('Category Agunan wajib diisi');
+      }
+
+      // Parse and validate numeric fields
+      final plafond =
+          double.tryParse(unformatRupiah(plafondController.text)) ?? 0.0;
+      final value =
+          double.tryParse(unformatRupiah(valueController.text)) ?? 0.0;
+      final income =
+          double.tryParse(unformatRupiah(incomeController.text)) ?? 0.0;
+      final asset =
+          double.tryParse(unformatRupiah(assetController.text)) ?? 0.0;
+      final expenses =
+          double.tryParse(unformatRupiah(expenseController.text)) ?? 0.0;
+      final installment =
+          double.tryParse(unformatRupiah(installmentController.text)) ?? 0.0;
+
+      if (plafond <= 0) {
+        throw Exception('Plafond harus lebih besar dari 0');
+      }
+      if (value <= 0) {
+        throw Exception('Nilai agunan harus lebih besar dari 0');
+      }
+
+      final putModelsUpdate = PutModelsUpdate(
+        cifId: int.tryParse(cifIdController.text) ?? 0,
+        idLegal: int.tryParse(idLegalController.text) ?? 0,
+        officeId: officeIdController.text,
+        application: Application(
+          trxDate: trxDateController.text,
+          trxSurvey: trxSurveyController.text,
+          applicationNo: applicationNoController.text,
+          purpose: purposeController.text,
+          plafond: formatForApi(plafond.toString()),
+        ),
+        collateral: Collateral(
+          id: collateralIdController.text,
+          idName: collateralNameController.text,
+          addDescript: collateralAddDescController.text,
+          idCatDocument: int.tryParse(collateralCatDocController.text) ?? 0,
+          value: formatForApi(value.toString()),
+        ),
+        additionalInfo: AdditionalInfo(
+          income: formatForApi(income.toString()),
+          asset: formatForApi(asset.toString()),
+          expenses: formatForApi(expenses.toString()),
+          installment: formatForApi(installment.toString()),
+        ),
+      );
+
+      print('Data to be sent: ${jsonEncode(putModelsUpdate.toJson())}');
+      print('Collateral id_name being sent: ${collateralNameController.text}');
+
+      final response = await putUpdateSurvey.putUpdateSurvey(
+        surveyId: surveyId,
+        surveyData: putModelsUpdate.toJson(),
+      );
+
+      print('API response: $response');
+
+      // Update observables for DetailSurvey
+      purpose.value = purposeController.text;
+      adddescript.value = collateralAddDescController.text;
+
+      Get.snackbar(
+        'Sukses',
+        'Data survey berhasil diperbarui',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+
+      // Navigate to Form Agunan
+      Get.toNamed(MyAppRoutes.formAgunan);
     } on DioException catch (e) {
       String errorMessage = 'Failed to update survey';
       if (e.response != null) {

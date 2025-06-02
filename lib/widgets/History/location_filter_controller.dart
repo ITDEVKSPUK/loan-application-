@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:loan_application/API/service/get_location.dart';
 import 'package:loan_application/core/theme/color.dart';
 
-class LocationController extends GetxController {
+class Location_filterController extends GetxController {
   var provinces = <Map<String, dynamic>>[].obs; // Explicit type
   var regencies = <Map<String, dynamic>>[].obs; // Explicit type
   var districts = <Map<String, dynamic>>[].obs; // Explicit type

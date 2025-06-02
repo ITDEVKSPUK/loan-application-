@@ -7,6 +7,7 @@ import 'package:loan_application/API/models/anggota_models.dart';
 import 'package:loan_application/API/models/cif_models.dart';
 import 'package:loan_application/API/service/post_create_CIF.dart';
 import 'package:loan_application/API/service/post_nik_check.dart';
+import 'package:loan_application/utils/routes/my_app_route.dart';
 
 class InputDataController extends GetxController {
   final nikController = TextEditingController();
@@ -235,5 +236,38 @@ class InputDataController extends GetxController {
       return false;
     }
     return true;
+  }
+
+  Future<void> pickDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: startDate.value,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+      startDate.value = picked;
+      // Format date as dd-MMMM-yyyy (e.g., 12-Oktober-2005)
+      tanggallahirController.text = DateFormat('dd-MMMM', 'id_ID').format(picked);
+    }
+  }
+
+  Future<void> handleNextButton() async {
+    if (validateForm()) {
+      final nikDataExists = await checkNik();
+      print(nikDataExists.toString());
+      if (!nikDataExists) {
+        await saveForm();
+      }
+      clearForm();
+      Get.toNamed(MyAppRoutes.dataPinjaman);
+    } else {
+      Get.snackbar(
+        'Error',
+        'Please fill all fields correctly.',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
   }
 }

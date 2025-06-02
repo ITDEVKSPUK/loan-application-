@@ -11,6 +11,7 @@ class TextfieldForm extends StatefulWidget {
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final VoidCallback? onTap;
+  final bool readOnly; // Added readOnly parameter
 
   const TextfieldForm({
     super.key,
@@ -22,6 +23,7 @@ class TextfieldForm extends StatefulWidget {
     this.keyboardType,
     this.inputFormatters,
     this.onTap,
+    this.readOnly = false, // Default to false
   });
 
   @override
@@ -57,9 +59,10 @@ class _TextfieldFormState extends State<TextfieldForm> {
               controller: widget.controller,
               keyboardType: widget.keyboardType,
               inputFormatters: widget.inputFormatters ?? [],
-              readOnly: widget.onTap != null,
+              readOnly: widget.readOnly ||
+                  widget.onTap != null, // Respect readOnly or onTap
               onTap: widget.onTap,
-              textAlignVertical: TextAlignVertical.center, // Tambahkan ini
+              textAlignVertical: TextAlignVertical.center,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: widget.hintText,
