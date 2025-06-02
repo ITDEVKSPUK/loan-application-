@@ -1,20 +1,21 @@
 import 'package:dio/dio.dart';
+import 'package:get/get.dart';
 import 'package:loan_application/API/dio/dio_client.dart';
+import 'package:loan_application/utils/signature_utils.dart';
 
 class getlocation {
+  static final signatureController = Get.find<SignatureController>();
   static final Dio _dio = DioClient.dio;
-  static const baseUrl = '/sandbox.ics/v1.0/List';
-
-  static final headers = {
-    'ICS-Wipala': 'sastra.astana.dwipangga',
-    'ICS-Timestamp':
-        '${DateTime.now().toUtc().toIso8601String().split('.').first}Z',
-  };
+  static const path = '/sandbox.ics/v1.0/List';
 
   static Future<List<dynamic>> fetchProvinces() async {
     try {
+      final headers = signatureController.generateHeaders(
+        path: '$path/province',
+        verb: "GET",
+      );
       final response = await _dio.get(
-        '$baseUrl/province',
+        '$path/province',
         options: Options(headers: headers),
       );
       if (response.statusCode == 200) {
@@ -30,8 +31,12 @@ class getlocation {
 
   static Future<List<dynamic>> fetchRegencies(String provinceId) async {
     try {
+      final headers = signatureController.generateHeaders(
+        path: '$path/Region/$provinceId',
+        verb: "GET",
+      );
       final response = await _dio.get(
-        '$baseUrl/Region/$provinceId',
+        '$path/Region/$provinceId',
         options: Options(headers: headers),
       );
       if (response.statusCode == 200) {
@@ -47,8 +52,12 @@ class getlocation {
 
   static Future<List<dynamic>> fetchDistricts(String regencyId) async {
     try {
+      final headers = signatureController.generateHeaders(
+        path: '$path/Sector/$regencyId',
+        verb: "GET",
+      );
       final response = await _dio.get(
-        '$baseUrl/Sector/$regencyId',
+        '$path/Sector/$regencyId',
         options: Options(headers: headers),
       );
       if (response.statusCode == 200) {
@@ -64,8 +73,12 @@ class getlocation {
 
   static Future<List<dynamic>> fetchVillages(String districtId) async {
     try {
+      final headers = signatureController.generateHeaders(
+        path: '$path/Village/$districtId',
+        verb: "GET",
+      );
       final response = await _dio.get(
-        '$baseUrl/Village/$districtId',
+        '$path/Village/$districtId',
         options: Options(headers: headers),
       );
       if (response.statusCode == 200) {

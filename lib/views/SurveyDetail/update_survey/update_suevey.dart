@@ -70,9 +70,12 @@ class _UpdateSurveyState extends State<UpdateSurvey> {
                       Align(
                         alignment: Alignment.centerRight,
                         child: ElevatedButton(
-                          onPressed: controller.isLoading.value
-                              ? null
-                              : () => controller.saveAndNext(),
+                          onPressed: () {
+                            controller.saveSurvey();
+                            Get.toNamed(
+                              MyAppRoutes.formAgunan,
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.casualbutton1,
                             padding: const EdgeInsets.symmetric(

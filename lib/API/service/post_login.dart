@@ -2,11 +2,14 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart';
+import 'package:get/get.dart' hide Response;
 import 'package:get_storage/get_storage.dart';
 import 'package:loan_application/API/dio/dio_client.dart';
 import 'package:loan_application/API/models/login_models.dart';
+import 'package:loan_application/utils/signature_utils.dart';
 
 class LoginService {
+  static final signatureController = Get.find<SignatureController>();
   final GetStorage storage = GetStorage();
   final Dio _dio = DioClient.dio;
 
@@ -41,7 +44,7 @@ class LoginService {
         storage.write('login_model', loginModel.toJson());
         storage.write('session_id', loginModel.sessionId);
         storage.write('encryptedUsername', _encrypt(username));
-        storage.write('UserName', loginModel.userName); 
+        storage.write('UserName', loginModel.userName);
         print('Login Success: ${data['UserName']}');
         final uri = Uri.parse('http://36.92.75.178:8001');
         final cookies = await DioClient.cookieJar.loadForRequest(uri);
@@ -60,25 +63,23 @@ class LoginService {
   }
 
   Future<bool> checkSession() async {
-    final timestamp =
-        '${DateTime.now().toUtc().toIso8601String().split('.').first}Z';
     try {
-      final headers = {
-        "ICS-Wipala": "sastra.astana.dwipangga",
-        "ICS-Timestamp": timestamp,
-        "Content-Type": "application/json"
-      };
-      final response = await DioClient.dio.get(
-          '/sandbox.ics/v1.0/List/province',
-          options: Options(headers: headers));
+      final String path = "/sandbox.ics/v1.0/List/province";
+      final headers = signatureController.generateHeaders(
+        path: path,
+        verb: "GET",
+      );
+      final response =
+          await DioClient.dio.get(path, options: Options(headers: headers));
 
       if (response.statusCode == 200) {
-        print('[DIO] ICS-Timestamp added: $timestamp');
         return true;
       } else {
+        await DioClient.cookieJar.deleteAll();
         return false;
       }
     } catch (e) {
+      await DioClient.cookieJar.deleteAll();
       print('Session check error: $e');
       return false;
     }

@@ -6,14 +6,14 @@ import 'package:loan_application/widgets/History/dropdown.dart';
 import 'package:loan_application/widgets/custom_text.dart';
 
 void showLocationBottomSheet(
-    BuildContext context, Function(String) onLocationSelected) {
+    BuildContext context, Function(String) onLocationSelected , LocationController locationController) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (context) => StatefulBuilder(
       builder: (context, setState) {
-        final locationController = Get.put(LocationController());
+        
 
         return DraggableScrollableSheet(
           initialChildSize: 0.6,

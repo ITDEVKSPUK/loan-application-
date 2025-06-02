@@ -1,8 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:get/get.dart' hide Response;
 import 'package:get_storage/get_storage.dart';
 import 'package:loan_application/API/dio/dio_client.dart';
+import 'package:loan_application/utils/signature_utils.dart';
 
 class CreateCIFService {
+  static final signatureController = Get.find<SignatureController>();
   final dio = DioClient.dio;
   final storage = GetStorage();
   final String path = "/sandbox.ics/v1.0/survei/create-cif";
@@ -29,11 +32,10 @@ class CreateCIFService {
   }) async {
     try {
       // Generate headers
-      final headers = {
-        'ICS-Wipala': 'sastra.astana.dwipangga',
-        'ICS-Timestamp': DateTime.now().toUtc().toIso8601String(),
-        'ICS-Signature': 'sandbox.rus2025',
-      };
+      final headers = signatureController.generateHeaders(
+        path: path,
+        verb: "POST",
+      );
 
       // Construct the request body dynamically
       final requestBody = {

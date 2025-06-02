@@ -1,25 +1,22 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:get/get.dart' hide Response;
 import 'package:get/get.dart';
 import 'package:loan_application/API/dio/dio_client.dart';
-import 'package:loan_application/API/models/history_models.dart';
 import 'package:loan_application/API/models/inqury_survey_models.dart';
+import 'package:loan_application/utils/signature_utils.dart';
 
 class PostInqury {
+  static final signatureController = Get.find<SignatureController>();
   final dio = DioClient.dio;
+  final String path = "/sandbox.ics/v1.0/v1/survey/inquiry";
   Future<InquirySurveyModel> fetchInqury({
     required String officeId,
     required String trxSurvey,
   }) async {
-    final timestamp =
-        '${DateTime.now().toUtc().toIso8601String().split('.').first}Z';
-
-    final headers = {
-      'ICS-Wipala': 'sastra.astana.dwipangga',
-      'ICS-Timestamp': timestamp,
-      'ICS-Signature': 'sandbox.rus2025',
-      'Content-Type': 'application/json',
-    };
+    final headers = signatureController.generateHeaders(
+      path: path,
+      verb: "POST",
+    );
 
     final body = {
       'Office_ID': officeId,
@@ -28,7 +25,7 @@ class PostInqury {
 
     try {
       final response = await dio.post(
-        '/sandbox.ics/v1.0/v1/survey/inquiry',
+        path,
         data: body,
         options: Options(headers: headers),
       );

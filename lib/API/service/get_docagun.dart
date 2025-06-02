@@ -1,19 +1,21 @@
 import 'package:dio/dio.dart';
+import 'package:get/get.dart';
 import 'package:loan_application/API/dio/dio_client.dart';
+import 'package:loan_application/utils/signature_utils.dart';
 
 class getDocAgun {
+  static final signatureController = Get.find<SignatureController>();
   static final Dio _dio = DioClient.dio;
-  static const baseUrl = '/sandbox.ics/v1.0/reff';
+  static const path = '/sandbox.ics/v1.0/reff';
 
-  static final headers = {
-    'ICS-Wipala': 'sastra.astana.dwipangga',
-    'ICS-Timestamp':
-        '${DateTime.now().toUtc().toIso8601String().split('.').first}+00:00',
-  };
   static Future<List<dynamic>> fetchAgunan() async {
     try {
+      final headers = signatureController.generateHeaders(
+        path: '$path/ref_catagunan',
+        verb: "GET",
+      );
       final response = await _dio.get(
-        '$baseUrl/ref_catagunan',
+        '$path/ref_catagunan',
         options: Options(headers: headers),
       );
       if (response.statusCode == 200) {
@@ -29,8 +31,12 @@ class getDocAgun {
 
   static Future<List<dynamic>> fetchDocuments() async {
     try {
+      final headers = signatureController.generateHeaders(
+        path: '$path/ref_catdocumen',
+        verb: "GET",
+      );
       final response = await _dio.get(
-        '$baseUrl/ref_catdocumen',
+        '$path/ref_catdocumen',
         options: Options(headers: headers),
       );
       if (response.statusCode == 200) {

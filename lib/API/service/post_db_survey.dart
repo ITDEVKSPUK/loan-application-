@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:get/get.dart' hide Response;
 import 'package:loan_application/API/dio/dio_client.dart';
+import 'package:loan_application/utils/signature_utils.dart';
 
 class PostSurveyService {
+  static final signatureController = Get.find<SignatureController>();
   final dio = DioClient.dio;
   final String path = "/sandbox.ics/v1.0/survey/debitur/maker";
 
@@ -13,12 +16,10 @@ class PostSurveyService {
     required Map<String, dynamic> collateral,
     required Map<String, dynamic> additionalInfo,
   }) async {
-    final headers = {
-      'ICS-Wipala': 'sastra.astana.dwipangga',
-      'ICS-Timestamp':
-          '${DateTime.now().toUtc().toIso8601String().split('.').first}+00:00',
-      'ICS-Signature': 'sandbox.rus2025',
-    };
+    final headers = signatureController.generateHeaders(
+      path: path,
+      verb: "POST",
+    );
 
     final body = {
       "cif_id": cifId,
