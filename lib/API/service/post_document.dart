@@ -22,7 +22,7 @@ class DocumentService {
       final ktpLength = await docImageKTP.length();
       final agunanLength = await docImageAgunan.length();
       final dokumenLength = await docImageDokumen.length();
-      final encodedRequestBody = Uri.encodeComponent(jsonEncode(requestBody));
+      final encodedRequestBody = jsonEncode(requestBody);
 
       formData.fields.add(MapEntry(
         "requestbody",
@@ -60,7 +60,8 @@ class DocumentService {
         ),
       ));
 
-      final path =
+      final path = "/sandbox.ics/v1.0/v1/survei/doc-upload";
+      final fullPath =
           "/sandbox.ics/v1.0/v1/survei/doc-upload?requestbody=$encodedRequestBody";
       print("✅ doc-008 (KTP): $ktpLength bytes");
       print("✅ doc-027 (Agunan): $agunanLength bytes");
@@ -75,7 +76,7 @@ class DocumentService {
       );
       // Kirim request POST
       final response = await dio.post(
-        path,
+        fullPath,
         data: formData,
         options: Options(headers: headers),
       );
