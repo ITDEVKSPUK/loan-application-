@@ -225,7 +225,7 @@ class InputData extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () => controller.handleNextButton(),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.casualbutton1,
+                    backgroundColor: AppColors.selanjutnyabutton,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24, vertical: 12),
                     shape: RoundedRectangleBorder(

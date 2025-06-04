@@ -5,15 +5,15 @@ import 'package:loan_application/views/History/controller_location.dart';
 import 'package:loan_application/widgets/custom_text.dart';
 
 void showLocationBottomSheet(
-    BuildContext context, Function(String) onLocationSelected) {
+    BuildContext context,
+    Function(String) onLocationSelected,
+    LocationController locationController) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (context) => StatefulBuilder(
       builder: (context, setState) {
-        final locationController = Get.put(LocationController());
-
         return DraggableScrollableSheet(
           initialChildSize: 0.6,
           minChildSize: 0.3,
@@ -143,8 +143,8 @@ void showLocationBottomSheet(
                                     );
                                   }).toList(),
                                   onChanged: (value) {
-                                    locationController
-                                        .selectedVillageId.value = value!;
+                                    locationController.selectedVillageId.value =
+                                        value!;
                                   },
                                 ),
                               ],
@@ -208,4 +208,4 @@ void showLocationBottomSheet(
       },
     ),
   );
-}   
+}

@@ -33,7 +33,8 @@ class _DetailDocumentState extends State<DetailDocument> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(
+      child: Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         title: 'Detail Dokumen',
@@ -245,6 +246,7 @@ class _DetailDocumentState extends State<DetailDocument> {
           ),
         );
       }),
+      )
     );
   }
 }
