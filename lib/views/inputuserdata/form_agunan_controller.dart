@@ -253,9 +253,6 @@ class CreditFormController extends GetxController {
 
   Future<void> uploadDocuments() async {
     try {
-      final timestamp =
-          '${DateTime.now().toUtc().toIso8601String().split('.').first}Z';
-
       final requestBody = {
         "Office_ID": "000",
         "cif_id": cifID.cifId,
@@ -278,7 +275,6 @@ class CreditFormController extends GetxController {
         docImageAgunan: selectedAgunanImages[0],
         docImageDokumen: selectedDocumentImages[0],
         requestBody: requestBody,
-        timestamp: timestamp,
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {

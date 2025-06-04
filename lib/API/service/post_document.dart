@@ -16,17 +16,17 @@ class DocumentService {
     required File docImageAgunan,
     required File docImageDokumen,
     required Map<String, dynamic> requestBody,
-    required String timestamp,
   }) async {
     try {
       final formData = FormData();
       final ktpLength = await docImageKTP.length();
       final agunanLength = await docImageAgunan.length();
       final dokumenLength = await docImageDokumen.length();
+      final encodedRequestBody = Uri.encodeComponent(jsonEncode(requestBody));
 
       formData.fields.add(MapEntry(
         "requestbody",
-        jsonEncode(requestBody),
+        encodedRequestBody,
       ));
       // Tambah file KTP
       formData.files.add(MapEntry(
@@ -60,8 +60,6 @@ class DocumentService {
         ),
       ));
 
-      // Encode requestbody ke query string
-      final encodedRequestBody = Uri.encodeComponent(jsonEncode(requestBody));
       final path =
           "/sandbox.ics/v1.0/v1/survei/doc-upload?requestbody=$encodedRequestBody";
       print("✅ doc-008 (KTP): $ktpLength bytes");
