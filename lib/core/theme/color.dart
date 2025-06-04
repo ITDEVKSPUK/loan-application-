@@ -34,6 +34,7 @@ class AppColors {
   static const Color navbar2 = Color(0xFF00274F);
   //ultities
   static const Color casualbutton1 = Color(0xFF5A89FF);
+  static const Color selanjutnyabutton = Color.fromARGB(255, 56, 121, 195);
 
   static var primary;
 }

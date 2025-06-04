@@ -34,7 +34,8 @@ class _DatailAnggotaState extends State<DatailAnggota> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(
+      child: Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         title: 'Debitur Detail',
@@ -140,7 +141,7 @@ class _DatailAnggotaState extends State<DatailAnggota> {
                   Get.toNamed(MyAppRoutes.detailsurvey, arguments: trxSurvey);
                 }, // Pass the trx_survey value
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.casualbutton1,
+                  backgroundColor: AppColors.selanjutnyabutton,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   shape: RoundedRectangleBorder(
@@ -167,6 +168,7 @@ class _DatailAnggotaState extends State<DatailAnggota> {
           ],
         ),
       ),
+      )
     );
   }
 }

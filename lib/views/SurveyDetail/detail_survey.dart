@@ -35,8 +35,8 @@ class _DetailSurveyState extends State<DetailSurvey> {
   @override
   Widget build(BuildContext context) {
     final SurveyController controller = Get.find<SurveyController>();
-
-    return Scaffold(
+    return SafeArea(
+      child: Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         title: 'Debitur Detail Documen',
@@ -107,7 +107,7 @@ class _DetailSurveyState extends State<DetailSurvey> {
                         arguments: Get.arguments,
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.casualbutton1,
+                        backgroundColor: AppColors.selanjutnyabutton,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 24, vertical: 12),
                         shape: RoundedRectangleBorder(
@@ -143,6 +143,7 @@ class _DetailSurveyState extends State<DetailSurvey> {
           ],
         ),
       ),
+      )
     );
   }
 }
