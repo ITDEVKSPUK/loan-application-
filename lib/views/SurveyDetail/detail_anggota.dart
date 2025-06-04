@@ -74,7 +74,7 @@ class _DatailAnggotaState extends State<DatailAnggota> {
                     ),
                     //sudah
                     FieldReadonly(
-                      label: 'Alamat Lengkap',
+                      label: 'Alamat',
                       width: double.infinity,
                       height: 58,
                       value: iqyAnggotaController.sector_city.value,
@@ -84,7 +84,7 @@ class _DatailAnggotaState extends State<DatailAnggota> {
                       label: 'Detail Alamat',
                       width: double.infinity,
                       height: 58,
-                      value: iqyAnggotaController.sector_city.value,
+                      value: iqyAnggotaController.address_line1.value,
                       keyboardType: TextInputType.text,
                     ),
                     //sudah
@@ -92,7 +92,7 @@ class _DatailAnggotaState extends State<DatailAnggota> {
                       label: 'Kota Lahir',
                       width: double.infinity,
                       height: 50,
-                      value: iqyAnggotaController.address_line1.value,
+                      value: iqyAnggotaController.city_born.value,
                       keyboardType: TextInputType.text,
                     ),
                     //belum
@@ -116,6 +116,13 @@ class _DatailAnggotaState extends State<DatailAnggota> {
                       width: double.infinity,
                       height: 50,
                       value: iqyAnggotaController.pasangan_nama.value,
+                      keyboardType: TextInputType.text,
+                    ),
+                    FieldReadonly(
+                      label: 'NIK pasangan',
+                      width: double.infinity,
+                      height: 50,
+                      value: iqyAnggotaController.pasangan_idcard.value,
                       keyboardType: TextInputType.text,
                     ),
                     FieldReadonly(

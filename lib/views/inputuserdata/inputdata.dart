@@ -18,13 +18,19 @@ class InputData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: CustomAppBar(
-          title: 'Debitur Form',
-          onBack: () => Get.offAllNamed('/dashboard'),
-        ),
+    return WillPopScope(
+      onWillPop: () async {
+        // Handle back gesture or back button press
+        Get.offAllNamed('/dashboard');
+        return false; // Prevent default back behavior (popping the route)
+      },
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: CustomAppBar(
+            title: 'Debitur Form',
+            onBack: () => Get.offAllNamed('/dashboard'),
+          ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -77,11 +83,27 @@ class InputData extends StatelessWidget {
                   ),
                 ],
               ),
-              TextfieldForm(
-                  width: double.infinity,
-                  height: 50,
-                  label: 'Nama Awal',
-                  controller: controller.namaAwalController),
+              const SizedBox(height: 10),
+              Obx(() => TextfieldForm(
+                    width: double.infinity,
+                    height: 55,
+                    label: 'Nama Awal',
+                    controller: controller.namaAwalController,
+                    readOnly: controller.isNoFirstName.value,
+                  )),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Obx(() => Checkbox(
+                        value: controller.isNoFirstName.value,
+                        onChanged: controller.toggleNoFirstName,
+                      )),
+                  const Text(
+                    'Tidak Ada Nama Awal',
+                    style: TextStyle(fontSize: 14, fontFamily: 'Outfit'),
+                  ),
+                ],
+              ),
               TextfieldForm(
                   width: double.infinity,
                   height: 50,
@@ -100,20 +122,6 @@ class InputData extends StatelessWidget {
               GenderRadioButtons(
                 gender: controller.selectedGender,
               ),
-              GestureDetector(
-                onTap: () =>
-                    controller.pickDate(context), // Moved to controller
-                child: AbsorbPointer(
-                  child: TextfieldForm(
-                    width: double.infinity,
-                    height: 50,
-                    label: 'Tanggal Lahir',
-                    hintText: 'PILIH TANGGAL LAHIR',
-                    controller: controller.tanggallahirController,
-                    readOnly: true,
-                  ),
-                ),
-              ),
               TextfieldForm(
                   width: double.infinity,
                   height: 50,
@@ -124,21 +132,38 @@ class InputData extends StatelessWidget {
                   height: 50,
                   label: 'Pekerjaan',
                   controller: controller.pekerjaanController),
-              TextfieldForm(
-                  width: double.infinity,
-                  height: 50,
-                  label: 'Nama Pasangan',
-                  controller: controller.namaPasanganController),
-              TextfieldForm(
-                width: double.infinity,
-                height: 50,
-                label: 'Nik Pasangan',
-                controller: controller.nikpasaganController,
-                keyboardType: TextInputType.phone,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[+\d\s]')),
+              const SizedBox(height: 10),
+              Obx(() => TextfieldForm(
+                    width: double.infinity,
+                    height: 50,
+                    label: 'Nama Pasangan',
+                    controller: controller.namaPasanganController,
+                    readOnly: controller.isUnmarried.value,
+                  )),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Obx(() => Checkbox(
+                        value: controller.isUnmarried.value,
+                        onChanged: controller.toggleUnmarried,
+                      )),
+                  const Text(
+                    'Belum Kawin',
+                    style: TextStyle(fontSize: 14, fontFamily: 'Outfit'),
+                  ),
                 ],
               ),
+              Obx(() => TextfieldForm(
+                    width: double.infinity,
+                    height: 50,
+                    label: 'Nik Pasangan',
+                    controller: controller.nikpasaganController,
+                    keyboardType: TextInputType.phone,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'[+\d\s]')),
+                    ],
+                    readOnly: controller.isUnmarried.value,
+                  )),
               TextfieldForm(
                 width: double.infinity,
                 height: 50,
@@ -147,10 +172,15 @@ class InputData extends StatelessWidget {
                 hintText: 'Nama Jalan, Gedung, No. Rumah / Detail Lainnya',
               ),
               TextfieldForm(
-                  width: double.infinity,
-                  height: 50,
-                  label: 'Kode POS',
-                  controller: controller.postalCodeController),
+                width: double.infinity,
+                height: 50,
+                label: 'Kode POS',
+                controller: controller.postalCodeController,
+                keyboardType: TextInputType.phone,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[+\d\s]')),
+                ],
+              ),
               TextfieldForm(
                 width: double.infinity,
                 height: 58,
@@ -193,8 +223,7 @@ class InputData extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: ElevatedButton(
-                  onPressed: () =>
-                      controller.handleNextButton(), // Moved to controller
+                  onPressed: () => controller.handleNextButton(),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.casualbutton1,
                     padding: const EdgeInsets.symmetric(
@@ -224,6 +253,7 @@ class InputData extends StatelessWidget {
             ],
           ),
         ),
+      ),
       ),
     );
   }

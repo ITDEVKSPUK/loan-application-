@@ -62,8 +62,6 @@ class DocumentService {
 
       // Encode requestbody ke query string
       final encodedRequestBody = Uri.encodeComponent(jsonEncode(requestBody));
-      final path =
-          "/sandbox.ics/v1.0/v1/survei/doc-upload?requestbody=$encodedRequestBody";
       print("✅ doc-008 (KTP): $ktpLength bytes");
       print("✅ doc-027 (Agunan): $agunanLength bytes");
       print("✅ doc-005 (Dokumen): $dokumenLength bytes");
@@ -71,6 +69,8 @@ class DocumentService {
       print(formData.fields);
       print(formData.files.map((e) => "${e.key}:${e.value.length}"));
 
+      final path =
+          "sandbox.ics/v1.0/v1/survei/doc-upload?requestbody=$encodedRequestBody";
       final headers = signatureController.generateHeaders(
         path: path,
         verb: "POST",
