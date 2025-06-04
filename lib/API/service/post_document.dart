@@ -70,8 +70,6 @@ class DocumentService {
       print(formData.fields);
       print(formData.files.map((e) => "${e.key}:${e.value.length}"));
 
-      final path =
-          "sandbox.ics/v1.0/v1/survei/doc-upload?requestbody=$encodedRequestBody";
       final headers = signatureController.generateHeaders(
         path: path,
         verb: "POST",
