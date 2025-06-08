@@ -61,11 +61,6 @@ class _UpdateSurveyState extends State<UpdateSurvey> {
                         controller: controller.purposeController,
                         keyboardType: TextInputType.text,
                       ),
-                      FieldEditable(
-                        label: 'Category Document',
-                        controller: controller.collateralAddDescController,
-                        keyboardType: TextInputType.text,
-                      ),
                       LoanAngkaPinjaman_Update(),
                       Align(
                         alignment: Alignment.centerRight,
