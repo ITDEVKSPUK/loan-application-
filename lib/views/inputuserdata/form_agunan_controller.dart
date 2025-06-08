@@ -150,6 +150,9 @@ class CreditFormController extends GetxController {
     if (result == null) {
       print("⚠️ Kompresi gagal, mengirim file asli");
       return file;
+    } else {
+      print("✅ Kompresi berhasil: ${result.length()} bytes");
+      print("📁 File disimpan di: ${result.path}");
     }
 
     return File(result.path);
