@@ -19,12 +19,6 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
   final controller = Get.put(CreditFormController());
 
   @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -52,7 +46,7 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     controller.handleSubmit(context);
-                    Get.toNamed(MyAppRoutes.dashboard);
+                    Get.offAllNamed(MyAppRoutes.dashboard);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.casualbutton1,

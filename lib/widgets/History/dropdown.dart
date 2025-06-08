@@ -3,10 +3,11 @@ import 'package:loan_application/core/theme/color.dart';
 
 class DropdownFilter extends StatelessWidget {
   final String title;
-  final List items;
+  final List<Map<String, dynamic>> items;
   final String? value;
   final String labelKey;
   final String idKey;
+  final String? hint; // Added hint parameter
   final Function(String?) onChanged;
 
   const DropdownFilter({
@@ -17,6 +18,7 @@ class DropdownFilter extends StatelessWidget {
     required this.labelKey,
     required this.idKey,
     required this.onChanged,
+    this.hint, // Added hint parameter
   });
 
   @override
@@ -37,7 +39,7 @@ class DropdownFilter extends StatelessWidget {
           const SizedBox(height: 8),
           Container(
             decoration: BoxDecoration(
-              color: AppColors.pureWhite,  // Ubah ke putih terang
+              color: AppColors.pureWhite,
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
@@ -55,7 +57,7 @@ class DropdownFilter extends StatelessWidget {
                   color: AppColors.blackGrey),
               decoration: InputDecoration(
                 filled: true,
-                fillColor: AppColors.pureWhite,  // Warna latar belakang jadi putih
+                fillColor: AppColors.pureWhite,
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 16,
@@ -64,12 +66,17 @@ class DropdownFilter extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
                 ),
+                hintText: hint, // Apply hint to InputDecoration
+                hintStyle: TextStyle(
+                  fontSize: 14,
+                  color: AppColors.blackGrey, // Match dropdown text style
+                ),
               ),
               style: TextStyle(
                 fontSize: 14,
                 color: AppColors.black,
               ),
-              dropdownColor: AppColors.pureWhite,  // Dropdown tetap putih
+              dropdownColor: AppColors.pureWhite,
               items: items.map<DropdownMenuItem<String>>((item) {
                 return DropdownMenuItem<String>(
                   value: item[idKey].toString(),

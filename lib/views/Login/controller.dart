@@ -60,4 +60,6 @@ class LoginControllers extends GetxController {
     // If session not valid or not found
     Get.offNamed(MyAppRoutes.loginScreen);
   }
+
+  
 }

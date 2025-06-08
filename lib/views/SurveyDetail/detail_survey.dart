@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loan_application/API/service/put_update_survey.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/SurveyDetail/inqury_survey_controller.dart';
 import 'package:loan_application/widgets/SurveyDetail/detail_NominalPinjaman.dart';
 import 'package:loan_application/widgets/SurveyDetail/field_readonly.dart';
 import 'package:loan_application/widgets/custom_appbar.dart';
-import 'package:loan_application/API/service/put_update_survey.dart';
 
 class DetailSurvey extends StatefulWidget {
   const DetailSurvey({super.key});
@@ -35,8 +35,8 @@ class _DetailSurveyState extends State<DetailSurvey> {
   @override
   Widget build(BuildContext context) {
     final SurveyController controller = Get.find<SurveyController>();
-
-    return Scaffold(
+    return SafeArea(
+        child: Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         title: 'Debitur Detail Documen',
@@ -55,9 +55,11 @@ class _DetailSurveyState extends State<DetailSurvey> {
                 );
                 return;
               }
-              Get.toNamed(
+              Get.offNamed(
                 MyAppRoutes.updateSurvey,
-                arguments: {'trxSurvey': inquiryData.application.trxSurvey},
+                arguments: {
+                  'trxSurvey': inquiryData.application.trxSurvey,
+                },
               );
             },
           ),
@@ -107,20 +109,27 @@ class _DetailSurveyState extends State<DetailSurvey> {
                         arguments: Get.arguments,
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.casualbutton1,
+                        backgroundColor: AppColors.selanjutnyabutton,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 24, vertical: 12),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: Text(
-                        'Selanjutnya',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: AppColors.pureWhite,
-                          fontFamily: 'Outfit',
-                        ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Selanjutnya',
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: AppColors.pureWhite,
+                                fontFamily: 'Outfit'),
+                          ),
+                          const SizedBox(width: 8),
+                          const Icon(Icons.arrow_forward_outlined,
+                              color: Colors.white),
+                        ],
                       ),
                     ),
                   ),
@@ -136,6 +145,6 @@ class _DetailSurveyState extends State<DetailSurvey> {
           ],
         ),
       ),
-    );
+    ));
   }
 }

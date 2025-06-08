@@ -65,8 +65,7 @@ class _HistoryEmployeeState extends State<HistoryEmployee> {
                   itemCount: list.length,
                   itemBuilder: (context, index) {
                     final item = list[index];
-                    final statusText =
-                        item.status?.value ?? item.application.toString();
+                    final statusText = item.status.value ?? 'Unknown';
                     final statusColor = controller.getStatusColor(statusText);
 
                     return GestureDetector(

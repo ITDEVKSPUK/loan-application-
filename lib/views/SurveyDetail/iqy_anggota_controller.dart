@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:loan_application/API/models/inquiry_anggota_models.dart';
 import 'package:loan_application/API/service/post_inquiry_anggota.dart';
-import 'package:intl/intl.dart'; // Tambahkan untuk format tanggal
+import 'package:intl/intl.dart'; // Untuk format tanggal
 
 class IqyAnggotaController extends GetxController {
   var full_name = ''.obs;
@@ -12,7 +12,9 @@ class IqyAnggotaController extends GetxController {
   var date_born = ''.obs;
   var gender = ''.obs;
   var pasangan_nama = ''.obs;
+  var pasangan_idcard = ''.obs;
   var deskripsiPekerjaan = ''.obs;
+  var city_born = ''.obs; // Already included for city of birth
   var trx_survey = ''.obs;
   var inquiryModel = Rxn<InquiryAnggota>();
   var isLoading = false.obs;
@@ -73,17 +75,23 @@ class IqyAnggotaController extends GetxController {
       address_line1.value = InquiryAnggota.address.addressLine1;
       sector_city.value = InquiryAnggota.address.sectorCity;
       date_born.value = formatDate(InquiryAnggota.owner.dateBorn);
-      gender.value = formatGender(
-          InquiryAnggota.owner.gender); // Terapkan formatter gender
+      gender.value = formatGender(InquiryAnggota.owner.gender);
       pasangan_nama.value = InquiryAnggota.owner.pasanganNama.isEmpty
           ? 'Tidak Ada'
           : InquiryAnggota.owner.pasanganNama;
-      trx_survey.value = InquiryAnggota.owner.cifId.toString();
+      pasangan_idcard.value = InquiryAnggota.owner.pasanganIdCard.isEmpty
+          ? 'Tidak Ada'
+          : InquiryAnggota.owner.pasanganIdCard;
       deskripsiPekerjaan.value = InquiryAnggota.owner.deskripsiPekerjaan.isEmpty
           ? InquiryAnggota.address.deskripsiPekerjaan.isEmpty
               ? 'Tidak Ada'
               : InquiryAnggota.address.deskripsiPekerjaan
           : InquiryAnggota.owner.deskripsiPekerjaan;
+      // Update city_born value
+      city_born.value = InquiryAnggota.owner.cityBorn?.isEmpty ?? true
+          ? 'Tidak Ada'
+          : InquiryAnggota.owner.cityBorn!;
+      trx_survey.value = InquiryAnggota.owner.cifId.toString();
     } catch (e, stackTrace) {
       errorMessage.value = 'Gagal mengambil data: $e';
       print('Error fetching inquiry: $e');

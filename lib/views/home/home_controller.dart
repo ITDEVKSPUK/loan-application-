@@ -24,7 +24,7 @@ class HomeController extends GetxController {
       final historyResponse = HistoryResponse.fromJson(response.data);
 
       // Assign the parsed data to surveyList and filteredList
-      surveyList.value = historyResponse.data;  
+      surveyList.value = historyResponse.data;
       filteredList.value = historyResponse.data;
 
       if (surveyList.isEmpty) {
@@ -69,11 +69,11 @@ class HomeController extends GetxController {
 
   Color getStatusColor(String status) {
     switch (status.toUpperCase()) {
-      case 'DISETUJUI':
+      case 'APPROVED':
         return AppColors.greenstatus;
-      case 'DITOLAK':
+      case 'DECLINED':
         return AppColors.redstatus;
-      case 'PROCES':
+      case 'PROGRESS':
         return AppColors.orangestatus;
       default:
         return Colors.grey;
