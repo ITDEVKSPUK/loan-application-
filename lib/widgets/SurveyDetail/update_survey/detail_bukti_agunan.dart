@@ -9,7 +9,7 @@ class CategoryAgunan extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       // Use the observable adddescript for reactivity
-      final collateralDesc = controller.adddescript.value;
+      final collateralDesc = controller.document_type.value;
       final trxDate = controller.inquiryModel.value?.application.trxDate ?? 'N/A';
 
       return SizedBox(

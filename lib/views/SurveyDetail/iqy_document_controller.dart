@@ -54,31 +54,36 @@ class IqyDocumentController extends GetxController {
     }
   }
 
-  // Moved function to show full-screen image
+  // Zoom imgae in full screen yoo
   void showFullScreenImage(String imageUrl) {
-    if (imageUrl.isEmpty) return; // Do nothing if there's no image
+    if (imageUrl.isEmpty) return; 
     Get.dialog(
-      Dialog(
-        backgroundColor: Colors.black,
-        insetPadding: EdgeInsets.zero,
-        child: Stack(
+      Scaffold(
+        backgroundColor: Colors.black .withOpacity(0.8),
+        body: Stack(
           children: [
-            Center(
-              child: Image.network(
-                imageUrl,
-                fit: BoxFit
-                    .contain, // Ensure the image fits within the screen while maintaining aspect ratio
-                errorBuilder: (context, error, stackTrace) => const Center(
-                  child: Text(
-                    'Gagal memuat gambar',
-                    style: TextStyle(color: Colors.white),
+            InteractiveViewer(
+              boundaryMargin: const EdgeInsets.all(0),
+              minScale: 0.5, 
+              maxScale: 4.0, 
+              child: Center(
+                child: Image.network(
+                  imageUrl,
+                  fit: BoxFit.contain, 
+                  width: double.infinity,
+                  height: double.infinity,
+                  errorBuilder: (context, error, stackTrace) => const Center(
+                    child: Text(
+                      'Gagal memuat gambar',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
               ),
             ),
             Positioned(
               top: 40,
-              right: 20,
+              right: 25,
               child: IconButton(
                 icon: const Icon(Icons.close, color: Colors.white, size: 30),
                 onPressed: () =>
@@ -88,6 +93,8 @@ class IqyDocumentController extends GetxController {
           ],
         ),
       ),
+      barrierDismissible: true,
+      barrierColor: Colors.transparent,
     );
   }
 }

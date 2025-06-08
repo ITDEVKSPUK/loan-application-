@@ -7,7 +7,6 @@ class SurveyBox extends StatelessWidget {
   final String plafond;
   final String date;
   final String location;
-  final String trx_survey;
   final String status;
   final String image;
   final Color statusColor;
@@ -18,7 +17,6 @@ class SurveyBox extends StatelessWidget {
     required this.aged,
     required this.plafond,
     required this.date,
-    required this.trx_survey,
     required this.location,
     required this.status,
     required this.image,
@@ -39,11 +37,19 @@ class SurveyBox extends StatelessWidget {
         )}';
   }
 
+  // Function to format age
+  String formatAge(String ageString) {
+    // Remove "years old" and trim any extra spaces
+    return ageString.replaceAll('years old', 'years').trim();
+  }
+
   @override
   Widget build(BuildContext context) {
     final isNetworkImage = image.startsWith('http');
     // Format plafond as Rupiah
     final formattedPlafond = formatRupiah(plafond);
+    // Format age
+    final formattedAge = formatAge(aged);
 
     return Container(
       height: 120, // tinggi ditambah agar tidak overflow
@@ -108,8 +114,7 @@ class SurveyBox extends StatelessWidget {
                   ),
                   buildInfoRow(Icons.account_balance, formattedPlafond),
                   buildInfoRow(Icons.calendar_today, date),
-                  buildInfoRow(Icons.person, aged),
-                  buildInfoRow(Icons.assignment, trx_survey),
+                  buildInfoRow(Icons.person, formattedAge),
                   buildInfoRow(Icons.location_on, location),
                 ],
               ),
@@ -145,6 +150,7 @@ class SurveyBox extends StatelessWidget {
       ),
     );
   }
+
   Widget buildInfoRow(IconData icon, String text) {
     return Padding(
       padding: const EdgeInsets.only(top: 2),
