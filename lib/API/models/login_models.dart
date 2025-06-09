@@ -4,7 +4,6 @@ class LoginModel {
   final String userName;
   final AdditionalUser additionalUser;
   final AdditionalInfo additionalInfo;
-  final String sessionId;
 
   LoginModel({
     required this.status,
@@ -12,7 +11,6 @@ class LoginModel {
     required this.userName,
     required this.additionalUser,
     required this.additionalInfo,
-    required this.sessionId,
   });
 
   factory LoginModel.fromJson(Map<String, dynamic> json) {
@@ -22,7 +20,6 @@ class LoginModel {
       userName: json['UserName'],
       additionalUser: AdditionalUser.fromJson(json['additionalUser']),
       additionalInfo: AdditionalInfo.fromJson(json['additionalInfo']),
-      sessionId: json['SessionID'],
     );
   }
 
@@ -32,8 +29,7 @@ class LoginModel {
       'LoginName': loginName,  
       'UserName': userName,
       'additionalUser': additionalUser.toJson(),
-      'additionalInfo': additionalInfo.toJson(),
-      'SessionID': sessionId,
+      'additionalInfo': additionalInfo.toJson()
     };
   }
 }
