@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loan_application/views/SurveyDetail/inqury_survey_controller.dart';
@@ -19,51 +20,45 @@ class LoanAngkaPinjaman extends StatelessWidget {
       return Column(
         children: [
           FieldReadonly(
-            label: 'Nominal Pinjaman',
+            label: 'Pengajuan Pinjaman',
             width: double.infinity,
             height: 50,
-            value: controller
-                .formatRupiah(inquiryData.application.plafond.toString()),
+            value: 'Rp. ${controller.formatRupiah(inquiryData.application.plafond.toString())}',
             keyboardType: TextInputType.number,
           ),
           FieldReadonly(
             label: 'Taksiran Nilai Jaminan',
             width: double.infinity,
             height: 50,
-            value: controller
-                .formatRupiah(inquiryData.collateral.value.toString()),
+            value: 'Rp. ${controller.formatRupiah(inquiryData.collateral.value.toString())}',
             keyboardType: TextInputType.number,
           ),
           FieldReadonly(
             label: 'Pendapatan Bulanan',
             width: double.infinity,
             height: 50,
-            value: controller
-                .formatRupiah(inquiryData.additionalInfo.income.toString()),
+            value: 'Rp. ${controller.formatRupiah(inquiryData.additionalInfo.income.toString())}',
             keyboardType: TextInputType.number,
           ),
           FieldReadonly(
             label: 'Total Aset',
             width: double.infinity,
             height: 50,
-            value: controller
-                .formatRupiah(inquiryData.additionalInfo.asset.toString()),
+            value: 'Rp. ${controller.formatRupiah(inquiryData.additionalInfo.asset.toString())}',
             keyboardType: TextInputType.number,
           ),
           FieldReadonly(
             label: 'Pengeluaran Perbulan',
             width: double.infinity,
             height: 50,
-            value: controller
-                .formatRupiah(inquiryData.additionalInfo.expenses.toString()),
+            value: 'Rp. ${controller.formatRupiah(inquiryData.additionalInfo.expenses.toString())}',
             keyboardType: TextInputType.number,
           ),
           FieldReadonly(
             label: 'Angsuran Perbulan',
             width: double.infinity,
             height: 50,
-            value: controller.formatRupiah(
-                inquiryData.additionalInfo.installment.toString()),
+            value: 'Rp. ${controller.formatRupiah(inquiryData.additionalInfo.installment.toString())}',
             keyboardType: TextInputType.number,
           ),
         ],

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:get/get.dart' hide Response;
@@ -42,14 +43,17 @@ class LoginService {
 
         final loginModel = LoginModel.fromJson(data);
         storage.write('login_model', loginModel.toJson());
-        storage.write('session_id', loginModel.sessionId);
         storage.write('encryptedUsername', _encrypt(username));
         storage.write('UserName', loginModel.userName);
         print('Login Success: ${data['UserName']}');
         final uri = Uri.parse('http://36.92.75.178:8001');
         final cookies = await DioClient.cookieJar.loadForRequest(uri);
-        print(
-            '[COOKIES] ${cookies.map((e) => '${e.name}=${e.value}').join('; ')}');
+        final sessionCookie = cookies.firstWhere(
+          (c) => c.name == 'dtsessionid',
+          orElse: () => Cookie('dtsessionid', ''),
+        );
+        storage.write('session_id', sessionCookie.value);
+        print('[COOKIES]${sessionCookie.value}');
 
         return true;
       } else {

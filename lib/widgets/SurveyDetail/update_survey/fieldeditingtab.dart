@@ -64,6 +64,13 @@ class FieldEditable extends StatelessWidget {
                     fontFamily: 'Outfit',
                     fontWeight: FontWeight.w500,
                   ),
+                  prefixText: keyboardType == TextInputType.number ? 'Rp. ' : null, // Menambahkan Rp. sebagai prefix
+                  prefixStyle: const TextStyle(
+                    color: AppColors.black,
+                    fontSize: 15,
+                    fontFamily: 'Outfit',
+                    fontWeight: FontWeight.w500,
+                  ),
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 17),
                 ),

@@ -36,115 +36,124 @@ class _DetailSurveyState extends State<DetailSurvey> {
   Widget build(BuildContext context) {
     final SurveyController controller = Get.find<SurveyController>();
     return SafeArea(
-        child: Scaffold(
-      backgroundColor: Colors.white,
-      appBar: CustomAppBar(
-        title: 'Debitur Detail Documen',
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () {
-              final inquiryData = controller.inquiryModel.value;
-              if (inquiryData == null) {
-                Get.snackbar(
-                  'Error',
-                  'Data inquiry tidak tersedia',
-                  snackPosition: SnackPosition.BOTTOM,
-                  backgroundColor: Colors.red,
-                  colorText: Colors.white,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: CustomAppBar(
+          title: 'Debitur Detail Dokumen',
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () {
+                final inquiryData = controller.inquiryModel.value;
+                if (inquiryData == null) {
+                  Get.snackbar(
+                    'Error',
+                    'Data inquiry tidak tersedia',
+                    snackPosition: SnackPosition.BOTTOM,
+                    backgroundColor: Colors.red,
+                    colorText: Colors.white,
+                  );
+                  return;
+                }
+                Get.offNamed(
+                  MyAppRoutes.updateSurvey,
+                  arguments: {
+                    'trxSurvey': inquiryData.application.trxSurvey,
+                  },
                 );
-                return;
-              }
-              Get.offNamed(
-                MyAppRoutes.updateSurvey,
-                arguments: {
-                  'trxSurvey': inquiryData.application.trxSurvey,
-                },
-              );
-            },
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Obx(() => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FieldReadonly(
-                            label: 'Tujuan Pinjaman',
-                            width: double.infinity,
-                            height: 50,
-                            value: controller.purpose.value,
-                            keyboardType: TextInputType.text,
-                          ),
-                          const SizedBox(height: 4),
-                          FieldReadonly(
-                            label: 'Category Document',
-                            width: double.infinity,
-                            height: 50,
-                            value: controller.adddescript.value,
-                            keyboardType: TextInputType.text,
-                          ),
-                          const SizedBox(height: 10),
-                          const Divider(
-                            thickness: 1,
-                            color: Colors.grey,
-                          ),
-                          const SizedBox(height: 10),
-                          LoanAngkaPinjaman(),
-                        ],
-                      )),
-                  const SizedBox(height: 30),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedButton(
-                      onPressed: () => Get.toNamed(
-                        MyAppRoutes.detaildocumen,
-                        arguments: Get.arguments,
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.selanjutnyabutton,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Selanjutnya',
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: AppColors.pureWhite,
-                                fontFamily: 'Outfit'),
-                          ),
-                          const SizedBox(width: 8),
-                          const Icon(Icons.arrow_forward_outlined,
-                              color: Colors.white),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              },
             ),
-            Obx(() => controller.isLoading.value
-                ? Container(
-                    color: Colors.black.withOpacity(0.5),
-                    child: const Center(child: CircularProgressIndicator()),
-                  )
-                : const SizedBox.shrink()),
           ],
         ),
+        body: SafeArea(
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Obx(() => Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FieldReadonly(
+                              label: 'Tujuan Pinjaman',
+                              width: double.infinity,
+                              height: 50,
+                              value: controller.purpose.value,
+                              keyboardType: TextInputType.text,
+                            ),
+                            const SizedBox(height: 4),
+                            FieldReadonly(
+                              label: 'Category Agunan',
+                              width: double.infinity,
+                              height: 50,
+                              value: controller.idName.value, // Fixed to use id_name
+                              keyboardType: TextInputType.text,
+                            ),
+                            const SizedBox(height: 4),
+                            FieldReadonly(
+                              label: 'Category Document',
+                              width: double.infinity,
+                              height: 50,
+                              value: controller.document_type.value,
+                              keyboardType: TextInputType.text,
+                            ),
+                            const SizedBox(height: 10),
+                            const Divider(
+                              thickness: 1,
+                              color: Colors.grey,
+                            ),
+                            const SizedBox(height: 10),
+                            LoanAngkaPinjaman(),
+                          ],
+                        )),
+                    const SizedBox(height: 30),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: ElevatedButton(
+                        onPressed: () => Get.toNamed(
+                          MyAppRoutes.detaildocumen,
+                          arguments: Get.arguments,
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.selanjutnyabutton,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Selanjutnya',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: AppColors.pureWhite,
+                                  fontFamily: 'Outfit'),
+                            ),
+                            const SizedBox(width: 8),
+                            const Icon(Icons.arrow_forward_outlined,
+                                color: Colors.white),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Obx(() => controller.isLoading.value
+                  ? Container(
+                      color: Colors.black.withOpacity(0.5),
+                      child: const Center(child: CircularProgressIndicator()),
+                    )
+                  : const SizedBox.shrink()),
+            ],
+          ),
+        ),
       ),
-    ));
+    );
   }
 }

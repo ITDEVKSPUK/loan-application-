@@ -14,7 +14,7 @@ class CollateralTypeWidget extends StatelessWidget {
           label: 'Category Agunan',
           width: double.infinity,
           height: 50,
-          value: controller.adddescript.value,
+          value: controller.document_type.value,
           keyboardType: TextInputType.text,
         ));
   }

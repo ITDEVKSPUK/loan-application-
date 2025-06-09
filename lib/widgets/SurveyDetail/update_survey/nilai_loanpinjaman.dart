@@ -14,7 +14,7 @@ class LoanAngkaPinjaman_Update extends StatelessWidget {
     return Column(
       children: [
         FieldEditable(
-          label: 'Nominal Pinjaman',
+          label: 'Pebgajuan Pinjaman',
           controller: controller.plafondController,
           keyboardType: TextInputType.number,
         ),

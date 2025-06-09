@@ -29,7 +29,8 @@ class SurveyController extends GetxController {
 
   // Observables for DetailSurvey
   final purpose = ''.obs;
-  final adddescript = ''.obs;
+  final idName = ''.obs; // Added for Category Agunan
+  final document_type = ''.obs;
   final inquiryModel = Rx<dynamic>(null);
   final isLoading = false.obs;
   String surveyId = '';
@@ -81,7 +82,9 @@ class SurveyController extends GetxController {
 
       inquiryModel.value = inquiryData;
       purpose.value = inquiryData.application.purpose ?? '';
-      adddescript.value = inquiryData.collateral.adddescript ?? '';
+      idName.value = inquiryData.collateral.idName ?? ''; // Set idName
+      document_type.value = inquiryData.collateral.adddescript ?? '';
+      print('Category Agunan (idName): ${idName.value}');
     } catch (e) {
       print('Error fetching survey list: $e');
       Get.snackbar(
@@ -148,7 +151,9 @@ class SurveyController extends GetxController {
       // Update observables for DetailSurvey
       inquiryModel.value = inquiryData;
       purpose.value = inquiryData.application.purpose ?? '';
-      adddescript.value = inquiryData.collateral.adddescript ?? '';
+      idName.value = inquiryData.collateral.idName ?? ''; // Update idName
+      document_type.value = inquiryData.collateral.adddescript ?? '';
+      print('Category Agunan (idName) loaded: ${idName.value}');
     } catch (e) {
       print('Error loading survey data: $e');
       Get.snackbar(
@@ -227,7 +232,7 @@ class SurveyController extends GetxController {
       );
 
       print('Data to be sent: ${jsonEncode(putModelsUpdate.toJson())}');
-      print('Collateral id_name being sent: ${collateralNameController.text}');
+      print('Collateral idName being sent: ${collateralNameController.text}');
 
       final response = await putUpdateSurvey.putUpdateSurvey(
         surveyId: surveyId,
@@ -238,7 +243,8 @@ class SurveyController extends GetxController {
 
       // Update observables for DetailSurvey
       purpose.value = purposeController.text;
-      adddescript.value = collateralAddDescController.text;
+      idName.value = collateralNameController.text; // Update idName
+      document_type.value = collateralAddDescController.text;
 
       Get.snackbar(
         'Sukses',
@@ -350,7 +356,7 @@ class SurveyController extends GetxController {
       );
 
       print('Data to be sent: ${jsonEncode(putModelsUpdate.toJson())}');
-      print('Collateral id_name being sent: ${collateralNameController.text}');
+      print('Collateral idName being sent: ${collateralNameController.text}');
 
       final response = await putUpdateSurvey.putUpdateSurvey(
         surveyId: surveyId,
@@ -361,7 +367,8 @@ class SurveyController extends GetxController {
 
       // Update observables for DetailSurvey
       purpose.value = purposeController.text;
-      adddescript.value = collateralAddDescController.text;
+      idName.value = collateralNameController.text; // Update idName
+      document_type.value = collateralAddDescController.text;
 
       Get.snackbar(
         'Sukses',
