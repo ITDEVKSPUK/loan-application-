@@ -9,13 +9,6 @@ import 'package:loan_application/API/models/cif_models.dart';
 import 'package:loan_application/API/service/post_create_CIF.dart';
 import 'package:loan_application/API/service/post_nik_check.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
-import 'package:flutter/services.dart';
-import 'package:loan_application/core/theme/color.dart';
-import 'package:loan_application/views/History/controller_location.dart';
-import 'package:loan_application/views/inputuserdata/overlayalamat.dart';
-import 'package:loan_application/widgets/InputUserData/gender_radio.dart';
-import 'package:loan_application/widgets/InputUserData/textfield_form.dart';
-import 'package:loan_application/widgets/custom_appbar.dart';
 
 class InputDataController extends GetxController {
   final nikController = TextEditingController();
@@ -119,6 +112,7 @@ class InputDataController extends GetxController {
         detileAlamatController.text =
             anggotaResponse.address?.addressDetile ?? '';
         selectedGender.value = anggotaResponse.owner?.gender?.toString() ?? '';
+        alamatController.text = anggotaResponse.address?.sectorCity ?? '';
 
         // Set isUnmarried based on pasanganNama
         isUnmarried.value = anggotaResponse.owner?.pasanganNama == null ||
@@ -153,7 +147,7 @@ class InputDataController extends GetxController {
     final createCIFService = CreateCIFService();
 
     try {
-      final parts = alamatController.text.split('-');
+      final parts = alamatController.text.split(', ');
 
       final region = parts.length > 1 ? parts[1] : '';
       final sector = parts.length > 2 ? parts[2] : '';

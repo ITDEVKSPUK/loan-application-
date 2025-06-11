@@ -16,8 +16,7 @@ class AnggotaResponse {
       responseCode: json['responseCode'] ?? '',
       responseDescription: json['responseDescription'] ?? '',
       owner: json['owner'] != null ? Owner.fromJson(json['owner']) : null,
-      address:
-          json['addres'] != null ? Address.fromJson(json['addres']) : null,
+      address: json['addres'] != null ? Address.fromJson(json['addres']) : null,
     );
   }
 
@@ -134,6 +133,7 @@ class Owner {
 }
 
 class Address {
+  final String? sectorCity;
   final String? region;
   final String? sector;
   final String? village;
@@ -147,6 +147,7 @@ class Address {
   final String? phone;
 
   Address({
+    this.sectorCity,
     this.region,
     this.sector,
     this.village,
@@ -162,6 +163,7 @@ class Address {
 
   factory Address.fromJson(Map<String, dynamic> json) {
     return Address(
+      sectorCity: json['sector_city'] ?? '',
       region: json['region'] ?? '',
       sector: json['sector'] ?? '',
       village: json['village'] ?? '',
@@ -178,6 +180,7 @@ class Address {
 
   Map<String, dynamic> toJson() {
     return {
+      'sector_city': sectorCity,
       'region': region,
       'sector': sector,
       'village': village,

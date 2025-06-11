@@ -6,15 +6,15 @@ import 'package:loan_application/widgets/History/dropdown.dart';
 import 'package:loan_application/widgets/custom_text.dart';
 
 void showLocationBottomSheet(
-    BuildContext context, Function(String) onLocationSelected , LocationController locationController) {
+    BuildContext context,
+    Function(String) onLocationSelected,
+    LocationController locationController) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (context) => StatefulBuilder(
       builder: (context, setState) {
-        
-
         return DraggableScrollableSheet(
           initialChildSize: 0.6,
           minChildSize: 0.3,
@@ -90,12 +90,12 @@ void showLocationBottomSheet(
                                     orElse: () => {},
                                   );
 
-                                  locationController.selectedProvinceName.value =
-                                      selectedItem['province'] ?? '';
+                                  locationController.selectedProvinceName
+                                      .value = selectedItem['province'] ?? '';
                                   locationController.selectedRegencyName.value =
                                       '';
-                                  locationController.selectedDistrictName
-                                      .value = '';
+                                  locationController
+                                      .selectedDistrictName.value = '';
                                   locationController.selectedVillageName.value =
                                       '';
                                   print(
@@ -120,9 +120,8 @@ void showLocationBottomSheet(
                                   onChanged: (value) {
                                     locationController.selectedRegencyId.value =
                                         value!;
-                                    final selectedItem = locationController
-                                        .regencies
-                                        .firstWhere(
+                                    final selectedItem =
+                                        locationController.regencies.firstWhere(
                                       (element) =>
                                           element['reg_idn'].toString() ==
                                           value.toString(),
@@ -131,10 +130,10 @@ void showLocationBottomSheet(
 
                                     locationController.selectedRegencyName
                                         .value = selectedItem['region'] ?? '';
-                                    locationController.selectedDistrictName
-                                        .value = '';
-                                    locationController.selectedVillageName
-                                        .value = '';
+                                    locationController
+                                        .selectedDistrictName.value = '';
+                                    locationController
+                                        .selectedVillageName.value = '';
                                     print(
                                         'Nama kabupaten terpilih: ${locationController.selectedRegencyName.value}');
                                     locationController.fetchDistricts(value);
@@ -156,11 +155,10 @@ void showLocationBottomSheet(
                                   labelKey: 'sector',
                                   idKey: 'sec_idn',
                                   onChanged: (value) {
-                                    locationController.selectedDistrictId.value =
-                                        value!;
-                                    final selectedItem = locationController
-                                        .districts
-                                        .firstWhere(
+                                    locationController
+                                        .selectedDistrictId.value = value!;
+                                    final selectedItem =
+                                        locationController.districts.firstWhere(
                                       (element) =>
                                           element['sec_idn'].toString() ==
                                           value.toString(),
@@ -169,8 +167,8 @@ void showLocationBottomSheet(
 
                                     locationController.selectedDistrictName
                                         .value = selectedItem['sector'] ?? '';
-                                    locationController.selectedVillageName
-                                        .value = '';
+                                    locationController
+                                        .selectedVillageName.value = '';
                                     print(
                                         'Nama kecamatan terpilih: ${locationController.selectedDistrictName.value}');
                                     locationController.fetchVillages(value);
@@ -194,9 +192,8 @@ void showLocationBottomSheet(
                                   onChanged: (value) {
                                     locationController.selectedVillageId.value =
                                         value!;
-                                    final selectedItem = locationController
-                                        .villages
-                                        .firstWhere(
+                                    final selectedItem =
+                                        locationController.villages.firstWhere(
                                       (element) =>
                                           element['vil_idn'].toString() ==
                                           value.toString(),
@@ -248,7 +245,7 @@ void showLocationBottomSheet(
                                 locationController.selectedRegencyName.value,
                                 locationController.selectedDistrictName.value,
                                 locationController.selectedVillageName.value,
-                              ].where((e) => e.isNotEmpty).join('-');
+                              ].where((e) => e.isNotEmpty).join(', ');
 
                               onLocationSelected(selected);
                               Navigator.pop(context);
