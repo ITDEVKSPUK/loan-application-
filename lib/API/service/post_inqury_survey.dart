@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide Response;
-import 'package:get/get.dart';
 import 'package:loan_application/API/dio/dio_client.dart';
 import 'package:loan_application/API/models/inqury_survey_models.dart';
 import 'package:loan_application/utils/signature_utils.dart';

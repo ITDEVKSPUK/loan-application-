@@ -4,9 +4,9 @@ import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/views/Simulation_Calculator/loan_summary.dart';
 import 'package:loan_application/views/Simulation_Calculator/simulation_controller.dart';
 import 'package:loan_application/widgets/app_button.dart';
-import 'package:loan_application/widgets/simulation%20calculator/loan_input_form.dart';
-import 'package:loan_application/widgets/simulation%20calculator/loan_start_date_picker.dart';
-import 'package:loan_application/widgets/simulation%20calculator/loan_type_dropdown.dart';
+import 'package:loan_application/widgets/simulation calculator/loan_input_form.dart';
+import 'package:loan_application/widgets/simulation calculator/loan_start_date_picker.dart';
+import 'package:loan_application/widgets/simulation calculator/loan_type_dropdown.dart';
 
 class Simulation_Employe extends StatelessWidget {
   const Simulation_Employe({super.key});
@@ -45,22 +45,20 @@ class Simulation_Employe extends StatelessWidget {
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  LoanInputForm(
-                    loanAmountController: controller.loanAmountController,
-                    loanTermController: controller.loanTermController,
-                    interestRateController: controller.interestRateController,
-                  ),
+                  LoanInputForm(),
                   const SizedBox(height: 12),
-                  LoanTypeDropdown(loanType: controller.loanType),
+                  LoanTypeDropdown(),
                   LoanStartDatePicker(startDate: controller.startDate),
+                  const SizedBox(height: 12),
                   CustomButton(
                     text: 'Hitung',
                     onPressed: () => controller.calculateLoan(context),
                     color: AppColors.deepBlue,
                     borderRadius: 8,
-                    paddingHorizontal: BorderSide.strokeAlignCenter,
-                    paddingVertical: BorderSide.strokeAlignCenter,
+                    paddingHorizontal: 16,
+                    paddingVertical: 12,
                     textStyle: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -68,20 +66,54 @@ class Simulation_Employe extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Obx(() => controller.monthlyPayment.value > 0
-                      ? LoanSummaryAndSchedule(
-                          monthlyPayment: controller.monthlyPayment.value,
-                          totalInterest: controller.totalInterest.value,
-                          totalPayment: controller.totalPayment.value,
-                          loanAmountText: controller.loanAmountController.text,
-                          loanTermText: controller.loanTermController.text,
-                          loanType: controller.loanType.value,
-                          interestRateText:
-                              controller.interestRateController.text,
-                          startDate: controller.startDate.value,
-                          repaymentSchedule: controller.repaymentSchedule,
-                        )
-                      : const SizedBox()),
+
+                  // 👇 Obx diletakkan DI DALAM scrollable column
+                  Obx(() {
+                    if (controller.response.value != null) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 20),
+                          Text(
+                            "Hasil Simulasi:",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          // Batasin tinggi maksimal agar tombol tetap kelihatan
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxHeight:
+                                  MediaQuery.of(context).size.height * 0.6,
+                            ),
+                            child: SingleChildScrollView(
+                              child: LoanSummaryAndSchedule(
+                                monthlyPayment: controller.monthlyPayment.value,
+                                totalInterest: controller.totalInterest.value,
+                               totalPayment: controller.totalPayment.value,
+                                loanAmountText:
+                                    controller.loanAmountController.text,
+                                loanTermText:
+                                    controller.loanTermController.text,
+                                loanType: controller.loanType.value,
+                                interestRateText:
+                                    controller.interestRateController.text,
+                                startDate: controller.startDate.value,
+                                repaymentSchedule: controller.repaymentSchedule,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  }),
+
+                  const SizedBox(
+                      height: 32), // Jarak bawah biar ga terlalu mepet
                 ],
               ),
             ),

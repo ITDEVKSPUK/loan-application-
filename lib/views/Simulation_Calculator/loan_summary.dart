@@ -25,6 +25,8 @@ class LoanSummaryAndSchedule extends StatelessWidget {
     required this.repaymentSchedule,
   });
 
+  
+
   String formatCurrency(dynamic value) {
     double number;
     if (value is String) {

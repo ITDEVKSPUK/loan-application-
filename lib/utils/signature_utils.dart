@@ -38,6 +38,7 @@ class SignatureController {
     return {
       'ICS-Timestamp': timestamp,
       'ICS-Signature': signature,
+      'ICS-Wipala': 'sastra.astana.dwipangga',
     };
   }
 }

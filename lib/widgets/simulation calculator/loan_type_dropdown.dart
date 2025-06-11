@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loan_application/views/Simulation_Calculator/simulation_controller.dart';
 
 class LoanTypeDropdown extends StatelessWidget {
-  final RxString loanType;
-
-  const LoanTypeDropdown({super.key, required this.loanType});
+  const LoanTypeDropdown({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final ctrl = Get.find<SimulationController>();
     return Obx(() => DropdownButtonFormField<String>(
-          value: loanType.value,
-          items: ['Flat', 'Efektif', 'Anuitas']
-              .map((type) => DropdownMenuItem(value: type, child: Text(type)))
-              .toList(),
-          onChanged: (val) => loanType.value = val!,
-          decoration: const InputDecoration(
-            labelText: 'Jenis Pinjaman',
-            border: OutlineInputBorder(),
-          ),
-        ));
+      value: ctrl.loanType.value,
+      decoration: const InputDecoration(labelText: 'Metode', border: OutlineInputBorder()),
+      items: ['FLAT','ANNUITY','EFFECTIVE'].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+      onChanged: (val) {
+        if (val != null) ctrl.loanType.value = val;
+      },
+    ));
   }
 }
