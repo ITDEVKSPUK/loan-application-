@@ -31,13 +31,10 @@ class SimulationService {
 
       print("🔧 Request Body: ${jsonEncode(body)}");
 
-      // Generate headers dengan body yang sudah di-serialize
-      final bodyString = jsonEncode(body);
       final headers = signatureController.generateHeaders(
         path: path,
         verb: "POST",
-        body: bodyString,
-         // Pass body string untuk signature
+        // Pass body string untuk signature
       );
 
       print("📡 Headers generated:");

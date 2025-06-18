@@ -25,8 +25,6 @@ class LoanSummaryAndSchedule extends StatelessWidget {
     required this.repaymentSchedule,
   });
 
-  
-
   String formatCurrency(dynamic value) {
     double number;
     if (value is String) {
@@ -38,7 +36,9 @@ class LoanSummaryAndSchedule extends StatelessWidget {
       number = 0;
     }
 
-    return NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0).format(number);
+    return NumberFormat.currency(
+            locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0)
+        .format(number);
   }
 
   @override
@@ -48,12 +48,16 @@ class LoanSummaryAndSchedule extends StatelessWidget {
     double totalPaymentLocal = 0;
 
     for (var schedule in repaymentSchedule) {
-      totalPrincipal += schedule['principalPayment'];
-      totalInterestLocal += schedule['interestPayment'];
-      totalPaymentLocal += schedule['totalPayment'];
+      totalPrincipal +=
+          double.tryParse(schedule['principalPayment'].toString()) ?? 0;
+      totalInterestLocal +=
+          double.tryParse(schedule['interestPayment'].toString()) ?? 0;
+      totalPaymentLocal +=
+          double.tryParse(schedule['totalPayment'].toString()) ?? 0;
     }
 
-    final double bungaPerBulan = (double.tryParse(interestRateText.replaceAll(',', '.')) ?? 0) / 12;
+    final double bungaPerBulan =
+        (double.tryParse(interestRateText.replaceAll(',', '.')) ?? 0) / 12;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

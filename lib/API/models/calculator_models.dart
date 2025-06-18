@@ -43,11 +43,9 @@ class LoanSimulationResponse {
       data: (json['data'] as List<dynamic>)
           .map((e) => RepaymentData.fromJson(e))
           .toList(),
-
-        monthlyPayment: json['Monthly Payment']?.toString() ?? '0',
-        totalInterest: json['Total Interest']?.toString() ?? '0',
-        totalPayment: json['Total Payment']?.toString() ?? '0',
-        
+      monthlyPayment: json['Monthly Payment']?.toString() ?? '0',
+      totalInterest: json['Total Interest']?.toString() ?? '0',
+      totalPayment: json['Total Payment']?.toString() ?? '0',
     );
   }
 }
@@ -55,10 +53,10 @@ class LoanSimulationResponse {
 class RepaymentData {
   final DateTime month;
   final String monthSay;
-  final int balance;
-  final int interest;
-  final int principal;
-  final int payment;
+  final String balance;
+  final String interest;
+  final String principal;
+  final String payment;
 
   RepaymentData({
     required this.month,
@@ -73,10 +71,10 @@ class RepaymentData {
     return RepaymentData(
       month: DateTime.parse(json['Month']),
       monthSay: json['MonthSay'] ?? '',
-      balance: int.tryParse(json['Balance'].toString()) ?? 0,
-      interest: int.tryParse(json['Interest'].toString()) ?? 0,
-      principal: int.tryParse(json['Principal'].toString()) ?? 0,
-      payment: int.tryParse(json['Payment'].toString()) ?? 0,
+      balance: json['Balance'].toString() ?? "0",
+      interest: json['Interest'].toString() ?? "0",
+      principal: json['Principal'].toString() ?? "0",
+      payment: json['Payment'].toString() ?? "0",
     );
   }
 }
