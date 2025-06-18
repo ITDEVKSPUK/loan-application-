@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <application
         android:label="loan_apllication"
         android:name="${applicationName}"
@@ -42,6 +44,11 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+            
+              <meta-data
+               android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyAmLitIC-L5lsgN3LsNGU0ql7-d-EC3NFU"/>
+
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

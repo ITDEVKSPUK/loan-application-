@@ -13,5 +13,6 @@ class MyAppRoutes {
   static const updateSurvey = "/updateSurvey";
   static const detailsurvey = "/detailsurvey";
   static const dataPinjaman = "/data_pinjaman";
+  static const detailMaps = "/detail_maps";
 
 }

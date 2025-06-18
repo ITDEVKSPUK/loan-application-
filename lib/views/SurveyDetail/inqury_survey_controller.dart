@@ -41,33 +41,41 @@ class SurveyController extends GetxController {
   SurveyController({required this.putUpdateSurvey});
 
   /// Format angka ke format Rupiah untuk tampilan (contoh: 1000000 -> 1.000.000)
-  String formatRupiah(String numberString) {
-    if (numberString.isEmpty || numberString == '0' || numberString == '0.00') {
-      return '0';
-    }
-    final number =
-        double.tryParse(numberString.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0.0;
-    if (number == 0) return '0';
-    return number.toInt().toString().replaceAllMapped(
-        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]}.');
+  /// Format angka ke format Rupiah untuk tampilan (contoh: 1000000 -> 5.000.000,00)
+String formatRupiah(String numberString) {
+  if (numberString.isEmpty || numberString == '0' || numberString == '0.00') {
+    return '0,00';
   }
+  final number = double.tryParse(numberString.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0.0;
+  if (number == 0) return '0,00';
+
+  // Format to two decimal places
+  final formatted = number.toStringAsFixed(2);
+  // Split into integer and decimal parts
+  final parts = formatted.split('.');
+  // Add thousand separators to integer part
+  final integerPart = parts[0].replaceAllMapped(
+      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]}.');
+  // Combine with decimal part, using comma as decimal separator
+  return '$integerPart,${parts[1]}';
+}
 
   /// Format angka untuk API dengan dua desimal (contoh: 1000000 -> "1000000.00")
-  String formatForApi(String numberString) {
-    if (numberString.isEmpty || numberString == '0') return '0.00';
-    final number =
-        double.tryParse(numberString.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0.0;
-    return number.toStringAsFixed(2);
-  }
+String formatForApi(String numberString) {
+  if (numberString.isEmpty || numberString == '0') return '0.00';
+  final number =
+      double.tryParse(numberString.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0.0;
+  return number.toStringAsFixed(2);
+}
 
   /// Menghapus format Rupiah untuk parsing (contoh: 1.000.000 -> 1000000)
-  String unformatRupiah(String formatted) {
-    if (formatted.isEmpty || formatted == '0') return '0';
-    final cleaned = formatted
-        .replaceAll(RegExp(r'[^0-9]'), '')
-        .replaceFirst(RegExp(r'^0+'), '');
-    return cleaned.isEmpty ? '0' : cleaned;
-  }
+String unformatRupiah(String formatted) {
+  if (formatted.isEmpty || formatted == '0') return '0';
+  final cleaned = formatted
+      .replaceAll(RegExp(r'[^0-9]'), '')
+      .replaceFirst(RegExp(r'^0+'), '');
+  return cleaned.isEmpty ? '0' : cleaned;
+}
 
   /// Fetch survey data for DetailSurvey
   Future<void> getSurveyList({required String trxSurvey}) async {

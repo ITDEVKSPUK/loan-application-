@@ -67,7 +67,6 @@ void showLocationBottomSheet(
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // Dropdown untuk Provinsi
                               DropdownFilter(
                                 title: 'Provinsi',
                                 items: locationController.provinces,
@@ -103,8 +102,6 @@ void showLocationBottomSheet(
                                   locationController.fetchRegencies(value);
                                 },
                               ),
-
-                              // Dropdown untuk Kabupaten
                               if (locationController.regencies.isNotEmpty) ...[
                                 DropdownFilter(
                                   title: 'Kabupaten',
@@ -140,8 +137,6 @@ void showLocationBottomSheet(
                                   },
                                 ),
                               ],
-
-                              // Dropdown untuk Kecamatan
                               if (locationController.districts.isNotEmpty) ...[
                                 DropdownFilter(
                                   title: 'Kecamatan',
@@ -175,8 +170,6 @@ void showLocationBottomSheet(
                                   },
                                 ),
                               ],
-
-                              // Dropdown untuk Desa
                               if (locationController.villages.isNotEmpty) ...[
                                 DropdownFilter(
                                   title: 'Desa',

@@ -67,7 +67,7 @@ class _DatailAnggotaState extends State<DatailAnggota> {
                         label: 'No. Telpon',
                         width: double.infinity,
                         height: 50,
-                        value: '+62  ${iqyAnggotaController.phone.value}',
+                        value: iqyAnggotaController.phone.value,
                         keyboardType: TextInputType.text,
                       ),
                       FieldReadonly(

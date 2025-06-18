@@ -73,8 +73,8 @@ class _SurveyListState extends State<SurveyList> {
                       ),
                       child: SurveyBox(
                         name: item.fullName,
-                        date: DateFormat('yyyy-MM-dd')
-                            .format(item.application.trxDate),
+                        date: DateFormat('yyyy-MMMM-dd', 'id_ID')
+                            .format(item.application.trxDate), // Updated date format
                         location: item.sectorCity,
                         image: (item.document?.docPerson.isNotEmpty ?? false)
                             ? item.document!.docPerson[0].img
