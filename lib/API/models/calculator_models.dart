@@ -1,12 +1,12 @@
 class LoanSimulationResponse {
   final String loanAmount;
   final String annualInterestRate;
-  final DateTime loanDate;
+  final String loanDate;
   final String paymentFrequency;
   final String tenor;
   final String method;
-  final DateTime firstPaymentDue;
-  final DateTime lastPaymentDue;
+  final String firstPaymentDue;
+  final String lastPaymentDue;
   final String totalAllPayments;
   final String monthlyPayment;
   final String totalInterest;
@@ -31,14 +31,14 @@ class LoanSimulationResponse {
 
   factory LoanSimulationResponse.fromJson(Map<String, dynamic> json) {
     return LoanSimulationResponse(
-      loanAmount: json['Loan Amount']?.toString() ?? '0',
-      annualInterestRate: json['Annual Interest Rate']?.toString() ?? '0',
-      loanDate: DateTime.parse(json['Loan Date']),
+      loanAmount: json['Loan Amount'] ?? '0',
+      annualInterestRate: json['Annual Interest Rate'] ?? '0',
+      loanDate: json['Loan Date'],
       paymentFrequency: json['Payment Frequency'] ?? '',
-      tenor: json['Tenor']?.toString() ?? '',
+      tenor: json['Tenor'] ?? '',
       method: json['Method'] ?? '',
-      firstPaymentDue: DateTime.parse(json['1st Payment Due']),
-      lastPaymentDue: DateTime.parse(json['Last Payment Due']),
+      firstPaymentDue: json['1st Payment Due'],
+      lastPaymentDue: json['Last Payment Due'] ?? 'raono',
       totalAllPayments: json['Total All Payments']?.toString() ?? '0',
       data: (json['data'] as List<dynamic>)
           .map((e) => RepaymentData.fromJson(e))

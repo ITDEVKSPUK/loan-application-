@@ -7,12 +7,13 @@ class SimulationController extends GetxController {
   final loanAmountController = TextEditingController();
   final loanTermController = TextEditingController();
   final interestRateController = TextEditingController();
-
   var loanType = 'FLAT'.obs;
   var startDate = DateTime.now().obs;
-
+  var LoanAmount = ''.obs;
   var isLoanAmountValid = true.obs;
   var isLoading = false.obs;
+  var duration = ''.obs;
+  var annualInterestRate = ''.obs;
 
   var response = Rxn<LoanSimulationResponse>();
   RxList<Map<String, dynamic>> repaymentSchedule = <Map<String, dynamic>>[].obs;
@@ -20,6 +21,10 @@ class SimulationController extends GetxController {
   var monthlyPayment = 0.0.obs;
   var totalInterest = 0.0.obs;
   var totalPayment = 0.0.obs;
+  var loanDate = ''.obs;
+  var firstPaymentDue = ''.obs;
+  var lastPaymentDue = ''.obs;
+  var method = ''.obs;
 
   // void validateLoanAmount(String val) {
   //   final cleaned = val.replaceAll('.', '').replaceAll('Rp', '').trim();
@@ -64,13 +69,21 @@ class SimulationController extends GetxController {
         return;
       }
 
+      String roundTo;
+      if (loanType.value == 'FLAT') {
+        roundTo = '2';
+      } else {
+        roundTo = '1'; // Untuk ANNUITY dan EFFECTIVE
+      }
+
       isLoading.value = true;
       final res = await SimulationService().simulateLoan(
         method: loanType.value,
-        loanDate: DateTime.now(),
+        loanDate: startDate.value,
         interestRate: rate.toString(),
         loanAmount: loanAmount.toString(),
         tenor: tenor.toString(),
+        roundTo: roundTo,
       );
       if (res == null) {
         _showError(context, 'Gagal mendapatkan data simulasi');
@@ -81,7 +94,15 @@ class SimulationController extends GetxController {
       monthlyPayment.value = double.tryParse(res.monthlyPayment) ?? 0;
       totalInterest.value = double.tryParse(res.totalInterest) ?? 0;
       totalPayment.value = double.tryParse(res.totalPayment) ?? 0;
+      lastPaymentDue.value = res.lastPaymentDue;
+      firstPaymentDue.value = res.firstPaymentDue;
+      loanDate.value = res.loanDate;
+      LoanAmount.value = res.loanAmount;
+      duration.value = res.tenor;
+      annualInterestRate.value = res.annualInterestRate;
+      method.value = res.method;
       repaymentSchedule.value = res.data
+      
           .map((e) => {
                 'month': e.monthSay,
                 'totalPayment': e.payment,

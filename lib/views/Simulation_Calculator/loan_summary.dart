@@ -10,6 +10,12 @@ class LoanSummaryAndSchedule extends StatelessWidget {
   final String loanType;
   final String interestRateText;
   final DateTime startDate;
+  final String firstPaymentDue;
+  final String lastPaymentDue;
+  final String duration;
+  final String annualInterestRate;
+  final String method;
+  final String loanDate;
   final List<Map<String, dynamic>> repaymentSchedule;
 
   const LoanSummaryAndSchedule({
@@ -23,19 +29,24 @@ class LoanSummaryAndSchedule extends StatelessWidget {
     required this.interestRateText,
     required this.startDate,
     required this.repaymentSchedule,
+    required this.lastPaymentDue,
+    required this.loanDate,
+    required this.firstPaymentDue,
+    required this.duration,
+    required this.annualInterestRate,
+    required this.method,
   });
 
   String formatCurrency(dynamic value) {
+    print('Input to formatCurrency: $value, Type: ${value.runtimeType}');
     double number;
     if (value is String) {
-      final cleaned = value.replaceAll('.', '').replaceAll(',', '');
-      number = double.tryParse(cleaned) ?? 0;
+      number = double.tryParse(value.replaceAll(',', '')) ?? 0;
     } else if (value is num) {
       number = value.toDouble();
     } else {
       number = 0;
     }
-
     return NumberFormat.currency(
             locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0)
         .format(number);
@@ -56,24 +67,21 @@ class LoanSummaryAndSchedule extends StatelessWidget {
           double.tryParse(schedule['totalPayment'].toString()) ?? 0;
     }
 
-    final double bungaPerBulan =
-        (double.tryParse(interestRateText.replaceAll(',', '.')) ?? 0) / 12;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Jumlah Pinjaman: ${formatCurrency(loanAmountText)}'),
-        Text('Lama Peminjaman: $loanTermText bulan'),
-        Text('Jenis: $loanType'),
-        Text('Bunga per bulan: ${bungaPerBulan.toStringAsFixed(2)}%'),
-        Text('Bunga per tahun: $interestRateText%'),
-        Text('Mulai Meminjam: ${DateFormat.yMMMMd().format(startDate)}'),
-        const SizedBox(height: 20),
-        Text('Angsuran per bulan: ${formatCurrency(monthlyPayment)}'),
-        Text('Total Bunga: ${formatCurrency(totalInterest)}'),
-        Text('Total yang Dibayarkan: ${formatCurrency(totalPayment)}'),
+        Text('Lama Peminjaman: $duration'),
+        Text('Jenis: $method'),
+        Text('Bunga per tahun: $annualInterestRate'),
         Text(
-          'Tanggal Lunas: ${DateFormat.yMMMMd().format(startDate.add(Duration(days: 30 * int.parse(loanTermText))))}',
+            'Tanggal peminjaman: ${DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.parse(loanDate))}'),
+        Text(
+            'Pembayaran Pertama: ${DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.parse(firstPaymentDue))}'),
+        const SizedBox(height: 20),
+        Text('Total yang Dibayarkan: ${formatCurrency(totalPaymentLocal)}'),
+        Text(
+          'Tanggal Lunas: ${DateFormat('dd MMMM yyyy', 'id_ID').format(DateTime.parse(lastPaymentDue))}',
         ),
         const SizedBox(height: 20),
         const Text('Simulasi Angsuran:'),

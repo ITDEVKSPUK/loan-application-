@@ -16,7 +16,7 @@ class SimulationService {
     required String interestRate,
     required String loanAmount,
     required String tenor,
-    String roundTo = "1", // Default ke "1" seperti di Postman
+    required String roundTo, // Default ke "1" seperti di Postman
   }) async {
     try {
       // Format body sama persis seperti di Postman

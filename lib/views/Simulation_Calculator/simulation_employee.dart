@@ -15,11 +15,6 @@ class Simulation_Employe extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(SimulationController());
 
-    double calculateTotal(String key) {
-      return controller.repaymentSchedule
-          .fold(0.0, (sum, item) => sum + item[key]);
-    }
-
     return Scaffold(
       backgroundColor: AppColors.pureWhite,
       body: Column(
@@ -90,11 +85,18 @@ class Simulation_Employe extends StatelessWidget {
                             ),
                             child: SingleChildScrollView(
                               child: LoanSummaryAndSchedule(
+                                method: controller.method.value,
+                                annualInterestRate:
+                                    controller.annualInterestRate.value,
+                                duration: controller.duration.value,
+                                loanDate: controller.loanDate.value,
+                                firstPaymentDue:
+                                    controller.firstPaymentDue.value,
+                                lastPaymentDue: controller.lastPaymentDue.value,
                                 monthlyPayment: controller.monthlyPayment.value,
                                 totalInterest: controller.totalInterest.value,
-                               totalPayment: controller.totalPayment.value,
-                                loanAmountText:
-                                    controller.loanAmountController.text,
+                                totalPayment: controller.totalPayment.value,
+                                loanAmountText: controller.LoanAmount.value,
                                 loanTermText:
                                     controller.loanTermController.text,
                                 loanType: controller.loanType.value,
