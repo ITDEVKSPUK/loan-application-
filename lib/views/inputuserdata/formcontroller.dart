@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -18,7 +19,7 @@ class InputDataController extends GetxController {
   // Text Controllers
   final nikController = TextEditingController();
   final selectedGenderController = TextEditingController();
-  final nikpasaganController = TextEditingController();
+  final nikpasanganController = TextEditingController();
   final namaAwalController = TextEditingController();
   final namaAkhirController = TextEditingController();
   final namaPasanganController = TextEditingController();
@@ -29,7 +30,10 @@ class InputDataController extends GetxController {
   final alamatController = TextEditingController();
   final nominalController = TextEditingController();
   final jenisJaminanController = TextEditingController();
+  final nilaiJaminanController = TextEditingController();
+  final tujuanPinjamanController = TextEditingController();
   final detileAlamatController = TextEditingController();
+  final mapsUrlController = TextEditingController();
   final postalCodeController = TextEditingController();
 
   // Reactive Variables
@@ -48,7 +52,8 @@ class InputDataController extends GetxController {
   final selectedLongitude = 0.0.obs;
   final isLoading = true.obs;
   final locationServiceEnabled = true.obs;
-  final initialPosition = const LatLng(-6.175392, 106.827153).obs; // Default: Jakarta
+  final initialPosition =
+      const LatLng(-6.175392, 106.827153).obs; // Default: Jakarta
   final selectedPosition = Rxn<LatLng>();
   final mapController = Rxn<GoogleMapController>();
 
@@ -57,23 +62,9 @@ class InputDataController extends GetxController {
 
   @override
   void onClose() {
-    // Dispose controllers
-    nikController.dispose();
-    selectedGenderController.dispose();
-    nikpasaganController.dispose();
-    namaAwalController.dispose();
-    namaAkhirController.dispose();
-    namaPasanganController.dispose();
-    tanggallahirController.dispose();
-    kotaAsalController.dispose();
-    telpController.dispose();
-    pekerjaanController.dispose();
-    alamatController.dispose();
-    nominalController.dispose();
-    jenisJaminanController.dispose();
-    detileAlamatController.dispose();
-    postalCodeController.dispose();
+    // Dispose of the map controller when the controller is closed
     mapController.value?.dispose();
+    mapController.value = null;
     super.onClose();
   }
 
@@ -140,13 +131,7 @@ class InputDataController extends GetxController {
         desiredAccuracy: LocationAccuracy.high,
       );
       initialPosition.value = LatLng(position.latitude, position.longitude);
-      selectedPosition.value = initialPosition.value;
       isLoading.value = false;
-      if (mapController.value != null) {
-        mapController.value!.animateCamera(
-          CameraUpdate.newLatLng(initialPosition.value),
-        );
-      }
     } catch (e) {
       isLoading.value = false;
       Get.snackbar(
@@ -164,15 +149,18 @@ class InputDataController extends GetxController {
     selectedLongitude.value = position.longitude;
     selectedLocationLink.value =
         'https://maps.google.com/?q=${position.latitude},${position.longitude}';
-    detileAlamatController.text = selectedLocationLink.value;
+    mapsUrlController.text = selectedLocationLink.value;
     update();
   }
 
   void onMapCreated(GoogleMapController controller) {
     mapController.value = controller;
-    mapController.value!.animateCamera(
-      CameraUpdate.newLatLngZoom(initialPosition.value, 15),
-    );
+    // Only animate camera if map is initialized and initial position is valid
+    if (initialPosition.value != const LatLng(-6.175392, 106.827153)) {
+      mapController.value!.animateCamera(
+        CameraUpdate.newLatLngZoom(initialPosition.value, 15),
+      );
+    }
   }
 
   Future<void> fetchNikData() async {
@@ -215,7 +203,7 @@ class InputDataController extends GetxController {
     namaAwalController.text = anggotaResponse.owner?.firstName ?? '';
     namaAkhirController.text = anggotaResponse.owner?.lastName ?? '';
     namaPasanganController.text = anggotaResponse.owner?.pasanganNama ?? '';
-    nikpasaganController.text = anggotaResponse.owner?.pasanganIdcard ?? '';
+    nikpasanganController.text = anggotaResponse.owner?.pasanganIdcard ?? '';
     tanggallahirController.text =
         formatDate(anggotaResponse.owner?.dateBorn?.toString());
     telpController.text = anggotaResponse.address?.phone ?? '';
@@ -224,6 +212,7 @@ class InputDataController extends GetxController {
         anggotaResponse.address?.deskripsiPekerjaan ?? '';
     postalCodeController.text = anggotaResponse.address?.postalCode ?? '';
     detileAlamatController.text = anggotaResponse.address?.addressDetile ?? '';
+    mapsUrlController.text = anggotaResponse.address?.mapsUrl ?? '';
     selectedGender.value = anggotaResponse.owner?.gender?.toString() ?? '';
     alamatController.text = anggotaResponse.address?.sectorCity ?? '';
     isUnmarried.value = anggotaResponse.owner?.pasanganNama == null ||
@@ -299,22 +288,30 @@ class InputDataController extends GetxController {
         cityBorn: kotaAsalController.text,
         pasanganNama:
             isUnmarried.value ? 'Belum Kawin' : namaPasanganController.text,
-        pasanganIdCart: isUnmarried.value ? '0' : nikpasaganController.text,
+        pasanganIdCart: isUnmarried.value ? '0' : nikpasanganController.text,
         region: parts.length > 1 ? parts[1] : '',
         sector: parts.length > 2 ? parts[2] : '',
         village: parts.length > 3 ? parts[3] : '',
         scopeVillage: '004-005',
         addressLine1: detileAlamatController.text,
+        mapsUrl: mapsUrlController.text.isEmpty
+            ? 'https://maps.google.com/?q=${selectedLatitude.value},${selectedLongitude.value}'
+            : mapsUrlController.text,
         pemberiKerja: pekerjaanController.text,
         postalCode: postalCodeController.text,
         deskripsiPekerjaan: pekerjaanController.text,
         phone: telpController.text.replaceAll(RegExp(r'\s'), ''),
       );
+
       if (response.statusCode == 200) {
-        _showSnackbar(
-            'Berhasil', 'Data berhasil disimpan', AppColors.casualbutton1);
-        final cifResponse = CifResponse.fromJson(response.data);
-        setCif(cifResponse.cifId);
+        if (response.data != null) {
+          final cifResponse = CifResponse.fromJson(response.data);
+          setCif(cifResponse.cifId);
+          _showSnackbar(
+              'Berhasil', 'Data berhasil disimpan', AppColors.casualbutton1);
+        } else {
+          _showSnackbar('Gagal', 'Respons data kosong', AppColors.redstatus);
+        }
       } else {
         _showSnackbar('Gagal', 'Gagal menyimpan data: ${response.statusCode}',
             AppColors.redstatus);
@@ -350,7 +347,7 @@ class InputDataController extends GetxController {
     namaPasanganController.clear();
     tanggallahirController.clear();
     kotaAsalController.clear();
-    nikpasaganController.clear();
+    nikpasanganController.clear();
     telpController.clear();
     pekerjaanController.clear();
     postalCodeController.clear();
@@ -358,6 +355,7 @@ class InputDataController extends GetxController {
     nominalController.clear();
     jenisJaminanController.clear();
     detileAlamatController.clear();
+    mapsUrlController.clear();
     fotoKtp.value = null;
     buktiJaminan.value = null;
     isUnmarried.value = false;
@@ -373,8 +371,11 @@ class InputDataController extends GetxController {
     isLoading.value = true;
     locationServiceEnabled.value = true;
     selectedPosition.value = null;
+    // Dispose of existing map controller to prevent channel errors
+    mapController.value?.dispose();
     mapController.value = null;
     cifResponse.value = 0;
+    telpController.clear();
     update();
   }
 
@@ -392,14 +393,23 @@ class InputDataController extends GetxController {
           AppColors.redstatus);
       return false;
     }
-    final cleanedPhone = telpController.text.replaceAll(RegExp(r'\s'), '');
-    if (!RegExp(r'^\+\d+$').hasMatch(cleanedPhone)) {
+
+    final cleanedPhone = telpController.text.replaceAll(RegExp(r'[\s\-]'), '');
+    print('Cleaned phone in validateForm: $cleanedPhone');
+    if (cleanedPhone.isEmpty) {
+      _showSnackbar(
+          'Error', 'Nomor telepon tidak boleh kosong', AppColors.redstatus);
+      return false;
+    }
+
+    if (!RegExp(r'^\+\d{6,15}$').hasMatch(cleanedPhone)) {
       _showSnackbar(
           'Error',
-          'Nomor telepon harus diawali dengan "+" dan hanya berisi angka',
+          'Nomor telepon harus diawali dengan kode negara (misal +62 atau +376) dan memiliki 6-15 digit',
           AppColors.redstatus);
       return false;
     }
+
     return true;
   }
 
@@ -431,7 +441,10 @@ class InputDataController extends GetxController {
       return;
     }
     await saveForm();
-    clearForm();
+    final storage = GetStorage();
+    storage.write('nominal', nominalController.text);
+    storage.write('tujuanPinjaman', tujuanPinjamanController.text);
+    storage.write('nilaiJaminan', nilaiJaminanController.text);
     Get.toNamed(MyAppRoutes.dataPinjaman);
   }
 
@@ -439,10 +452,10 @@ class InputDataController extends GetxController {
     isUnmarried.value = value ?? false;
     if (isUnmarried.value) {
       namaPasanganController.text = 'Belum Kawin';
-      nikpasaganController.text = '0';
+      nikpasanganController.text = '0';
     } else {
       namaPasanganController.clear();
-      nikpasaganController.clear();
+      nikpasanganController.clear();
     }
     update();
   }
@@ -469,23 +482,26 @@ class InputDataController extends GetxController {
   Future<void> navigateToGoogleMaps() async {
     try {
       print('Navigating to /detail_maps...');
-      await checkLocationServiceAndGetPosition(); // Initialize location
-      final result = await Get.toNamed('/detail_maps');
+      // Reset map state to prevent channel errors
+      mapController.value?.dispose();
+      mapController.value = null;
+      await checkLocationServiceAndGetPosition(); // Ensure location is checked
+      final result = await Get.toNamed('/detail_maps', arguments: {
+        'initialLatitude':
+            selectedLatitude.value != 0.0 ? selectedLatitude.value : initialPosition.value.latitude,
+        'initialLongitude':
+            selectedLongitude.value != 0.0 ? selectedLongitude.value : initialPosition.value.longitude,
+      });
       print('Navigation result: $result');
       if (result is Map<String, dynamic>) {
         selectedLatitude.value = result['latitude'] as double;
         selectedLongitude.value = result['longitude'] as double;
         selectedLocationLink.value =
             'https://maps.google.com/?q=${result['latitude']},${result['longitude']}';
-        detileAlamatController.text = selectedLocationLink.value;
+        mapsUrlController.text = selectedLocationLink.value;
         update();
       } else {
-        print('Unexpected result type: ${result.runtimeType}');
-        _showSnackbar(
-          'Error',
-          'Unexpected result from Google Maps navigation.',
-          AppColors.redstatus,
-        );
+        print('No coordinates selected or navigation cancelled.');
       }
     } catch (e, stackTrace) {
       print('Navigation error: $e\nStack trace: $stackTrace');
@@ -495,6 +511,5 @@ class InputDataController extends GetxController {
         AppColors.redstatus,
       );
     }
-    await Geolocator.getCurrentPosition();
   }
 }

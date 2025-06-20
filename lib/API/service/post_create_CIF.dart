@@ -29,6 +29,7 @@ class CreateCIFService {
     required String pemberiKerja,
     required String phone,
     required String deskripsiPekerjaan,
+    required String mapsUrl,
   }) async {
     try {
       // Generate headers
@@ -58,6 +59,7 @@ class CreateCIFService {
           "address_line1": addressLine1,
           "postal_code": postalCode,
           "pemberi_kerja": pemberiKerja,
+          "maps_url" : mapsUrl,
           "deskripsi_pekerjaan": deskripsiPekerjaan,
           "phone": phone,
         }

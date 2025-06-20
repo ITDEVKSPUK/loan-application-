@@ -19,6 +19,8 @@ class IqyAnggotaController extends GetxController {
   var inquiryModel = Rxn<InquiryAnggota>();
   var isLoading = false.obs;
   var errorMessage = ''.obs;
+  var mapsUrl = ''.obs;
+  var postal_code = ''.obs;
 
   // Formatter untuk tanggal lahir (DD-MMMM-YYYY, contoh: 12-Oktober-2025)
   String formatDate(String? date_born) {
@@ -54,6 +56,50 @@ class IqyAnggotaController extends GetxController {
     }
   }
 
+  String formatPhoneNumber(String phoneNumber) {
+    if (phoneNumber.isEmpty) {
+      return 'Tidak Ada';
+    }
+
+    // Bersihkan input, hanya ambil digit dan tanda +
+    String cleanNumber = phoneNumber.replaceAll(RegExp(r'[^\d+]'), '');
+
+    // Cek kode negara (1-4 digit)
+    final countryCodeMatch = RegExp(r'^\+(\d{1,4})').firstMatch(cleanNumber);
+    if (countryCodeMatch == null) {
+      return phoneNumber; // Kembalikan asli jika tidak ada kode negara
+    }
+
+    // Ambil kode negara dan sisa nomor
+    String countryCode = countryCodeMatch.group(0)!; // Misal: +62, +376
+    String restOfNumber =
+        cleanNumber.substring(countryCode.length); // Sisa nomor // Sisa nomor
+
+    // Jika sisa nomor terlalu pendek, kembalikan tanpa format
+    if (restOfNumber.length < 3) {
+      return '$countryCode $restOfNumber';
+    }
+
+    // Format nomor berdasarkan panjang
+    String formattedNumber;
+    if (restOfNumber.length >= 10) {
+      // Untuk nomor panjang (misal: Indonesia, +62812-345-6789)
+      formattedNumber =
+          '${restOfNumber.substring(0, 3)}-${restOfNumber.substring(3, 6)}-${restOfNumber.substring(6)}';
+    } else if (restOfNumber.length >= 7) {
+      // Untuk nomor menengah (misal: Indonesia pendek, +62812-3456)
+      formattedNumber =
+          '${restOfNumber.substring(0, 3)}-${restOfNumber.substring(3)}';
+    } else {
+      // Untuk nomor pendek (misal: Andorra, +376123-456)
+      formattedNumber =
+          '${restOfNumber.substring(0, 3)}-${restOfNumber.substring(3)}';
+    }
+
+    // Gabungkan kode negara dan nomor dengan spasi
+    return '$countryCode $formattedNumber';
+  }
+
   void getSurveyListanggota({required String id_search}) async {
     isLoading.value = true;
     errorMessage.value = '';
@@ -68,10 +114,14 @@ class IqyAnggotaController extends GetxController {
 
       inquiryModel.value = InquiryAnggota;
       full_name.value = InquiryAnggota.owner.fullName;
-      enik_no.value = InquiryAnggota.owner.enikNo;
-      phone.value = InquiryAnggota.address.phone.isEmpty
+      mapsUrl.value = InquiryAnggota.address.mapsUrl;
+      postal_code.value = InquiryAnggota.address.postalCode.isEmpty
           ? 'Tidak Ada'
-          : InquiryAnggota.address.phone;
+          : InquiryAnggota.address.postalCode;
+      enik_no.value = InquiryAnggota.owner.enikNo;
+      phone.value = formatPhoneNumber(InquiryAnggota.address.phone.isEmpty
+          ? 'Tidak Ada'
+          : InquiryAnggota.address.phone);
       address_line1.value = InquiryAnggota.address.addressLine1;
       sector_city.value = InquiryAnggota.address.sectorCity;
       date_born.value = formatDate(InquiryAnggota.owner.dateBorn);

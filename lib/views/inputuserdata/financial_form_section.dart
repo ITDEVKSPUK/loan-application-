@@ -23,7 +23,7 @@ class FinancialFormSection extends StatelessWidget {
           inputFormatters: [
             MoneyInputFormatter(
               thousandSeparator: ThousandSeparator.Period,
-              mantissaLength: 0, // Prevent decimal input
+              mantissaLength: 0,
             ),
           ],
         ),
@@ -46,7 +46,7 @@ class FinancialFormSection extends StatelessWidget {
           inputFormatters: [
             MoneyInputFormatter(
               thousandSeparator: ThousandSeparator.Period,
-              mantissaLength: 0, // Prevent decimal input
+              mantissaLength: 0,
             ),
           ],
         ),
@@ -61,10 +61,10 @@ class FinancialFormSection extends StatelessWidget {
           label: 'Pendapatan per bulan',
           controller: controller.incomeController,
           keyboardType: TextInputType.number,
-           inputFormatters: [
+          inputFormatters: [
             MoneyInputFormatter(
               thousandSeparator: ThousandSeparator.Period,
-              mantissaLength: 0, // Prevent decimal input
+              mantissaLength: 0,
             ),
           ],
         ),
@@ -74,10 +74,10 @@ class FinancialFormSection extends StatelessWidget {
           label: 'Total Aset',
           controller: controller.assetController,
           keyboardType: TextInputType.number,
-           inputFormatters: [
+          inputFormatters: [
             MoneyInputFormatter(
               thousandSeparator: ThousandSeparator.Period,
-              mantissaLength: 0, // Prevent decimal input
+              mantissaLength: 0,
             ),
           ],
         ),
@@ -90,7 +90,7 @@ class FinancialFormSection extends StatelessWidget {
           inputFormatters: [
             MoneyInputFormatter(
               thousandSeparator: ThousandSeparator.Period,
-              mantissaLength: 0, // Prevent decimal input
+              mantissaLength: 0,
             ),
           ],
         ),
@@ -103,7 +103,7 @@ class FinancialFormSection extends StatelessWidget {
           inputFormatters: [
             MoneyInputFormatter(
               thousandSeparator: ThousandSeparator.Period,
-              mantissaLength: 0, // Prevent decimal input
+              mantissaLength: 0,
             ),
           ],
         ),

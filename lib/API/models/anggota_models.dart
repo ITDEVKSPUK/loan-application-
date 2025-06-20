@@ -140,6 +140,7 @@ class Address {
   final String? scopeVillage;
   final String? postalCode;
   final String? addressDetile;
+  final String? mapsUrl;
   final String? pemberiKerja;
   final String? deskripsiPekerjaan;
   final String? kodePekerjaan;
@@ -154,6 +155,7 @@ class Address {
     this.scopeVillage,
     this.postalCode,
     this.addressDetile,
+    this.mapsUrl,
     this.pemberiKerja,
     this.deskripsiPekerjaan,
     this.kodePekerjaan,
@@ -170,6 +172,7 @@ class Address {
       scopeVillage: json['scope_village'] ?? '',
       postalCode: json['postal_code'] ?? '',
       addressDetile: json['address_line1'] ?? '',
+      mapsUrl: json['maps_url'] ?? '',
       pemberiKerja: json['pemberi_kerja'] ?? '',
       deskripsiPekerjaan: json['deskripsi_pekerjaan'] ?? '',
       kodePekerjaan: json['kode_pekerjaan'] ?? '',
@@ -187,6 +190,7 @@ class Address {
       'scope_village': scopeVillage,
       'postal_code': postalCode,
       'address_line1': addressDetile,
+      'maps_url': mapsUrl,
       'pemberi_kerja': pemberiKerja,
       'deskripsi_pekerjaan': deskripsiPekerjaan,
       'kode_pekerjaan': kodePekerjaan,

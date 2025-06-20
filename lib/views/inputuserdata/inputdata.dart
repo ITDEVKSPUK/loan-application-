@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/History/controller_location.dart';
@@ -110,15 +111,47 @@ class InputData extends StatelessWidget {
                     height: 50,
                     label: 'Nama Akhir',
                     controller: controller.namaAkhirController),
-                TextfieldForm(
-                  width: double.infinity,
-                  height: 50,
-                  label: 'No. Telpon',
-                  controller: controller.telpController,
-                  keyboardType: TextInputType.phone,
-                  inputFormatters: [
-                    PhoneNumberFormatter(),
-                    LengthLimitingTextInputFormatter(20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'No. Telepon',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Outfit',
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    IntlPhoneField(
+                      initialCountryCode: 'ID',
+                      disableLengthCheck: false,
+                      decoration: InputDecoration(
+                        labelText: 'Nomor Telepon',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                              color: AppColors.black.withOpacity(0.2)),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 15),
+                      ),
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontFamily: 'Outfit',
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.black,
+                      ),
+                      onChanged: (phone) {
+                        controller.telpController.text =
+                            phone.completeNumber; 
+                        print(
+                            'Phone number updated: ${phone.completeNumber}'); // Debug
+                      },
+                      invalidNumberMessage: 'Nomor telepon tidak valid',
+                      flagsButtonPadding: const EdgeInsets.only(left: 10),
+                      dropdownIconPosition: IconPosition.trailing,
+                    ),
                   ],
                 ),
                 GenderRadioButtons(
@@ -167,18 +200,18 @@ class InputData extends StatelessWidget {
                       width: double.infinity,
                       height: 50,
                       label: 'Nik Pasangan',
-                      controller: controller.nikpasaganController,
-                      keyboardType: TextInputType.phone,
+                      controller: controller.nikpasanganController,
+                      keyboardType: TextInputType.number,
                       inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'[+\d\s]')),
+                        FilteringTextInputFormatter.digitsOnly,
                       ],
                       readOnly: controller.isUnmarried.value,
                     )),
                 TextfieldForm(
                   width: double.infinity,
                   height: 60,
-                  label: 'Detail Alamat',
-                  controller: controller.detileAlamatController,
+                  label: 'Titik Kordinat Alamat',
+                  controller: controller.mapsUrlController,
                   hintText: controller.selectedLocationLink.value.isEmpty
                       ? 'Klik untuk memilih lokasi di Google Maps'
                       : controller.selectedLocationLink.value,
@@ -190,11 +223,18 @@ class InputData extends StatelessWidget {
                   height: 50,
                   label: 'Kode POS',
                   controller: controller.postalCodeController,
-                  keyboardType: TextInputType.phone,
+                  keyboardType: TextInputType.number,
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[+\d\s]')),
+                    FilteringTextInputFormatter.digitsOnly,
                   ],
                 ),
+                TextfieldForm(
+                    width: double.infinity,
+                    height: 50,
+                    label: 'Detail Alamat',
+                    hintText: 'Jalan, RT/RW, Blok, No Rumah',
+                    controller: controller.detileAlamatController),
+                const SizedBox(height: 10),
                 TextfieldForm(
                   width: double.infinity,
                   height: 58,

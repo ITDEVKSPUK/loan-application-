@@ -78,6 +78,7 @@ class Address {
   final String deskripsiPekerjaan;
   final String namaPerusahaan;
   final String phone;
+  final String mapsUrl;
 
   Address({
     required this.sectorCity,
@@ -93,6 +94,7 @@ class Address {
     required this.deskripsiPekerjaan,
     required this.namaPerusahaan,
     required this.phone,
+    required this.mapsUrl,
   });
 
   factory Address.fromJson(Map<String, dynamic> json) {
@@ -110,6 +112,7 @@ class Address {
       deskripsiPekerjaan: json['deskripsi_pekerjaan']?.toString() ?? '',
       namaPerusahaan: json['nama_perusahaan']?.toString() ?? '',
       phone: json['phone']?.toString() ?? '',
+      mapsUrl: json['maps_url']?.toString() ?? '',
     );
   }
 }

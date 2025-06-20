@@ -37,7 +37,7 @@ class GoogleMapsScreen extends StatelessWidget {
                         position: controller.selectedPosition.value!,
                       ),
                     }
-                  : {},
+                  : {}, // Only show marker after a tap
               myLocationEnabled: controller.locationServiceEnabled.value,
               myLocationButtonEnabled: controller.locationServiceEnabled.value,
               zoomControlsEnabled: false,

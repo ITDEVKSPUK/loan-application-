@@ -57,7 +57,7 @@ class _DatailAnggotaState extends State<DatailAnggota> {
                         keyboardType: TextInputType.number,
                       ),
                       FieldReadonly(
-                        label: 'Nama',
+                        label: 'Nama Lengkap',
                         width: double.infinity,
                         height: 50,
                         value: iqyAnggotaController.full_name.value,
@@ -69,19 +69,13 @@ class _DatailAnggotaState extends State<DatailAnggota> {
                         height: 50,
                         value: iqyAnggotaController.phone.value,
                         keyboardType: TextInputType.text,
+                        
                       ),
-                      FieldReadonly(
-                        label: 'Alamat',
+                       FieldReadonly(
+                        label: 'Gender',
                         width: double.infinity,
-                        height: 58,
-                        value: iqyAnggotaController.sector_city.value,
-                        keyboardType: TextInputType.text,
-                      ),
-                      FieldReadonly(
-                        label: 'Detail Alamat',
-                        width: double.infinity,
-                        height: 58,
-                        value: iqyAnggotaController.address_line1.value,
+                        height: 50,
+                        value: iqyAnggotaController.gender.value,
                         keyboardType: TextInputType.text,
                       ),
                       FieldReadonly(
@@ -119,11 +113,32 @@ class _DatailAnggotaState extends State<DatailAnggota> {
                         value: iqyAnggotaController.pasangan_idcard.value,
                         keyboardType: TextInputType.text,
                       ),
-                      FieldReadonly(
-                        label: 'Gender',
+                     FieldReadonly(
+                        label: 'Kode Pos',
                         width: double.infinity,
-                        height: 50,
-                        value: iqyAnggotaController.gender.value,
+                        height: 58,
+                        value: iqyAnggotaController.postal_code.value,
+                        keyboardType: TextInputType.text,
+                      ),
+                      FieldReadonly(
+                        label: 'Detail Alamat',
+                        width: double.infinity,
+                        height: 58,
+                        value: iqyAnggotaController.address_line1.value,
+                        keyboardType: TextInputType.text,
+                      ),
+                      FieldReadonly(
+                        label: 'Titik Kordinat Alamat',
+                        width: double.infinity,
+                        height: 58,
+                        value: iqyAnggotaController.mapsUrl.value,
+                        keyboardType: TextInputType.text,
+                      ),
+                      FieldReadonly(
+                        label: 'Alamat',
+                        width: double.infinity,
+                        height: 58,
+                        value: iqyAnggotaController.sector_city.value,
                         keyboardType: TextInputType.text,
                       ),
                     ],
