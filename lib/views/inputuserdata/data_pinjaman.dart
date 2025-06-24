@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
-import 'package:loan_application/widgets/InputUserData/financial_form_section.dart';
+import 'package:loan_application/views/inputuserdata/financial_form_section.dart';
 import 'package:loan_application/widgets/custom_appbar.dart';
 
 class DataPinjaman extends StatefulWidget {

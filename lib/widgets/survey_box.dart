@@ -24,17 +24,24 @@ class SurveyBox extends StatelessWidget {
   });
 
   // Function to format number as Rupiah
+  // Function to format number as Rupiah
   String formatRupiah(String numberString) {
     if (numberString.isEmpty || numberString == '0' || numberString == '0.00') {
-      return 'Rp 0';
+      return 'Rp 0,00';
     }
     final number =
         double.tryParse(numberString.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0.0;
-    if (number == 0) return 'Rp 0';
-    return 'Rp ${number.toInt().toString().replaceAllMapped(
-          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-          (m) => '${m[1]}.',
-        )}';
+    if (number == 0) return 'Rp 0,00';
+
+    // Format to two decimal places
+    final formatted = number.toStringAsFixed(2);
+    // Split into integer and decimal parts
+    final parts = formatted.split('.');
+    // Add thousand separators to integer part
+    final integerPart = parts[0].replaceAllMapped(
+        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]}.');
+    // Combine with decimal part, using comma as decimal separator
+    return 'Rp $integerPart,${parts[1]}';
   }
 
   // Function to format age

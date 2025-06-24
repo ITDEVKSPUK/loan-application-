@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart' as dio_pkg;
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -12,12 +11,12 @@ import 'package:loan_application/API/service/post_document.dart';
 import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
 class CreditFormController extends GetxController {
   final dio_pkg.Dio dio = DioClient.dio;
   final plafondController = TextEditingController();
   final purposeController = TextEditingController();
-  final collateralDescriptionController = TextEditingController();
   final collateralValueController = TextEditingController();
   final incomeController = TextEditingController();
   final assetController = TextEditingController();
@@ -25,14 +24,7 @@ class CreditFormController extends GetxController {
   final installmentController = TextEditingController();
 
   final cifID = Get.put(InputDataController());
-  // // Selected options
-  // String selectedPurpose = 'MODAL KERJA';
-  // String selectedCollateralType = 'Mobil';
-
-  // Selected images for the PDF
   List<XFile> selectedImages = [];
-
-  // Agunan and Document data
   var agunanList = <dynamic>[].obs;
   var documentList = <dynamic>[].obs;
   var selectedAgunan = ''.obs;
@@ -46,7 +38,7 @@ class CreditFormController extends GetxController {
       var fetchedAgunan = await getDocAgun.fetchAgunan();
       if (fetchedAgunan.isNotEmpty) {
         agunanList.value = fetchedAgunan;
-        print(cifID.cifId);
+        print('CIF ID: ${cifID.cifId}');
       }
     } catch (e) {
       print("Error fetching agunan: $e");
@@ -71,7 +63,6 @@ class CreditFormController extends GetxController {
     fetchDocuments();
   }
 
-  // Picking images (from camera or gallery)
   Future<void> pickImagesFromSource(
       BuildContext context, VoidCallback onImagesUpdated) async {
     final picker = ImagePicker();
@@ -91,7 +82,7 @@ class CreditFormController extends GetxController {
                     await picker.pickImage(source: ImageSource.camera);
                 if (image != null) {
                   selectedImages.add(image);
-                  onImagesUpdated(); // Trigger UI update
+                  onImagesUpdated();
                 }
               },
             ),
@@ -102,7 +93,7 @@ class CreditFormController extends GetxController {
                 Get.back();
                 final List<XFile> images = await picker.pickMultiImage();
                 selectedImages.addAll(images);
-                onImagesUpdated(); // Trigger UI update
+                onImagesUpdated();
               },
             ),
           ],
@@ -111,7 +102,6 @@ class CreditFormController extends GetxController {
     );
   }
 
-  // Generate PDF from selected images
   Future<File> generatePdfFromImages() async {
     final pdf = pw.Document();
     for (var image in selectedImages) {
@@ -131,10 +121,6 @@ class CreditFormController extends GetxController {
     await file.writeAsBytes(await pdf.save());
     return file;
   }
-
-  // Dispose controllers
-
-  // Convert form data to JSON for submission
 
   Future<File> compressImage(File file) async {
     final dir = await getTemporaryDirectory();
@@ -256,19 +242,21 @@ class CreditFormController extends GetxController {
 
   Future<void> uploadDocuments() async {
     try {
+      if (cifID.cifId == null || surveyId == null) {
+        throw Exception("CIF ID or Survey ID is missing.");
+      }
       final requestBody = {
         "Office_ID": "000",
         "cif_id": cifID.cifId,
         "application": {"trx_survey": surveyId}
       };
-      print('surveyId: $surveyId cifID: ${cifID.cifId}');
+      print('uploadDocuments: surveyId: $surveyId, cifID: ${cifID.cifId}');
       if (selectedDocumentImages.isEmpty ||
           selectedAgunanImages.isEmpty ||
           selectedKTPImages.isEmpty) {
         throw Exception("Gambar KTP, agunan, dan dokumen belum dipilih.");
       }
-      print(cifID.cifId);
-      print(surveyId);
+      print('uploadDocuments: Request body: $requestBody');
       Get.snackbar("Uploading", "Harap tunggu...",
           snackPosition: SnackPosition.BOTTOM);
 
@@ -295,76 +283,164 @@ class CreditFormController extends GetxController {
     }
   }
 
-  Future<void> createSurvey() async {
-    String cleanNumber(String text) => text.replaceAll(RegExp(r'[^0-9]'), '');
-    final service = PostSurveyService();
-    final response = await service.postSurvey(
-      cifId: cifID.cifId ?? 0,
-      idLegal: 3319123456,
-      officeId: "000",
-      application: {
-        "trx_date":
-            '${DateTime.now().toUtc().toIso8601String().split('.').first}+00:00',
-        "application_no": "0",
-        "purpose": purposeController.text,
-        "plafond": cleanNumber(plafondController.text),
-      },
-      collateral: {
-        "id": "600",
-        "id_name": "Mobil",
-        "adddescript": "Tanah Bangunan",
-        "id_catdocument": 1,
-        "document_type": "BPKB",
-        "value": 950000000
-      },
-      additionalInfo: {
-        "income": cleanNumber(incomeController.text),
-        "asset": cleanNumber(assetController.text),
-        "expenses": cleanNumber(expensesController.text),
-        "installment": cleanNumber(installmentController.text),
-      },
-    );
-    print(response.data);
+  double cleanNumber(String? text) {
+    if (text == null || text.isEmpty) {
+      print('cleanNumber: Input is null or empty, returning 0.0');
+      return 0.0;
+    }
+    // Remove all non-digit characters
+    String cleaned = text.replaceAll(RegExp(r'[^\d]'), '');
+    print('cleanNumber: Input: $text, Cleaned: $cleaned');
+    // If the cleaned string is empty, return 0.0
+    if (cleaned.isEmpty) {
+      print('cleanNumber: Cleaned string is empty, returning 0.0');
+      return 0.0;
+    }
+    // Parse as double
+    double result = double.tryParse(cleaned) ?? 0.0;
+    print('cleanNumber: Parsed result: $result');
+    return result;
+  }
 
-    setSurveyId(response.data['trx_idx']);
-    print(surveyId);
+  Future<String?> getAuthToken() async {
+    // Replace with your actual token retrieval logic
+    // Example: Fetch from secure storage or login API
+    return 'your_token_here'; // Placeholder: Replace with real token
+  }
+
+  Future<void> createSurvey() async {
+    try {
+      if (cifID.cifId == null) {
+        Get.snackbar("Error", "CIF ID is missing");
+        print('createSurvey: CIF ID is null');
+        return;
+      }
+
+      // Fetch auth token
+      final token = await getAuthToken();
+      if (token == null) {
+        Get.snackbar("Error", "Authentication token is missing");
+        print('createSurvey: Authentication token is null');
+        return;
+      }
+
+      // Set token in Dio headers
+      dio.options.headers['Authorization'] = 'Bearer $token';
+
+      final service = PostSurveyService();
+      final plafond = cleanNumber(plafondController.text);
+      final collateralValue = cleanNumber(collateralValueController.text);
+      final income = cleanNumber(incomeController.text);
+      final asset = cleanNumber(assetController.text);
+      final expenses = cleanNumber(expensesController.text);
+      final installment = cleanNumber(installmentController.text);
+
+      print('createSurvey: Sending data - '
+          'plafond: $plafond, '
+          'collateralValue: $collateralValue, '
+          'income: $income, '
+          'asset: $asset, '
+          'expenses: $expenses, '
+          'installment: $installment');
+
+      final response = await service.postSurvey(
+        cifId: cifID.cifId!,
+        idLegal: 3319123456,
+        officeId: "000",
+        application: {
+          "trx_date":
+              '${DateTime.now().toUtc().toIso8601String().split('.').first}+00:00',
+          "application_no": "0",
+          "purpose": purposeController.text,
+          "plafond": plafond,
+        },
+        collateral: {
+          "id": "600",
+          "id_name": "Mobil",
+          "adddescript": "Tanah Bangunan",
+          "id_catdocument": 1,
+          "document_type": "BPKB",
+          "value": collateralValue,
+        },
+        additionalInfo: {
+          "income": income,
+          "asset": asset,
+          "expenses": expenses,
+          "installment": installment,
+        },
+      );
+      print('createSurvey: Response data: ${response.data}');
+
+      final trxIdx = response.data['trx_idx']?.toString();
+      if (trxIdx == null) {
+        Get.snackbar("Error", "Failed to retrieve transaction ID");
+        print('createSurvey: Transaction ID (trx_idx) is null');
+        return;
+      }
+      setSurveyId(trxIdx);
+      print('createSurvey: Survey ID set to: $surveyId');
+    } catch (e) {
+      print("❌ Create survey gagal: $e");
+      if (e is dio_pkg.DioException && e.response?.statusCode == 401) {
+        Get.snackbar("Error", "Unauthorized: Invalid or missing authentication token");
+      } else {
+        Get.snackbar("Error", "Create survey gagal: ${e.toString()}");
+      }
+    }
   }
 
   Future<void> handleSubmit(BuildContext context) async {
+    if (!validateForm()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Harap isi semua kolom formulir.")),
+      );
+      print('handleSubmit: Form validation failed');
+      return;
+    }
     if (selectedAgunanImages.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             content: Text("Harap unggah gambar agunan terlebih dahulu.")),
       );
+      print('handleSubmit: No agunan images selected');
       return;
     }
     try {
-      await uploadDocuments(); // Pastikan fungsi ini dipanggil
-      Get.snackbar("Sukses", "Dokumen berhasil diunggah");
+      await createSurvey();
+      if (surveyId != null) {
+        await uploadDocuments();
+        Get.snackbar("Sukses", "Dokumen berhasil diunggah");
+        print('handleSubmit: Documents uploaded successfully');
+      } else {
+        Get.snackbar("Error", "Gagal membuat survey, upload dibatalkan");
+        print('handleSubmit: Survey ID is null, upload cancelled');
+      }
     } catch (e) {
+      print("❌ Handle submit gagal: $e");
       Get.snackbar("Error", "Upload gagal: ${e.toString()}");
     }
   }
 
   bool validateForm() {
-    if (plafondController.text.trim().isEmpty ||
-        purposeController.text.trim().isEmpty ||
-        collateralDescriptionController.text.trim().isEmpty ||
-        collateralValueController.text.trim().isEmpty ||
-        incomeController.text.trim().isEmpty ||
-        assetController.text.trim().isEmpty ||
-        expensesController.text.trim().isEmpty ||
-        installmentController.text.trim().isEmpty) {
-      return false;
-    }
-    return true;
+    bool isValid = [
+      plafondController.text,
+      purposeController.text,
+      collateralValueController.text,
+      incomeController.text,
+      assetController.text,
+      expensesController.text,
+      installmentController.text,
+    ].every((text) => text != null && text.trim().isNotEmpty);
+    print('validateForm: Form is ${isValid ? 'valid' : 'invalid'}');
+    return isValid;
   }
 
   RxString trxSurveyRespons = "".obs;
 
   void setSurveyId(String data) {
     trxSurveyRespons.value = data;
+    print('setSurveyId: Survey ID set to $data');
   }
 
-  String? get surveyId => trxSurveyRespons.value;
+  String? get surveyId => trxSurveyRespons.value.isEmpty ? null : trxSurveyRespons.value;
 }
