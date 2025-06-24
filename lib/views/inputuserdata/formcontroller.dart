@@ -14,6 +14,7 @@ import 'package:loan_application/API/service/post_history.dart';
 import 'package:loan_application/API/service/post_nik_check.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
+import 'package:loan_application/views/SurveyDetail/iqy_anggota_controller.dart';
 
 class InputDataController extends GetxController {
   // Text Controllers
@@ -40,7 +41,8 @@ class InputDataController extends GetxController {
   final fotoKtp = Rxn<File>();
   final buktiJaminan = Rxn<File>();
   final selectedGender = ''.obs;
-  final startDate = DateTime.now().obs;
+  final startDate = DateTime(2025, 6, 24, 13, 2)
+      .obs; // Updated to 01:02 PM WIB, June 24, 2025
   final selectedDateText = ''.obs;
   final selectedDate = ''.obs;
   final isUnmarried = false.obs;
@@ -56,24 +58,32 @@ class InputDataController extends GetxController {
       const LatLng(-6.175392, 106.827153).obs; // Default: Jakarta
   final selectedPosition = Rxn<LatLng>();
   final mapController = Rxn<GoogleMapController>();
+  final selectedCountryCode = '+62'.obs;
 
   final ImagePicker _picker = ImagePicker();
   final RxInt cifResponse = 0.obs;
 
   @override
   void onClose() {
-    // Dispose of the map controller when the controller is closed
     mapController.value?.dispose();
     mapController.value = null;
     super.onClose();
   }
 
+  void setCif(int cifId) {
+    cifResponse.value = cifId;
+    print('CIF ID set to: $cifId');
+  }
+
+  int? get cifId => cifResponse.value;
+
   String formatDate(String? dateString) {
-    if (dateString == null || dateString.isEmpty) return '';
+    if (dateString == null || dateString.isEmpty) return 'Tidak Ada';
     try {
       final date = DateTime.parse(dateString);
       return DateFormat('dd-MMMM-yyyy', 'id_ID').format(date);
     } catch (e) {
+      print('Error parsing date: $e');
       return dateString;
     }
   }
@@ -155,7 +165,6 @@ class InputDataController extends GetxController {
 
   void onMapCreated(GoogleMapController controller) {
     mapController.value = controller;
-    // Only animate camera if map is initialized and initial position is valid
     if (initialPosition.value != const LatLng(-6.175392, 106.827153)) {
       mapController.value!.animateCamera(
         CameraUpdate.newLatLngZoom(initialPosition.value, 15),
@@ -164,7 +173,7 @@ class InputDataController extends GetxController {
   }
 
   Future<void> fetchNikData() async {
-    final nikInput = nikController.text;
+    final nikInput = nikController.text.trim();
     if (nikInput.isEmpty) {
       _showSnackbar('Error', 'NIK field cannot be empty', AppColors.redstatus);
       isNextButtonEnabled.value = false;
@@ -206,7 +215,7 @@ class InputDataController extends GetxController {
     nikpasanganController.text = anggotaResponse.owner?.pasanganIdcard ?? '';
     tanggallahirController.text =
         formatDate(anggotaResponse.owner?.dateBorn?.toString());
-    telpController.text = anggotaResponse.address?.phone ?? '';
+    telpController.text = anggotaResponse.address?.phone ?? 'Tidak Ada';
     kotaAsalController.text = anggotaResponse.owner?.cityBorn ?? '';
     pekerjaanController.text =
         anggotaResponse.address?.deskripsiPekerjaan ?? '';
@@ -276,8 +285,17 @@ class InputDataController extends GetxController {
     }
 
     final createCIFService = CreateCIFService();
+    final storage = GetStorage(); // Tambahkan GetStorage
     try {
       final parts = alamatController.text.split(', ');
+      // Simpan countryCode dan phone ke GetStorage dengan kunci unik berdasarkan NIK
+      await storage.write(
+          'countryCode_${nikController.text}', selectedCountryCode.value);
+      await storage.write('phone_${nikController.text}', telpController.text);
+
+      print(
+          'Saved to storage: countryCode_${nikController.text}=${selectedCountryCode.value}, phone_${nikController.text}=${telpController.text}');
+
       final response = await createCIFService.createCIF(
         idLegal: 3319123456,
         officeId: '000',
@@ -294,21 +312,24 @@ class InputDataController extends GetxController {
         village: parts.length > 3 ? parts[3] : '',
         scopeVillage: '004-005',
         addressLine1: detileAlamatController.text,
+        postalCode: postalCodeController.text,
+        pemberiKerja: pekerjaanController.text,
+        phone: telpController.text,
+        deskripsiPekerjaan: pekerjaanController.text,
         mapsUrl: mapsUrlController.text.isEmpty
             ? 'https://maps.google.com/?q=${selectedLatitude.value},${selectedLongitude.value}'
             : mapsUrlController.text,
-        pemberiKerja: pekerjaanController.text,
-        postalCode: postalCodeController.text,
-        deskripsiPekerjaan: pekerjaanController.text,
-        phone: telpController.text.replaceAll(RegExp(r'\s'), ''),
+        countryCode: selectedCountryCode.value,
       );
 
       if (response.statusCode == 200) {
         if (response.data != null) {
           final cifResponse = CifResponse.fromJson(response.data);
           setCif(cifResponse.cifId);
+          print('Saved cifId: ${cifResponse.cifId}');
           _showSnackbar(
               'Berhasil', 'Data berhasil disimpan', AppColors.casualbutton1);
+          Get.toNamed(MyAppRoutes.dataPinjaman);
         } else {
           _showSnackbar('Gagal', 'Respons data kosong', AppColors.redstatus);
         }
@@ -322,21 +343,29 @@ class InputDataController extends GetxController {
   }
 
   Future<void> pickImageFromGallery(bool isKtp) async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      if (isKtp) {
-        fotoKtp.value = File(pickedFile.path);
-      } else {
-        buktiJaminan.value = File(pickedFile.path);
+    try {
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        if (isKtp) {
+          fotoKtp.value = File(pickedFile.path);
+        } else {
+          buktiJaminan.value = File(pickedFile.path);
+        }
       }
+    } catch (e) {
+      _showSnackbar('Error', 'Gagal memilih gambar: $e', AppColors.redstatus);
     }
   }
 
   void setImageFromCamera(String path, bool isKtp) {
-    if (isKtp) {
-      fotoKtp.value = File(path);
-    } else {
-      buktiJaminan.value = File(path);
+    try {
+      if (isKtp) {
+        fotoKtp.value = File(path);
+      } else {
+        buktiJaminan.value = File(path);
+      }
+    } catch (e) {
+      _showSnackbar('Error', 'Gagal mengatur gambar: $e', AppColors.redstatus);
     }
   }
 
@@ -362,7 +391,7 @@ class InputDataController extends GetxController {
     isNoFirstName.value = false;
     isNikValid.value = false;
     isNextButtonEnabled.value = false;
-    startDate.value = DateTime.now();
+    startDate.value = DateTime(2025, 6, 24, 13, 26); // Updated to 01:26 PM WIB
     selectedDateText.value = '';
     selectedDate.value = '';
     selectedLocationLink.value = '';
@@ -371,59 +400,48 @@ class InputDataController extends GetxController {
     isLoading.value = true;
     locationServiceEnabled.value = true;
     selectedPosition.value = null;
-    // Dispose of existing map controller to prevent channel errors
     mapController.value?.dispose();
     mapController.value = null;
     cifResponse.value = 0;
-    telpController.clear();
+    selectedCountryCode.value = '+62';
     update();
   }
 
-  void setCif(int data) {
-    cifResponse.value = data;
-  }
-
-  int? get cifId => cifResponse.value;
-
   bool validateForm() {
+    final cleanedPhone = telpController.text.replaceAll(RegExp(r'[\s\-]'), '');
     if (nikController.text.isEmpty ||
         (namaAwalController.text.isEmpty && !isNoFirstName.value) ||
-        selectedGender.value.isEmpty) {
-      _showSnackbar('Error', 'Pastikan semua data terisi termasuk gender',
-          AppColors.redstatus);
-      return false;
-    }
-
-    final cleanedPhone = telpController.text.replaceAll(RegExp(r'[\s\-]'), '');
-    print('Cleaned phone in validateForm: $cleanedPhone');
-    if (cleanedPhone.isEmpty) {
-      _showSnackbar(
-          'Error', 'Nomor telepon tidak boleh kosong', AppColors.redstatus);
-      return false;
-    }
-
-    if (!RegExp(r'^\+\d{6,15}$').hasMatch(cleanedPhone)) {
+        selectedGender.value.isEmpty ||
+        cleanedPhone.isEmpty) {
       _showSnackbar(
           'Error',
-          'Nomor telepon harus diawali dengan kode negara (misal +62 atau +376) dan memiliki 6-15 digit',
+          'Pastikan semua data terisi termasuk gender dan nomor telepon',
           AppColors.redstatus);
       return false;
     }
-
+    if (!RegExp(r'^\d{6,15}$').hasMatch(cleanedPhone)) {
+      _showSnackbar('Error', 'Nomor telepon harus memiliki 6-15 digit',
+          AppColors.redstatus);
+      return false;
+    }
     return true;
   }
 
   Future<void> pickDate(BuildContext context) async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: startDate.value,
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
-    );
-    if (picked != null) {
-      startDate.value = picked;
-      tanggallahirController.text =
-          DateFormat('dd-MMMM-yyyy', 'id_ID').format(picked);
+    try {
+      final picked = await showDatePicker(
+        context: context,
+        initialDate: startDate.value,
+        firstDate: DateTime(1900),
+        lastDate: DateTime(2100),
+      );
+      if (picked != null) {
+        startDate.value = picked;
+        tanggallahirController.text =
+            DateFormat('dd-MMMM-yyyy', 'id_ID').format(picked);
+      }
+    } catch (e) {
+      _showSnackbar('Error', 'Gagal memilih tanggal: $e', AppColors.redstatus);
     }
   }
 
@@ -441,11 +459,6 @@ class InputDataController extends GetxController {
       return;
     }
     await saveForm();
-    final storage = GetStorage();
-    storage.write('nominal', nominalController.text);
-    storage.write('tujuanPinjaman', tujuanPinjamanController.text);
-    storage.write('nilaiJaminan', nilaiJaminanController.text);
-    Get.toNamed(MyAppRoutes.dataPinjaman);
   }
 
   void toggleUnmarried(bool? value) {
@@ -482,15 +495,16 @@ class InputDataController extends GetxController {
   Future<void> navigateToGoogleMaps() async {
     try {
       print('Navigating to /detail_maps...');
-      // Reset map state to prevent channel errors
       mapController.value?.dispose();
       mapController.value = null;
-      await checkLocationServiceAndGetPosition(); // Ensure location is checked
+      await checkLocationServiceAndGetPosition();
       final result = await Get.toNamed('/detail_maps', arguments: {
-        'initialLatitude':
-            selectedLatitude.value != 0.0 ? selectedLatitude.value : initialPosition.value.latitude,
-        'initialLongitude':
-            selectedLongitude.value != 0.0 ? selectedLongitude.value : initialPosition.value.longitude,
+        'initialLatitude': selectedLatitude.value != 0.0
+            ? selectedLatitude.value
+            : initialPosition.value.latitude,
+        'initialLongitude': selectedLongitude.value != 0.0
+            ? selectedLongitude.value
+            : initialPosition.value.longitude,
       });
       print('Navigation result: $result');
       if (result is Map<String, dynamic>) {

@@ -69,7 +69,6 @@ class _DatailAnggotaState extends State<DatailAnggota> {
                         height: 50,
                         value: iqyAnggotaController.phone.value,
                         keyboardType: TextInputType.text,
-                        
                       ),
                        FieldReadonly(
                         label: 'Gender',

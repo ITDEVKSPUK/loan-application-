@@ -27,18 +27,17 @@ class CreateCIFService {
     required String addressLine1,
     String? postalCode,
     required String pemberiKerja,
-    required String phone,
+    required String phone, // Only phone number
     required String deskripsiPekerjaan,
     required String mapsUrl,
+    required String countryCode, // New parameter
   }) async {
     try {
-      // Generate headers
       final headers = signatureController.generateHeaders(
         path: path,
         verb: "POST",
       );
 
-      // Construct the request body dynamically
       final requestBody = {
         "id_legal": 3319123456,
         "Office_ID": "000",
@@ -59,23 +58,21 @@ class CreateCIFService {
           "address_line1": addressLine1,
           "postal_code": postalCode,
           "pemberi_kerja": pemberiKerja,
-          "maps_url" : mapsUrl,
+          "maps_url": mapsUrl,
           "deskripsi_pekerjaan": deskripsiPekerjaan,
-          "phone": phone,
+          "phone": phone, // Only phone number
+          "country_code": countryCode, // Separate country code
         }
       };
 
-      // Make the POST request
       final response = await dio.post(
         path,
         data: requestBody,
         options: Options(headers: headers),
       );
 
-      // Check for success
       if (response.statusCode == 200) {
         print("CIF created successfully: ${response.data}");
-        print(requestBody);
       } else {
         print("Failed to create CIF: ${response.statusCode}");
       }

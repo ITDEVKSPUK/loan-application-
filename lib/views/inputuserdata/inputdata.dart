@@ -5,6 +5,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/History/controller_location.dart';
+import 'package:loan_application/views/SurveyDetail/iqy_anggota_controller.dart';
 import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 import 'package:loan_application/views/inputuserdata/overlayalamat.dart';
 import 'package:loan_application/widgets/InputUserData/format_phone.dart';
@@ -111,47 +112,70 @@ class InputData extends StatelessWidget {
                     height: 50,
                     label: 'Nama Akhir',
                     controller: controller.namaAkhirController),
+                const SizedBox(height: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'No. Telepon',
+                      'Nomor Telepon',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'Outfit',
+                        fontFamily: 'Outfit'
                       ),
                     ),
                     const SizedBox(height: 6),
                     IntlPhoneField(
-                      initialCountryCode: 'ID',
-                      disableLengthCheck: false,
-                      decoration: InputDecoration(
-                        labelText: 'Nomor Telepon',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(
-                              color: AppColors.black.withOpacity(0.2)),
+                          initialCountryCode: 'ID',
+                          // initialCountryCode: controller
+                          //     .selectedCountryCode.value
+                          //     .replaceFirst('+', ''),
+                          initialValue:
+                              controller.telpController.text.isNotEmpty
+                                  ? controller.telpController.text
+                                  : null,
+                          disableLengthCheck: true, // Allow custom validation
+                          decoration: InputDecoration(
+                            hintText: 'Masukkan Nomor Telepon',
+                            hintStyle: TextStyle(
+                              color: AppColors.black.withOpacity(0.3),
+                              fontSize: 13,
+                              fontFamily: 'Outfit',
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(
+                                color: AppColors.black.withOpacity(0.2),
+                                width: 1.2,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(
+                                color: AppColors.black.withOpacity(0.2),
+                                width: 1.2,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(
+                                color: AppColors.black.withOpacity(0.2),
+                                width: 1.5,
+                              ),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 15),
+                          ),
+                          onChanged: (phone) {
+                            controller.selectedCountryCode.value =
+                                phone.countryCode;
+                            controller.telpController.text =
+                                phone.number; // Only the phone number
+                            print(
+                                'Country Code: ${phone.countryCode}, Phone: ${phone.number}');
+                          },
+                          invalidNumberMessage: 'Nomor telepon tidak valid',
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 15),
-                      ),
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontFamily: 'Outfit',
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.black,
-                      ),
-                      onChanged: (phone) {
-                        controller.telpController.text =
-                            phone.completeNumber; 
-                        print(
-                            'Phone number updated: ${phone.completeNumber}'); // Debug
-                      },
-                      invalidNumberMessage: 'Nomor telepon tidak valid',
-                      flagsButtonPadding: const EdgeInsets.only(left: 10),
-                      dropdownIconPosition: IconPosition.trailing,
-                    ),
                   ],
                 ),
                 GenderRadioButtons(

@@ -79,6 +79,7 @@ class Address {
   final String namaPerusahaan;
   final String phone;
   final String mapsUrl;
+  final String? countryCode; // New field
 
   Address({
     required this.sectorCity,
@@ -95,6 +96,7 @@ class Address {
     required this.namaPerusahaan,
     required this.phone,
     required this.mapsUrl,
+    this.countryCode, // Optional
   });
 
   factory Address.fromJson(Map<String, dynamic> json) {
@@ -113,6 +115,7 @@ class Address {
       namaPerusahaan: json['nama_perusahaan']?.toString() ?? '',
       phone: json['phone']?.toString() ?? '',
       mapsUrl: json['maps_url']?.toString() ?? '',
+      countryCode: json['country_code']?.toString(), // Fetch country code
     );
   }
 }
