@@ -23,7 +23,7 @@ class TextfieldForm extends StatefulWidget {
     this.keyboardType,
     this.inputFormatters,
     this.onTap,
-    this.readOnly = false, // Default to false
+    this.readOnly = false,
   });
 
   @override

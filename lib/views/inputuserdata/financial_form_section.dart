@@ -20,7 +20,12 @@ class FinancialFormSection extends StatelessWidget {
           hintText: 'Masukkan jumlah pinjaman',
           controller: controller.plafondController,
           keyboardType: TextInputType.number,
-          inputFormatters: [MoneyInputFormatter()],
+          inputFormatters: [
+            MoneyInputFormatter(
+              thousandSeparator: ThousandSeparator.Period,
+              mantissaLength: 0,
+            ),
+          ],
         ),
         const SizedBox(height: 16),
         TextfieldForm(
@@ -34,22 +39,20 @@ class FinancialFormSection extends StatelessWidget {
         TextfieldForm(
           width: double.infinity,
           height: 50,
-          label: 'Deskripsi Jaminan',
-          hintText: 'Contoh: BPKB',
-          controller: controller.collateralDescriptionController,
-        ),
-        TextfieldForm(
-          width: double.infinity,
-          height: 50,
-          label: 'Nilai Jaminan',
+          label: 'Taksiran Nilai Jaminan',
           hintText: 'Masukkan nilai jaminan',
           controller: controller.collateralValueController,
           keyboardType: TextInputType.number,
-          inputFormatters: [MoneyInputFormatter()],
+          inputFormatters: [
+            MoneyInputFormatter(
+              thousandSeparator: ThousandSeparator.Period,
+              mantissaLength: 0,
+            ),
+          ],
         ),
         const SizedBox(height: 24),
         const Text(
-          "Info Keuangan",
+          "Info Keuangan 📊",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         TextfieldForm(
@@ -58,7 +61,12 @@ class FinancialFormSection extends StatelessWidget {
           label: 'Pendapatan per bulan',
           controller: controller.incomeController,
           keyboardType: TextInputType.number,
-          inputFormatters: [MoneyInputFormatter()],
+          inputFormatters: [
+            MoneyInputFormatter(
+              thousandSeparator: ThousandSeparator.Period,
+              mantissaLength: 0,
+            ),
+          ],
         ),
         TextfieldForm(
           width: double.infinity,
@@ -66,7 +74,12 @@ class FinancialFormSection extends StatelessWidget {
           label: 'Total Aset',
           controller: controller.assetController,
           keyboardType: TextInputType.number,
-          inputFormatters: [MoneyInputFormatter()],
+          inputFormatters: [
+            MoneyInputFormatter(
+              thousandSeparator: ThousandSeparator.Period,
+              mantissaLength: 0,
+            ),
+          ],
         ),
         TextfieldForm(
           width: double.infinity,
@@ -74,7 +87,12 @@ class FinancialFormSection extends StatelessWidget {
           label: 'Pengeluaran per bulan',
           controller: controller.expensesController,
           keyboardType: TextInputType.number,
-          inputFormatters: [MoneyInputFormatter()],
+          inputFormatters: [
+            MoneyInputFormatter(
+              thousandSeparator: ThousandSeparator.Period,
+              mantissaLength: 0,
+            ),
+          ],
         ),
         TextfieldForm(
           width: double.infinity,
@@ -82,7 +100,12 @@ class FinancialFormSection extends StatelessWidget {
           label: 'Angsuran per bulan',
           controller: controller.installmentController,
           keyboardType: TextInputType.number,
-          inputFormatters: [MoneyInputFormatter()],
+          inputFormatters: [
+            MoneyInputFormatter(
+              thousandSeparator: ThousandSeparator.Period,
+              mantissaLength: 0,
+            ),
+          ],
         ),
       ],
     );

@@ -56,20 +56,20 @@ class IqyDocumentController extends GetxController {
 
   // Zoom imgae in full screen yoo
   void showFullScreenImage(String imageUrl) {
-    if (imageUrl.isEmpty) return; 
+    if (imageUrl.isEmpty) return;
     Get.dialog(
       Scaffold(
-        backgroundColor: Colors.black .withOpacity(0.8),
+        backgroundColor: Colors.black.withOpacity(0.8),
         body: Stack(
           children: [
             InteractiveViewer(
               boundaryMargin: const EdgeInsets.all(0),
-              minScale: 0.5, 
-              maxScale: 4.0, 
+              minScale: 0.5,
+              maxScale: 4.0,
               child: Center(
                 child: Image.network(
                   imageUrl,
-                  fit: BoxFit.contain, 
+                  fit: BoxFit.contain,
                   width: double.infinity,
                   height: double.infinity,
                   errorBuilder: (context, error, stackTrace) => const Center(

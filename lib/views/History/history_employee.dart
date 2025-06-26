@@ -76,7 +76,7 @@ class _HistoryEmployeeState extends State<HistoryEmployee> {
                         aged: item.aged,
                         location: item.sectorCity,
                         plafond: item.application.plafond,
-                        date: DateFormat('yyyy-MM-dd')
+                        date: DateFormat('yyyy-MMMM-dd', 'id_ID')
                             .format(item.application.trxDate),
                         image: (item.document?.docPerson.isNotEmpty ?? false)
                             ? item.document!.docPerson[0].img

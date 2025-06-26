@@ -3,10 +3,10 @@ import 'package:loan_application/API/service/get_location.dart';
 import 'package:loan_application/core/theme/color.dart';
 
 class LocationController extends GetxController {
-  var provinces = <Map<String, dynamic>>[].obs; // Explicit type
-  var regencies = <Map<String, dynamic>>[].obs; // Explicit type
-  var districts = <Map<String, dynamic>>[].obs; // Explicit type
-  var villages = <Map<String, dynamic>>[].obs; // Explicit type
+  var provinces = <Map<String, dynamic>>[].obs;
+  var regencies = <Map<String, dynamic>>[].obs;
+  var districts = <Map<String, dynamic>>[].obs;
+  var villages = <Map<String, dynamic>>[].obs;
 
   var selectedProvinceId = ''.obs;
   var selectedProvinceName = ''.obs;
@@ -31,7 +31,7 @@ class LocationController extends GetxController {
       isLoading.value = true;
       errorMessage.value = '';
       final data = await getlocation.fetchProvinces();
-      provinces.value = data.cast<Map<String, dynamic>>(); // Cast API response
+      provinces.value = data.cast<Map<String, dynamic>>();
       print(">>> Province List IDs: ${provinces.map((e) => e['pro_idn']).toList()}");
       print(">>> Current selectedProvinceId: ${selectedProvinceId.value}");
     } catch (e) {
@@ -39,7 +39,7 @@ class LocationController extends GetxController {
       print('Error fetching provinces: $e');
       Get.snackbar('Error', errorMessage.value,
           snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: AppColors.redstatus,
+          backgroundColor: AppColors.redstatus,
           colorText: AppColors.pureWhite);
     } finally {
       isLoading.value = false;
@@ -62,7 +62,7 @@ class LocationController extends GetxController {
       print('Error fetching regencies: $e');
       Get.snackbar('Error', errorMessage.value,
           snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: AppColors.redstatus,
+          backgroundColor: AppColors.redstatus,
           colorText: AppColors.pureWhite);
     } finally {
       isLoading.value = false;
@@ -76,14 +76,14 @@ class LocationController extends GetxController {
       selectedRegencyId.value = regencyId;
       selectedDistrictId.value = '';
       selectedVillageId.value = '';
-      districts.value = (await getlocation.fetchDistricts(regencyId)).cast<Map<String, dynamic>>(); // Cast
+      districts.value = (await getlocation.fetchDistricts(regencyId)).cast<Map<String, dynamic>>();
       villages.clear();
     } catch (e) {
       errorMessage.value = 'Gagal memuat kecamatan: $e';
       print('Error fetching districts: $e');
       Get.snackbar('Error', errorMessage.value,
           snackPosition: SnackPosition.BOTTOM,
-           backgroundColor: AppColors.redstatus,
+          backgroundColor: AppColors.redstatus,
           colorText: AppColors.pureWhite);
     } finally {
       isLoading.value = false;
