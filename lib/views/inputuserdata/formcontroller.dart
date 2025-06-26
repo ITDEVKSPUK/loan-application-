@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -14,7 +15,6 @@ import 'package:loan_application/API/service/post_history.dart';
 import 'package:loan_application/API/service/post_nik_check.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
-import 'package:loan_application/views/SurveyDetail/iqy_anggota_controller.dart';
 
 class InputDataController extends GetxController {
   // Text Controllers
