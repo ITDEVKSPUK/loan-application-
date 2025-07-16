@@ -41,8 +41,7 @@ class InputDataController extends GetxController {
   final fotoKtp = Rxn<File>();
   final buktiJaminan = Rxn<File>();
   final selectedGender = ''.obs;
-  final startDate = DateTime(2025, 6, 24, 13, 2)
-      .obs; // Updated to 01:02 PM WIB, June 24, 2025
+  final startDate = DateTime(2025, 6, 24, 13, 2).obs; // 01:02 PM WIB, June 24, 2025
   final selectedDateText = ''.obs;
   final selectedDate = ''.obs;
   final isUnmarried = false.obs;
@@ -54,11 +53,11 @@ class InputDataController extends GetxController {
   final selectedLongitude = 0.0.obs;
   final isLoading = true.obs;
   final locationServiceEnabled = true.obs;
-  final initialPosition =
-      const LatLng(-6.175392, 106.827153).obs; // Default: Jakarta
+  final initialPosition = const LatLng(-6.175392, 106.827153).obs; // Jakarta
   final selectedPosition = Rxn<LatLng>();
   final mapController = Rxn<GoogleMapController>();
   final selectedCountryCode = '+62'.obs;
+  final mapType = MapType.normal.obs; // Added map type control
 
   final ImagePicker _picker = ImagePicker();
   final RxInt cifResponse = 0.obs;
@@ -170,6 +169,11 @@ class InputDataController extends GetxController {
         CameraUpdate.newLatLngZoom(initialPosition.value, 15),
       );
     }
+  }
+
+  void setMapType(MapType type) {
+    mapType.value = type;
+    update();
   }
 
   Future<void> fetchNikData() async {
@@ -285,10 +289,9 @@ class InputDataController extends GetxController {
     }
 
     final createCIFService = CreateCIFService();
-    final storage = GetStorage(); // Tambahkan GetStorage
+    final storage = GetStorage();
     try {
       final parts = alamatController.text.split(', ');
-      // Simpan countryCode dan phone ke GetStorage dengan kunci unik berdasarkan NIK
       await storage.write(
           'countryCode_${nikController.text}', selectedCountryCode.value);
       await storage.write('phone_${nikController.text}', telpController.text);
@@ -391,7 +394,7 @@ class InputDataController extends GetxController {
     isNoFirstName.value = false;
     isNikValid.value = false;
     isNextButtonEnabled.value = false;
-    startDate.value = DateTime(2025, 6, 24, 13, 26); // Updated to 01:26 PM WIB
+    startDate.value = DateTime(2025, 6, 24, 13, 26); // 01:26 PM WIB
     selectedDateText.value = '';
     selectedDate.value = '';
     selectedLocationLink.value = '';
@@ -404,6 +407,7 @@ class InputDataController extends GetxController {
     mapController.value = null;
     cifResponse.value = 0;
     selectedCountryCode.value = '+62';
+    mapType.value = MapType.normal; // Reset map type
     update();
   }
 
