@@ -88,7 +88,16 @@ class _DetailSurveyState extends State<DetailSurvey> {
                               label: 'Category Agunan',
                               width: double.infinity,
                               height: 50,
-                              value: controller.idName.value, // Fixed to use id_name
+                              value: controller
+                                  .idName.value, // Fixed to use id_name
+                              keyboardType: TextInputType.text,
+                            ),
+                            FieldReadonly(
+                              label: 'Deskripsi Agunan',
+                              width: double.infinity,
+                              height: 50,
+                              value: controller
+                                  .descript.value, // Fixed to use id_name
                               keyboardType: TextInputType.text,
                             ),
                             const SizedBox(height: 4),

@@ -17,6 +17,13 @@ class FullCreditFormPage extends StatefulWidget {
 
 class _FullCreditFormPageState extends State<FullCreditFormPage> {
   final controller = Get.put(CreditFormController());
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchInquiryData(controller.surveyId.toString());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +40,11 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              const Text("Tujuan Kredit & Jaminan",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              Center(
+                child: const Text("Upload Bukti",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              ),
               const SizedBox(height: 16),
               UploadKTPPicker(controller: controller),
               const SizedBox(height: 12),
@@ -46,7 +56,6 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     controller.handleSubmit(context);
-                    Get.offAllNamed(MyAppRoutes.dashboard);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.casualbutton1,

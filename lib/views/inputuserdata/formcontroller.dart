@@ -41,7 +41,8 @@ class InputDataController extends GetxController {
   final fotoKtp = Rxn<File>();
   final buktiJaminan = Rxn<File>();
   final selectedGender = ''.obs;
-  final startDate = DateTime(2025, 6, 24, 13, 2).obs; // 01:02 PM WIB, June 24, 2025
+  final startDate =
+      DateTime(2025, 6, 24, 13, 2).obs; // 01:02 PM WIB, June 24, 2025
   final selectedDateText = ''.obs;
   final selectedDate = ''.obs;
   final isUnmarried = false.obs;
@@ -298,7 +299,7 @@ class InputDataController extends GetxController {
 
       print(
           'Saved to storage: countryCode_${nikController.text}=${selectedCountryCode.value}, phone_${nikController.text}=${telpController.text}');
-
+    
       final response = await createCIFService.createCIF(
         idLegal: 3319123456,
         officeId: '000',
@@ -324,7 +325,7 @@ class InputDataController extends GetxController {
             : mapsUrlController.text,
         countryCode: selectedCountryCode.value,
       );
-
+      print('Response from createCIF: ${response.data}');
       if (response.statusCode == 200) {
         if (response.data != null) {
           final cifResponse = CifResponse.fromJson(response.data);

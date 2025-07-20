@@ -30,7 +30,7 @@ class PostInqury {
       );
 
       if (response.data is Map<String, dynamic>) {
-        print('Inquiry response data: ${response.data}');
+        print('Inquiry response data masok: ${response.data}');
         return InquirySurveyModel.fromJson(response.data);
       } else {
         print('Unexpected inquiry response: ${response.data}');

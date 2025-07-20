@@ -18,7 +18,7 @@ class UploadDocumentPicker extends StatelessWidget {
                 ? null
                 : controller.selectedDocument.value,
             decoration: InputDecoration(
-              labelText: "Kategori Dokumen",
+              labelText: "Kategori Dokumen *", // Menandai sebagai wajib
               labelStyle: TextStyle(color: Colors.blue.shade700),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -34,6 +34,9 @@ class UploadDocumentPicker extends StatelessWidget {
               ),
               filled: true,
               fillColor: Colors.blue.shade50,
+              errorText: controller.selectedDocument.value.isEmpty
+                  ? "Kategori Dokumen wajib dipilih"
+                  : null, // Validasi real-time
             ),
             dropdownColor: Colors.white,
             icon: Icon(Icons.arrow_drop_down, color: Colors.blue.shade700),
@@ -47,7 +50,14 @@ class UploadDocumentPicker extends StatelessWidget {
               );
             }).toList(),
             onChanged: (val) {
-              if (val != null) controller.selectedDocument.value = val;
+              final selected = controller.documentList.firstWhere(
+                (e) => e['id_catdocument'].toString() == val,
+                orElse: () => {},
+              );
+              controller.selectedDocument.value = val!;
+              controller.selectedDocumentName.value = selected['name'] ?? '';
+              print(
+                  'Document selected: ID = $val, Name = ${selected['name'] ?? 'N/A'}');
             },
           );
         }),
@@ -74,48 +84,58 @@ class UploadDocumentPicker extends StatelessWidget {
         const SizedBox(height: 12),
         Obx(() {
           final images = controller.selectedDocumentImages;
-          if (images.isEmpty) {
-            return const Text("Belum ada dokumen yang dipilih.");
-          }
-
-          return SizedBox(
-            height: 90,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: images.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 8),
-              itemBuilder: (context, index) {
-                return Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.file(
-                        images[index],
-                        width: 80,
-                        height: 80,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: () =>
-                            controller.selectedDocumentImages.removeAt(index),
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.black45,
-                            shape: BoxShape.circle,
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (images.isEmpty)
+                const Text("Belum ada dokumen yang dipilih.")
+              else
+                SizedBox(
+                  height: 90,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: images.length,
+                    separatorBuilder: (_, __) => const SizedBox(width: 8),
+                    itemBuilder: (context, index) {
+                      return Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.file(
+                              images[index],
+                              width: 80,
+                              height: 80,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                          child: const Icon(Icons.close,
-                              color: Colors.white, size: 20),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }
-            ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: GestureDetector(
+                              onTap: () =>
+                                  controller.selectedDocumentImages.removeAt(index),
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  color: Colors.black45,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(Icons.close,
+                                    color: Colors.white, size: 20),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              const SizedBox(height: 12),
+              if (images.isEmpty) // Tampilkan error jika belum ada dokumen
+                Text(
+                  "Dokumen wajib diunggah",
+                  style: TextStyle(color: Colors.red, fontSize: 12),
+                ),
+            ],
           );
         }),
       ],

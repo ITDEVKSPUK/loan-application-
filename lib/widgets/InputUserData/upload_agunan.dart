@@ -18,7 +18,7 @@ class UploadAgunanPicker extends StatelessWidget {
                 ? null
                 : controller.selectedAgunan.value,
             decoration: InputDecoration(
-              labelText: "Kategori Agunan",
+              labelText: "Kategori Agunan *",
               labelStyle: TextStyle(color: Colors.blue.shade700),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -34,6 +34,9 @@ class UploadAgunanPicker extends StatelessWidget {
               ),
               filled: true,
               fillColor: Colors.blue.shade50,
+              errorText: controller.selectedAgunan.value.isEmpty
+                  ? "Kategori Agunan wajib dipilih"
+                  : null,
             ),
             dropdownColor: Colors.white,
             icon: Icon(Icons.arrow_drop_down, color: Colors.blue.shade700),
@@ -47,7 +50,14 @@ class UploadAgunanPicker extends StatelessWidget {
               );
             }).toList(),
             onChanged: (val) {
-              if (val != null) controller.selectedAgunan.value = val;
+              final selected = controller.agunanList.firstWhere(
+                (e) => e['ida'].toString() == val,
+                orElse: () => {},
+              );
+              controller.selectedAgunan.value = val!;
+              controller.selectedAgunanName.value = selected['descript'] ?? '';
+              print(
+                  'Dropdown selected: ID = $val, Name = ${selected['descript'] ?? 'N/A'}');
             },
           );
         }),
@@ -74,48 +84,82 @@ class UploadAgunanPicker extends StatelessWidget {
         const SizedBox(height: 12),
         Obx(() {
           final images = controller.selectedAgunanImages;
-          if (images.isEmpty) {
-            return const Text("Belum ada gambar yang dipilih.");
-          }
-
-          return SizedBox(
-            height: 90,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: images.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 8),
-              itemBuilder: (context, index) {
-                return Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.file(
-                        images[index],
-                        width: 80,
-                        height: 80,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: () =>
-                            controller.selectedAgunanImages.removeAt(index),
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.black45,
-                            shape: BoxShape.circle,
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (images.isEmpty)
+                const Text("Belum ada gambar yang dipilih.")
+              else
+                SizedBox(
+                  height: 90,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: images.length,
+                    separatorBuilder: (_, __) => const SizedBox(width: 8),
+                    itemBuilder: (context, index) {
+                      return Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.file(
+                              images[index],
+                              width: 80,
+                              height: 80,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                          child: const Icon(Icons.close,
-                              color: Colors.white, size: 20),
-                        ),
-                      ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: GestureDetector(
+                              onTap: () =>
+                                  controller.selectedAgunanImages.removeAt(index),
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  color: Colors.black45,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(Icons.close,
+                                    color: Colors.white, size: 20),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              const SizedBox(height: 12),
+              Obx(() {
+                return TextField(
+                  decoration: InputDecoration(
+                    labelText: "Add Descript *",
+                    labelStyle: TextStyle(color: Colors.blue.shade700),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.blue.shade200),
                     ),
-                  ],
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.blue.shade200),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.blue.shade600, width: 2),
+                    ),
+                    filled: true,
+                    fillColor: Colors.blue.shade50,
+                    errorText: controller.addDescript.value.isEmpty
+                        ? "Add Descript wajib diisi"
+                        : null,
+                  ),
+                  onChanged: (value) {
+                    controller.addDescript.value = value;
+                    print('Add Descript updated: $value');
+                  },
                 );
-              },
-            ),
+              }),
+            ],
           );
         }),
       ],

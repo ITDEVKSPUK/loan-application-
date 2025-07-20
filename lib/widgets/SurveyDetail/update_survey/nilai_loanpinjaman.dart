@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_multi_formatter/formatters/money_input_enums.dart';
-import 'package:flutter_multi_formatter/formatters/money_input_formatter.dart';
 import 'package:get/get.dart';
-import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/views/SurveyDetail/inqury_survey_controller.dart';
 import 'package:loan_application/widgets/SurveyDetail/update_survey/fieldeditingtab.dart';
 
