@@ -5,13 +5,15 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loan_application/API/dio/dio_client.dart';
+import 'package:loan_application/API/models/put_models_update.dart';
 import 'package:loan_application/API/service/get_docagun.dart';
 import 'package:loan_application/API/service/post_db_survey.dart';
 import 'package:loan_application/API/service/post_document.dart';
+import 'package:loan_application/API/service/post_inqury_survey.dart';
+import 'package:loan_application/API/service/put_update_survey.dart';
 import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
 class CreditFormController extends GetxController {
   final dio_pkg.Dio dio = DioClient.dio;
@@ -29,10 +31,12 @@ class CreditFormController extends GetxController {
   var documentList = <dynamic>[].obs;
   var selectedAgunan = ''.obs;
   var selectedDocument = ''.obs;
+  var selectedAgunanName = ''.obs;
+  var selectedDocumentName = ''.obs;
   var selectedKTPImages = <File>[].obs;
   var selectedAgunanImages = <File>[].obs;
   var selectedDocumentImages = <File>[].obs;
-
+  var addDescript = ''.obs;
   Future<void> fetchAgunan() async {
     try {
       var fetchedAgunan = await getDocAgun.fetchAgunan();
@@ -302,12 +306,6 @@ class CreditFormController extends GetxController {
     return result;
   }
 
-  Future<String?> getAuthToken() async {
-    // Replace with your actual token retrieval logic
-    // Example: Fetch from secure storage or login API
-    return 'your_token_here'; // Placeholder: Replace with real token
-  }
-
   Future<void> createSurvey() async {
     try {
       if (cifID.cifId == null) {
@@ -315,18 +313,6 @@ class CreditFormController extends GetxController {
         print('createSurvey: CIF ID is null');
         return;
       }
-
-      // Fetch auth token
-      final token = await getAuthToken();
-      if (token == null) {
-        Get.snackbar("Error", "Authentication token is missing");
-        print('createSurvey: Authentication token is null');
-        return;
-      }
-
-      // Set token in Dio headers
-      dio.options.headers['Authorization'] = 'Bearer $token';
-
       final service = PostSurveyService();
       final plafond = cleanNumber(plafondController.text);
       final collateralValue = cleanNumber(collateralValueController.text);
@@ -382,7 +368,8 @@ class CreditFormController extends GetxController {
     } catch (e) {
       print("❌ Create survey gagal: $e");
       if (e is dio_pkg.DioException && e.response?.statusCode == 401) {
-        Get.snackbar("Error", "Unauthorized: Invalid or missing authentication token");
+        Get.snackbar(
+            "Error", "Unauthorized: Invalid or missing authentication token");
       } else {
         Get.snackbar("Error", "Create survey gagal: ${e.toString()}");
       }
@@ -390,35 +377,49 @@ class CreditFormController extends GetxController {
   }
 
   Future<void> handleSubmit(BuildContext context) async {
-    if (!validateForm()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Harap isi semua kolom formulir.")),
-      );
-      print('handleSubmit: Form validation failed');
+    // Validasi semua field wajib
+    if (selectedAgunanImages.isEmpty ||
+        selectedAgunan.value.isEmpty ||
+        selectedDocument.value.isEmpty ||
+        selectedDocumentImages.isEmpty || // Tambahkan validasi untuk dokumen
+        addDescript.value.isEmpty) {
+      _showError(context, 'Lengkapi semua input');
+      print('handleSubmit: One or more required fields are empty');
       return;
     }
-    if (selectedAgunanImages.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text("Harap unggah gambar agunan terlebih dahulu.")),
-      );
-      print('handleSubmit: No agunan images selected');
-      return;
-    }
+
     try {
-      await createSurvey();
       if (surveyId != null) {
+        print("handleSubmit: Start updating survey with ID: $surveyId");
+        print("handleSubmit: selectedAgunan = ${selectedAgunan.value}");
+        print("handleSubmit: selectedAgunanName = ${selectedAgunanName.value}");
+
+        print('handleSubmit: Fetching inquiry data for surveyId: $surveyId');
+        await fetchInquiryData(surveyId!);
+        print('handleSubmit: Inquiry data fetched, proceeding to update');
+        await updateSurveyFromInquiry(surveyId!);
+
+        print('handleSubmit: Updating documents...');
         await uploadDocuments();
-        Get.snackbar("Sukses", "Dokumen berhasil diunggah");
         print('handleSubmit: Documents uploaded successfully');
+        Get.snackbar("Sukses", "Dokumen berhasil diunggah");
+        print('handleSubmit: Form submission completed');
+        Get.back(); // Pindah ke halaman sebelumnya hanya jika berhasil
       } else {
-        Get.snackbar("Error", "Gagal membuat survey, upload dibatalkan");
+        _showError(context, 'Gagal membuat survey, upload dibatalkan');
         print('handleSubmit: Survey ID is null, upload cancelled');
       }
     } catch (e) {
       print("❌ Handle submit gagal: $e");
-      Get.snackbar("Error", "Upload gagal: ${e.toString()}");
+      _showError(context, 'Upload gagal: ${e.toString()}');
     }
+  }
+
+// Fungsi untuk menampilkan error
+  void _showError(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   bool validateForm() {
@@ -442,5 +443,94 @@ class CreditFormController extends GetxController {
     print('setSurveyId: Survey ID set to $data');
   }
 
-  String? get surveyId => trxSurveyRespons.value.isEmpty ? null : trxSurveyRespons.value;
+  String? get surveyId =>
+      trxSurveyRespons.value.isEmpty ? null : trxSurveyRespons.value;
+
+  final PostInqury postInqury = PostInqury();
+  final fetchedInquiryData = Rxn<dynamic>();
+  final putUpdateSurvey = PutUpdateSurvey();
+
+  Future<void> fetchInquiryData(String surveyId) async {
+    try {
+      if (surveyId.isEmpty) {
+        Get.snackbar("Error", "Survey ID tidak boleh kosong");
+        return;
+      }
+
+      final inquiryData = await postInqury.fetchInqury(
+        officeId: '000',
+        trxSurvey: surveyId,
+      );
+
+      if (inquiryData != null) {
+        // Simpan ke variabel observable jika diperlukan
+        fetchedInquiryData.value = inquiryData;
+
+        print("✅ Inquiry data berhasil diambil: $inquiryData");
+      } else {
+        Get.snackbar("Error", "Inquiry data kosong atau tidak ditemukan");
+      }
+    } catch (e) {
+      print("❌ Gagal mengambil inquiry data: $e");
+      Get.snackbar("Error", "Gagal ambil inquiry data: ${e.toString()}");
+    }
+  }
+
+  Future<void> updateSurveyFromInquiry(String surveyId) async {
+    if (surveyId.isEmpty) {
+      Get.snackbar("Error", "Survey ID tidak boleh kosong");
+      print("updateSurveyFromInquiry: Survey ID is empty $surveyId");
+      return;
+    }
+
+    final inquiryData = fetchedInquiryData.value;
+    print("updateSurveyFromInquiry: Inquiry data: $inquiryData");
+    if (inquiryData == null) {
+      Get.snackbar(
+          "Error", "Data inquiry belum dimuat, silakan fetch terlebih dahulu");
+      return;
+    }
+
+    print("🟡 Raw inquiryData: $inquiryData");
+    print("🟡 selectedAgunan: ${selectedAgunan.value}");
+    print("🟡 selectedAgunanName: ${selectedAgunanName.value}");
+    print("🟡 selectedDocument: ${selectedDocument.value}");
+
+    final putModelsUpdate = PutModelsUpdate(
+      cifId: int.tryParse(inquiryData.cifId.toString()) ?? 0,
+      idLegal: 3319123456,
+      officeId: inquiryData.officeId,
+      application: Application(
+        trxDate: inquiryData.application.trxDate,
+        trxSurvey: inquiryData.application.trxSurvey,
+        applicationNo: inquiryData.application.applicationNo,
+        purpose: inquiryData.application.purpose,
+        plafond: inquiryData.application.plafond,
+      ),
+      collateral: Collateral(
+        id: selectedAgunan.value,
+        idName: selectedAgunanName.value,
+        addDescript: addDescript.value,
+        idCatDocument: int.tryParse(selectedDocument.value) ?? 0,
+        value: inquiryData.collateral.value,
+      ),
+      additionalInfo: AdditionalInfo(
+        income: inquiryData.additionalInfo.income.toString(),
+        asset: inquiryData.additionalInfo.asset.toString(),
+        expenses: inquiryData.additionalInfo.expenses.toString(),
+        installment: inquiryData.additionalInfo.installment.toString(),
+      ),
+    );
+
+    final response = await putUpdateSurvey.putUpdateSurvey(
+      surveyId: surveyId,
+      surveyData: putModelsUpdate.toJson(),
+    );
+
+    print("📦 Payload yang dikirim ke API: ${putModelsUpdate.toJson()}");
+
+    print("updateSurveyFromInquiry: Response: ${response}");
+    print("✅ Survey berhasil diperbarui dari inquiry");
+    Get.snackbar("Sukses", "Survey berhasil diperbarui");
+  }
 }
