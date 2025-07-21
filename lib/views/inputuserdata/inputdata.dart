@@ -124,12 +124,7 @@ class InputData extends StatelessWidget {
                     const SizedBox(height: 6),
                     IntlPhoneField(
                       initialCountryCode: 'ID',
-                      // initialCountryCode: controller
-                      //     .selectedCountryCode.value
-                      //     .replaceFirst('+', ''),
-                      initialValue: controller.telpController.text.isNotEmpty
-                          ? controller.telpController.text
-                          : null,
+                      controller: controller.telpController,
                       disableLengthCheck: true, // Allow custom validation
                       decoration: InputDecoration(
                         hintText: 'Masukkan Nomor Telepon',
@@ -165,8 +160,7 @@ class InputData extends StatelessWidget {
                       onChanged: (phone) {
                         controller.selectedCountryCode.value =
                             phone.countryCode;
-                        controller.telpController.text =
-                            phone.number; // Only the phone number
+                        controller.telpController.text = phone.number;
                         print(
                             'Country Code: ${phone.countryCode}, Phone: ${phone.number}');
                       },
