@@ -18,6 +18,7 @@ class CreateCIFService {
     required String firstName,
     required String lastName,
     required String cityBorn,
+    required String dateBorn, // Nullable
     required String pasanganNama,
     required String pasanganIdCart,
     required String region,
@@ -47,6 +48,7 @@ class CreateCIFService {
           "firts_name": firstName,
           "last_name": lastName,
           "city_born": cityBorn,
+          "date_born": dateBorn,
           "pasangan_nama": pasanganNama ?? "",
           "pasangan_idcart": pasanganIdCart ?? "",
         },

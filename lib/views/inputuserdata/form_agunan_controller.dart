@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:dio/dio.dart' as dio_pkg;
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -11,6 +12,7 @@ import 'package:loan_application/API/service/post_db_survey.dart';
 import 'package:loan_application/API/service/post_document.dart';
 import 'package:loan_application/API/service/post_inqury_survey.dart';
 import 'package:loan_application/API/service/put_update_survey.dart';
+import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -404,7 +406,8 @@ class CreditFormController extends GetxController {
         print('handleSubmit: Documents uploaded successfully');
         Get.snackbar("Sukses", "Dokumen berhasil diunggah");
         print('handleSubmit: Form submission completed');
-        Get.back(); // Pindah ke halaman sebelumnya hanya jika berhasil
+        Get.offNamed(MyAppRoutes
+            .dashboard); // Pindah ke halaman sebelumnya hanya jika berhasil
       } else {
         _showError(context, 'Gagal membuat survey, upload dibatalkan');
         print('handleSubmit: Survey ID is null, upload cancelled');
