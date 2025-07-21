@@ -48,6 +48,7 @@ class InputDataController extends GetxController {
   final isUnmarried = false.obs;
   final isNoFirstName = false.obs;
   final isNikValid = false.obs;
+  final isDontHaveLoan = false.obs;
   final isNextButtonEnabled = false.obs;
   final selectedLocationLink = ''.obs;
   final selectedLatitude = 0.0.obs;
@@ -59,7 +60,7 @@ class InputDataController extends GetxController {
   final mapController = Rxn<GoogleMapController>();
   final selectedCountryCode = '+62'.obs;
   final mapType = MapType.normal.obs; // Added map type control
-
+  String? dateBornIso;
   final ImagePicker _picker = ImagePicker();
   final RxInt cifResponse = 0.obs;
 
@@ -263,6 +264,9 @@ class InputDataController extends GetxController {
               'Success',
               'NIK terdaftar tetapi belum memiliki data pinjaman.',
               AppColors.casualbutton1);
+          setCif(anggotaResponse.owner?.cifId ?? 0);
+          print('CIF ID set to: ${anggotaResponse.owner?.cifId}');
+          isDontHaveLoan.value = true;
           isNikValid.value = true;
           isNextButtonEnabled.value = true;
         }
@@ -271,6 +275,7 @@ class InputDataController extends GetxController {
             'Success',
             'NIK terdaftar tetapi tidak dapat memeriksa data pinjaman.',
             AppColors.casualbutton1);
+        isDontHaveLoan.value = true;
         isNikValid.value = true;
         isNextButtonEnabled.value = true;
       }
@@ -299,7 +304,8 @@ class InputDataController extends GetxController {
 
       print(
           'Saved to storage: countryCode_${nikController.text}=${selectedCountryCode.value}, phone_${nikController.text}=${telpController.text}');
-    
+      print('tanggal  ${dateBornIso}');
+
       final response = await createCIFService.createCIF(
         idLegal: 3319123456,
         officeId: '000',
@@ -308,6 +314,7 @@ class InputDataController extends GetxController {
         firstName: isNoFirstName.value ? '' : namaAwalController.text,
         lastName: namaAkhirController.text,
         cityBorn: kotaAsalController.text,
+        dateBorn: dateBornIso ?? '',
         pasanganNama:
             isUnmarried.value ? 'Belum Kawin' : namaPasanganController.text,
         pasanganIdCart: isUnmarried.value ? '0' : nikpasanganController.text,
@@ -442,6 +449,7 @@ class InputDataController extends GetxController {
       );
       if (picked != null) {
         startDate.value = picked;
+        dateBornIso = picked.toIso8601String();
         tanggallahirController.text =
             DateFormat('dd-MMMM-yyyy', 'id_ID').format(picked);
       }
