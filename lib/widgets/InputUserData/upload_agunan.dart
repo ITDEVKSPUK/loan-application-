@@ -112,8 +112,8 @@ class UploadAgunanPicker extends StatelessWidget {
                             top: 0,
                             right: 0,
                             child: GestureDetector(
-                              onTap: () =>
-                                  controller.selectedAgunanImages.removeAt(index),
+                              onTap: () => controller.selectedAgunanImages
+                                  .removeAt(index),
                               child: Container(
                                 decoration: const BoxDecoration(
                                   color: Colors.black45,
@@ -145,7 +145,8 @@ class UploadAgunanPicker extends StatelessWidget {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: Colors.blue.shade600, width: 2),
+                      borderSide:
+                          BorderSide(color: Colors.blue.shade600, width: 2),
                     ),
                     filled: true,
                     fillColor: Colors.blue.shade50,
@@ -155,6 +156,37 @@ class UploadAgunanPicker extends StatelessWidget {
                   ),
                   onChanged: (value) {
                     controller.addDescript.value = value;
+                    print('Add Descript updated: $value');
+                  },
+                );
+              }),
+              SizedBox(height: 12),
+              Obx(() {
+                return TextField(
+                  decoration: InputDecoration(
+                    labelText: "Value Market*",
+                    labelStyle: TextStyle(color: Colors.blue.shade700),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.blue.shade200),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.blue.shade200),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide:
+                          BorderSide(color: Colors.blue.shade600, width: 2),
+                    ),
+                    filled: true,
+                    fillColor: Colors.blue.shade50,
+                    errorText: controller.marketValue.value.isEmpty
+                        ? "Value Market wajib diisi"
+                        : null,
+                  ),
+                  onChanged: (value) {
+                    controller.marketValue.value = value;
                     print('Add Descript updated: $value');
                   },
                 );

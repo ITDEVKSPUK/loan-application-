@@ -16,11 +16,6 @@ class LoanAngkaPinjaman_Update extends StatelessWidget {
           keyboardType: TextInputType.number,
         ),
         FieldEditable(
-          label: 'Taksiran Nilai Jaminan',
-          controller: controller.valueController,
-          keyboardType: TextInputType.number,
-        ),
-        FieldEditable(
           label: 'Pendapatan Bulanan',
           controller: controller.incomeController,
           keyboardType: TextInputType.number,

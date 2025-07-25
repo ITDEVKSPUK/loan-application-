@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,7 +16,6 @@ class SurveyController extends GetxController {
   final assetController = TextEditingController();
   final expenseController = TextEditingController();
   final installmentController = TextEditingController();
-  final valueController = TextEditingController();
   final cifIdController = TextEditingController();
   final idLegalController = TextEditingController();
   final officeIdController = TextEditingController();
@@ -153,8 +153,6 @@ class SurveyController extends GetxController {
           inquiryData.collateral.adddescript ?? '';
       collateralCatDocController.text =
           inquiryData.collateral.idCatDocument.toString();
-      valueController.text =
-          formatRupiah(inquiryData.collateral.value.toString());
       incomeController.text =
           formatRupiah(inquiryData.additionalInfo.income.toString());
       assetController.text =
@@ -204,8 +202,6 @@ class SurveyController extends GetxController {
       // Parse and validate numeric fields
       final plafond =
           double.tryParse(unformatRupiah(plafondController.text)) ?? 0.0;
-      final value =
-          double.tryParse(unformatRupiah(valueController.text)) ?? 0.0;
       final income =
           double.tryParse(unformatRupiah(incomeController.text)) ?? 0.0;
       final asset =
@@ -217,9 +213,6 @@ class SurveyController extends GetxController {
 
       if (plafond <= 0) {
         throw Exception('Plafond harus lebih besar dari 0');
-      }
-      if (value <= 0) {
-        throw Exception('Nilai agunan harus lebih besar dari 0');
       }
 
       final putModelsUpdate = PutModelsUpdate(
@@ -238,7 +231,7 @@ class SurveyController extends GetxController {
           idName: collateralNameController.text,
           addDescript: collateralAddDescController.text,
           idCatDocument: int.tryParse(collateralCatDocController.text) ?? 0,
-          value: formatForApi(value.toString()),
+          value: '',
         ),
         additionalInfo: AdditionalInfo(
           income: formatForApi(income.toString()),
@@ -328,8 +321,6 @@ class SurveyController extends GetxController {
       // Parse and validate numeric fields
       final plafond =
           double.tryParse(unformatRupiah(plafondController.text)) ?? 0.0;
-      final value =
-          double.tryParse(unformatRupiah(valueController.text)) ?? 0.0;
       final income =
           double.tryParse(unformatRupiah(incomeController.text)) ?? 0.0;
       final asset =
@@ -341,9 +332,6 @@ class SurveyController extends GetxController {
 
       if (plafond <= 0) {
         throw Exception('Plafond harus lebih besar dari 0');
-      }
-      if (value <= 0) {
-        throw Exception('Nilai agunan harus lebih besar dari 0');
       }
 
       final putModelsUpdate = PutModelsUpdate(
@@ -362,7 +350,7 @@ class SurveyController extends GetxController {
           idName: collateralNameController.text,
           addDescript: collateralAddDescController.text,
           idCatDocument: int.tryParse(collateralCatDocController.text) ?? 0,
-          value: formatForApi(value.toString()),
+          value: '',
         ),
         additionalInfo: AdditionalInfo(
           income: formatForApi(income.toString()),
