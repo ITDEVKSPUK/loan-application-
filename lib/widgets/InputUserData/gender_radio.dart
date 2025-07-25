@@ -8,7 +8,7 @@ class GenderRadioButtons extends StatelessWidget {
 
   const GenderRadioButtons({
     super.key,
-    this.isReadOnly = false,
+    required this.isReadOnly,
     this.genderFromApi,
     this.gender,
   });
