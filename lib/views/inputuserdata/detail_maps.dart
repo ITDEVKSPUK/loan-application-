@@ -33,16 +33,19 @@ class GoogleMapsScreen extends StatelessWidget {
                 zoom: 15,
               ),
               onMapCreated: controller.onMapCreated,
-              onTap: controller.onMapTap,
               mapType: controller.mapType.value,
-              markers: controller.selectedPosition.value != null
+              markers: controller.isLocationConfirmed.value &&
+                      controller.selectedPosition.value != null
                   ? {
                       Marker(
-                        markerId: const MarkerId('selected-location'),
+                        markerId: const MarkerId('device-location'),
+                        draggable: false,
                         position: controller.selectedPosition.value!,
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueRed),
                       ),
                     }
-                  : {}, // Only show marker after a tap
+                  : {}, // Show marker only when location is confirmed
               myLocationEnabled: controller.locationServiceEnabled.value,
               myLocationButtonEnabled: controller.locationServiceEnabled.value,
               zoomControlsEnabled: false,
@@ -61,6 +64,7 @@ class GoogleMapsScreen extends StatelessWidget {
               child: GestureDetector(
                 onTap: controller.selectedPosition.value != null
                     ? () {
+                        controller.confirmLocation(); // Confirm the location
                         Get.back(result: {
                           'latitude':
                               controller.selectedPosition.value!.latitude,

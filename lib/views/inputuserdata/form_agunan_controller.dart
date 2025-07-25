@@ -39,6 +39,7 @@ class CreditFormController extends GetxController {
   var selectedAgunanImages = <File>[].obs;
   var selectedDocumentImages = <File>[].obs;
   var addDescript = ''.obs;
+  
   Future<void> fetchAgunan() async {
     try {
       var fetchedAgunan = await getDocAgun.fetchAgunan();
@@ -72,40 +73,11 @@ class CreditFormController extends GetxController {
   Future<void> pickImagesFromSource(
       BuildContext context, VoidCallback onImagesUpdated) async {
     final picker = ImagePicker();
-
-    showModalBottomSheet(
-      context: context,
-      builder: (_) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: const Text('Ambil dari Kamera'),
-              onTap: () async {
-                Get.back();
-                final XFile? image =
-                    await picker.pickImage(source: ImageSource.camera);
-                if (image != null) {
-                  selectedImages.add(image);
-                  onImagesUpdated();
-                }
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: const Text('Pilih dari Galeri'),
-              onTap: () async {
-                Get.back();
-                final List<XFile> images = await picker.pickMultiImage();
-                selectedImages.addAll(images);
-                onImagesUpdated();
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+    final XFile? image = await picker.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      selectedImages.add(image);
+      onImagesUpdated();
+    }
   }
 
   Future<File> generatePdfFromImages() async {
@@ -151,99 +123,33 @@ class CreditFormController extends GetxController {
   }
 
   Future<void> pickKTPImages(BuildContext context) async {
-    final source = await _chooseSource(context);
-    if (source == null) return;
-
     final picker = ImagePicker();
-
-    if (source == ImageSource.gallery) {
-      final result = await picker.pickMultiImage();
-      if (result.isNotEmpty) {
-        for (var e in result) {
-          final file = File(e.path);
-          final compressed = await compressImage(file);
-          selectedKTPImages.add(compressed);
-        }
-      }
-    } else {
-      final single = await picker.pickImage(source: source);
-      if (single != null) {
-        final file = File(single.path);
-        final compressed = await compressImage(file);
-        selectedKTPImages.add(compressed);
-      }
+    final single = await picker.pickImage(source: ImageSource.camera);
+    if (single != null) {
+      final file = File(single.path);
+      final compressed = await compressImage(file);
+      selectedKTPImages.add(compressed);
     }
   }
 
   Future<void> pickAgunanImages(BuildContext context) async {
-    final source = await _chooseSource(context);
-    if (source == null) return;
-
     final picker = ImagePicker();
-
-    if (source == ImageSource.gallery) {
-      final result = await picker.pickMultiImage();
-      if (result.isNotEmpty) {
-        for (var e in result) {
-          final file = File(e.path);
-          final compressed = await compressImage(file);
-          selectedAgunanImages.add(compressed);
-        }
-      }
-    } else {
-      final single = await picker.pickImage(source: source);
-      if (single != null) {
-        final file = File(single.path);
-        final compressed = await compressImage(file);
-        selectedAgunanImages.add(compressed);
-      }
+    final single = await picker.pickImage(source: ImageSource.camera);
+    if (single != null) {
+      final file = File(single.path);
+      final compressed = await compressImage(file);
+      selectedAgunanImages.add(compressed);
     }
   }
 
   Future<void> pickDocumentImages(BuildContext context) async {
-    final source = await _chooseSource(context);
-    if (source == null) return;
-
     final picker = ImagePicker();
-
-    if (source == ImageSource.gallery) {
-      final result = await picker.pickMultiImage();
-      if (result.isNotEmpty) {
-        for (var e in result) {
-          final file = File(e.path);
-          final compressed = await compressImage(file);
-          selectedDocumentImages.add(compressed);
-        }
-      }
-    } else {
-      final single = await picker.pickImage(source: source);
-      if (single != null) {
-        final file = File(single.path);
-        final compressed = await compressImage(file);
-        selectedDocumentImages.add(compressed);
-      }
+    final single = await picker.pickImage(source: ImageSource.camera);
+    if (single != null) {
+      final file = File(single.path);
+      final compressed = await compressImage(file);
+      selectedDocumentImages.add(compressed);
     }
-  }
-
-  Future<ImageSource?> _chooseSource(BuildContext context) async {
-    return showModalBottomSheet<ImageSource>(
-      context: context,
-      builder: (ctx) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ListTile(
-            leading: const Icon(Icons.photo_library),
-            title: const Text('Galeri'),
-            onTap: () => Get.back(result: ImageSource.gallery),
-          ),
-          ListTile(
-            leading: const Icon(Icons.camera_alt),
-            title: const Text('Kamera'),
-            onTap: () => Get.back(result: ImageSource.camera),
-          ),
-        ],
-      ),
-    );
   }
 
   Future<void> uploadDocuments() async {
@@ -294,15 +200,12 @@ class CreditFormController extends GetxController {
       print('cleanNumber: Input is null or empty, returning 0.0');
       return 0.0;
     }
-    // Remove all non-digit characters
     String cleaned = text.replaceAll(RegExp(r'[^\d]'), '');
     print('cleanNumber: Input: $text, Cleaned: $cleaned');
-    // If the cleaned string is empty, return 0.0
     if (cleaned.isEmpty) {
       print('cleanNumber: Cleaned string is empty, returning 0.0');
       return 0.0;
     }
-    // Parse as double
     double result = double.tryParse(cleaned) ?? 0.0;
     print('cleanNumber: Parsed result: $result');
     return result;
@@ -379,11 +282,10 @@ class CreditFormController extends GetxController {
   }
 
   Future<void> handleSubmit(BuildContext context) async {
-    // Validasi semua field wajib
     if (selectedAgunanImages.isEmpty ||
         selectedAgunan.value.isEmpty ||
         selectedDocument.value.isEmpty ||
-        selectedDocumentImages.isEmpty || // Tambahkan validasi untuk dokumen
+        selectedDocumentImages.isEmpty ||
         addDescript.value.isEmpty) {
       _showError(context, 'Lengkapi semua input');
       print('handleSubmit: One or more required fields are empty');
@@ -407,7 +309,7 @@ class CreditFormController extends GetxController {
         Get.snackbar("Sukses", "Dokumen berhasil diunggah");
         print('handleSubmit: Form submission completed');
         Get.offNamed(MyAppRoutes
-            .dashboard); // Pindah ke halaman sebelumnya hanya jika berhasil
+            .dashboard);
       } else {
         _showError(context, 'Gagal membuat survey, upload dibatalkan');
         print('handleSubmit: Survey ID is null, upload cancelled');
@@ -418,7 +320,6 @@ class CreditFormController extends GetxController {
     }
   }
 
-// Fungsi untuk menampilkan error
   void _showError(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
@@ -466,9 +367,7 @@ class CreditFormController extends GetxController {
       );
 
       if (inquiryData != null) {
-        // Simpan ke variabel observable jika diperlukan
         fetchedInquiryData.value = inquiryData;
-
         print("✅ Inquiry data berhasil diambil: $inquiryData");
       } else {
         Get.snackbar("Error", "Inquiry data kosong atau tidak ditemukan");

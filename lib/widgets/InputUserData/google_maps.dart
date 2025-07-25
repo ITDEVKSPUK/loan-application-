@@ -6,7 +6,7 @@ import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 class MapTypeOptionWidget extends StatelessWidget {
   final MapType type;
   final String label;
-  final ImageProvider image; // Changed to required, removing icon
+  final ImageProvider image;
   final InputDataController controller;
 
   const MapTypeOptionWidget({
@@ -38,7 +38,7 @@ class MapTypeOptionWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               image: DecorationImage(
                 image: image,
-                fit: BoxFit.cover, // Adjusts image to fill container
+                fit: BoxFit.cover,
               ),
             ),
           ),

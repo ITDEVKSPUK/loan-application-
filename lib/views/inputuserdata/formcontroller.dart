@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -59,13 +60,25 @@ class InputDataController extends GetxController {
   final selectedPosition = Rxn<LatLng>();
   final mapController = Rxn<GoogleMapController>();
   final selectedCountryCode = '+62'.obs;
-  final mapType = MapType.normal.obs; // Added map type control
+  final mapType = MapType.normal.obs;
+  final isLocationConfirmed = false.obs; // Track confirmation
   String? dateBornIso;
   final ImagePicker _picker = ImagePicker();
   final RxInt cifResponse = 0.obs;
 
+  // Stream subscription for real-time location updates
+  StreamSubscription<Position>? _positionStream;
+
+  @override
+  void onInit() {
+    super.onInit();
+    checkLocationServiceAndGetPosition();
+    _startLocationUpdates();
+  }
+
   @override
   void onClose() {
+    _positionStream?.cancel();
     mapController.value?.dispose();
     mapController.value = null;
     super.onClose();
@@ -138,11 +151,21 @@ class InputDataController extends GetxController {
         return;
       }
 
+      // Get initial position
       final position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
       initialPosition.value = LatLng(position.latitude, position.longitude);
+      selectedPosition.value = LatLng(position.latitude, position.longitude);
+      selectedLatitude.value = position.latitude;
+      selectedLongitude.value = position.longitude;
+      // Do not set selectedLocationLink or mapsUrlController here
       isLoading.value = false;
+
+      // Update camera position
+      mapController.value?.animateCamera(
+        CameraUpdate.newLatLngZoom(initialPosition.value, 15),
+      );
     } catch (e) {
       isLoading.value = false;
       Get.snackbar(
@@ -154,12 +177,40 @@ class InputDataController extends GetxController {
     }
   }
 
-  void onMapTap(LatLng position) {
-    selectedPosition.value = position;
-    selectedLatitude.value = position.latitude;
-    selectedLongitude.value = position.longitude;
+  // Start listening to location updates
+  void _startLocationUpdates() {
+    _positionStream = Geolocator.getPositionStream(
+      locationSettings: const LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 10, // Update when device moves 10 meters
+      ),
+    ).listen((Position position) {
+      selectedPosition.value = LatLng(position.latitude, position.longitude);
+      selectedLatitude.value = position.latitude;
+      selectedLongitude.value = position.longitude;
+      // Do not set selectedLocationLink or mapsUrlController here
+      initialPosition.value = LatLng(position.latitude, position.longitude);
+
+      // Update camera to follow the device
+      mapController.value?.animateCamera(
+        CameraUpdate.newLatLng(initialPosition.value),
+      );
+      update();
+    }, onError: (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to update location: $e',
+        backgroundColor: AppColors.redstatus,
+        colorText: AppColors.pureWhite,
+      );
+    });
+  }
+
+  // Confirm the current device location
+  void confirmLocation() {
+    isLocationConfirmed.value = true;
     selectedLocationLink.value =
-        'https://maps.google.com/?q=${position.latitude},${position.longitude}';
+        'https://maps.google.com/?q=${selectedLatitude.value},${selectedLongitude.value}';
     mapsUrlController.text = selectedLocationLink.value;
     update();
   }
@@ -411,11 +462,12 @@ class InputDataController extends GetxController {
     isLoading.value = true;
     locationServiceEnabled.value = true;
     selectedPosition.value = null;
+    isLocationConfirmed.value = false;
     mapController.value?.dispose();
     mapController.value = null;
     cifResponse.value = 0;
     selectedCountryCode.value = '+62';
-    mapType.value = MapType.normal; // Reset map type
+    mapType.value = MapType.normal;
     update();
   }
 
@@ -526,6 +578,7 @@ class InputDataController extends GetxController {
         selectedLocationLink.value =
             'https://maps.google.com/?q=${result['latitude']},${result['longitude']}';
         mapsUrlController.text = selectedLocationLink.value;
+        isLocationConfirmed.value = true;
         update();
       } else {
         print('No coordinates selected or navigation cancelled.');
