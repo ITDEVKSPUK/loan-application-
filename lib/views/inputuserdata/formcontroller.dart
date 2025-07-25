@@ -39,6 +39,7 @@ class InputDataController extends GetxController {
   final postalCodeController = TextEditingController();
 
   // Reactive Variables
+  final readOnly = true.obs;
   final fotoKtp = Rxn<File>();
   final buktiJaminan = Rxn<File>();
   final selectedGender = ''.obs;
@@ -239,6 +240,7 @@ class InputDataController extends GetxController {
     }
 
     clearForm();
+    readOnly.value = false;
     nikController.text = nikInput;
 
     final checkNikService = CheckNik();

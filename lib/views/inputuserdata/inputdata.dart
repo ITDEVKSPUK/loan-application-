@@ -84,246 +84,283 @@ class InputData extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
-                Obx(() => TextfieldForm(
-                      width: double.infinity,
-                      height: 55,
-                      label: 'Nama Awal',
-                      controller: controller.namaAwalController,
-                      readOnly: controller.isNoFirstName.value,
-                    )),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Obx(() => Checkbox(
-                          value: controller.isNoFirstName.value,
-                          onChanged: controller.toggleNoFirstName,
-                        )),
-                    const Text(
-                      'Tidak Ada Nama Awal',
-                      style: TextStyle(fontSize: 14, fontFamily: 'Outfit'),
-                    ),
-                  ],
-                ),
-                TextfieldForm(
-                    width: double.infinity,
-                    height: 50,
-                    label: 'Nama Akhir',
-                    controller: controller.namaAkhirController),
-                const SizedBox(height: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Nomor Telepon',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Outfit'),
-                    ),
-                    const SizedBox(height: 6),
-                    IntlPhoneField(
-                      initialCountryCode: 'ID',
-                      controller: controller.telpController,
-                      disableLengthCheck: true, // Allow custom validation
-                      decoration: InputDecoration(
-                        hintText: 'Masukkan Nomor Telepon',
-                        hintStyle: TextStyle(
-                          color: AppColors.black.withOpacity(0.3),
-                          fontSize: 13,
-                          fontFamily: 'Outfit',
+                Obx(
+                  () => Container(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 10),
+                        TextfieldForm(
+                          width: double.infinity,
+                          height: 55,
+                          label: 'Nama Awal',
+                          controller: controller.namaAwalController,
+                          readOnly: controller.isNoFirstName.value ||
+                              controller.readOnly.value,
                         ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(
-                            color: AppColors.black.withOpacity(0.2),
-                            width: 1.2,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(
-                            color: AppColors.black.withOpacity(0.2),
-                            width: 1.2,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(
-                            color: AppColors.black.withOpacity(0.2),
-                            width: 1.5,
-                          ),
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 15),
-                      ),
-                      onChanged: (phone) {
-                        controller.selectedCountryCode.value =
-                            phone.countryCode;
-                        controller.telpController.text = phone.number;
-                        print(
-                            'Country Code: ${phone.countryCode}, Phone: ${phone.number}');
-                      },
-                      invalidNumberMessage: 'Nomor telepon tidak valid',
-                    ),
-                  ],
-                ),
-                GenderRadioButtons(
-                  gender: controller.selectedGender,
-                ),
-                TextfieldForm(
-                    width: double.infinity,
-                    height: 50,
-                    label: 'Kota lahir',
-                    controller: controller.kotaAsalController),
-                TextfieldForm(
-                    width: double.infinity,
-                    height: 50,
-                    label: 'Tanggal lahir',
-                    controller: controller.tanggallahirController,
-                    readOnly: true,
-                    onTap: () => controller.pickDate(context),
-                    hintText: 'Klik dan Masukan Tanggal Lahir'),
-                TextfieldForm(
-                    width: double.infinity,
-                    height: 50,
-                    label: 'Pekerjaan',
-                    controller: controller.pekerjaanController),
-                const SizedBox(height: 10),
-                Obx(() => TextfieldForm(
-                      width: double.infinity,
-                      height: 50,
-                      label: 'Nama Pasangan',
-                      controller: controller.namaPasanganController,
-                      readOnly: controller.isUnmarried.value,
-                    )),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Obx(() => Checkbox(
-                          value: controller.isUnmarried.value,
-                          onChanged: controller.toggleUnmarried,
-                        )),
-                    const Text(
-                      'Belum Kawin',
-                      style: TextStyle(fontSize: 14, fontFamily: 'Outfit'),
-                    ),
-                  ],
-                ),
-                Obx(() => TextfieldForm(
-                      width: double.infinity,
-                      height: 50,
-                      label: 'Nik Pasangan',
-                      controller: controller.nikpasanganController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
-                      readOnly: controller.isUnmarried.value,
-                    )),
-                TextfieldForm(
-                  width: double.infinity,
-                  height: 60,
-                  label: 'Titik Kordinat Alamat',
-                  controller: controller.mapsUrlController,
-                  hintText: controller.selectedLocationLink.value.isEmpty
-                      ? 'Klik untuk memilih lokasi di Google Maps'
-                      : controller.selectedLocationLink.value,
-                  readOnly: true,
-                  onTap: controller.navigateToGoogleMaps,
-                ),
-                TextfieldForm(
-                  width: double.infinity,
-                  height: 50,
-                  label: 'Kode POS',
-                  controller: controller.postalCodeController,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                  ],
-                ),
-                TextfieldForm(
-                    width: double.infinity,
-                    height: 50,
-                    label: 'Detail Alamat',
-                    hintText: 'Jalan, RT/RW, Blok, No Rumah',
-                    controller: controller.detileAlamatController),
-                const SizedBox(height: 10),
-                TextfieldForm(
-                  width: double.infinity,
-                  height: 58,
-                  label: 'Alamat',
-                  controller: controller.alamatController,
-                  readOnly: true,
-                  hintText: controller.alamatController.text.isEmpty
-                      ? 'Provinsi, Kota, Kecamatan, Desa'
-                      : '',
-                ),
-                ElevatedButton(
-                  onPressed: () => showLocationBottomSheet(
-                      context,
-                      (value) => controller.alamatController.text = value,
-                      locationController),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.casualbutton1,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.location_on, color: Colors.white),
-                      const SizedBox(width: 5),
-                      Text(
-                        'Selengkapnya',
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: AppColors.pureWhite,
-                            fontFamily: 'Outfit'),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Obx(() => ElevatedButton(
-                        onPressed: controller.isNextButtonEnabled.value
-                            ? (controller.isDontHaveLoan.value
-                                ? () => Get.toNamed(MyAppRoutes.dataPinjaman)
-                                : () => controller.handleNextButton())
-                            : null,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: controller.isNextButtonEnabled.value
-                              ? AppColors.selanjutnyabutton
-                              : Colors.grey,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text(
-                              'Selanjutnya',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: AppColors.pureWhite,
-                                  fontFamily: 'Outfit'),
+                            Checkbox(
+                              value: controller.isNoFirstName.value,
+                              onChanged: controller.readOnly.value
+                                  ? null
+                                  : controller.toggleNoFirstName,
                             ),
-                            const SizedBox(width: 8),
-                            const Icon(Icons.arrow_forward_outlined,
-                                color: Colors.white),
+                            const Text(
+                              'Tidak Ada Nama Awal',
+                              style:
+                                  TextStyle(fontSize: 14, fontFamily: 'Outfit'),
+                            ),
                           ],
                         ),
-                      )),
-                ),
-                const SizedBox(height: 30),
+                        TextfieldForm(
+                            width: double.infinity,
+                            height: 50,
+                            label: 'Nama Akhir',
+                            readOnly: controller.readOnly.value,
+                            controller: controller.namaAkhirController),
+                        const SizedBox(height: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Nomor Telepon',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Outfit'),
+                            ),
+                            const SizedBox(height: 6),
+                            IntlPhoneField(
+                              initialCountryCode: 'ID',
+                              controller: controller.telpController,
+                              readOnly: controller.readOnly.value,
+                              enabled: controller.readOnly.value ? false : true,
+                              disableLengthCheck:
+                                  true, // Allow custom validation
+                              decoration: InputDecoration(
+                                hintText: 'Masukkan Nomor Telepon',
+                                hintStyle: TextStyle(
+                                  color: AppColors.black.withOpacity(0.3),
+                                  fontSize: 13,
+                                  fontFamily: 'Outfit',
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  borderSide: BorderSide(
+                                    color: AppColors.black.withOpacity(0.2),
+                                    width: 1.2,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  borderSide: BorderSide(
+                                    color: AppColors.black.withOpacity(0.2),
+                                    width: 1.2,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  borderSide: BorderSide(
+                                    color: AppColors.black.withOpacity(0.2),
+                                    width: 1.5,
+                                  ),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 15),
+                              ),
+                              onChanged: (phone) {
+                                controller.selectedCountryCode.value =
+                                    phone.countryCode;
+                                controller.telpController.text = phone.number;
+                                print(
+                                    'Country Code: ${phone.countryCode}, Phone: ${phone.number}');
+                              },
+                              invalidNumberMessage: 'Nomor telepon tidak valid',
+                            ),
+                          ],
+                        ),
+                        GenderRadioButtons(
+                          gender: controller.selectedGender,
+                          isReadOnly: controller.readOnly.value,
+                        ),
+                        TextfieldForm(
+                            width: double.infinity,
+                            height: 50,
+                            label: 'Kota lahir',
+                            readOnly: controller.readOnly.value,
+                            controller: controller.kotaAsalController),
+                        TextfieldForm(
+                            width: double.infinity,
+                            height: 50,
+                            label: 'Tanggal lahir',
+                            controller: controller.tanggallahirController,
+                            readOnly: controller.readOnly.value,
+                            onTap: controller.readOnly.value
+                                ? null
+                                : () => controller.pickDate(context),
+                            hintText: 'Klik dan Masukan Tanggal Lahir'),
+                        TextfieldForm(
+                            width: double.infinity,
+                            height: 50,
+                            readOnly: controller.readOnly.value,
+                            label: 'Pekerjaan',
+                            controller: controller.pekerjaanController),
+                        const SizedBox(height: 10),
+                        TextfieldForm(
+                          width: double.infinity,
+                          height: 50,
+                          label: 'Nama Pasangan',
+                          controller: controller.namaPasanganController,
+                          readOnly: controller.isUnmarried.value ||
+                              controller.readOnly.value,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Checkbox(
+                              value: controller.isUnmarried.value,
+                              onChanged: controller.readOnly.value
+                                  ? null
+                                  : controller.toggleUnmarried,
+                            ),
+                            const Text(
+                              'Belum Kawin',
+                              style:
+                                  TextStyle(fontSize: 14, fontFamily: 'Outfit'),
+                            ),
+                          ],
+                        ),
+                        TextfieldForm(
+                          width: double.infinity,
+                          height: 50,
+                          label: 'Nik Pasangan',
+                          controller: controller.nikpasanganController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          readOnly: controller.isUnmarried.value ||
+                              controller.readOnly.value,
+                        ),
+                        TextfieldForm(
+                          width: double.infinity,
+                          height: 60,
+                          label: 'Titik Kordinat Alamat',
+                          controller: controller.mapsUrlController,
+                          hintText:
+                              controller.selectedLocationLink.value.isEmpty
+                                  ? 'Klik untuk memilih lokasi di Google Maps'
+                                  : controller.selectedLocationLink.value,
+                          readOnly: controller.readOnly.value,
+                          onTap: controller.readOnly.value
+                              ? null
+                              : controller.navigateToGoogleMaps,
+                        ),
+                        TextfieldForm(
+                          width: double.infinity,
+                          height: 50,
+                          label: 'Kode POS',
+                          controller: controller.postalCodeController,
+                          readOnly: controller.readOnly.value,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                        ),
+                        TextfieldForm(
+                            width: double.infinity,
+                            height: 50,
+                            label: 'Detail Alamat',
+                            readOnly: controller.readOnly.value,
+                            hintText: 'Jalan, RT/RW, Blok, No Rumah',
+                            controller: controller.detileAlamatController),
+                        const SizedBox(height: 10),
+                        TextfieldForm(
+                          width: double.infinity,
+                          height: 58,
+                          label: 'Alamat',
+                          controller: controller.alamatController,
+                          readOnly: true,
+                          hintText: controller.alamatController.text.isEmpty
+                              ? 'Provinsi, Kota, Kecamatan, Desa'
+                              : '',
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: ElevatedButton(
+                            onPressed: controller.readOnly.value
+                                ? null
+                                : () => showLocationBottomSheet(
+                                    context,
+                                    (value) => controller
+                                        .alamatController.text = value,
+                                    locationController),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.casualbutton1,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.location_on,
+                                    color: Colors.white),
+                                const SizedBox(width: 5),
+                                Text(
+                                  'Selengkapnya',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: AppColors.pureWhite,
+                                      fontFamily: 'Outfit'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: ElevatedButton(
+                            onPressed: controller.isNextButtonEnabled.value
+                                ? (controller.isDontHaveLoan.value
+                                    ? () =>
+                                        Get.toNamed(MyAppRoutes.dataPinjaman)
+                                    : () => controller.handleNextButton())
+                                : null,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.selanjutnyabutton,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'Selanjutnya',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: AppColors.pureWhite,
+                                      fontFamily: 'Outfit'),
+                                ),
+                                const SizedBox(width: 8),
+                                const Icon(Icons.arrow_forward_outlined,
+                                    color: Colors.white),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
           ),

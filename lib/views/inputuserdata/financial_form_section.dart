@@ -35,21 +35,6 @@ class FinancialFormSection extends StatelessWidget {
           hintText: 'Contoh: Modal Kerja',
           controller: controller.purposeController,
         ),
-        const SizedBox(height: 16),
-        TextfieldForm(
-          width: double.infinity,
-          height: 50,
-          label: 'Taksiran Nilai Jaminan',
-          hintText: 'Masukkan nilai jaminan',
-          controller: controller.collateralValueController,
-          keyboardType: TextInputType.number,
-          inputFormatters: [
-            MoneyInputFormatter(
-              thousandSeparator: ThousandSeparator.Period,
-              mantissaLength: 0,
-            ),
-          ],
-        ),
         const SizedBox(height: 24),
         const Text(
           "Info Keuangan 📊",

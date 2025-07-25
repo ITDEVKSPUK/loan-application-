@@ -21,7 +21,6 @@ class CreditFormController extends GetxController {
   final dio_pkg.Dio dio = DioClient.dio;
   final plafondController = TextEditingController();
   final purposeController = TextEditingController();
-  final collateralValueController = TextEditingController();
   final incomeController = TextEditingController();
   final assetController = TextEditingController();
   final expensesController = TextEditingController();
@@ -39,7 +38,8 @@ class CreditFormController extends GetxController {
   var selectedAgunanImages = <File>[].obs;
   var selectedDocumentImages = <File>[].obs;
   var addDescript = ''.obs;
-  
+  var marketValue = ''.obs;
+
   Future<void> fetchAgunan() async {
     try {
       var fetchedAgunan = await getDocAgun.fetchAgunan();
@@ -220,7 +220,6 @@ class CreditFormController extends GetxController {
       }
       final service = PostSurveyService();
       final plafond = cleanNumber(plafondController.text);
-      final collateralValue = cleanNumber(collateralValueController.text);
       final income = cleanNumber(incomeController.text);
       final asset = cleanNumber(assetController.text);
       final expenses = cleanNumber(expensesController.text);
@@ -228,7 +227,6 @@ class CreditFormController extends GetxController {
 
       print('createSurvey: Sending data - '
           'plafond: $plafond, '
-          'collateralValue: $collateralValue, '
           'income: $income, '
           'asset: $asset, '
           'expenses: $expenses, '
@@ -251,7 +249,7 @@ class CreditFormController extends GetxController {
           "adddescript": "Tanah Bangunan",
           "id_catdocument": 1,
           "document_type": "BPKB",
-          "value": collateralValue,
+          "value": "0",
         },
         additionalInfo: {
           "income": income,
@@ -286,7 +284,8 @@ class CreditFormController extends GetxController {
         selectedAgunan.value.isEmpty ||
         selectedDocument.value.isEmpty ||
         selectedDocumentImages.isEmpty ||
-        addDescript.value.isEmpty) {
+        addDescript.value.isEmpty ||
+        marketValue.value.isEmpty) {
       _showError(context, 'Lengkapi semua input');
       print('handleSubmit: One or more required fields are empty');
       return;
@@ -308,8 +307,7 @@ class CreditFormController extends GetxController {
         print('handleSubmit: Documents uploaded successfully');
         Get.snackbar("Sukses", "Dokumen berhasil diunggah");
         print('handleSubmit: Form submission completed');
-        Get.offNamed(MyAppRoutes
-            .dashboard);
+        Get.offNamed(MyAppRoutes.dashboard);
       } else {
         _showError(context, 'Gagal membuat survey, upload dibatalkan');
         print('handleSubmit: Survey ID is null, upload cancelled');
@@ -330,7 +328,6 @@ class CreditFormController extends GetxController {
     bool isValid = [
       plafondController.text,
       purposeController.text,
-      collateralValueController.text,
       incomeController.text,
       assetController.text,
       expensesController.text,
@@ -414,7 +411,7 @@ class CreditFormController extends GetxController {
         idName: selectedAgunanName.value,
         addDescript: addDescript.value,
         idCatDocument: int.tryParse(selectedDocument.value) ?? 0,
-        value: inquiryData.collateral.value,
+        value: marketValue.value,
       ),
       additionalInfo: AdditionalInfo(
         income: inquiryData.additionalInfo.income.toString(),
