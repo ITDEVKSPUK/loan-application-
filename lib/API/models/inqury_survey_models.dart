@@ -1,6 +1,10 @@
 import 'package:get/get.dart';
 import 'package:loan_application/API/service/post_inqury_survey.dart';
 
+import 'package:get/get.dart';
+import 'package:loan_application/API/models/inqury_survey_models.dart';
+import 'package:loan_application/API/service/post_inqury_survey.dart';
+
 class InqurySurveyController extends GetxController {
   var plafond = ''.obs;
   var purpose = ''.obs;
@@ -19,13 +23,14 @@ class InqurySurveyController extends GetxController {
     isLoading.value = true;
     errorMessage.value = '';
     final inquryService = PostInqury();
+    print('Requesting data for trxSurvey: $trxSurvey, officeId: 000');
 
     try {
       final inquryResponse = await inquryService.fetchInqury(
         officeId: '000',
         trxSurvey: trxSurvey,
       );
-
+      print('Response: $inquryResponse');
       inquiryModel.value = inquryResponse;
       plafond.value = inquryResponse.application.plafond;
       purpose.value = inquryResponse.application.purpose;
@@ -44,6 +49,7 @@ class InqurySurveyController extends GetxController {
       ));
     } catch (e) {
       errorMessage.value = 'Gagal mengambil data: $e';
+      print('Error: $e');
       Get.snackbar('Error', errorMessage.value);
     } finally {
       isLoading.value = false;
@@ -66,7 +72,6 @@ class CollateralProofModel {
     this.sector_city = '',
   });
 }
-
 class InquirySurveyModel {
   final String responseCode;
   final String responseDescription;
@@ -92,6 +97,7 @@ class InquirySurveyModel {
   final AdditionalInfo additionalInfo;
   final Document document;
   final Status status;
+  final List<Collaboration> collaboration;
 
   InquirySurveyModel({
     required this.responseCode,
@@ -118,6 +124,7 @@ class InquirySurveyModel {
     required this.additionalInfo,
     required this.document,
     required this.status,
+    required this.collaboration,
   });
 
   factory InquirySurveyModel.fromJson(Map<String, dynamic> json) {
@@ -146,6 +153,10 @@ class InquirySurveyModel {
       additionalInfo: AdditionalInfo.fromJson(json['additionalinfo'] ?? {}),
       document: Document.fromJson(json['document'] ?? {}),
       status: Status.fromJson(json['status'] ?? {}),
+      collaboration: (json['Collaboration'] as List<dynamic>?)
+              ?.map((item) => Collaboration.fromJson(item))
+              .toList() ??
+          [],
     );
   }
 
@@ -175,6 +186,7 @@ class InquirySurveyModel {
       'additionalinfo': additionalInfo.toJson(),
       'document': document.toJson(),
       'status': status.toJson(),
+      'Collaboration': collaboration.map((item) => item.toJson()).toList(),
     };
   }
 }
@@ -380,6 +392,46 @@ class Status {
       'description': description,
       'attachedDocument': attachedDocument,
       'Mandatory': mandatory,
+    };
+  }
+}
+
+class Collaboration {
+  final String approvalNo;
+  final String category;
+  final String content;
+  final String judgment;
+  final String date;
+  final String note;
+
+  Collaboration({
+    required this.approvalNo,
+    required this.category,
+    required this.content,
+    required this.judgment,
+    required this.date,
+    required this.note,
+  });
+
+  factory Collaboration.fromJson(Map<String, dynamic> json) {
+    return Collaboration(
+      approvalNo: json['Approval_No'] ?? '',
+      category: json['Category'] ?? '',
+      content: json['Content'] ?? '',
+      judgment: json['Judgment'] ?? '',
+      date: json['Date'] ?? '',
+      note: json['Note'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'Approval_No': approvalNo,
+      'Category': category,
+      'Content': content,
+      'Judgment': judgment,
+      'Date': date,
+      'Note': note,
     };
   }
 }

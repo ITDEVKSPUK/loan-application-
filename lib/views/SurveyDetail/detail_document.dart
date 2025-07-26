@@ -35,218 +35,252 @@ class _DetailDocumentState extends State<DetailDocument> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-      backgroundColor: Colors.white,
-      appBar: CustomAppBar(
-        title: 'Detail Dokumen',
-      ),
-      body: Obx(() {
-        if (documentController.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (documentController.errorMessage.value.isNotEmpty) {
-          return Center(
+        backgroundColor: Colors.white,
+        appBar: CustomAppBar(
+          title: 'Detail Dokumen',
+        ),
+        body: Obx(() {
+          if (documentController.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (documentController.errorMessage.value.isNotEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    documentController.errorMessage.value,
+                    style: const TextStyle(color: Colors.red, fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      final trxSurvey = Get.arguments;
+                      if (trxSurvey != null && trxSurvey is String) {
+                        documentController.fetchDocuments(trxSurvey: trxSurvey);
+                      }
+                    },
+                    child: const Text('Coba Lagi'),
+                  ),
+                ],
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  documentController.errorMessage.value,
-                  style: const TextStyle(color: Colors.red, fontSize: 16),
-                  textAlign: TextAlign.center,
+                // KTP Section
+                const Center(
+                  child: Text(
+                    'KTP',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Center(
+                  child: GestureDetector(
+                    onTap: () => documentController
+                        .showFullScreenImage(documentController.ktpImage.value),
+                    child: Container(
+                      width: 317,
+                      height: 200,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade300),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: documentController.ktpImage.value.isNotEmpty
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.network(
+                                documentController.ktpImage.value,
+                                fit: BoxFit.fitWidth,
+                                width: double.infinity,
+                                height: double.infinity,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Center(
+                                  child: Text(
+                                    'KTP Tidak Tersedia',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Center(
+                              child: Text(
+                                'KTP Tidak Tersedia',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ),
+                            ),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    final trxSurvey = Get.arguments;
-                    if (trxSurvey != null && trxSurvey is String) {
-                      documentController.fetchDocuments(trxSurvey: trxSurvey);
-                    }
-                  },
-                  child: const Text('Coba Lagi'),
+                const Divider(thickness: 1, color: Colors.grey),
+                const SizedBox(height: 16),
+
+                // Agunan Section
+                const Center(
+                  child: Text(
+                    'AGUNAN',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
+                const SizedBox(height: 20),
+                Center(
+                  child: GestureDetector(
+                    onTap: () => documentController
+                        .showFullScreenImage(documentController.img_agun.value),
+                    child: Container(
+                      width: 317,
+                      height: 200,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: documentController.img_agun.value.isNotEmpty
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.network(
+                                documentController.img_agun.value,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Center(
+                                  child: Text(
+                                    'Foto Tanah Tidak Tersedia',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Center(
+                              child: Text(
+                                'Foto Tanah Tidak Tersedia',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ),
+                            ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                const Divider(thickness: 1, color: Colors.grey),
+                const SizedBox(height: 16),
+
+                // Document Section
+                const Center(
+                  child: Text(
+                    'DOKUMEN',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Center(
+                  child: GestureDetector(
+                    onTap: () => documentController
+                        .showFullScreenImage(documentController.img_doc.value),
+                    child: Container(
+                      width: 317,
+                      height: 200,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: documentController.img_doc.value.isNotEmpty
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.network(
+                                documentController.img_doc.value,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Center(
+                                  child: Text(
+                                    'Foto Surat Tidak Tersedia',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Center(
+                              child: Text(
+                                'Foto Surat Tidak Tersedia',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ),
+                            ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Divider(
+                  thickness: 1,
+                  color: Colors.grey,
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    const Text(
+                      "Note Document: ",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Obx(
+                      () => Text(
+                        documentController.noteDocument.value.isEmpty
+                            ? 'Tidak ada data'
+                            : documentController.noteDocument.value,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                const Divider(
+                  thickness: 1,
+                  color: Colors.grey,
+                ),
+                const SizedBox(height: 10),
               ],
             ),
           );
-        }
-        return SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // KTP Section
-              const Center(
-                child: Text(
-                  'KTP',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Center(
-                child: GestureDetector(
-                  onTap: () => documentController
-                      .showFullScreenImage(documentController.ktpImage.value),
-                  child: Container(
-                    width: 317,
-                    height: 200,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade300),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: documentController.ktpImage.value.isNotEmpty
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Image.network(
-                              documentController.ktpImage.value,
-                              fit: BoxFit.fitWidth,
-                              width: double.infinity,
-                              height: double.infinity,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Center(
-                                child: Text(
-                                  'KTP Tidak Tersedia',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey.shade600,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        : Center(
-                            child: Text(
-                              'KTP Tidak Tersedia',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey.shade600,
-                              ),
-                            ),
-                          ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Divider(thickness: 1, color: Colors.grey),
-              const SizedBox(height: 16),
-
-              // Agunan Section
-              const Center(
-                child: Text(
-                  'AGUNAN',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Center(
-                child: GestureDetector(
-                  onTap: () => documentController
-                      .showFullScreenImage(documentController.img_agun.value),
-                  child: Container(
-                    width: 317,
-                    height: 200,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: documentController.img_agun.value.isNotEmpty
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Image.network(
-                              documentController.img_agun.value,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: double.infinity,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Center(
-                                child: Text(
-                                  'Foto Tanah Tidak Tersedia',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey.shade600,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        : Center(
-                            child: Text(
-                              'Foto Tanah Tidak Tersedia',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey.shade600,
-                              ),
-                            ),
-                          ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Divider(thickness: 1, color: Colors.grey),
-              const SizedBox(height: 16),
-
-              // Document Section
-              const Center(
-                child: Text(
-                  'DOKUMEN',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Center(
-                child: GestureDetector(
-                  onTap: () => documentController
-                      .showFullScreenImage(documentController.img_doc.value),
-                  child: Container(
-                    width: 317,
-                    height: 200,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: documentController.img_doc.value.isNotEmpty
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Image.network(
-                              documentController.img_doc.value,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: double.infinity,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Center(
-                                child: Text(
-                                  'Foto Surat Tidak Tersedia',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey.shade600,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        : Center(
-                            child: Text(
-                              'Foto Surat Tidak Tersedia',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey.shade600,
-                              ),
-                            ),
-                          ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      }),
-      )
+        }),
+      ),
     );
   }
 }

@@ -76,6 +76,20 @@ class _DetailSurveyState extends State<DetailSurvey> {
                     Obx(() => Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Text(
+                              'Detail Aguan',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.black,
+                              ),
+                            ),
+                            const SizedBox(height: 5),
+                            const Divider(
+                              thickness: 1,
+                              color: Colors.grey,
+                            ),
+                            const SizedBox(height: 5),
                             FieldReadonly(
                               label: 'Tujuan Pinjaman',
                               width: double.infinity,
@@ -88,16 +102,14 @@ class _DetailSurveyState extends State<DetailSurvey> {
                               label: 'Category Agunan',
                               width: double.infinity,
                               height: 50,
-                              value: controller
-                                  .idName.value, // Fixed to use id_name
+                              value: controller.idName.value,
                               keyboardType: TextInputType.text,
                             ),
                             FieldReadonly(
                               label: 'Deskripsi Agunan',
                               width: double.infinity,
                               height: 50,
-                              value: controller
-                                  .descript.value, // Fixed to use id_name
+                              value: controller.descript.value,
                               keyboardType: TextInputType.text,
                             ),
                             const SizedBox(height: 4),
@@ -114,7 +126,56 @@ class _DetailSurveyState extends State<DetailSurvey> {
                               color: Colors.grey,
                             ),
                             const SizedBox(height: 10),
+                            Text(
+                              'Detail Nomainal Pinjaman',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.black,
+                              ),
+                            ),
+                            const SizedBox(height: 5),
+                            const Divider(
+                              thickness: 1,
+                              color: Colors.grey,
+                            ),
+                            const SizedBox(height: 5),
+                            //Widged Detail Nominal Pinjaman
                             LoanAngkaPinjaman(),
+                            const SizedBox(height: 10),
+                            const Divider(
+                              thickness: 1,
+                              color: Colors.grey,
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              children: [
+                                const Text(
+                                  "Note Plafond: ",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Obx(
+                                  () => Text(
+                                    controller.notePlafond.value.isEmpty
+                                        ? 'Tidak ada data'
+                                        : controller.notePlafond.value,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            const Divider(
+                              thickness: 1,
+                              color: Colors.grey,
+                            ),
+                            const SizedBox(height: 10),
                           ],
                         )),
                     const SizedBox(height: 30),

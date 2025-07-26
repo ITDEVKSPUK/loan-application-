@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:loan_application/API/models/inqury_survey_models.dart';
 import 'package:loan_application/core/theme/color.dart';
+import 'package:loan_application/views/home/note_popup.dart';
 
 class SurveyBox extends StatelessWidget {
   final String name;
@@ -10,6 +14,7 @@ class SurveyBox extends StatelessWidget {
   final String status;
   final String image;
   final Color statusColor;
+  final String trxSurvey;
 
   const SurveyBox({
     super.key,
@@ -21,10 +26,9 @@ class SurveyBox extends StatelessWidget {
     required this.status,
     required this.image,
     required this.statusColor,
+    required this.trxSurvey,
   });
 
-  // Function to format number as Rupiah
-  // Function to format number as Rupiah
   String formatRupiah(String numberString) {
     if (numberString.isEmpty || numberString == '0' || numberString == '0.00') {
       return 'Rp 0,00';
@@ -33,33 +37,25 @@ class SurveyBox extends StatelessWidget {
         double.tryParse(numberString.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0.0;
     if (number == 0) return 'Rp 0,00';
 
-    // Format to two decimal places
     final formatted = number.toStringAsFixed(2);
-    // Split into integer and decimal parts
     final parts = formatted.split('.');
-    // Add thousand separators to integer part
     final integerPart = parts[0].replaceAllMapped(
         RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]}.');
-    // Combine with decimal part, using comma as decimal separator
     return 'Rp $integerPart,${parts[1]}';
   }
 
-  // Function to format age
   String formatAge(String ageString) {
-    // Remove "years old" and trim any extra spaces
     return ageString.replaceAll('years old', 'years').trim();
   }
 
   @override
   Widget build(BuildContext context) {
     final isNetworkImage = image.startsWith('http');
-    // Format plafond as Rupiah
     final formattedPlafond = formatRupiah(plafond);
-    // Format age
     final formattedAge = formatAge(aged);
 
     return Container(
-      height: 120, 
+      height: 120,
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         color: AppColors.pureWhite,
@@ -73,9 +69,8 @@ class SurveyBox extends StatelessWidget {
         ],
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Gambar
           ClipRRect(
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(10),
@@ -83,6 +78,7 @@ class SurveyBox extends StatelessWidget {
             ),
             child: Container(
               width: 100,
+              height: 120,
               color: Colors.grey[200],
               child: isNetworkImage
                   ? Image.network(
@@ -97,11 +93,8 @@ class SurveyBox extends StatelessWidget {
                     ),
             ),
           ),
-
           const SizedBox(width: 10),
-
-          // Konten utama
-          Flexible(
+          Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 6.0),
               child: Column(
@@ -125,6 +118,24 @@ class SurveyBox extends StatelessWidget {
                   buildInfoRow(Icons.location_on, location),
                 ],
               ),
+            ),
+          ),
+          SizedBox(
+            width: 54, // Matches the status width to align properly
+            child: IconButton(
+              icon: const Icon(Icons.notifications),
+              onPressed: () {
+                final controller = Get.put(InqurySurveyController());
+                controller.getSurveyList(
+                    trxSurvey:
+                        trxSurvey);
+                showDialog(
+                  context: context,
+                  builder: (context) => const NotePopup(),
+                );
+              },
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
             ),
           ),
           ClipRRect(
