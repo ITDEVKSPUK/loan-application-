@@ -74,7 +74,7 @@ class _SurveyListState extends State<SurveyList> {
                       child: SurveyBox(
                         name: item.fullName,
                         date: DateFormat('yyyy-MMMM-dd', 'id_ID')
-                            .format(item.application.trxDate), // Updated date format
+                            .format(item.application.trxDate),
                         location: item.sectorCity,
                         image: (item.document?.docPerson.isNotEmpty ?? false)
                             ? item.document!.docPerson[0].img
@@ -83,6 +83,7 @@ class _SurveyListState extends State<SurveyList> {
                         statusColor: statusColor,
                         plafond: item.application.plafond,
                         aged: item.aged,
+                        trxSurvey: item.application.trxSurvey.toString(),
                       ),
                     );
                   },

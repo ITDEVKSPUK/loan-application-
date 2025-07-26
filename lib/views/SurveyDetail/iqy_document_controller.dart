@@ -13,6 +13,7 @@ class IqyDocumentController extends GetxController {
   var errorMessage = ''.obs;
   var adddescript = ''.obs;
   var documentModel = Rxn<Document>();
+  var noteDocument = ''.obs; // Added to store the note for Document
 
   void fetchDocuments({required String trxSurvey}) async {
     isLoading.value = true;
@@ -46,6 +47,20 @@ class IqyDocumentController extends GetxController {
       asset.value = documentModel.value?.docImg.isNotEmpty ?? false
           ? documentModel.value!.docImg[0].doc
           : 'Tidak tersedia';
+
+      // Fetch note for Document from collaboration (assuming 'DOC' for general documents)
+      final documentNote = inquryResponse.collaboration.firstWhere(
+        (col) => col.content == 'DOC',
+        orElse: () => Collaboration(
+          approvalNo: '',
+          category: '',
+          content: '',
+          judgment: '',
+          date: '',
+          note: 'Tidak ada data',
+        ),
+      ).note;
+      noteDocument.value = documentNote;
     } catch (e) {
       errorMessage.value = 'Gagal mengambil data dokumen: $e';
       Get.snackbar('Error', errorMessage.value);
@@ -54,7 +69,7 @@ class IqyDocumentController extends GetxController {
     }
   }
 
-  // Zoom imgae in full screen yoo
+  // Zoom image in full screen
   void showFullScreenImage(String imageUrl) {
     if (imageUrl.isEmpty) return;
     Get.dialog(
@@ -86,8 +101,7 @@ class IqyDocumentController extends GetxController {
               right: 25,
               child: IconButton(
                 icon: const Icon(Icons.close, color: Colors.white, size: 30),
-                onPressed: () =>
-                    Get.back(), // Use Get.back() instead of Navigator
+                onPressed: () => Get.back(),
               ),
             ),
           ],

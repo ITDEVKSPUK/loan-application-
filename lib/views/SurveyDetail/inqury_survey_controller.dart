@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loan_application/API/models/put_models_update.dart';
+import 'package:loan_application/API/models/inqury_survey_models.dart' as InquiryModels;
+import 'package:loan_application/API/models/put_models_update.dart' as UpdateModels;
 import 'package:loan_application/API/service/post_inqury_survey.dart';
 import 'package:loan_application/API/service/put_update_survey.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
@@ -29,11 +30,12 @@ class SurveyController extends GetxController {
 
   // Observables for DetailSurvey
   final purpose = ''.obs;
-  final idName = ''.obs; // Added for Category Agunan
+  final idName = ''.obs; // For Category Agunan
   final document_type = ''.obs;
   final descript = ''.obs;
-  final inquiryModel = Rx<dynamic>(null);
+  final inquiryModel = Rx<InquiryModels.InquirySurveyModel?>(null);
   final isLoading = false.obs;
+  final notePlafond = ''.obs;
   String surveyId = '';
 
   final PutUpdateSurvey putUpdateSurvey;
@@ -42,7 +44,6 @@ class SurveyController extends GetxController {
   SurveyController({required this.putUpdateSurvey});
 
   /// Format angka ke format Rupiah untuk tampilan (contoh: 1000000 -> 1.000.000)
-  /// Format angka ke format Rupiah untuk tampilan (contoh: 1000000 -> 5.000.000,00)
   String formatRupiah(String numberString) {
     if (numberString.isEmpty || numberString == '0' || numberString == '0.00') {
       return '0';
@@ -98,10 +99,28 @@ class SurveyController extends GetxController {
 
       inquiryModel.value = inquiryData;
       purpose.value = inquiryData.application.purpose ?? '';
-      idName.value = inquiryData.collateral.idName ?? ''; // Set idName
+      idName.value = inquiryData.collateral.idName ?? '';
       document_type.value = inquiryData.collateral.documentType ?? '';
       descript.value = inquiryData.collateral.adddescript ?? '';
+
+      // Extract Note for PLAF from Collaboration
+      final collaborationList = inquiryData.collaboration;
+      notePlafond.value = collaborationList
+              .firstWhere(
+                (collab) => collab.content == 'PLAF',
+                orElse: () => InquiryModels.Collaboration(
+                  approvalNo: '',
+                  category: '',
+                  content: '',
+                  judgment: '',
+                  date: '',
+                  note: 'Tidak ada data',
+                ),
+              )
+              .note;
+
       print('Category Agunan (idName): ${idName.value}');
+      print('Note Plafond: ${notePlafond.value}');
     } catch (e) {
       print('Error fetching survey list: $e');
       Get.snackbar(
@@ -166,7 +185,7 @@ class SurveyController extends GetxController {
       // Update observables for DetailSurvey
       inquiryModel.value = inquiryData;
       purpose.value = inquiryData.application.purpose ?? '';
-      idName.value = inquiryData.collateral.idName ?? ''; // Update idName
+      idName.value = inquiryData.collateral.idName ?? '';
       document_type.value = inquiryData.collateral.adddescript ?? '';
       print('Category Agunan (idName) loaded: ${idName.value}');
     } catch (e) {
@@ -215,25 +234,25 @@ class SurveyController extends GetxController {
         throw Exception('Plafond harus lebih besar dari 0');
       }
 
-      final putModelsUpdate = PutModelsUpdate(
+      final putModelsUpdate = UpdateModels.PutModelsUpdate(
         cifId: int.tryParse(cifIdController.text) ?? 0,
         idLegal: int.tryParse(idLegalController.text) ?? 0,
         officeId: officeIdController.text,
-        application: Application(
+        application: UpdateModels.Application(
           trxDate: trxDateController.text,
           trxSurvey: trxSurveyController.text,
           applicationNo: applicationNoController.text,
           purpose: purposeController.text,
           plafond: formatForApi(plafond.toString()),
         ),
-        collateral: Collateral(
+        collateral: UpdateModels.Collateral(
           id: collateralIdController.text,
           idName: collateralNameController.text,
           addDescript: collateralAddDescController.text,
           idCatDocument: int.tryParse(collateralCatDocController.text) ?? 0,
           value: '',
         ),
-        additionalInfo: AdditionalInfo(
+        additionalInfo: UpdateModels.AdditionalInfo(
           income: formatForApi(income.toString()),
           asset: formatForApi(asset.toString()),
           expenses: formatForApi(expenses.toString()),
@@ -253,7 +272,7 @@ class SurveyController extends GetxController {
 
       // Update observables for DetailSurvey
       purpose.value = purposeController.text;
-      idName.value = collateralNameController.text; // Update idName
+      idName.value = collateralNameController.text;
       document_type.value = collateralAddDescController.text;
 
       Get.snackbar(
@@ -334,25 +353,25 @@ class SurveyController extends GetxController {
         throw Exception('Plafond harus lebih besar dari 0');
       }
 
-      final putModelsUpdate = PutModelsUpdate(
+      final putModelsUpdate = UpdateModels.PutModelsUpdate(
         cifId: int.tryParse(cifIdController.text) ?? 0,
         idLegal: int.tryParse(idLegalController.text) ?? 0,
         officeId: officeIdController.text,
-        application: Application(
+        application: UpdateModels.Application(
           trxDate: trxDateController.text,
           trxSurvey: trxSurveyController.text,
           applicationNo: applicationNoController.text,
           purpose: purposeController.text,
           plafond: formatForApi(plafond.toString()),
         ),
-        collateral: Collateral(
+        collateral: UpdateModels.Collateral(
           id: collateralIdController.text,
           idName: collateralNameController.text,
           addDescript: collateralAddDescController.text,
           idCatDocument: int.tryParse(collateralCatDocController.text) ?? 0,
           value: '',
         ),
-        additionalInfo: AdditionalInfo(
+        additionalInfo: UpdateModels.AdditionalInfo(
           income: formatForApi(income.toString()),
           asset: formatForApi(asset.toString()),
           expenses: formatForApi(expenses.toString()),
@@ -372,7 +391,7 @@ class SurveyController extends GetxController {
 
       // Update observables for DetailSurvey
       purpose.value = purposeController.text;
-      idName.value = collateralNameController.text; // Update idName
+      idName.value = collateralNameController.text;
       document_type.value = collateralAddDescController.text;
 
       Get.snackbar(
