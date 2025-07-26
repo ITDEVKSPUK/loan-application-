@@ -11,7 +11,7 @@ class TextfieldForm extends StatefulWidget {
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final VoidCallback? onTap;
-  final bool readOnly; // Added readOnly parameter
+  final bool readOnly;
 
   const TextfieldForm({
     super.key,
@@ -33,6 +33,8 @@ class TextfieldForm extends StatefulWidget {
 class _TextfieldFormState extends State<TextfieldForm> {
   @override
   Widget build(BuildContext context) {
+    final bool isReadOnly = widget.readOnly || widget.onTap != null;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
@@ -51,23 +53,35 @@ class _TextfieldFormState extends State<TextfieldForm> {
             width: widget.width,
             height: widget.height,
             decoration: BoxDecoration(
-              color: AppColors.pureWhite.withOpacity(0.05),
-              border: Border.all(color: AppColors.black.withOpacity(0.2)),
+              color: isReadOnly
+                  ? Colors.grey.shade200
+                  : AppColors.pureWhite.withOpacity(0.05),
+              border: Border.all(
+                color: isReadOnly
+                    ? Colors.grey.shade400
+                    : AppColors.black.withOpacity(0.2),
+              ),
               borderRadius: BorderRadius.circular(15),
             ),
             child: TextField(
               controller: widget.controller,
               keyboardType: widget.keyboardType,
               inputFormatters: widget.inputFormatters ?? [],
-              readOnly: widget.readOnly ||
-                  widget.onTap != null, // Respect readOnly or onTap
+              readOnly: isReadOnly,
               onTap: widget.onTap,
+              style: TextStyle(
+                color: isReadOnly ? Colors.grey.shade600 : AppColors.black,
+                fontSize: 14,
+                fontFamily: 'Outfit',
+              ),
               textAlignVertical: TextAlignVertical.center,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: widget.hintText,
                 hintStyle: TextStyle(
-                  color: AppColors.black.withOpacity(0.2),
+                  color: isReadOnly
+                      ? Colors.grey.shade500
+                      : AppColors.black.withOpacity(0.2),
                   fontSize: 13,
                   fontFamily: 'Outfit',
                   fontWeight: FontWeight.w500,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
 
 class UploadKTPPicker extends StatelessWidget {
@@ -12,40 +13,39 @@ class UploadKTPPicker extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Upload KTP",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ),
-        const SizedBox(height: 8),
-        const Text(
-          "Pastikan foto KTP jelas dan tidak terpotong",
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.black54,
-          ),
-        ),
-        const SizedBox(height: 12),
-        ElevatedButton.icon(
-          onPressed: () => controller.pickKTPImages(context),
-          icon: const Icon(Icons.camera_alt, color: Colors.white),
-          label: const Text(
-            "Upload Foto KTP",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
+        GestureDetector(
+          onTap: () => controller.pickKTPImages(context),
+          child: DottedBorder(
+            color: Colors.blue.shade300,
+            strokeWidth: 1.5,
+            dashPattern: [6, 4],
+            borderType: BorderType.RRect,
+            radius: const Radius.circular(12),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.cloud_upload, size: 40, color: Colors.blue.shade600),
+                  const SizedBox(height: 8),
+                  Text.rich(
+                    TextSpan(
+                      text: 'Klik untuk ',
+                      children: [
+                        TextSpan(
+                          text: 'upload KTP',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue.shade700),
+                        )
+                      ],
+                    ),
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
             ),
-          ),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue.shade600,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            elevation: 2,
           ),
         ),
         const SizedBox(height: 12),
@@ -54,7 +54,6 @@ class UploadKTPPicker extends StatelessWidget {
           if (images.isEmpty) {
             return const Text("Belum ada foto KTP yang dipilih.");
           }
-
           return SizedBox(
             height: 90,
             child: ListView.separated(
@@ -88,8 +87,7 @@ class UploadKTPPicker extends StatelessWidget {
                               color: Colors.white, size: 20),
                         ),
                       ),
-                    ),
-                  ],
+                    ),                  ],
                 );
               },
             ),

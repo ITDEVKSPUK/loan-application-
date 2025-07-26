@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
 
 class UploadAgunanPicker extends StatelessWidget {
@@ -13,6 +14,7 @@ class UploadAgunanPicker extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Dropdown kategori agunan
         Obx(() {
           return DropdownButtonFormField<String>(
             value: controller.selectedAgunan.value.isEmpty
@@ -20,7 +22,7 @@ class UploadAgunanPicker extends StatelessWidget {
                 : controller.selectedAgunan.value,
             decoration: InputDecoration(
               labelText: "Kategori Agunan *",
-              labelStyle: TextStyle(color: Colors.blue.shade700),
+              labelStyle: TextStyle(color: const Color.fromARGB(255, 138, 138, 138)),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(color: Colors.blue.shade200),
@@ -31,16 +33,16 @@ class UploadAgunanPicker extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Colors.blue.shade600, width: 2),
+                borderSide: BorderSide(color: const Color.fromARGB(255, 179, 203, 255), width: 2),
               ),
               filled: true,
-              fillColor: Colors.blue.shade50,
+              fillColor: const Color.fromARGB(255, 238, 238, 238),
               errorText: controller.selectedAgunan.value.isEmpty
                   ? "Kategori Agunan wajib dipilih"
                   : null,
             ),
             dropdownColor: Colors.white,
-            icon: Icon(Icons.arrow_drop_down, color: Colors.blue.shade700),
+            icon: Icon(Icons.arrow_drop_down, color: const Color.fromARGB(255, 139, 143, 147)),
             items: controller.agunanList.map((agunan) {
               return DropdownMenuItem<String>(
                 value: agunan['ida'].toString(),
@@ -57,32 +59,50 @@ class UploadAgunanPicker extends StatelessWidget {
               );
               controller.selectedAgunan.value = val!;
               controller.selectedAgunanName.value = selected['descript'] ?? '';
-              print(
-                  'Dropdown selected: ID = $val, Name = ${selected['descript'] ?? 'N/A'}');
             },
           );
         }),
         const SizedBox(height: 12),
-        ElevatedButton.icon(
-          onPressed: () => controller.pickAgunanImages(context),
-          icon: const Icon(Icons.camera_alt, color: Colors.white),
-          label: const Text(
-            "Upload Foto Agunan",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
+
+        // Upload dengan DottedBorder
+        GestureDetector(
+          onTap: () => controller.pickAgunanImages(context),
+          child: DottedBorder(
+            color: Colors.blue.shade300,
+            strokeWidth: 1.5,
+            dashPattern: [6, 4],
+            borderType: BorderType.RRect,
+            radius: const Radius.circular(12),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.cloud_upload, size: 40, color: Colors.blue.shade600),
+                  const SizedBox(height: 8),
+                  Text.rich(
+                    TextSpan(
+                      text: 'Klik untuk ',
+                      children: [
+                        TextSpan(
+                          text: 'upload foto Agunan',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue.shade700),
+                        )
+                      ],
+                    ),
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
             ),
-          ),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue.shade600,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            elevation: 2,
           ),
         ),
         const SizedBox(height: 12),
+
+        // Preview gambar Agunan
         Obx(() {
           final images = controller.selectedAgunanImages;
           return Column(
@@ -113,8 +133,8 @@ class UploadAgunanPicker extends StatelessWidget {
                             top: 0,
                             right: 0,
                             child: GestureDetector(
-                              onTap: () => controller.selectedAgunanImages
-                                  .removeAt(index),
+                              onTap: () =>
+                                  controller.selectedAgunanImages.removeAt(index),
                               child: Container(
                                 decoration: const BoxDecoration(
                                   color: Colors.black45,
@@ -131,68 +151,66 @@ class UploadAgunanPicker extends StatelessWidget {
                   ),
                 ),
               const SizedBox(height: 12),
+
+              // Deskripsi Agunan
               Obx(() {
                 return TextField(
                   decoration: InputDecoration(
                     labelText: "Tambahkan Deskripsi Agunan",
-                    labelStyle: TextStyle(color: Colors.blue.shade700),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: Colors.blue.shade200),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: Colors.blue.shade200),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide:
-                          BorderSide(color: Colors.blue.shade600, width: 2),
-                    ),
-                    filled: true,
-                    fillColor: Colors.blue.shade50,
+              labelStyle: TextStyle(color: const Color.fromARGB(255, 138, 138, 138)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: Colors.blue.shade200),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: Colors.blue.shade200),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: const Color.fromARGB(255, 179, 203, 255), width: 2),
+              ),
+              filled: true,
+              fillColor: const Color.fromARGB(255, 238, 238, 238),
                     errorText: controller.addDescript.value.isEmpty
                         ? "Deskripsi wajib diisi"
                         : null,
                   ),
                   onChanged: (value) {
                     controller.addDescript.value = value;
-                    print('Add Descript updated: $value');
                   },
                 );
               }),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
+
+              // Market Value
               Obx(() {
                 return TextField(
                   keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly, // hanya angka
-                  ],
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   decoration: InputDecoration(
                     labelText: "Taksiran Nilai Agunan *",
-                    labelStyle: TextStyle(color: Colors.blue.shade700),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: Colors.blue.shade200),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: Colors.blue.shade200),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide:
-                          BorderSide(color: Colors.blue.shade600, width: 2),
-                    ),
-                    filled: true,
-                    fillColor: Colors.blue.shade50,
+              labelStyle: TextStyle(color: const Color.fromARGB(255, 138, 138, 138)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: Colors.blue.shade200),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: Colors.blue.shade200),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: const Color.fromARGB(255, 179, 203, 255), width: 2),
+              ),
+              filled: true,
+              fillColor: const Color.fromARGB(255, 238, 238, 238),
                     errorText: controller.marketValue.value.isEmpty
-                        ? "Value Market wajib diisi"
+                        ? "Nilai taksiran wajib diisi"
                         : null,
                   ),
                   onChanged: (value) {
                     controller.marketValue.value = value;
-                    print('Value Market updated: $value');
                   },
                 );
               }),
