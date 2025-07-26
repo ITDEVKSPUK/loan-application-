@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
 
@@ -133,7 +134,7 @@ class UploadAgunanPicker extends StatelessWidget {
               Obx(() {
                 return TextField(
                   decoration: InputDecoration(
-                    labelText: "Add Descript *",
+                    labelText: "Tambahkan Deskripsi Agunan",
                     labelStyle: TextStyle(color: Colors.blue.shade700),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -151,7 +152,7 @@ class UploadAgunanPicker extends StatelessWidget {
                     filled: true,
                     fillColor: Colors.blue.shade50,
                     errorText: controller.addDescript.value.isEmpty
-                        ? "Add Descript wajib diisi"
+                        ? "Deskripsi wajib diisi"
                         : null,
                   ),
                   onChanged: (value) {
@@ -163,8 +164,12 @@ class UploadAgunanPicker extends StatelessWidget {
               SizedBox(height: 12),
               Obx(() {
                 return TextField(
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly, // hanya angka
+                  ],
                   decoration: InputDecoration(
-                    labelText: "Value Market*",
+                    labelText: "Taksiran Nilai Agunan *",
                     labelStyle: TextStyle(color: Colors.blue.shade700),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -187,7 +192,7 @@ class UploadAgunanPicker extends StatelessWidget {
                   ),
                   onChanged: (value) {
                     controller.marketValue.value = value;
-                    print('Add Descript updated: $value');
+                    print('Value Market updated: $value');
                   },
                 );
               }),

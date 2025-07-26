@@ -250,7 +250,7 @@ class SurveyController extends GetxController {
           idName: collateralNameController.text,
           addDescript: collateralAddDescController.text,
           idCatDocument: int.tryParse(collateralCatDocController.text) ?? 0,
-          value: '',
+          value: "0",
         ),
         additionalInfo: UpdateModels.AdditionalInfo(
           income: formatForApi(income.toString()),
