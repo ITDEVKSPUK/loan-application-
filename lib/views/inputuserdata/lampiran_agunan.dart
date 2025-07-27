@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loan_application/core/theme/color.dart';
-import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
 import 'package:loan_application/widgets/InputUserData/upload_agunan.dart';
 import 'package:loan_application/widgets/InputUserData/upload_document.dart';
@@ -32,36 +31,44 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 16),
-              Center(
-                child: const Text("Upload Bukti",
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              const SizedBox(height: 8),
+              const Text(
+                "Upload Bukti",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
               ),
               const SizedBox(height: 16),
+
+              // Upload KTP
               UploadKTPPicker(controller: controller),
-              const SizedBox(height: 12),
+              const SizedBox(height: 24),
+
+              // Upload Agunan
               UploadAgunanPicker(controller: controller),
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
+
+              // Upload Dokumen
               UploadDocumentPicker(controller: controller),
-              const SizedBox(height: 16),
+              const SizedBox(height: 32),
+
+              // Submit Button
               Center(
                 child: ElevatedButton(
-                  onPressed: () {
-                    controller.handleSubmit(context);
-                  },
+                  onPressed: () => controller.handleSubmit(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.casualbutton1,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                   child: Text(
                     'Submit',
                     style: TextStyle(
                       fontSize: 16,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.pureWhite,
                       fontFamily: 'Outfit',
                     ),
