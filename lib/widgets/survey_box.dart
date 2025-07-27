@@ -121,14 +121,14 @@ class SurveyBox extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 54, // Matches the status width to align properly
+            height: 40,
+            width: 40, // Matches the status width to align properly
             child: IconButton(
-              icon: const Icon(Icons.notifications),
+              icon: Icon(Icons.info_outline,
+                  size: 20, color: AppColors.black.withOpacity(0.3)),
               onPressed: () {
                 final controller = Get.put(InqurySurveyController());
-                controller.getSurveyList(
-                    trxSurvey:
-                        trxSurvey);
+                controller.getSurveyList(trxSurvey: trxSurvey);
                 showDialog(
                   context: context,
                   builder: (context) => const NotePopup(),

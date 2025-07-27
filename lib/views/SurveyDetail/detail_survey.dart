@@ -77,17 +77,12 @@ class _DetailSurveyState extends State<DetailSurvey> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Detail Aguan',
+                              'Detail Agunan',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.black,
                               ),
-                            ),
-                            const SizedBox(height: 5),
-                            const Divider(
-                              thickness: 1,
-                              color: Colors.grey,
                             ),
                             const SizedBox(height: 5),
                             FieldReadonly(
@@ -120,9 +115,18 @@ class _DetailSurveyState extends State<DetailSurvey> {
                               value: controller.document_type.value,
                               keyboardType: TextInputType.text,
                             ),
+                            const SizedBox(height: 4),
+                            FieldReadonly(
+                              label: 'Taksiran Nilai Jaminan',
+                              width: double.infinity,
+                              height: 50,
+                              value:
+                                  'Rp. ${controller.formatRupiah(controller.inquiryModel.value?.collateral.value.toString() ?? '0')}',
+                              keyboardType: TextInputType.number,
+                            ),
                             const SizedBox(height: 10),
                             const Divider(
-                              thickness: 1,
+                              thickness: 2,
                               color: Colors.grey,
                             ),
                             const SizedBox(height: 10),
@@ -135,13 +139,10 @@ class _DetailSurveyState extends State<DetailSurvey> {
                               ),
                             ),
                             const SizedBox(height: 5),
-                            const Divider(
-                              thickness: 1,
-                              color: Colors.grey,
-                            ),
-                            const SizedBox(height: 5),
-                            //Widged Detail Nominal Pinjaman
+                            //Widget Detail Nominal Pinjaman
                             LoanAngkaPinjaman(),
+
+                            //yg di atas widget detail nominal pinjaman
                             const SizedBox(height: 10),
                             const Divider(
                               thickness: 1,
@@ -151,7 +152,7 @@ class _DetailSurveyState extends State<DetailSurvey> {
                             Row(
                               children: [
                                 const Text(
-                                  "Note Plafond: ",
+                                  "Note Agunan : ",
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,

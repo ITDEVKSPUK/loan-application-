@@ -27,14 +27,6 @@ class LoanAngkaPinjaman extends StatelessWidget {
             keyboardType: TextInputType.number,
           ),
           FieldReadonly(
-            label: 'Taksiran Nilai Jaminan',
-            width: double.infinity,
-            height: 50,
-            value:
-                'Rp. ${controller.formatRupiah(inquiryData.collateral.value.toString())}',
-            keyboardType: TextInputType.number,
-          ),
-          FieldReadonly(
             label: 'Pendapatan Bulanan',
             width: double.infinity,
             height: 50,

@@ -1,139 +1,143 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loan_application/API/models/inqury_survey_models.dart';
+import 'package:loan_application/core/theme/color.dart';
+import 'package:loan_application/views/home/note_controller.dart';
 
-class NotePopup extends StatefulWidget {
+class NotePopup extends StatelessWidget {
   const NotePopup({super.key});
 
   @override
-  State<NotePopup> createState() => _NotePopupState();
-}
-
-class _NotePopupState extends State<NotePopup> {
-  final InqurySurveyController controller = Get.put(InqurySurveyController());
-  Color documentColor = Colors.grey[300]!;
-  Color agunanColor = Colors.grey[300]!;
-  String activeTab = 'Document';
-
-  @override
-  void initState() {
-    super.initState();
-    // Ensure data is fetched when popup opens
-    // This should be triggered from SurveyBox with dynamic trxSurvey
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // Initialize the controller
+    final NotePopupController controller = Get.put(NotePopupController());
+
     return Dialog(
-      child: Container(
-        padding: const EdgeInsets.all(16.0),
+      backgroundColor: Colors.white.withOpacity(0.95),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Note :',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            Row(
+            // Title with icon
+            const Row(
               children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        activeTab = 'Document';
-                        documentColor = Colors.blue;
-                        agunanColor = Colors.grey[300]!;
-                      });
-                    },
-                    child: Container(
-                      height: 30,
-                      color: documentColor,
-                      child: const Center(child: Text('Document')),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        activeTab = 'Agunan';
-                        agunanColor = Colors.blue;
-                        documentColor = Colors.grey[300]!;
-                      });
-                    },
-                    child: Container(
-                      height: 30,
-                      color: agunanColor,
-                      child: const Center(child: Text('Agunan')),
-                    ),
+                Text(
+                  '📝 Catatan',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.black,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 10),
-            Container(
-              height: 200,
-              width: double.maxFinite,
-              color: Colors.grey[300],
-              child: Obx(() {
-                print('Inquiry Model: ${controller.inquiryModel.value}');
-                if (controller.isLoading.value) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (controller.inquiryModel.value == null) {
-                  return const Center(child: Text('No data available'));
-                }
-                final model = controller.inquiryModel.value!;
-                String noteToShow = 'No note available';
-                String plafondToShow = controller.plafond.value.isEmpty
-                    ? 'Rp 0,00'
-                    : controller.plafond.value;
-                if (activeTab == 'Document') {
-                  noteToShow = model.collaboration
-                          .firstWhere(
-                            (col) => col.content == 'DOC',
-                            orElse: () => Collaboration(
-                                approvalNo: '',
-                                category: '',
-                                content: '',
-                                judgment: '',
-                                date: '',
-                                note: 'No document note'),
-                          )
-                          .note ??
-                      'No document note';
-                } else if (activeTab == 'Agunan') {
-                  noteToShow = model.collaboration
-                          .firstWhere(
-                            (col) => col.content == 'PLAF',
-                            orElse: () => Collaboration(
-                                approvalNo: '',
-                                category: '',
-                                content: '',
-                                judgment: '',
-                                date: '',
-                                note: 'No agunan note'),
-                          )
-                          .note ??
-                      'No agunan note';
-                }
-                return Center(
-                  child: Text(
-                    'Plafond: $plafondToShow\nNote: $noteToShow',
-                    textAlign: TextAlign.center,
-                  ),
-                );
-              }),
-            ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
+
+            // Tabs
+            Obx(() => Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => controller.switchTab('Document'),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          decoration: BoxDecoration(
+                            color: controller.activeTab.value == 'Document'
+                                ? AppColors.casualbutton1
+                                : Colors.grey[200],
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Document',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: controller.activeTab.value == 'Document'
+                                    ? AppColors.pureWhite
+                                    : Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => controller.switchTab('Agunan'),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          decoration: BoxDecoration(
+                            color: controller.activeTab.value == 'Agunan'
+                                ? AppColors.casualbutton1
+                                : Colors.grey[200],
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Agunan',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: controller.activeTab.value == 'Agunan'
+                                    ? AppColors.pureWhite
+                                    : Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
+
+            const SizedBox(height: 20),
+
+            // Content Box
+            Obx(() {
+              if (controller.inquiryController.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              return Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  'Plafond: ${controller.getPlafondToShow()}\nNote: ${controller.getNoteToShow()}',
+                  style: const TextStyle(fontSize: 16),
+                  textAlign: TextAlign.left,
+                ),
+              );
+            }),
+
+            const SizedBox(height: 20),
+
+            // Close button
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Close'),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.close, color: AppColors.black),
+                    SizedBox(width: 6),
+                    Text(
+                      'Close',
+                      style: TextStyle(
+                        color: AppColors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
