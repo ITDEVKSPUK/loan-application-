@@ -26,7 +26,7 @@ class NotePopup extends StatelessWidget {
             const Row(
               children: [
                 Text(
-                  '📝 Catatan',
+                  'Catatan',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
