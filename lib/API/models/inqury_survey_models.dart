@@ -18,6 +18,7 @@ class InqurySurveyController extends GetxController {
   var collateralProofs = <CollateralProofModel>[].obs;
   var isLoading = false.obs;
   var errorMessage = ''.obs;
+  RxString marketValue = ''.obs;
 
   void getSurveyList({required String trxSurvey}) async {
     isLoading.value = true;

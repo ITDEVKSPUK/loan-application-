@@ -48,66 +48,70 @@ class NotePopup extends StatelessWidget {
                     const SizedBox(height: 20),
 
                     // Tabs
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () => controller.switchTab('Document'),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              decoration: BoxDecoration(
-                                color: controller.activeTab.value == 'Document'
-                                    ? AppColors.casualbutton1
-                                    : Colors.grey[200],
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Document',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                    Obx(() => Row(
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  controller.switchTab('Document');
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  decoration: BoxDecoration(
                                     color: controller.activeTab.value == 'Document'
-                                        ? AppColors.pureWhite
-                                        : Colors.black,
+                                        ? AppColors.casualbutton1
+                                        : Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Document',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: controller.activeTab.value == 'Document'
+                                            ? AppColors.pureWhite
+                                            : Colors.black,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () => controller.switchTab('Agunan'),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              decoration: BoxDecoration(
-                                color: controller.activeTab.value == 'Agunan'
-                                    ? AppColors.casualbutton1
-                                    : Colors.grey[200],
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Agunan',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  controller.switchTab('Agunan');
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  decoration: BoxDecoration(
                                     color: controller.activeTab.value == 'Agunan'
-                                        ? AppColors.pureWhite
-                                        : Colors.black,
+                                        ? AppColors.casualbutton1
+                                        : Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Agunan',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: controller.activeTab.value == 'Agunan'
+                                            ? AppColors.pureWhite
+                                            : Colors.black,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
+                          ],
+                        )),
 
                     const SizedBox(height: 20),
 
                     // Content Box
-                    controller.inquiryController.isLoading.value
+                    Obx(() => controller.inquiryController.isLoading.value
                         ? const Center(child: CircularProgressIndicator())
                         : Container(
                             width: double.infinity,
@@ -117,11 +121,11 @@ class NotePopup extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
-                              'Plafond: ${controller.getPlafondToShow()}\nNote: ${controller.getNoteToShow()}',
+                              controller.getContentToShow(),
                               style: const TextStyle(fontSize: 16),
                               textAlign: TextAlign.left,
                             ),
-                          ),
+                          )),
 
                     const SizedBox(height: 20),
 
