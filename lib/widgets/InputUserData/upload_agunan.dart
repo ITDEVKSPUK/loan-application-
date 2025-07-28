@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_multi_formatter/formatters/money_input_enums.dart';
+import 'package:flutter_multi_formatter/formatters/money_input_formatter.dart';
 import 'package:get/get.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
@@ -22,7 +24,8 @@ class UploadAgunanPicker extends StatelessWidget {
                 : controller.selectedAgunan.value,
             decoration: InputDecoration(
               labelText: "Kategori Agunan *",
-              labelStyle: TextStyle(color: const Color.fromARGB(255, 138, 138, 138)),
+              labelStyle:
+                  TextStyle(color: const Color.fromARGB(255, 138, 138, 138)),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(color: Colors.blue.shade200),
@@ -33,7 +36,8 @@ class UploadAgunanPicker extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: const Color.fromARGB(255, 179, 203, 255), width: 2),
+                borderSide: BorderSide(
+                    color: const Color.fromARGB(255, 179, 203, 255), width: 2),
               ),
               filled: true,
               fillColor: const Color.fromARGB(255, 238, 238, 238),
@@ -42,7 +46,8 @@ class UploadAgunanPicker extends StatelessWidget {
                   : null,
             ),
             dropdownColor: Colors.white,
-            icon: Icon(Icons.arrow_drop_down, color: const Color.fromARGB(255, 139, 143, 147)),
+            icon: Icon(Icons.arrow_drop_down,
+                color: const Color.fromARGB(255, 139, 143, 147)),
             items: controller.agunanList.map((agunan) {
               return DropdownMenuItem<String>(
                 value: agunan['ida'].toString(),
@@ -79,7 +84,8 @@ class UploadAgunanPicker extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.cloud_upload, size: 40, color: Colors.blue.shade600),
+                  Icon(Icons.cloud_upload,
+                      size: 40, color: Colors.blue.shade600),
                   const SizedBox(height: 8),
                   Text.rich(
                     TextSpan(
@@ -133,8 +139,8 @@ class UploadAgunanPicker extends StatelessWidget {
                             top: 0,
                             right: 0,
                             child: GestureDetector(
-                              onTap: () =>
-                                  controller.selectedAgunanImages.removeAt(index),
+                              onTap: () => controller.selectedAgunanImages
+                                  .removeAt(index),
                               child: Container(
                                 decoration: const BoxDecoration(
                                   color: Colors.black45,
@@ -157,21 +163,24 @@ class UploadAgunanPicker extends StatelessWidget {
                 return TextField(
                   decoration: InputDecoration(
                     labelText: "Tambahkan Deskripsi Agunan",
-              labelStyle: TextStyle(color: const Color.fromARGB(255, 138, 138, 138)),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Colors.blue.shade200),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Colors.blue.shade200),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: const Color.fromARGB(255, 179, 203, 255), width: 2),
-              ),
-              filled: true,
-              fillColor: const Color.fromARGB(255, 238, 238, 238),
+                    labelStyle: TextStyle(
+                        color: const Color.fromARGB(255, 138, 138, 138)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.blue.shade200),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.blue.shade200),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(
+                          color: const Color.fromARGB(255, 179, 203, 255),
+                          width: 2),
+                    ),
+                    filled: true,
+                    fillColor: const Color.fromARGB(255, 238, 238, 238),
                     errorText: controller.addDescript.value.isEmpty
                         ? "Deskripsi wajib diisi"
                         : null,
@@ -187,24 +196,32 @@ class UploadAgunanPicker extends StatelessWidget {
               Obx(() {
                 return TextField(
                   keyboardType: TextInputType.number,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  inputFormatters: [
+                    MoneyInputFormatter(
+                      thousandSeparator: ThousandSeparator.Period,
+                      mantissaLength: 0,
+                    ),
+                  ],
                   decoration: InputDecoration(
                     labelText: "Taksiran Nilai Agunan *",
-              labelStyle: TextStyle(color: const Color.fromARGB(255, 138, 138, 138)),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Colors.blue.shade200),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Colors.blue.shade200),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: const Color.fromARGB(255, 179, 203, 255), width: 2),
-              ),
-              filled: true,
-              fillColor: const Color.fromARGB(255, 238, 238, 238),
+                    labelStyle: TextStyle(
+                        color: const Color.fromARGB(255, 138, 138, 138)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.blue.shade200),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.blue.shade200),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(
+                          color: const Color.fromARGB(255, 179, 203, 255),
+                          width: 2),
+                    ),
+                    filled: true,
+                    fillColor: const Color.fromARGB(255, 238, 238, 238),
                     errorText: controller.marketValue.value.isEmpty
                         ? "Nilai taksiran wajib diisi"
                         : null,
