@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:camera/camera.dart';
 import 'package:dio/dio.dart' as dio_pkg;
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -14,8 +14,10 @@ import 'package:loan_application/API/service/post_inqury_survey.dart';
 import 'package:loan_application/API/service/put_update_survey.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/inputuserdata/formcontroller.dart';
+import 'package:loan_application/views/inputuserdata/kamera_screen.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:google_ml_kit/google_ml_kit.dart';
 
 class CreditFormController extends GetxController {
   final dio_pkg.Dio dio = DioClient.dio;
@@ -39,6 +41,13 @@ class CreditFormController extends GetxController {
   var selectedDocumentImages = <File>[].obs;
   var addDescript = ''.obs;
   var marketValue = ''.obs;
+
+  // Camera-related variables
+  late CameraController _cameraController;
+  late Future<void> _initializeControllerFuture;
+  var isCameraInitialized = false.obs;
+  var cameraPreview = Rx<Widget>(Container());
+  var isProcessing = false.obs;
 
   Future<void> fetchAgunan() async {
     try {
@@ -108,7 +117,7 @@ class CreditFormController extends GetxController {
     final result = await FlutterImageCompress.compressAndGetFile(
       file.path,
       targetPath,
-      quality: 60,
+      quality: 70,
     );
 
     if (result == null) {
@@ -123,13 +132,7 @@ class CreditFormController extends GetxController {
   }
 
   Future<void> pickKTPImages(BuildContext context) async {
-    final picker = ImagePicker();
-    final single = await picker.pickImage(source: ImageSource.camera);
-    if (single != null) {
-      final file = File(single.path);
-      final compressed = await compressImage(file);
-      selectedKTPImages.add(compressed);
-    }
+    Get.to(() => KtpCameraScreen(controller: this));
   }
 
   Future<void> pickAgunanImages(BuildContext context) async {
@@ -394,6 +397,11 @@ class CreditFormController extends GetxController {
     print("🟡 selectedAgunan: ${selectedAgunan.value}");
     print("🟡 selectedAgunanName: ${selectedAgunanName.value}");
     print("🟡 selectedDocument: ${selectedDocument.value}");
+    print("🟡 marketValue: ${marketValue.value}");
+
+    // Clean marketValue to ensure it's a valid floating-point number
+    final cleanedMarketValue =
+        cleanNumber(marketValue.value).toStringAsFixed(2);
 
     final putModelsUpdate = PutModelsUpdate(
       cifId: int.tryParse(inquiryData.cifId.toString()) ?? 0,
@@ -411,7 +419,7 @@ class CreditFormController extends GetxController {
         idName: selectedAgunanName.value,
         addDescript: addDescript.value,
         idCatDocument: int.tryParse(selectedDocument.value) ?? 0,
-        value: marketValue.value,
+        value: cleanedMarketValue, // Use cleaned market value
       ),
       additionalInfo: AdditionalInfo(
         income: inquiryData.additionalInfo.income.toString(),
@@ -431,5 +439,126 @@ class CreditFormController extends GetxController {
     print("updateSurveyFromInquiry: Response: ${response}");
     print("✅ Survey berhasil diperbarui dari inquiry");
     Get.snackbar("Sukses", "Survey berhasil diperbarui");
+  }
+
+  // Camera and OCR Logic
+
+  Future<void> scanKTP(BuildContext context) async {
+    if (isProcessing.value) {
+      print('scanKTP: Sedang memproses, menghentikan pemindaian baru');
+      return;
+    }
+    isProcessing.value = true;
+    print('scanKTP: Memulai pemindaian KTP');
+
+    try {
+      print('scanKTP: Menunggu inisialisasi kamera');
+      await _initializeControllerFuture.timeout(
+        const Duration(seconds: 10),
+        onTimeout: () => throw Exception('Timeout saat inisialisasi kamera'),
+      );
+      print('scanKTP: Kamera siap, mengambil gambar');
+
+      final image = await _cameraController.takePicture().timeout(
+            const Duration(seconds: 10),
+            onTimeout: () =>
+                throw Exception('Timeout saat mengambil gambar KTP'),
+          );
+      print('scanKTP: Gambar KTP diambil dari ${image.path}');
+
+      final compressedFile = await compressImage(File(image.path)).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () => throw Exception('Timeout saat mengompresi gambar'),
+      );
+      print('scanKTP: Gambar dikompresi ke ${compressedFile.path}');
+
+      final inputImage = InputImage.fromFilePath(compressedFile.path);
+      print('scanKTP: Memulai pemrosesan OCR');
+      final textRecognizer = GoogleMlKit.vision.textRecognizer();
+      final recognizedText =
+          await textRecognizer.processImage(inputImage).timeout(
+                const Duration(seconds: 15),
+                onTimeout: () => throw Exception('Timeout saat memproses OCR'),
+              );
+
+      String nik = '';
+      String name = '';
+      for (TextBlock block in recognizedText.blocks) {
+        for (TextLine line in block.lines) {
+          if (line.text.contains(RegExp(r'^\d{16}$'))) {
+            nik = line.text;
+            print('scanKTP: NIK terdeteksi: $nik');
+          } else if (line.text.toLowerCase().contains('nama')) {
+            name = line.text
+                .replaceAll(RegExp(r'nama[:\s]*', caseSensitive: false), '')
+                .trim();
+            print('scanKTP: Nama terdeteksi: $name');
+          }
+        }
+      }
+
+      await textRecognizer.close();
+      print('scanKTP: TextRecognizer ditutup');
+      selectedKTPImages.add(compressedFile);
+      print('scanKTP: Gambar KTP ditambahkan ke selectedKTPImages');
+
+      Get.snackbar(
+        'Sukses',
+        nik.isEmpty && name.isEmpty
+            ? 'Foto KTP berhasil diambil, tetapi data NIK/Nama tidak terdeteksi. Silakan coba lagi atau masukkan secara manual.'
+            : 'Foto KTP berhasil diambil! NIK: $nik, Nama: $name',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 4),
+      );
+      print('scanKTP: Notifikasi sukses ditampilkan');
+    } catch (e, stackTrace) {
+      print('❌ scanKTP: Error selama pemindaian KTP: $e');
+      print('scanKTP: Stack trace: $stackTrace');
+      Get.snackbar(
+        'Error',
+        'Gagal memindai KTP: ${e.toString()}',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 4),
+      );
+    } finally {
+      isProcessing.value = false;
+      print('scanKTP: isProcessing direset ke false');
+      print('scanKTP: Sebelum Get.back(), rute saat ini: ${Get.currentRoute}');
+      Get.back();
+      print('scanKTP: Setelah Get.back(), rute saat ini: ${Get.currentRoute}');
+    }
+  }
+
+  Future<void> initializeCamera() async {
+    try {
+      print('initializeCamera: Memulai inisialisasi kamera');
+      final cameras = await availableCameras();
+      if (cameras.isEmpty) {
+        throw Exception("Tidak ada kamera yang tersedia");
+      }
+      final firstCamera = cameras.firstWhere(
+        (camera) => camera.lensDirection == CameraLensDirection.back,
+        orElse: () => cameras.first,
+      );
+      _cameraController =
+          CameraController(firstCamera, ResolutionPreset.medium);
+      _initializeControllerFuture = _cameraController.initialize();
+      await _initializeControllerFuture;
+      _cameraController.setFocusMode(FocusMode.auto);
+      cameraPreview.value = CameraPreview(_cameraController);
+      isCameraInitialized.value = true;
+      print('initializeCamera: Kamera berhasil diinisialisasi');
+    } catch (e) {
+      print("❌ initializeCamera: Error inisialisasi kamera: $e");
+      isCameraInitialized.value = false;
+      Get.snackbar("Error", "Gagal menginisialisasi kamera: $e",
+          snackPosition: SnackPosition.BOTTOM);
+    }
+  }
+
+  void disposeCamera() {
+    print('disposeCamera: Membuang kamera');
+    _cameraController.dispose();
+    isCameraInitialized.value = false;
   }
 }

@@ -59,7 +59,8 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
                   onPressed: () => controller.handleSubmit(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.casualbutton1,
-                    padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 28, vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),

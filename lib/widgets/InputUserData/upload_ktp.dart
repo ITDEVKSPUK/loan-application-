@@ -87,7 +87,8 @@ class UploadKTPPicker extends StatelessWidget {
                               color: Colors.white, size: 20),
                         ),
                       ),
-                    ),                  ],
+                    ),
+                  ],
                 );
               },
             ),
