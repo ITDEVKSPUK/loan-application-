@@ -15,6 +15,7 @@ import 'package:loan_application/API/service/put_update_survey.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 import 'package:loan_application/views/inputuserdata/kamera_screen.dart';
+import 'package:loan_application/widgets/InputUserData/ktp_preview.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:google_ml_kit/google_ml_kit.dart';
@@ -444,88 +445,30 @@ class CreditFormController extends GetxController {
   // Camera and OCR Logic
 
   Future<void> scanKTP(BuildContext context) async {
-    if (isProcessing.value) {
-      print('scanKTP: Sedang memproses, menghentikan pemindaian baru');
-      return;
-    }
+    if (isProcessing.value) return;
     isProcessing.value = true;
-    print('scanKTP: Memulai pemindaian KTP');
 
     try {
-      print('scanKTP: Menunggu inisialisasi kamera');
-      await _initializeControllerFuture.timeout(
-        const Duration(seconds: 10),
-        onTimeout: () => throw Exception('Timeout saat inisialisasi kamera'),
-      );
-      print('scanKTP: Kamera siap, mengambil gambar');
+      await _initializeControllerFuture;
+      final image = await _cameraController.takePicture();
+      final compressedFile = await compressImage(File(image.path));
 
-      final image = await _cameraController.takePicture().timeout(
-            const Duration(seconds: 10),
-            onTimeout: () =>
-                throw Exception('Timeout saat mengambil gambar KTP'),
-          );
-      print('scanKTP: Gambar KTP diambil dari ${image.path}');
+      // Navigasi ke halaman preview sambil kirim gambar
+      Get.to(() => KtpPreviewScreen(
+            imageFile: compressedFile,
+            onConfirm: () {
+              selectedKTPImages.add(compressedFile);
 
-      final compressedFile = await compressImage(File(image.path)).timeout(
-        const Duration(seconds: 10),
-        onTimeout: () => throw Exception('Timeout saat mengompresi gambar'),
-      );
-      print('scanKTP: Gambar dikompresi ke ${compressedFile.path}');
-
-      final inputImage = InputImage.fromFilePath(compressedFile.path);
-      print('scanKTP: Memulai pemrosesan OCR');
-      final textRecognizer = GoogleMlKit.vision.textRecognizer();
-      final recognizedText =
-          await textRecognizer.processImage(inputImage).timeout(
-                const Duration(seconds: 15),
-                onTimeout: () => throw Exception('Timeout saat memproses OCR'),
-              );
-
-      String nik = '';
-      String name = '';
-      for (TextBlock block in recognizedText.blocks) {
-        for (TextLine line in block.lines) {
-          if (line.text.contains(RegExp(r'^\d{16}$'))) {
-            nik = line.text;
-            print('scanKTP: NIK terdeteksi: $nik');
-          } else if (line.text.toLowerCase().contains('nama')) {
-            name = line.text
-                .replaceAll(RegExp(r'nama[:\s]*', caseSensitive: false), '')
-                .trim();
-            print('scanKTP: Nama terdeteksi: $name');
-          }
-        }
-      }
-
-      await textRecognizer.close();
-      print('scanKTP: TextRecognizer ditutup');
-      selectedKTPImages.add(compressedFile);
-      print('scanKTP: Gambar KTP ditambahkan ke selectedKTPImages');
-
-      Get.snackbar(
-        'Sukses',
-        nik.isEmpty && name.isEmpty
-            ? 'Foto KTP berhasil diambil, tetapi data NIK/Nama tidak terdeteksi. Silakan coba lagi atau masukkan secara manual.'
-            : 'Foto KTP berhasil diambil! NIK: $nik, Nama: $name',
-        snackPosition: SnackPosition.BOTTOM,
-        duration: const Duration(seconds: 4),
-      );
-      print('scanKTP: Notifikasi sukses ditampilkan');
-    } catch (e, stackTrace) {
-      print('❌ scanKTP: Error selama pemindaian KTP: $e');
-      print('scanKTP: Stack trace: $stackTrace');
-      Get.snackbar(
-        'Error',
-        'Gagal memindai KTP: ${e.toString()}',
-        snackPosition: SnackPosition.BOTTOM,
-        duration: const Duration(seconds: 4),
-      );
+              // Kembali 2x: dari preview -> kamera -> halaman sebelum kamera
+              Get.back(); // keluar dari preview
+              Get.back(); // keluar dari kamera
+              Get.snackbar('Sukses', 'Foto KTP berhasil disimpan');
+            },
+          ));
+    } catch (e) {
+      Get.snackbar('Error', 'Gagal mengambil foto: $e');
     } finally {
       isProcessing.value = false;
-      print('scanKTP: isProcessing direset ke false');
-      print('scanKTP: Sebelum Get.back(), rute saat ini: ${Get.currentRoute}');
-      Get.back();
-      print('scanKTP: Setelah Get.back(), rute saat ini: ${Get.currentRoute}');
     }
   }
 
@@ -536,23 +479,35 @@ class CreditFormController extends GetxController {
       if (cameras.isEmpty) {
         throw Exception("Tidak ada kamera yang tersedia");
       }
+
       final firstCamera = cameras.firstWhere(
         (camera) => camera.lensDirection == CameraLensDirection.back,
         orElse: () => cameras.first,
       );
-      _cameraController =
-          CameraController(firstCamera, ResolutionPreset.medium);
+
+      _cameraController = CameraController(
+        firstCamera,
+        ResolutionPreset.medium,
+      );
+
       _initializeControllerFuture = _cameraController.initialize();
       await _initializeControllerFuture;
-      _cameraController.setFocusMode(FocusMode.auto);
+
+      // ✅ Matikan flash di sini
+      await _cameraController.setFocusMode(FocusMode.auto);
+      await _cameraController.setFlashMode(FlashMode.off); // ⬅️ Matikan flash
+
       cameraPreview.value = CameraPreview(_cameraController);
       isCameraInitialized.value = true;
       print('initializeCamera: Kamera berhasil diinisialisasi');
     } catch (e) {
       print("❌ initializeCamera: Error inisialisasi kamera: $e");
       isCameraInitialized.value = false;
-      Get.snackbar("Error", "Gagal menginisialisasi kamera: $e",
-          snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        "Error",
+        "Gagal menginisialisasi kamera: $e",
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 

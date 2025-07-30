@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
 import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 
@@ -42,7 +43,7 @@ class _KtpCameraScreenState extends State<KtpCameraScreen> {
                 width: 300,
                 height: 180,
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.green, width: 2),
+                  border: Border.all(color: AppColors.whitegray, width: 2),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Center(
