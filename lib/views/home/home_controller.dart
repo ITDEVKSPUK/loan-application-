@@ -45,12 +45,14 @@ class HomeController extends GetxController {
       final date = DateFormat('yyyy-MM-dd')
           .format(item.application.trxDate)
           .toLowerCase();
+      final sectorCity = item.sectorCity.toLowerCase();
 
       return fullName.contains(queryLower) ||
           purpose.contains(queryLower) ||
           trx_survey.contains(queryLower) ||
           aged.contains(queryLower) ||
-          date.contains(queryLower);
+          date.contains(queryLower) ||
+          sectorCity.contains(queryLower);
     }).toList();
   }
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -233,7 +234,7 @@ class InputDataController extends GetxController {
   Future<void> fetchNikData() async {
     final nikInput = nikController.text.trim();
     if (nikInput.isEmpty) {
-      _showSnackbar('Error', 'NIK field cannot be empty', AppColors.redstatus);
+      _showAwesomeDialog('Error', 'NIK Harus Terisi', AppColors.redstatus);
       isNextButtonEnabled.value = false;
       isNikValid.value = false;
       return;
@@ -254,13 +255,14 @@ class InputDataController extends GetxController {
         _populateForm(anggotaResponse);
         await _checkLoanHistory(historyService, anggotaResponse);
       } else {
-        _showSnackbar('Success', 'NIK belum terdaftar. Silakan lanjutkan.',
+        _showAwesomeDialog('Success', 'NIK belum terdaftar. Silakan lanjutkan.',
             AppColors.casualbutton1);
         isNikValid.value = true;
         isNextButtonEnabled.value = true;
       }
     } catch (e) {
-      _showSnackbar('Error', 'Gagal memvalidasi NIK: $e', AppColors.redstatus);
+      _showAwesomeDialog(
+          'Error', 'Gagal memvalidasi NIK: $e', AppColors.redstatus);
       isNikValid.value = false;
       isNextButtonEnabled.value = false;
     }
@@ -306,14 +308,14 @@ class InputDataController extends GetxController {
             datum.cifID == anggotaResponse.owner?.cifId &&
             datum.application.trxSurvey.isNotEmpty);
         if (hasLoan) {
-          _showSnackbar(
+          _showAwesomeDialog(
               'Error',
               'NIK/CIF sudah memiliki data pinjaman terdaftar.',
               AppColors.redstatus);
           isNikValid.value = false;
           isNextButtonEnabled.value = false;
         } else {
-          _showSnackbar(
+          _showAwesomeDialog(
               'Success',
               'NIK terdaftar tetapi belum memiliki data pinjaman.',
               AppColors.casualbutton1);
@@ -324,7 +326,7 @@ class InputDataController extends GetxController {
           isNextButtonEnabled.value = true;
         }
       } else {
-        _showSnackbar(
+        _showAwesomeDialog(
             'Success',
             'NIK terdaftar tetapi tidak dapat memeriksa data pinjaman.',
             AppColors.casualbutton1);
@@ -333,7 +335,7 @@ class InputDataController extends GetxController {
         isNextButtonEnabled.value = true;
       }
     } catch (e) {
-      _showSnackbar('Warning', 'Gagal memeriksa data pinjaman: $e.',
+      _showAwesomeDialog('Warning', 'Gagal memeriksa data pinjaman: $e.',
           AppColors.orangestatus);
       isNikValid.value = true;
       isNextButtonEnabled.value = true;
@@ -342,7 +344,7 @@ class InputDataController extends GetxController {
 
   Future<void> saveForm() async {
     if (!validateForm()) {
-      _showSnackbar('Gagal', 'Pastikan semua data terisi termasuk gender',
+      _showAwesomeDialog('Gagal', 'Pastikan semua data terisi termasuk gender',
           AppColors.redstatus);
       return;
     }
@@ -391,18 +393,30 @@ class InputDataController extends GetxController {
           final cifResponse = CifResponse.fromJson(response.data);
           setCif(cifResponse.cifId);
           print('Saved cifId: ${cifResponse.cifId}');
-          _showSnackbar(
-              'Berhasil', 'Data berhasil disimpan', AppColors.casualbutton1);
-          Get.toNamed(MyAppRoutes.dataPinjaman);
+          AwesomeDialog(
+            context: Get.context!,
+            dialogType: DialogType.success,
+            animType: AnimType.bottomSlide,
+            title: 'Berhasil',
+            desc: 'Data berhasil disimpan',
+            btnOkText: 'Lanjut',
+            btnOkOnPress: () {
+              Get.toNamed(MyAppRoutes.dataPinjaman);
+            },
+            btnOkColor: AppColors.casualbutton1,
+          ).show();
         } else {
-          _showSnackbar('Gagal', 'Respons data kosong', AppColors.redstatus);
+          _showAwesomeDialog(
+              'Gagal', 'Respons data kosong', AppColors.redstatus);
         }
       } else {
-        _showSnackbar('Gagal', 'Gagal menyimpan data: ${response.statusCode}',
+        _showAwesomeDialog(
+            'Gagal',
+            'Gagal menyimpan data: ${response.statusCode}',
             AppColors.redstatus);
       }
     } catch (e) {
-      _showSnackbar('Error', 'Terjadi kesalahan: $e', AppColors.redstatus);
+      _showAwesomeDialog('Error', 'Terjadi kesalahan: $e', AppColors.redstatus);
     }
   }
 
@@ -417,7 +431,8 @@ class InputDataController extends GetxController {
         }
       }
     } catch (e) {
-      _showSnackbar('Error', 'Gagal memilih gambar: $e', AppColors.redstatus);
+      _showAwesomeDialog(
+          'Error', 'Gagal memilih gambar: $e', AppColors.redstatus);
     }
   }
 
@@ -429,7 +444,8 @@ class InputDataController extends GetxController {
         buktiJaminan.value = File(path);
       }
     } catch (e) {
-      _showSnackbar('Error', 'Gagal mengatur gambar: $e', AppColors.redstatus);
+      _showAwesomeDialog(
+          'Error', 'Gagal mengatur gambar: $e', AppColors.redstatus);
     }
   }
 
@@ -479,14 +495,14 @@ class InputDataController extends GetxController {
         (namaAwalController.text.isEmpty && !isNoFirstName.value) ||
         selectedGender.value.isEmpty ||
         cleanedPhone.isEmpty) {
-      _showSnackbar(
+      _showAwesomeDialog(
           'Error',
           'Pastikan semua data terisi termasuk gender dan nomor telepon',
           AppColors.redstatus);
       return false;
     }
     if (!RegExp(r'^\d{6,15}$').hasMatch(cleanedPhone)) {
-      _showSnackbar('Error', 'Nomor telepon harus memiliki 6-15 digit',
+      _showAwesomeDialog('Error', 'Nomor telepon harus memiliki 6-15 digit',
           AppColors.redstatus);
       return false;
     }
@@ -508,18 +524,19 @@ class InputDataController extends GetxController {
             DateFormat('dd-MMMM-yyyy', 'id_ID').format(picked);
       }
     } catch (e) {
-      _showSnackbar('Error', 'Gagal memilih tanggal: $e', AppColors.redstatus);
+      _showAwesomeDialog(
+          'Error', 'Gagal memilih tanggal: $e', AppColors.redstatus);
     }
   }
 
   Future<void> handleNextButton() async {
     if (!validateForm()) {
-      _showSnackbar(
+      _showAwesomeDialog(
           'Error', 'Harap isi semua kolom dengan benar.', AppColors.redstatus);
       return;
     }
     if (!isNikValid.value) {
-      _showSnackbar(
+      _showAwesomeDialog(
           'Error',
           'NIK/CIF belum diperiksa atau sudah memiliki data pinjaman.',
           AppColors.redstatus);
@@ -550,13 +567,28 @@ class InputDataController extends GetxController {
     update();
   }
 
-  void _showSnackbar(String title, String message, Color backgroundColor) {
-    Get.snackbar(
-      title,
-      message,
-      backgroundColor: backgroundColor,
-      colorText: AppColors.pureWhite,
-    );
+  void _showAwesomeDialog(String title, String message, Color backgroundColor) {
+    DialogType dialogType;
+
+    if (backgroundColor == AppColors.redstatus) {
+      dialogType = DialogType.error;
+    } else if (backgroundColor == AppColors.casualbutton1) {
+      dialogType = DialogType.success;
+    } else if (backgroundColor == AppColors.orangestatus) {
+      dialogType = DialogType.warning;
+    } else {
+      dialogType = DialogType.info;
+    }
+
+    AwesomeDialog(
+      context: Get.context!,
+      dialogType: dialogType,
+      animType: AnimType.bottomSlide,
+      title: title,
+      desc: message,
+      btnOkOnPress: () {},
+      btnOkColor: backgroundColor,
+    ).show();
   }
 
   Future<void> navigateToGoogleMaps() async {
@@ -587,7 +619,7 @@ class InputDataController extends GetxController {
       }
     } catch (e, stackTrace) {
       print('Navigation error: $e\nStack trace: $stackTrace');
-      _showSnackbar(
+      _showAwesomeDialog(
         'Error',
         'Failed to navigate to Google Maps: $e',
         AppColors.redstatus,

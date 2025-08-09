@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:dio/dio.dart' as dio_pkg;
 import 'package:flutter/material.dart';
@@ -187,15 +188,23 @@ class CreditFormController extends GetxController {
       if (response.statusCode == 200 || response.statusCode == 201) {
         print(
             "✅ Upload sukses: ${response.statusCode} ${response.statusMessage}");
-        Get.snackbar("Sukses", "Dokumen berhasil diunggah");
+        AwesomeDialog(
+          context: Get.context!,
+          dialogType: DialogType.success,
+          animType: AnimType.bottomSlide,
+          title: 'Sukses',
+          desc: 'Dokumen berhasil diunggah',
+          btnOkOnPress: () {},
+          btnOkColor: Colors.green,
+        ).show();
       } else {
         print("⚠️ Upload gagal: ${response.statusCode}");
-        Get.snackbar(
-            "Error", "Upload gagal dengan status: ${response.statusCode}");
+        _showError(
+            Get.context!, "Upload gagal dengan status: ${response.statusCode}");
       }
     } catch (e) {
       print("❌ Upload gagal: $e");
-      Get.snackbar("Error", "Upload gagal: ${e.toString()}");
+      _showError(Get.context!, 'Upload gagal: ${e.toString()}');
     }
   }
 
@@ -309,7 +318,6 @@ class CreditFormController extends GetxController {
         print('handleSubmit: Updating documents...');
         await uploadDocuments();
         print('handleSubmit: Documents uploaded successfully');
-        Get.snackbar("Sukses", "Dokumen berhasil diunggah");
         print('handleSubmit: Form submission completed');
         Get.offNamed(MyAppRoutes.dashboard);
       } else {
@@ -323,9 +331,15 @@ class CreditFormController extends GetxController {
   }
 
   void _showError(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.error,
+      animType: AnimType.bottomSlide,
+      title: 'Error',
+      desc: message,
+      btnOkOnPress: () {},
+      btnOkColor: Colors.red,
+    ).show();
   }
 
   bool validateForm() {

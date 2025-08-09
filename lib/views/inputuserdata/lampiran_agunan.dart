@@ -24,7 +24,7 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
         backgroundColor: AppColors.pureWhite,
         appBar: CustomAppBar(
           title: 'Lampiran Dokumen',
-          onBack: () => Get.back(),
+          onBack: () => false,
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
