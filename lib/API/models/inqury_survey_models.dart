@@ -198,6 +198,7 @@ class Application {
   final String applicationNo;
   final String purpose;
   final String plafond;
+  final String status;
 
   Application({
     required this.trxSurvey,
@@ -205,6 +206,7 @@ class Application {
     required this.applicationNo,
     required this.purpose,
     required this.plafond,
+    required this.status,
   });
 
   factory Application.fromJson(Map<String, dynamic> json) {
@@ -214,6 +216,7 @@ class Application {
       applicationNo: json['application_no'] ?? '',
       purpose: json['purpose'] ?? '',
       plafond: json['plafond'] ?? '',
+      status: json['status'] ?? '',
     );
   }
 
@@ -224,6 +227,7 @@ class Application {
       'application_no': applicationNo,
       'purpose': purpose,
       'plafond': plafond,
+      'status': status,
     };
   }
 }
