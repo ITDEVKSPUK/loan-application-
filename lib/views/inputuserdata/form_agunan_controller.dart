@@ -18,8 +18,6 @@ import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 import 'package:loan_application/views/inputuserdata/kamera_screen.dart';
 import 'package:loan_application/widgets/InputUserData/ktp_preview.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:google_ml_kit/google_ml_kit.dart';
 
 class CreditFormController extends GetxController {
   final dio_pkg.Dio dio = DioClient.dio;
@@ -89,26 +87,6 @@ class CreditFormController extends GetxController {
       selectedImages.add(image);
       onImagesUpdated();
     }
-  }
-
-  Future<File> generatePdfFromImages() async {
-    final pdf = pw.Document();
-    for (var image in selectedImages) {
-      final imageBytes = await image.readAsBytes();
-      final pwImage = pw.MemoryImage(imageBytes);
-      pdf.addPage(
-        pw.Page(
-          build: (pw.Context context) => pw.Center(
-            child: pw.Image(pwImage),
-          ),
-        ),
-      );
-    }
-
-    final dir = await getTemporaryDirectory();
-    final file = File("${dir.path}/jaminan_bukti.pdf");
-    await file.writeAsBytes(await pdf.save());
-    return file;
   }
 
   Future<File> compressImage(File file) async {

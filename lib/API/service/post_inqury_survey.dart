@@ -31,7 +31,9 @@ class PostInqury {
 
       if (response.data is Map<String, dynamic>) {
         print('Inquiry response data masok: ${response.data}');
+        print('Inquiry response status: ${response.data['status']}');
         return InquirySurveyModel.fromJson(response.data);
+        
       } else {
         print('Unexpected inquiry response: ${response.data}');
         throw Exception(

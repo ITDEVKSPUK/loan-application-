@@ -28,7 +28,7 @@ class AppColors {
 
   // Button status
   static const Color redstatus = Color(0xFFE31F1F); // RGB(227, 31, 31)
-  static const Color greenstatus = Color(0xFF35F384);
+  static const Color greenstatus = Color(0xFF1DC864);
   static const Color orangestatus = Color(0xFFE3871F); // RGB(227, 135, 31)
   static const Color navbar = Color(0xFF3B8DD4);
   static const Color navbar2 = Color(0xFF00274F);

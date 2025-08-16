@@ -12,6 +12,7 @@ import 'package:loan_application/views/inputuserdata/data_pinjaman.dart';
 import 'package:loan_application/views/inputuserdata/detail_maps.dart';
 import 'package:loan_application/views/inputuserdata/inputdata.dart';
 import 'package:loan_application/views/inputuserdata/lampiran_agunan.dart';
+import 'package:loan_application/views/notif/notif_page.dart';
 
 class MyAppPage {
   static final List<GetPage> pages = [
@@ -28,5 +29,6 @@ class MyAppPage {
     GetPage(name: MyAppRoutes.dataPinjaman, page: () => DataPinjaman()),
     GetPage(name: MyAppRoutes.detailsurvey, page: () => DetailSurvey()),
     GetPage(name: MyAppRoutes.detailMaps, page: () => GoogleMapsScreen()),
+    GetPage(name: MyAppRoutes.notif, page: () => NotifPage()),
   ];
 }
