@@ -36,6 +36,7 @@ class SurveyController extends GetxController {
   final inquiryModel = Rx<InquiryModels.InquirySurveyModel?>(null);
   final isLoading = false.obs;
   final notePlafond = ''.obs;
+  final approvalStatus = ''.obs; // Observable for approval status
   String surveyId = '';
 
   final PutUpdateSurvey putUpdateSurvey;
@@ -86,6 +87,13 @@ class SurveyController extends GetxController {
     return cleaned.isEmpty ? '0' : cleaned;
   }
 
+  /// Check if edit icon should be visible based on approval status
+  bool get isEditIconVisible {
+    final status = approvalStatus.value.toLowerCase();
+    print('Checking isEditIconVisible: status = $status');
+    return status != 'approved';
+  }
+
   /// Fetch survey data for DetailSurvey
   Future<void> getSurveyList({required String trxSurvey}) async {
     isLoading.value = true;
@@ -102,6 +110,8 @@ class SurveyController extends GetxController {
       idName.value = inquiryData.collateral.idName ?? '';
       document_type.value = inquiryData.collateral.documentType ?? '';
       descript.value = inquiryData.collateral.adddescript ?? '';
+      approvalStatus.value = inquiryData.status.value?.toLowerCase() ?? 'progress';
+      print('Extracted approval status: ${approvalStatus.value}');
 
       // Extract Note for PLAF from Collaboration
       final collaborationList = inquiryData.collaboration;
@@ -121,6 +131,7 @@ class SurveyController extends GetxController {
 
       print('Category Agunan (idName): ${idName.value}');
       print('Note Plafond: ${notePlafond.value}');
+      print('Approval Status: ${approvalStatus.value}');
     } catch (e) {
       print('Error fetching survey list: $e');
       Get.snackbar(
@@ -180,6 +191,8 @@ class SurveyController extends GetxController {
           formatRupiah(inquiryData.additionalInfo.expenses.toString());
       installmentController.text =
           formatRupiah(inquiryData.additionalInfo.installment.toString());
+      approvalStatus.value = inquiryData.status.value?.toLowerCase() ?? 'progress';
+      print('Extracted approval status: ${approvalStatus.value}');
 
       print('Inquiry data received: ${inquiryData.toJson()}');
       // Update observables for DetailSurvey
@@ -188,6 +201,7 @@ class SurveyController extends GetxController {
       idName.value = inquiryData.collateral.idName ?? '';
       document_type.value = inquiryData.collateral.adddescript ?? '';
       print('Category Agunan (idName) loaded: ${idName.value}');
+      print('Approval Status loaded: ${approvalStatus.value}');
     } catch (e) {
       print('Error loading survey data: $e');
       Get.snackbar(

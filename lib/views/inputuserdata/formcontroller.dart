@@ -262,7 +262,7 @@ class InputDataController extends GetxController {
       }
     } catch (e) {
       _showAwesomeDialog(
-          'Error', 'Gagal memvalidasi NIK: $e', AppColors.redstatus);
+          'Error', 'Tolong masukan NIK yang sesuai', AppColors.redstatus);
       isNikValid.value = false;
       isNextButtonEnabled.value = false;
     }

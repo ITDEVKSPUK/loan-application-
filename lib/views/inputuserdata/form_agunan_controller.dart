@@ -297,7 +297,7 @@ class CreditFormController extends GetxController {
         await uploadDocuments();
         print('handleSubmit: Documents uploaded successfully');
         print('handleSubmit: Form submission completed');
-        Get.offNamed(MyAppRoutes.dashboard);
+        Get.offAllNamed(MyAppRoutes.dashboard);
       } else {
         _showError(context, 'Gagal membuat survey, upload dibatalkan');
         print('handleSubmit: Survey ID is null, upload cancelled');
