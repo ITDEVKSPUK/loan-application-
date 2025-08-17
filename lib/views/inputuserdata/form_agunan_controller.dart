@@ -1,12 +1,16 @@
 import 'dart:io';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:dio/dio.dart' as dio_pkg;
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loan_application/API/dio/dio_client.dart';
+import 'package:loan_application/API/models/inqury_survey_models.dart'
+    hide Collateral, Application, AdditionalInfo;
 import 'package:loan_application/API/models/put_models_update.dart';
 import 'package:loan_application/API/service/get_docagun.dart';
 import 'package:loan_application/API/service/post_db_survey.dart';
@@ -27,11 +31,18 @@ class CreditFormController extends GetxController {
   final assetController = TextEditingController();
   final expensesController = TextEditingController();
   final installmentController = TextEditingController();
+  final addDescript = TextEditingController();
+  final marketValue = TextEditingController();
 
   final cifID = Get.put(InputDataController());
   List<XFile> selectedImages = [];
   var agunanList = <dynamic>[].obs;
   var documentList = <dynamic>[].obs;
+  var documentModel = Rxn<Document>();
+  var collacteral = Rxn<Collateral>(); // For Agunan (docAsset)
+  var ktpImage = ''.obs; // For KTP (docPerson)
+  var img_doc = ''.obs; // For Foto Tanah (docAsset)
+  var img_agun = ''.obs;
   var selectedAgunan = ''.obs;
   var selectedDocument = ''.obs;
   var selectedAgunanName = ''.obs;
@@ -39,8 +50,6 @@ class CreditFormController extends GetxController {
   var selectedKTPImages = <File>[].obs;
   var selectedAgunanImages = <File>[].obs;
   var selectedDocumentImages = <File>[].obs;
-  var addDescript = ''.obs;
-  var marketValue = ''.obs;
 
   // Camera-related variables
   late CameraController _cameraController;
@@ -49,43 +58,92 @@ class CreditFormController extends GetxController {
   var cameraPreview = Rx<Widget>(Container());
   var isProcessing = false.obs;
 
-  Future<void> fetchAgunan() async {
+  Future<void> fetchCategory() async {
     try {
       var fetchedAgunan = await getDocAgun.fetchAgunan();
+      var fetchedDocuments = await getDocAgun.fetchDocuments();
       if (fetchedAgunan.isNotEmpty) {
         agunanList.value = fetchedAgunan;
+
         print('CIF ID: ${cifID.cifId}');
+      }
+      if (fetchedDocuments.isNotEmpty) {
+        documentList.value = fetchedDocuments;
       }
     } catch (e) {
       print("Error fetching agunan: $e");
     }
   }
 
-  Future<void> fetchDocuments() async {
-    try {
-      var fetchedDocuments = await getDocAgun.fetchDocuments();
-      if (fetchedDocuments.isNotEmpty) {
-        documentList.value = fetchedDocuments;
-      }
-    } catch (e) {
-      print("Error fetching documents: $e");
-    }
-  }
-
   @override
   void onInit() {
     super.onInit();
-    fetchAgunan();
-    fetchDocuments();
+    fetchCategory();
   }
 
-  Future<void> pickImagesFromSource(
-      BuildContext context, VoidCallback onImagesUpdated) async {
-    final picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.camera);
-    if (image != null) {
-      selectedImages.add(image);
-      onImagesUpdated();
+  Future<void> fetchDocuments() async {
+    final inquryService = PostInqury();
+
+    try {
+      var inquiryResponse = await inquryService.fetchInqury(
+        officeId: '000',
+        trxSurvey: surveyId ?? '',
+      );
+
+      // Extract the Document model from the response
+      documentModel.value = inquiryResponse.document;
+      addDescript.text = inquiryResponse.collateral.addDescript ?? '';
+      marketValue.text = inquiryResponse.collateral.value ?? '0';
+      ktpImage.value = documentModel.value?.docPerson.isNotEmpty ?? false
+          ? documentModel.value!.docPerson[0].img
+          : '';
+      img_doc.value = documentModel.value?.docAsset.isNotEmpty ?? false
+          ? documentModel.value!.docAsset[0].img
+          : '';
+      img_agun.value = documentModel.value?.docImg.isNotEmpty ?? false
+          ? documentModel.value!.docImg[0].img
+          : '';
+      print("📄 Document model fetched: ${documentModel.value}");
+      if (documentModel == null) return;
+
+      final dio = Dio();
+      final tempDir = await getTemporaryDirectory();
+
+      if (ktpImage.value.isNotEmpty) {
+        final url = ktpImage.value;
+        final filePath = "${tempDir.path}/${url.split('/').last}";
+        print("📥 Downloading KTP image from: $url to $filePath");
+        await dio.download(url, filePath);
+        if (filePath != null) {
+          final file = File(filePath);
+          final compressed = await compressImage(file);
+          selectedKTPImages.add(compressed);
+        }
+      }
+
+      if (img_doc.value.isNotEmpty) {
+        final url = img_doc.value;
+        final filePath = "${tempDir.path}/${url.split('/').last}";
+        await dio.download(url, filePath);
+        if (filePath != null) {
+          final file = File(filePath);
+          final compressed = await compressImage(file);
+          selectedDocumentImages.add(compressed);
+        }
+      }
+
+      if (img_agun.value.isNotEmpty) {
+        final url = img_agun.value;
+        final filePath = "${tempDir.path}/${url.split('/').last}";
+        await dio.download(url, filePath);
+        if (filePath != null) {
+          final file = File(filePath);
+          final compressed = await compressImage(file);
+          selectedAgunanImages.add(compressed);
+        }
+      }
+    } catch (e) {
+      print("Error fetching documents: $e");
     }
   }
 
@@ -275,8 +333,8 @@ class CreditFormController extends GetxController {
         selectedAgunan.value.isEmpty ||
         selectedDocument.value.isEmpty ||
         selectedDocumentImages.isEmpty ||
-        addDescript.value.isEmpty ||
-        marketValue.value.isEmpty) {
+        addDescript.text.isEmpty ||
+        marketValue.text.isEmpty) {
       _showError(context, 'Lengkapi semua input');
       print('handleSubmit: One or more required fields are empty');
       return;
@@ -284,16 +342,8 @@ class CreditFormController extends GetxController {
 
     try {
       if (surveyId != null) {
-        print("handleSubmit: Start updating survey with ID: $surveyId");
-        print("handleSubmit: selectedAgunan = ${selectedAgunan.value}");
-        print("handleSubmit: selectedAgunanName = ${selectedAgunanName.value}");
-
-        print('handleSubmit: Fetching inquiry data for surveyId: $surveyId');
         await fetchInquiryData(surveyId!);
-        print('handleSubmit: Inquiry data fetched, proceeding to update');
         await updateSurveyFromInquiry(surveyId!);
-
-        print('handleSubmit: Updating documents...');
         await uploadDocuments();
         print('handleSubmit: Documents uploaded successfully');
         print('handleSubmit: Form submission completed');
@@ -393,8 +443,7 @@ class CreditFormController extends GetxController {
     print("🟡 marketValue: ${marketValue.value}");
 
     // Clean marketValue to ensure it's a valid floating-point number
-    final cleanedMarketValue =
-        cleanNumber(marketValue.value).toStringAsFixed(2);
+    final cleanedMarketValue = cleanNumber(marketValue.text).toStringAsFixed(2);
 
     final putModelsUpdate = PutModelsUpdate(
       cifId: int.tryParse(inquiryData.cifId.toString()) ?? 0,
@@ -410,7 +459,7 @@ class CreditFormController extends GetxController {
       collateral: Collateral(
         id: selectedAgunan.value,
         idName: selectedAgunanName.value,
-        addDescript: addDescript.value,
+        addDescript: addDescript.text,
         idCatDocument: int.tryParse(selectedDocument.value) ?? 0,
         value: cleanedMarketValue, // Use cleaned market value
       ),

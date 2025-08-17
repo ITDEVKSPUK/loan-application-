@@ -16,6 +16,13 @@ class FullCreditFormPage extends StatefulWidget {
 
 class _FullCreditFormPageState extends State<FullCreditFormPage> {
   final controller = Get.put(CreditFormController());
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchDocuments(); // 👈 fetch old files after UI is ready
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

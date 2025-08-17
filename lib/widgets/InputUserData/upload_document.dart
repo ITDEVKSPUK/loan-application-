@@ -1,6 +1,6 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
 
 class UploadDocumentPicker extends StatelessWidget {
@@ -21,7 +21,8 @@ class UploadDocumentPicker extends StatelessWidget {
                 : controller.selectedDocument.value,
             decoration: InputDecoration(
               labelText: "Kategori Dokumen *",
-              labelStyle: TextStyle(color: const Color.fromARGB(255, 138, 138, 138)),
+              labelStyle:
+                  TextStyle(color: const Color.fromARGB(255, 138, 138, 138)),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(color: Colors.blue.shade200),
@@ -32,7 +33,8 @@ class UploadDocumentPicker extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: const Color.fromARGB(255, 179, 203, 255), width: 2),
+                borderSide: BorderSide(
+                    color: const Color.fromARGB(255, 179, 203, 255), width: 2),
               ),
               filled: true,
               fillColor: const Color.fromARGB(255, 238, 238, 238),
@@ -41,7 +43,8 @@ class UploadDocumentPicker extends StatelessWidget {
                   : null,
             ),
             dropdownColor: Colors.white,
-            icon: Icon(Icons.arrow_drop_down, color: const Color.fromARGB(255, 139, 143, 147)),
+            icon: Icon(Icons.arrow_drop_down,
+                color: const Color.fromARGB(255, 139, 143, 147)),
             items: controller.documentList.map((doc) {
               return DropdownMenuItem<String>(
                 value: doc['id_catdocument'].toString(),
@@ -64,41 +67,46 @@ class UploadDocumentPicker extends StatelessWidget {
         const SizedBox(height: 12),
 
         // Area upload dengan DottedBorder
-        GestureDetector(
-          onTap: () => controller.pickDocumentImages(context),
-          child: DottedBorder(
-            color: Colors.blue.shade300,
-            strokeWidth: 1.5,
-            dashPattern: [6, 4],
-            borderType: BorderType.RRect,
-            radius: const Radius.circular(12),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 24),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.cloud_upload, size: 40, color: Colors.blue.shade600),
-                  const SizedBox(height: 8),
-                  Text.rich(
-                    TextSpan(
-                      text: 'Klik untuk ',
-                      children: [
-                        TextSpan(
-                          text: 'upload Dokumen',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue.shade700),
-                        )
-                      ],
+        Obx(() {
+          return controller.selectedAgunanImages.isEmpty
+              ? GestureDetector(
+                  onTap: () => controller.pickDocumentImages(context),
+                  child: DottedBorder(
+                    color: Colors.blue.shade300,
+                    strokeWidth: 1.5,
+                    dashPattern: [6, 4],
+                    borderType: BorderType.RRect,
+                    radius: const Radius.circular(12),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 24),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.cloud_upload,
+                              size: 40, color: Colors.blue.shade600),
+                          const SizedBox(height: 8),
+                          Text.rich(
+                            TextSpan(
+                              text: 'Klik untuk ',
+                              children: [
+                                TextSpan(
+                                  text: 'upload Dokumen',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue.shade700),
+                                )
+                              ],
+                            ),
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ],
+                      ),
                     ),
-                    style: const TextStyle(fontSize: 14),
                   ),
-                ],
-              ),
-            ),
-          ),
-        ),
+                )
+              : SizedBox();
+        }),
         const SizedBox(height: 12),
 
         // Preview gambar dokumen
@@ -111,7 +119,7 @@ class UploadDocumentPicker extends StatelessWidget {
                 const Text("Belum ada dokumen yang dipilih.")
               else
                 SizedBox(
-                  height: 90,
+                  height: 190,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: images.length,
@@ -123,8 +131,8 @@ class UploadDocumentPicker extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                             child: Image.file(
                               images[index],
-                              width: 80,
-                              height: 80,
+                              width: 180,
+                              height: 180,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -132,7 +140,8 @@ class UploadDocumentPicker extends StatelessWidget {
                             top: 0,
                             right: 0,
                             child: GestureDetector(
-                              onTap: () => controller.selectedDocumentImages.removeAt(index),
+                              onTap: () => controller.selectedDocumentImages
+                                  .removeAt(index),
                               child: Container(
                                 decoration: const BoxDecoration(
                                   color: Colors.black45,

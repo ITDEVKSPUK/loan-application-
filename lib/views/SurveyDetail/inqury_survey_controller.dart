@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loan_application/API/models/inqury_survey_models.dart' as InquiryModels;
-import 'package:loan_application/API/models/put_models_update.dart' as UpdateModels;
+import 'package:loan_application/API/models/inqury_survey_models.dart'
+    as InquiryModels;
+import 'package:loan_application/API/models/put_models_update.dart'
+    as UpdateModels;
 import 'package:loan_application/API/service/post_inqury_survey.dart';
 import 'package:loan_application/API/service/put_update_survey.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
@@ -109,25 +111,26 @@ class SurveyController extends GetxController {
       purpose.value = inquiryData.application.purpose ?? '';
       idName.value = inquiryData.collateral.idName ?? '';
       document_type.value = inquiryData.collateral.documentType ?? '';
-      descript.value = inquiryData.collateral.adddescript ?? '';
-      approvalStatus.value = inquiryData.status.value?.toLowerCase() ?? 'progress';
+      descript.value = inquiryData.collateral.addDescript ?? '';
+      approvalStatus.value =
+          inquiryData.status.value?.toLowerCase() ?? 'progress';
       print('Extracted approval status: ${approvalStatus.value}');
 
       // Extract Note for PLAF from Collaboration
       final collaborationList = inquiryData.collaboration;
       notePlafond.value = collaborationList
-              .firstWhere(
-                (collab) => collab.content == 'PLAF',
-                orElse: () => InquiryModels.Collaboration(
-                  approvalNo: '',
-                  category: '',
-                  content: '',
-                  judgment: '',
-                  date: '',
-                  note: 'Tidak ada data',
-                ),
-              )
-              .note;
+          .firstWhere(
+            (collab) => collab.content == 'PLAF',
+            orElse: () => InquiryModels.Collaboration(
+              approvalNo: '',
+              category: '',
+              content: '',
+              judgment: '',
+              date: '',
+              note: 'Tidak ada data',
+            ),
+          )
+          .note;
 
       print('Category Agunan (idName): ${idName.value}');
       print('Note Plafond: ${notePlafond.value}');
@@ -180,7 +183,7 @@ class SurveyController extends GetxController {
       collateralIdController.text = inquiryData.collateral.id ?? '';
       collateralNameController.text = inquiryData.collateral.idName ?? '';
       collateralAddDescController.text =
-          inquiryData.collateral.adddescript ?? '';
+          inquiryData.collateral.addDescript ?? '';
       collateralCatDocController.text =
           inquiryData.collateral.idCatDocument.toString();
       incomeController.text =
@@ -191,7 +194,8 @@ class SurveyController extends GetxController {
           formatRupiah(inquiryData.additionalInfo.expenses.toString());
       installmentController.text =
           formatRupiah(inquiryData.additionalInfo.installment.toString());
-      approvalStatus.value = inquiryData.status.value?.toLowerCase() ?? 'progress';
+      approvalStatus.value =
+          inquiryData.status.value?.toLowerCase() ?? 'progress';
       print('Extracted approval status: ${approvalStatus.value}');
 
       print('Inquiry data received: ${inquiryData.toJson()}');
@@ -199,7 +203,7 @@ class SurveyController extends GetxController {
       inquiryModel.value = inquiryData;
       purpose.value = inquiryData.application.purpose ?? '';
       idName.value = inquiryData.collateral.idName ?? '';
-      document_type.value = inquiryData.collateral.adddescript ?? '';
+      document_type.value = inquiryData.collateral.addDescript ?? '';
       print('Category Agunan (idName) loaded: ${idName.value}');
       print('Approval Status loaded: ${approvalStatus.value}');
     } catch (e) {

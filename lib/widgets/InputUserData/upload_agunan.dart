@@ -1,9 +1,8 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_multi_formatter/formatters/money_input_enums.dart';
 import 'package:flutter_multi_formatter/formatters/money_input_formatter.dart';
 import 'package:get/get.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
 
 class UploadAgunanPicker extends StatelessWidget {
@@ -69,43 +68,48 @@ class UploadAgunanPicker extends StatelessWidget {
         }),
         const SizedBox(height: 12),
 
-        // Upload dengan DottedBorder
-        GestureDetector(
-          onTap: () => controller.pickAgunanImages(context),
-          child: DottedBorder(
-            color: Colors.blue.shade300,
-            strokeWidth: 1.5,
-            dashPattern: [6, 4],
-            borderType: BorderType.RRect,
-            radius: const Radius.circular(12),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 24),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.cloud_upload,
-                      size: 40, color: Colors.blue.shade600),
-                  const SizedBox(height: 8),
-                  Text.rich(
-                    TextSpan(
-                      text: 'Klik untuk ',
-                      children: [
-                        TextSpan(
-                          text: 'upload foto Agunan',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue.shade700),
-                        )
-                      ],
+        // Upload dengan DottedBorder (hilang jika sudah ada gambar)
+        Obx(() {
+          return controller.selectedDocumentImages.isEmpty
+              ? GestureDetector(
+                  onTap: () => controller.pickAgunanImages(context),
+                  child: DottedBorder(
+                    color: Colors.blue.shade300,
+                    strokeWidth: 1.5,
+                    dashPattern: [6, 4],
+                    borderType: BorderType.RRect,
+                    radius: const Radius.circular(12),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 24),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.cloud_upload,
+                              size: 40, color: Colors.blue.shade600),
+                          const SizedBox(height: 8),
+                          Text.rich(
+                            TextSpan(
+                              text: 'Klik untuk ',
+                              children: [
+                                TextSpan(
+                                  text: 'upload foto Agunan',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue.shade700),
+                                )
+                              ],
+                            ),
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ],
+                      ),
                     ),
-                    style: const TextStyle(fontSize: 14),
                   ),
-                ],
-              ),
-            ),
-          ),
-        ),
+                )
+              : const SizedBox(); // kosongkan jika ada gambar
+        }),
+
         const SizedBox(height: 12),
 
         // Preview gambar Agunan
@@ -118,7 +122,7 @@ class UploadAgunanPicker extends StatelessWidget {
                 const Text("Belum ada gambar yang dipilih.")
               else
                 SizedBox(
-                  height: 90,
+                  height: 190,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: images.length,
@@ -130,8 +134,8 @@ class UploadAgunanPicker extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                             child: Image.file(
                               images[index],
-                              width: 80,
-                              height: 80,
+                              width: 180,
+                              height: 180,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -159,78 +163,69 @@ class UploadAgunanPicker extends StatelessWidget {
               const SizedBox(height: 12),
 
               // Deskripsi Agunan
-              Obx(() {
-                return TextField(
-                  decoration: InputDecoration(
-                    labelText: "Tambahkan Deskripsi Agunan",
-                    labelStyle: TextStyle(
-                        color: const Color.fromARGB(255, 138, 138, 138)),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: Colors.blue.shade200),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: Colors.blue.shade200),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                          color: const Color.fromARGB(255, 179, 203, 255),
-                          width: 2),
-                    ),
-                    filled: true,
-                    fillColor: const Color.fromARGB(255, 238, 238, 238),
-                    errorText: controller.addDescript.value.isEmpty
-                        ? "Deskripsi wajib diisi"
-                        : null,
+              TextField(
+                decoration: InputDecoration(
+                  labelText: "Tambahkan Deskripsi Agunan",
+                  labelStyle: TextStyle(
+                      color: const Color.fromARGB(255, 138, 138, 138)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: Colors.blue.shade200),
                   ),
-                  onChanged: (value) {
-                    controller.addDescript.value = value;
-                  },
-                );
-              }),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: Colors.blue.shade200),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                        color: const Color.fromARGB(255, 179, 203, 255),
+                        width: 2),
+                  ),
+                  filled: true,
+                  fillColor: const Color.fromARGB(255, 238, 238, 238),
+                  errorText: controller.addDescript.text.isEmpty
+                      ? "Deskripsi wajib diisi"
+                      : null,
+                ),
+                controller: controller.addDescript,
+              ),
               const SizedBox(height: 12),
 
-              // Market Value
-              Obx(() {
-                return TextField(
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    MoneyInputFormatter(
-                      thousandSeparator: ThousandSeparator.Period,
-                      mantissaLength: 0,
-                    ),
-                  ],
-                  decoration: InputDecoration(
-                    labelText: "Taksiran Nilai Agunan *",
-                    labelStyle: TextStyle(
-                        color: const Color.fromARGB(255, 138, 138, 138)),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: Colors.blue.shade200),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: Colors.blue.shade200),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                          color: const Color.fromARGB(255, 179, 203, 255),
-                          width: 2),
-                    ),
-                    filled: true,
-                    fillColor: const Color.fromARGB(255, 238, 238, 238),
-                    errorText: controller.marketValue.value.isEmpty
-                        ? "Nilai taksiran wajib diisi"
-                        : null,
+              TextField(
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  MoneyInputFormatter(
+                    thousandSeparator: ThousandSeparator.Period,
+                    mantissaLength: 0,
                   ),
-                  onChanged: (value) {
-                    controller.marketValue.value = value;
-                  },
-                );
-              }),
+                ],
+                decoration: InputDecoration(
+                  labelText: "Taksiran Nilai Agunan *",
+                  labelStyle: TextStyle(
+                      color: const Color.fromARGB(255, 138, 138, 138)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: Colors.blue.shade200),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: Colors.blue.shade200),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                        color: const Color.fromARGB(255, 179, 203, 255),
+                        width: 2),
+                  ),
+                  filled: true,
+                  fillColor: const Color.fromARGB(255, 238, 238, 238),
+                  errorText: controller.marketValue.text.isEmpty
+                      ? "Nilai taksiran wajib diisi"
+                      : null,
+                ),
+                controller: controller.marketValue,
+              ),
             ],
           );
         }),
