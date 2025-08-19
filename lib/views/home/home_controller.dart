@@ -9,6 +9,10 @@ class HomeController extends GetxController {
   var surveyList = <Datum>[].obs;
   var filteredList = <Datum>[].obs;
 
+    // computed property untuk hitung notif
+  int get notifCount =>
+      surveyList.where((item) => item.status?.read == "notif").length;
+
   void getHistory() async {
     final historyService = HistoryService();
 

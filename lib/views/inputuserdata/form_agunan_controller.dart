@@ -33,6 +33,8 @@ class CreditFormController extends GetxController {
   final installmentController = TextEditingController();
   final addDescript = TextEditingController();
   final marketValue = TextEditingController();
+  final selectedAgunanName = TextEditingController();
+  final selectedDocumentName = TextEditingController();
 
   final cifID = Get.put(InputDataController());
   List<XFile> selectedImages = [];
@@ -45,8 +47,6 @@ class CreditFormController extends GetxController {
   var img_agun = ''.obs;
   var selectedAgunan = ''.obs;
   var selectedDocument = ''.obs;
-  var selectedAgunanName = ''.obs;
-  var selectedDocumentName = ''.obs;
   var selectedKTPImages = <File>[].obs;
   var selectedAgunanImages = <File>[].obs;
   var selectedDocumentImages = <File>[].obs;
@@ -58,17 +58,77 @@ class CreditFormController extends GetxController {
   var cameraPreview = Rx<Widget>(Container());
   var isProcessing = false.obs;
 
+  // Method untuk mencari ID berdasarkan nama/deskripsi
+  void setAgunanIdByName(String agunanName) {
+    if (agunanName.isEmpty || agunanList.isEmpty) return;
+
+    try {
+      final agunan = agunanList.firstWhere(
+        (item) =>
+            item['descript'].toString().toLowerCase().trim() ==
+            agunanName.toLowerCase().trim(),
+      );
+      selectedAgunan.value = agunan['ida'].toString();
+      print(
+          '✅ Agunan ID berhasil di-set: ${selectedAgunan.value} untuk nama: $agunanName');
+    } catch (e) {
+      print('⚠️ Agunan dengan nama "$agunanName" tidak ditemukan');
+      selectedAgunan.value = '';
+    }
+  }
+
+  void setDocumentIdByName(String documentName) {
+    if (documentName.isEmpty || documentList.isEmpty) return;
+
+    try {
+      final document = documentList.firstWhere(
+        (item) =>
+            item['name'].toString().toLowerCase().trim() ==
+            documentName.toLowerCase().trim(),
+      );
+      selectedDocument.value = document['id_catdocument'].toString();
+      print(
+          '✅ Document ID berhasil di-set: ${selectedDocument.value} untuk nama: $documentName');
+    } catch (e) {
+      print('⚠️ Document dengan nama "$documentName" tidak ditemukan');
+      selectedDocument.value = '';
+    }
+  }
+
+  void syncAllIdsWithCurrentText() {
+    // Sync Agunan ID
+    if (selectedAgunanName.text.isNotEmpty) {
+      setAgunanIdByName(selectedAgunanName.text);
+    }
+
+    // Sync Document ID
+    if (selectedDocumentName.text.isNotEmpty) {
+      setDocumentIdByName(selectedDocumentName.text);
+    }
+  }
+
   Future<void> fetchCategory() async {
     try {
       var fetchedAgunan = await getDocAgun.fetchAgunan();
       var fetchedDocuments = await getDocAgun.fetchDocuments();
+
       if (fetchedAgunan.isNotEmpty) {
         agunanList.value = fetchedAgunan;
-
         print('CIF ID: ${cifID.cifId}');
+
+        // ✅ Sync ID setelah data agunan dimuat
+        if (selectedAgunanName.text.isNotEmpty) {
+          setAgunanIdByName(selectedAgunanName.text);
+        }
       }
+
       if (fetchedDocuments.isNotEmpty) {
         documentList.value = fetchedDocuments;
+
+        // ✅ Sync ID setelah data dokumen dimuat
+        if (selectedDocumentName.text.isNotEmpty) {
+          setDocumentIdByName(selectedDocumentName.text);
+        }
       }
     } catch (e) {
       print("Error fetching agunan: $e");
@@ -79,6 +139,7 @@ class CreditFormController extends GetxController {
   void onInit() {
     super.onInit();
     fetchCategory();
+    setupAutoSync();
   }
 
   Future<void> fetchDocuments() async {
@@ -94,6 +155,17 @@ class CreditFormController extends GetxController {
       documentModel.value = inquiryResponse.document;
       addDescript.text = inquiryResponse.collateral.addDescript ?? '';
       marketValue.text = inquiryResponse.collateral.value ?? '0';
+      selectedAgunanName.text = inquiryResponse.collateral.idName ?? '';
+      selectedDocumentName.text = inquiryResponse.collateral.documentType ?? '';
+
+      // ✅ Set ID setelah text di-set
+      if (selectedAgunanName.text.isNotEmpty) {
+        setAgunanIdByName(selectedAgunanName.text);
+      }
+      if (selectedDocumentName.text.isNotEmpty) {
+        setDocumentIdByName(selectedDocumentName.text);
+      }
+
       ktpImage.value = documentModel.value?.docPerson.isNotEmpty ?? false
           ? documentModel.value!.docPerson[0].img
           : '';
@@ -145,6 +217,21 @@ class CreditFormController extends GetxController {
     } catch (e) {
       print("Error fetching documents: $e");
     }
+  }
+
+  // Method untuk set agunan yang dipilih (untuk dropdown)
+  void setSelectedAgunan(Map<String, dynamic> agunan) {
+    selectedAgunan.value = agunan['ida'].toString();
+    selectedAgunanName.text = agunan['descript'];
+    print(
+        '✅ Manual selection - Agunan ID: ${selectedAgunan.value}, Name: ${selectedAgunanName.text}');
+  }
+
+  void setSelectedDocument(Map<String, dynamic> document) {
+    selectedDocument.value = document['id_catdocument'].toString();
+    selectedDocumentName.text = document['name'];
+    print(
+        '✅ Manual selection - Document ID: ${selectedDocument.value}, Name: ${selectedDocumentName.text}');
   }
 
   Future<File> compressImage(File file) async {
@@ -458,7 +545,7 @@ class CreditFormController extends GetxController {
       ),
       collateral: Collateral(
         id: selectedAgunan.value,
-        idName: selectedAgunanName.value,
+        idName: selectedAgunanName.text,
         addDescript: addDescript.text,
         idCatDocument: int.tryParse(selectedDocument.value) ?? 0,
         value: cleanedMarketValue, // Use cleaned market value
@@ -550,6 +637,22 @@ class CreditFormController extends GetxController {
         snackPosition: SnackPosition.BOTTOM,
       );
     }
+  }
+
+  void setupAutoSync() {
+    // Listener untuk agunanList
+    ever(agunanList, (_) {
+      if (selectedAgunanName.text.isNotEmpty) {
+        setAgunanIdByName(selectedAgunanName.text);
+      }
+    });
+
+    // Listener untuk documentList
+    ever(documentList, (_) {
+      if (selectedDocumentName.text.isNotEmpty) {
+        setDocumentIdByName(selectedDocumentName.text);
+      }
+    });
   }
 
   void disposeCamera() {

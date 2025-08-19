@@ -16,11 +16,11 @@ class UploadAgunanPicker extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Dropdown kategori agunan
+        // TextField dropdown custom
         Obx(() {
-          return DropdownButtonFormField<String>(
-            value: controller.selectedAgunan.value.isEmpty
-                ? null
-                : controller.selectedAgunan.value,
+          return TextFormField(
+            readOnly: true,
+            controller: controller.selectedAgunanName,
             decoration: InputDecoration(
               labelText: "Kategori Agunan *",
               labelStyle:
@@ -35,34 +35,68 @@ class UploadAgunanPicker extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(
-                    color: const Color.fromARGB(255, 179, 203, 255), width: 2),
+                borderSide: const BorderSide(
+                    color: Color.fromARGB(255, 179, 203, 255), width: 2),
               ),
               filled: true,
               fillColor: const Color.fromARGB(255, 238, 238, 238),
               errorText: controller.selectedAgunan.value.isEmpty
                   ? "Kategori Agunan wajib dipilih"
                   : null,
+              suffixIcon: const Icon(Icons.arrow_drop_down,
+                  color: Color.fromARGB(255, 139, 143, 147)),
             ),
-            dropdownColor: Colors.white,
-            icon: Icon(Icons.arrow_drop_down,
-                color: const Color.fromARGB(255, 139, 143, 147)),
-            items: controller.agunanList.map((agunan) {
-              return DropdownMenuItem<String>(
-                value: agunan['ida'].toString(),
-                child: Text(
-                  agunan['descript'],
-                  style: const TextStyle(fontSize: 15),
+            onTap: () async {
+              final result = await showModalBottomSheet<Map<String, dynamic>>(
+                context: Get.context!,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                 ),
+                builder: (context) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        child: Text(
+                          'Pilih Kategori Agunan',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: controller.agunanList.length,
+                          itemBuilder: (context, index) {
+                            final agunan = controller.agunanList[index];
+                            final isSelected =
+                                controller.selectedAgunan.value ==
+                                    agunan['ida'].toString();
+
+                            return ListTile(
+                              title: Text(agunan['descript']),
+                              trailing: isSelected
+                                  ? Icon(Icons.check, color: Colors.blue)
+                                  : null,
+                              selected: isSelected,
+                                onTap: () {
+                                Get.back(result: agunan);
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                },
               );
-            }).toList(),
-            onChanged: (val) {
-              final selected = controller.agunanList.firstWhere(
-                (e) => e['ida'].toString() == val,
-                orElse: () => {},
-              );
-              controller.selectedAgunan.value = val!;
-              controller.selectedAgunanName.value = selected['descript'] ?? '';
+
+              if (result != null) {
+                // ✅ Gunakan method baru untuk set selected agunan
+                controller.setSelectedAgunan(result);
+              }
             },
           );
         }),
@@ -70,7 +104,7 @@ class UploadAgunanPicker extends StatelessWidget {
 
         // Upload dengan DottedBorder (hilang jika sudah ada gambar)
         Obx(() {
-          return controller.selectedDocumentImages.isEmpty
+          return controller.selectedAgunanImages.isEmpty
               ? GestureDetector(
                   onTap: () => controller.pickAgunanImages(context),
                   child: DottedBorder(
