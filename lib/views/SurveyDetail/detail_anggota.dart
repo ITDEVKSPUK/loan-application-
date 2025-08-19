@@ -134,7 +134,7 @@ class _DatailAnggotaState extends State<DatailAnggota> {
                         keyboardType: TextInputType.text,
                       ),
                       FieldReadonly(
-                        label: 'Alamat',
+                        label: 'Domisili',
                         width: double.infinity,
                         height: 58,
                         value: iqyAnggotaController.sector_city.value,

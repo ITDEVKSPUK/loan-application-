@@ -297,7 +297,7 @@ class InputData extends StatelessWidget {
                         TextfieldForm(
                           width: double.infinity,
                           height: 58,
-                          label: 'Alamat',
+                          label: 'Domisili',
                           controller: controller.alamatController,
                           readOnly: true,
                           hintText: controller.alamatController.text.isEmpty
