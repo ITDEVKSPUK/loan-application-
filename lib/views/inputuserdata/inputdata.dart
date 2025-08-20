@@ -19,6 +19,8 @@ class InputData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.addPekerjaanListener(); // Add listener for pekerjaanController
+
     return WillPopScope(
       onWillPop: () async {
         Get.offAllNamed('/dashboard');
@@ -131,11 +133,8 @@ class InputData extends StatelessWidget {
                                   fontFamily: 'Outfit'),
                             ),
                             const SizedBox(height: 6),
-
-                            // ✅ Masukkan final isReadOnly DI SINI, dalam build context
                             Builder(builder: (context) {
                               final isReadOnly = controller.readOnly.value;
-
                               return IntlPhoneField(
                                 initialCountryCode: 'ID',
                                 controller: controller.telpController,
@@ -218,12 +217,46 @@ class InputData extends StatelessWidget {
                                 ? null
                                 : () => controller.pickDate(context),
                             hintText: 'Klik dan Masukan Tanggal Lahir'),
-                        TextfieldForm(
-                            width: double.infinity,
-                            height: 50,
-                            readOnly: controller.readOnly.value,
-                            label: 'Pekerjaan',
-                            controller: controller.pekerjaanController),
+                        // Pekerjaan field with warning below
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextfieldForm(
+                              width: double.infinity,
+                              height: 50,
+                              readOnly: controller.readOnly.value,
+                              label: 'Pekerjaan',
+                              controller: controller.pekerjaanController,
+                              hintText: 'KETIK DISINI',
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(30),
+                              ],
+                            ),
+                            Obx(() => controller.isPekerjaanMax.value
+                                ? Padding(
+                                    padding: const EdgeInsets.only(top: 4.0),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.warning_amber,
+                                          color: AppColors.orangestatus,
+                                          size: 16,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          'Peringatan: Maksimum 30 karakter tercapai',
+                                          style: TextStyle(
+                                            color: AppColors.orangestatus,
+                                            fontSize: 12,
+                                            fontFamily: 'Outfit',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : const SizedBox.shrink()),
+                          ],
+                        ),
                         const SizedBox(height: 10),
                         TextfieldForm(
                           width: double.infinity,
