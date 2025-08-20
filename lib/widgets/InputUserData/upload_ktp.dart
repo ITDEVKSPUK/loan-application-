@@ -1,6 +1,6 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
 
 class UploadKTPPicker extends StatelessWidget {
@@ -13,41 +13,46 @@ class UploadKTPPicker extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        GestureDetector(
-          onTap: () => controller.pickKTPImages(context),
-          child: DottedBorder(
-            color: Colors.blue.shade300,
-            strokeWidth: 1.5,
-            dashPattern: [6, 4],
-            borderType: BorderType.RRect,
-            radius: const Radius.circular(12),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 24),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.cloud_upload, size: 40, color: Colors.blue.shade600),
-                  const SizedBox(height: 8),
-                  Text.rich(
-                    TextSpan(
-                      text: 'Klik untuk ',
-                      children: [
-                        TextSpan(
-                          text: 'upload KTP',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue.shade700),
-                        )
-                      ],
+        Obx(() {
+          return controller.selectedKTPImages.isEmpty
+              ? GestureDetector(
+                  onTap: () => controller.pickKTPImages(context),
+                  child: DottedBorder(
+                    color: Colors.blue.shade300,
+                    strokeWidth: 1.5,
+                    dashPattern: [6, 4],
+                    borderType: BorderType.RRect,
+                    radius: const Radius.circular(12),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 24),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.cloud_upload,
+                              size: 40, color: Colors.blue.shade600),
+                          const SizedBox(height: 8),
+                          Text.rich(
+                            TextSpan(
+                              text: 'Klik untuk ',
+                              children: [
+                                TextSpan(
+                                  text: 'upload KTP',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue.shade700),
+                                )
+                              ],
+                            ),
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ],
+                      ),
                     ),
-                    style: const TextStyle(fontSize: 14),
                   ),
-                ],
-              ),
-            ),
-          ),
-        ),
+                )
+              : SizedBox();
+        }),
         const SizedBox(height: 12),
         Obx(() {
           final images = controller.selectedKTPImages;
@@ -55,7 +60,7 @@ class UploadKTPPicker extends StatelessWidget {
             return const Text("Belum ada foto KTP yang dipilih.");
           }
           return SizedBox(
-            height: 90,
+            height: 190,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: images.length,
@@ -67,8 +72,8 @@ class UploadKTPPicker extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                       child: Image.file(
                         images[index],
-                        width: 80,
-                        height: 80,
+                        width: 180,
+                        height: 180,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -87,7 +92,8 @@ class UploadKTPPicker extends StatelessWidget {
                               color: Colors.white, size: 20),
                         ),
                       ),
-                    ),                  ],
+                    ),
+                  ],
                 );
               },
             ),

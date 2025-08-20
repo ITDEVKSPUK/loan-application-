@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loan_application/API/models/inqury_survey_models.dart' as InquiryModels;
-import 'package:loan_application/API/models/put_models_update.dart' as UpdateModels;
+import 'package:loan_application/API/models/inqury_survey_models.dart'
+    as InquiryModels;
+import 'package:loan_application/API/models/put_models_update.dart'
+    as UpdateModels;
 import 'package:loan_application/API/service/post_inqury_survey.dart';
 import 'package:loan_application/API/service/put_update_survey.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
@@ -36,6 +38,7 @@ class SurveyController extends GetxController {
   final inquiryModel = Rx<InquiryModels.InquirySurveyModel?>(null);
   final isLoading = false.obs;
   final notePlafond = ''.obs;
+  final approvalStatus = ''.obs; // Observable for approval status
   String surveyId = '';
 
   final PutUpdateSurvey putUpdateSurvey;
@@ -86,6 +89,13 @@ class SurveyController extends GetxController {
     return cleaned.isEmpty ? '0' : cleaned;
   }
 
+  /// Check if edit icon should be visible based on approval status
+  bool get isEditIconVisible {
+    final status = approvalStatus.value.toLowerCase();
+    print('Checking isEditIconVisible: status = $status');
+    return status != 'approved';
+  }
+
   /// Fetch survey data for DetailSurvey
   Future<void> getSurveyList({required String trxSurvey}) async {
     isLoading.value = true;
@@ -101,26 +111,30 @@ class SurveyController extends GetxController {
       purpose.value = inquiryData.application.purpose ?? '';
       idName.value = inquiryData.collateral.idName ?? '';
       document_type.value = inquiryData.collateral.documentType ?? '';
-      descript.value = inquiryData.collateral.adddescript ?? '';
+      descript.value = inquiryData.collateral.addDescript ?? '';
+      approvalStatus.value =
+          inquiryData.status.value?.toLowerCase() ?? 'progress';
+      print('Extracted approval status: ${approvalStatus.value}');
 
       // Extract Note for PLAF from Collaboration
       final collaborationList = inquiryData.collaboration;
       notePlafond.value = collaborationList
-              .firstWhere(
-                (collab) => collab.content == 'PLAF',
-                orElse: () => InquiryModels.Collaboration(
-                  approvalNo: '',
-                  category: '',
-                  content: '',
-                  judgment: '',
-                  date: '',
-                  note: 'Tidak ada data',
-                ),
-              )
-              .note;
+          .firstWhere(
+            (collab) => collab.content == 'PLAF',
+            orElse: () => InquiryModels.Collaboration(
+              approvalNo: '',
+              category: '',
+              content: '',
+              judgment: '',
+              date: '',
+              note: 'Tidak ada data',
+            ),
+          )
+          .note;
 
       print('Category Agunan (idName): ${idName.value}');
       print('Note Plafond: ${notePlafond.value}');
+      print('Approval Status: ${approvalStatus.value}');
     } catch (e) {
       print('Error fetching survey list: $e');
       Get.snackbar(
@@ -169,7 +183,7 @@ class SurveyController extends GetxController {
       collateralIdController.text = inquiryData.collateral.id ?? '';
       collateralNameController.text = inquiryData.collateral.idName ?? '';
       collateralAddDescController.text =
-          inquiryData.collateral.adddescript ?? '';
+          inquiryData.collateral.addDescript ?? '';
       collateralCatDocController.text =
           inquiryData.collateral.idCatDocument.toString();
       incomeController.text =
@@ -180,14 +194,18 @@ class SurveyController extends GetxController {
           formatRupiah(inquiryData.additionalInfo.expenses.toString());
       installmentController.text =
           formatRupiah(inquiryData.additionalInfo.installment.toString());
+      approvalStatus.value =
+          inquiryData.status.value?.toLowerCase() ?? 'progress';
+      print('Extracted approval status: ${approvalStatus.value}');
 
       print('Inquiry data received: ${inquiryData.toJson()}');
       // Update observables for DetailSurvey
       inquiryModel.value = inquiryData;
       purpose.value = inquiryData.application.purpose ?? '';
       idName.value = inquiryData.collateral.idName ?? '';
-      document_type.value = inquiryData.collateral.adddescript ?? '';
+      document_type.value = inquiryData.collateral.addDescript ?? '';
       print('Category Agunan (idName) loaded: ${idName.value}');
+      print('Approval Status loaded: ${approvalStatus.value}');
     } catch (e) {
       print('Error loading survey data: $e');
       Get.snackbar(

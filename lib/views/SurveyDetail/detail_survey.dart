@@ -41,28 +41,34 @@ class _DetailSurveyState extends State<DetailSurvey> {
         appBar: CustomAppBar(
           title: 'Debitur Detail Dokumen',
           actions: [
-            IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: () {
-                final inquiryData = controller.inquiryModel.value;
-                if (inquiryData == null) {
-                  Get.snackbar(
-                    'Error',
-                    'Data inquiry tidak tersedia',
-                    snackPosition: SnackPosition.BOTTOM,
-                    backgroundColor: Colors.red,
-                    colorText: Colors.white,
-                  );
-                  return;
-                }
-                Get.offNamed(
-                  MyAppRoutes.updateSurvey,
-                  arguments: {
-                    'trxSurvey': inquiryData.application.trxSurvey,
-                  },
-                );
-              },
-            ),
+            Obx(() {
+              print('isEditIconVisible: ${controller.isEditIconVisible}');
+              return controller.isEditIconVisible
+                  ? IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        final inquiryData = controller.inquiryModel.value;
+                        if (inquiryData == null) {
+                          Get.snackbar(
+                            'Error',
+                            'Data inquiry tidak tersedia',
+                            snackPosition: SnackPosition.BOTTOM,
+                            backgroundColor: Colors.red,
+                            colorText: Colors.white,
+                          );
+                          return;
+                        }
+                        print('Navigating to UpdateSurvey with trxSurvey: ${inquiryData.application.trxSurvey}');
+                        Get.offNamed(
+                          MyAppRoutes.updateSurvey,
+                          arguments: {
+                            'trxSurvey': inquiryData.application.trxSurvey,
+                          },
+                        );
+                      },
+                    )
+                  : const SizedBox.shrink();
+            }),
           ],
         ),
         body: SafeArea(
@@ -141,8 +147,6 @@ class _DetailSurveyState extends State<DetailSurvey> {
                             const SizedBox(height: 5),
                             //Widget Detail Nominal Pinjaman
                             LoanAngkaPinjaman(),
-
-                            //yg di atas widget detail nominal pinjaman
                             const SizedBox(height: 10),
                             const Divider(
                               thickness: 1,
@@ -177,6 +181,14 @@ class _DetailSurveyState extends State<DetailSurvey> {
                               color: Colors.grey,
                             ),
                             const SizedBox(height: 10),
+                            // Debug: Display status
+                            Obx(() => Text(
+                                  'Status: ${controller.approvalStatus.value}',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: AppColors.black,
+                                  ),
+                                )),
                           ],
                         )),
                     const SizedBox(height: 30),

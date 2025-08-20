@@ -297,6 +297,7 @@ class Status {
   final String? description;
   final int? attachedDocument;
   final String? mandatory;
+  final String? read;
 
   Status({
     required this.id,
@@ -306,6 +307,7 @@ class Status {
     this.description,
     this.attachedDocument,
     this.mandatory,
+    this.read,
   });
 
   factory Status.fromJson(Map<String, dynamic> json) {
@@ -317,6 +319,7 @@ class Status {
       description: json['description'],
       attachedDocument: json['attachedDocument'],
       mandatory: json['Mandatory'],
+      read: json['read'],
     );
   }
 }

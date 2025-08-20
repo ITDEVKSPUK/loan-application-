@@ -1,6 +1,6 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
 
 class UploadDocumentPicker extends StatelessWidget {
@@ -15,13 +15,13 @@ class UploadDocumentPicker extends StatelessWidget {
       children: [
         // Dropdown kategori dokumen
         Obx(() {
-          return DropdownButtonFormField<String>(
-            value: controller.selectedDocument.value.isEmpty
-                ? null
-                : controller.selectedDocument.value,
+          return TextFormField(
+            readOnly: true,
+            controller: controller.selectedDocumentName,
             decoration: InputDecoration(
               labelText: "Kategori Dokumen *",
-              labelStyle: TextStyle(color: const Color.fromARGB(255, 138, 138, 138)),
+              labelStyle:
+                  TextStyle(color: const Color.fromARGB(255, 138, 138, 138)),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(color: Colors.blue.shade200),
@@ -32,73 +32,114 @@ class UploadDocumentPicker extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: const Color.fromARGB(255, 179, 203, 255), width: 2),
+                borderSide: const BorderSide(
+                    color: Color.fromARGB(255, 179, 203, 255), width: 2),
               ),
               filled: true,
               fillColor: const Color.fromARGB(255, 238, 238, 238),
               errorText: controller.selectedDocument.value.isEmpty
                   ? "Kategori Dokumen wajib dipilih"
                   : null,
+              suffixIcon: const Icon(Icons.arrow_drop_down,
+                  color: Color.fromARGB(255, 139, 143, 147)),
             ),
-            dropdownColor: Colors.white,
-            icon: Icon(Icons.arrow_drop_down, color: const Color.fromARGB(255, 139, 143, 147)),
-            items: controller.documentList.map((doc) {
-              return DropdownMenuItem<String>(
-                value: doc['id_catdocument'].toString(),
-                child: Text(
-                  doc['name'],
-                  style: const TextStyle(fontSize: 15),
+            onTap: () async {
+              final result = await showModalBottomSheet<Map<String, dynamic>>(
+                context: Get.context!,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                 ),
+                builder: (context) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        child: Text(
+                          'Pilih Kategori Dokumen',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: controller.documentList.length,
+                          itemBuilder: (context, index) {
+                            final document = controller.documentList[index];
+                            final isSelected =
+                                controller.selectedDocument.value ==
+                                    document['id_catdocument'].toString();
+
+                            return ListTile(
+                              title: Text(document['name']),
+                              trailing: isSelected
+                                  ? Icon(Icons.check, color: Colors.blue)
+                                  : null,
+                              selected: isSelected,
+                              onTap: () {
+                                Get.back(result: document);
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                },
               );
-            }).toList(),
-            onChanged: (val) {
-              final selected = controller.documentList.firstWhere(
-                (e) => e['id_catdocument'].toString() == val,
-                orElse: () => {},
-              );
-              controller.selectedDocument.value = val!;
-              controller.selectedDocumentName.value = selected['name'] ?? '';
+
+              if (result != null) {
+                // ✅ Gunakan method baru untuk set selected dokumen
+                controller.setSelectedDocument(result);
+              }
             },
           );
         }),
         const SizedBox(height: 12),
 
         // Area upload dengan DottedBorder
-        GestureDetector(
-          onTap: () => controller.pickDocumentImages(context),
-          child: DottedBorder(
-            color: Colors.blue.shade300,
-            strokeWidth: 1.5,
-            dashPattern: [6, 4],
-            borderType: BorderType.RRect,
-            radius: const Radius.circular(12),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 24),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.cloud_upload, size: 40, color: Colors.blue.shade600),
-                  const SizedBox(height: 8),
-                  Text.rich(
-                    TextSpan(
-                      text: 'Klik untuk ',
-                      children: [
-                        TextSpan(
-                          text: 'upload Dokumen',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue.shade700),
-                        )
-                      ],
+        Obx(() {
+          return controller.selectedDocumentImages.isEmpty
+              ? GestureDetector(
+                  onTap: () => controller.pickDocumentImages(context),
+                  child: DottedBorder(
+                    color: Colors.blue.shade300,
+                    strokeWidth: 1.5,
+                    dashPattern: [6, 4],
+                    borderType: BorderType.RRect,
+                    radius: const Radius.circular(12),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 24),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.cloud_upload,
+                              size: 40, color: Colors.blue.shade600),
+                          const SizedBox(height: 8),
+                          Text.rich(
+                            TextSpan(
+                              text: 'Klik untuk ',
+                              children: [
+                                TextSpan(
+                                  text: 'upload Dokumen',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue.shade700),
+                                )
+                              ],
+                            ),
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ],
+                      ),
                     ),
-                    style: const TextStyle(fontSize: 14),
                   ),
-                ],
-              ),
-            ),
-          ),
-        ),
+                )
+              : SizedBox();
+        }),
         const SizedBox(height: 12),
 
         // Preview gambar dokumen
@@ -111,7 +152,7 @@ class UploadDocumentPicker extends StatelessWidget {
                 const Text("Belum ada dokumen yang dipilih.")
               else
                 SizedBox(
-                  height: 90,
+                  height: 190,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: images.length,
@@ -123,8 +164,8 @@ class UploadDocumentPicker extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                             child: Image.file(
                               images[index],
-                              width: 80,
-                              height: 80,
+                              width: 180,
+                              height: 180,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -132,7 +173,8 @@ class UploadDocumentPicker extends StatelessWidget {
                             top: 0,
                             right: 0,
                             child: GestureDetector(
-                              onTap: () => controller.selectedDocumentImages.removeAt(index),
+                              onTap: () => controller.selectedDocumentImages
+                                  .removeAt(index),
                               child: Container(
                                 decoration: const BoxDecoration(
                                   color: Colors.black45,

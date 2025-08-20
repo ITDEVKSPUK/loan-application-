@@ -16,6 +16,13 @@ class FullCreditFormPage extends StatefulWidget {
 
 class _FullCreditFormPageState extends State<FullCreditFormPage> {
   final controller = Get.put(CreditFormController());
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchDocuments(); // 👈 fetch old files after UI is ready
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +31,7 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
         backgroundColor: AppColors.pureWhite,
         appBar: CustomAppBar(
           title: 'Lampiran Dokumen',
-          onBack: () => Get.back(),
+          onBack: () => false,
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -59,7 +66,8 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
                   onPressed: () => controller.handleSubmit(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.casualbutton1,
-                    padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 28, vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),

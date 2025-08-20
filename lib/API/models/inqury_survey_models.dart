@@ -1,10 +1,6 @@
 import 'package:get/get.dart';
 import 'package:loan_application/API/service/post_inqury_survey.dart';
 
-import 'package:get/get.dart';
-import 'package:loan_application/API/models/inqury_survey_models.dart';
-import 'package:loan_application/API/service/post_inqury_survey.dart';
-
 class InqurySurveyController extends GetxController {
   var plafond = ''.obs;
   var purpose = ''.obs;
@@ -18,6 +14,7 @@ class InqurySurveyController extends GetxController {
   var collateralProofs = <CollateralProofModel>[].obs;
   var isLoading = false.obs;
   var errorMessage = ''.obs;
+  RxString marketValue = ''.obs;
 
   void getSurveyList({required String trxSurvey}) async {
     isLoading.value = true;
@@ -34,7 +31,7 @@ class InqurySurveyController extends GetxController {
       inquiryModel.value = inquryResponse;
       plafond.value = inquryResponse.application.plafond;
       purpose.value = inquryResponse.application.purpose;
-      adddescript.value = inquryResponse.collateral.adddescript;
+      adddescript.value = inquryResponse.collateral.addDescript;
       value.value = inquryResponse.collateral.value;
       expenses.value = inquryResponse.additionalInfo.expenses;
       income.value = inquryResponse.additionalInfo.income;
@@ -72,6 +69,7 @@ class CollateralProofModel {
     this.sector_city = '',
   });
 }
+
 class InquirySurveyModel {
   final String responseCode;
   final String responseDescription;
@@ -197,6 +195,7 @@ class Application {
   final String applicationNo;
   final String purpose;
   final String plafond;
+  final String status;
 
   Application({
     required this.trxSurvey,
@@ -204,6 +203,7 @@ class Application {
     required this.applicationNo,
     required this.purpose,
     required this.plafond,
+    required this.status,
   });
 
   factory Application.fromJson(Map<String, dynamic> json) {
@@ -213,6 +213,7 @@ class Application {
       applicationNo: json['application_no'] ?? '',
       purpose: json['purpose'] ?? '',
       plafond: json['plafond'] ?? '',
+      status: json['status'] ?? '',
     );
   }
 
@@ -223,6 +224,7 @@ class Application {
       'application_no': applicationNo,
       'purpose': purpose,
       'plafond': plafond,
+      'status': status,
     };
   }
 }
@@ -230,7 +232,7 @@ class Application {
 class Collateral {
   final String id;
   final String idName;
-  final String adddescript;
+  final String addDescript;
   final int idCatDocument;
   final String documentType;
   final String value;
@@ -238,7 +240,7 @@ class Collateral {
   Collateral({
     required this.id,
     required this.idName,
-    required this.adddescript,
+    required this.addDescript,
     required this.idCatDocument,
     required this.documentType,
     required this.value,
@@ -248,7 +250,7 @@ class Collateral {
     return Collateral(
       id: json['id'] ?? '',
       idName: json['id_name'] ?? '',
-      adddescript: json['adddescript'] ?? '',
+      addDescript: json['adddescript'] ?? '',
       idCatDocument: json['id_catdocument'] ?? 0,
       documentType: json['document_type'] ?? '',
       value: json['value'] ?? '',
@@ -259,7 +261,7 @@ class Collateral {
     return {
       'id': id,
       'id_name': idName,
-      'adddescript': adddescript,
+      'adddescript': addDescript,
       'id_catdocument': idCatDocument,
       'document_type': documentType,
       'value': value,

@@ -33,16 +33,52 @@ class _SurveyListState extends State<SurveyList> {
             width: double.infinity,
             height: 57,
             color: Colors.white,
-            child: const Center(
-              child: Text(
-                'Survey List',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontFamily: 'Outfit',
-                  fontWeight: FontWeight.w700,
+            child: Stack(
+              children: [
+                const Center(
+                  child: Text(
+                    'Survey List',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontFamily: 'Outfit',
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
-              ),
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  child: Stack(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.notifications,
+                            color: Colors.black),
+                        onPressed: () {
+                          Get.toNamed(MyAppRoutes.notif);
+                        },
+                      ),
+                      // Badge titik merah
+                      Obx(() {
+                        if (controller.notifCount == 0) return const SizedBox();
+                        return Positioned(
+                          right: 12,
+                          top: 12,
+                          child: Container(
+                            width: 10,
+                            height: 10,
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
           Expanded(
