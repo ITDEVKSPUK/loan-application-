@@ -58,7 +58,8 @@ class _DetailSurveyState extends State<DetailSurvey> {
                           );
                           return;
                         }
-                        print('Navigating to UpdateSurvey with trxSurvey: ${inquiryData.application.trxSurvey}');
+                        print(
+                            'Navigating to UpdateSurvey with trxSurvey: ${inquiryData.application.trxSurvey}');
                         Get.offNamed(
                           MyAppRoutes.updateSurvey,
                           arguments: {
@@ -82,14 +83,14 @@ class _DetailSurveyState extends State<DetailSurvey> {
                     Obx(() => Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Detail Agunan',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.black,
-                              ),
-                            ),
+                            // Text(
+                            //   'Detail Agunan',
+                            //   style: TextStyle(
+                            //     fontSize: 20,
+                            //     fontWeight: FontWeight.bold,
+                            //     color: AppColors.black,
+                            //   ),
+                            // ),
                             const SizedBox(height: 5),
                             FieldReadonly(
                               label: 'Tujuan Pinjaman',
@@ -99,52 +100,42 @@ class _DetailSurveyState extends State<DetailSurvey> {
                               keyboardType: TextInputType.text,
                             ),
                             const SizedBox(height: 4),
-                            FieldReadonly(
-                              label: 'Category Agunan',
-                              width: double.infinity,
-                              height: 50,
-                              value: controller.idName.value,
-                              keyboardType: TextInputType.text,
-                            ),
-                            FieldReadonly(
-                              label: 'Deskripsi Agunan',
-                              width: double.infinity,
-                              height: 50,
-                              value: controller.descript.value,
-                              keyboardType: TextInputType.text,
-                            ),
+                            // FieldReadonly(
+                            //   label: 'Category Agunan',
+                            //   width: double.infinity,
+                            //   height: 50,
+                            //   value: controller.idName.value,
+                            //   keyboardType: TextInputType.text,
+                            // ),
+                            // FieldReadonly(
+                            //   label: 'Deskripsi Agunan',
+                            //   width: double.infinity,
+                            //   height: 50,
+                            //   value: controller.descript.value,
+                            //   keyboardType: TextInputType.text,
+                            // ),
                             const SizedBox(height: 4),
-                            FieldReadonly(
-                              label: 'Category Document',
-                              width: double.infinity,
-                              height: 50,
-                              value: controller.document_type.value,
-                              keyboardType: TextInputType.text,
-                            ),
+                            // FieldReadonly(
+                            //   label: 'Category Document',
+                            //   width: double.infinity,
+                            //   height: 50,
+                            //   value: controller.document_type.value,
+                            //   keyboardType: TextInputType.text,
+                            // ),
                             const SizedBox(height: 4),
-                            FieldReadonly(
-                              label: 'Taksiran Nilai Jaminan',
-                              width: double.infinity,
-                              height: 50,
-                              value:
-                                  'Rp. ${controller.formatRupiah(controller.inquiryModel.value?.collateral.value.toString() ?? '0')}',
-                              keyboardType: TextInputType.number,
-                            ),
-                            const SizedBox(height: 10),
-                            const Divider(
-                              thickness: 2,
-                              color: Colors.grey,
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              'Detail Nomainal Pinjaman',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.black,
-                              ),
-                            ),
-                            const SizedBox(height: 5),
+                            // FieldReadonly(
+                            //   label: 'Taksiran Nilai Jaminan',
+                            //   width: double.infinity,
+                            //   height: 50,
+                            //   value:
+                            //       'Rp. ${controller.formatRupiah(controller.inquiryModel.value?.collateral.value.toString() ?? '0')}',
+                            //   keyboardType: TextInputType.number,
+                            // ),
+                            // const SizedBox(height: 10),
+                            // const Divider(
+                            //   thickness: 2,
+                            //   color: Colors.grey,
+                            // ),
                             //Widget Detail Nominal Pinjaman
                             LoanAngkaPinjaman(),
                             const SizedBox(height: 10),

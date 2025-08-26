@@ -1,7 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ErrorWidget;
 import 'package:get/get.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/views/SurveyDetail/iqy_document_controller.dart';
+import 'package:loan_application/views/SurveyDetail/inqury_survey_controller.dart';
+import 'package:loan_application/widgets/SurveyDetail/detail_cardDCM.dart';
+import 'package:loan_application/widgets/SurveyDetail/field_readonly.dart';
 import 'package:loan_application/widgets/custom_appbar.dart';
 
 class DetailDocument extends StatefulWidget {
@@ -14,6 +17,7 @@ class DetailDocument extends StatefulWidget {
 class _DetailDocumentState extends State<DetailDocument> {
   final IqyDocumentController documentController =
       Get.put(IqyDocumentController());
+  final SurveyController surveyController = Get.find<SurveyController>();
 
   @override
   void initState() {
@@ -26,8 +30,8 @@ class _DetailDocumentState extends State<DetailDocument> {
           'trxSurvey tidak valid atau tidak ditemukan';
       Get.snackbar('Error', documentController.errorMessage.value,
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white);
+          backgroundColor: AppColors.redstatus,
+          colorText: AppColors.pureWhite);
     }
   }
 
@@ -35,251 +39,142 @@ class _DetailDocumentState extends State<DetailDocument> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.pureWhite,
         appBar: CustomAppBar(
           title: 'Detail Dokumen',
         ),
         body: Obx(() {
           if (documentController.isLoading.value) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (documentController.errorMessage.value.isNotEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    documentController.errorMessage.value,
-                    style: const TextStyle(color: Colors.red, fontSize: 16),
-                    textAlign: TextAlign.center,
+            return Stack(
+              children: [
+                _buildContent(context),
+                Container(
+                  color: AppColors.black.withOpacity(0.5),
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(AppColors.royalBlue),
+                    ),
                   ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      final trxSurvey = Get.arguments;
-                      if (trxSurvey != null && trxSurvey is String) {
-                        documentController.fetchDocuments(trxSurvey: trxSurvey);
-                      }
-                    },
-                    child: const Text('Coba Lagi'),
-                  ),
-                ],
-              ),
+                ),
+              ],
             );
           }
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
+          if (documentController.errorMessage.value.isNotEmpty) {
+            return ErrorWidget(
+              errorMessage: documentController.errorMessage.value,
+              onRetry: () {
+                final trxSurvey = Get.arguments;
+                if (trxSurvey != null && trxSurvey is String) {
+                  documentController.fetchDocuments(trxSurvey: trxSurvey);
+                }
+              },
+            );
+          }
+          return _buildContent(context);
+        }),
+      ),
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // KTP Section
+          SectionCard(
+            title: 'KTP',
+            child: ImageContainer(
+              imageUrl: documentController.ktpImage.value,
+              placeholderText: 'KTP Tidak Tersedia',
+              onTap: () => documentController
+                  .showFullScreenImage(documentController.ktpImage.value),
+            ),
+          ),
+          const SizedBox(height: 24),
+          // Agunan Section
+          SectionCard(
+            title: 'Agunan',
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // KTP Section
-                const Center(
-                  child: Text(
-                    'KTP',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                ImageContainer(
+                  imageUrl: documentController.img_agun.value,
+                  placeholderText: 'Foto Tanah Tidak Tersedia',
+                  onTap: () => documentController
+                      .showFullScreenImage(documentController.img_agun.value),
+                ),
+                const SizedBox(height: 12),
+                FieldReadonly(
+                  label: 'Category Agunan',
+                  width: double.infinity,
+                  height: 50,
+                  value: surveyController.idName.value,
+                  keyboardType: TextInputType.text,
                 ),
                 const SizedBox(height: 8),
-                Center(
-                  child: GestureDetector(
-                    onTap: () => documentController
-                        .showFullScreenImage(documentController.ktpImage.value),
-                    child: Container(
-                      width: 317,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade300),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: documentController.ktpImage.value.isNotEmpty
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.network(
-                                documentController.ktpImage.value,
-                                fit: BoxFit.fitWidth,
-                                width: double.infinity,
-                                height: double.infinity,
-                                errorBuilder: (context, error, stackTrace) =>
-                                    Center(
-                                  child: Text(
-                                    'KTP Tidak Tersedia',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey.shade600,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          : Center(
-                              child: Text(
-                                'KTP Tidak Tersedia',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey.shade600,
-                                ),
-                              ),
-                            ),
-                    ),
-                  ),
+                FieldReadonly(
+                  label: 'Deskripsi Agunan',
+                  width: double.infinity,
+                  height: 50,
+                  value: surveyController.descript.value,
+                  keyboardType: TextInputType.text,
                 ),
-                const SizedBox(height: 16),
-                const Divider(thickness: 1, color: Colors.grey),
-                const SizedBox(height: 16),
-
-                // Agunan Section
-                const Center(
-                  child: Text(
-                    'AGUNAN',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                const SizedBox(height: 8),
+                FieldReadonly(
+                  label: 'Taksiran Nilai Jaminan',
+                  width: double.infinity,
+                  height: 50,
+                  value: 'Rp. ${surveyController.formatRupiah(surveyController.inquiryModel.value?.collateral.value.toString() ?? '0')}',
+                  keyboardType: TextInputType.number,
                 ),
-                const SizedBox(height: 20),
-                Center(
-                  child: GestureDetector(
-                    onTap: () => documentController
-                        .showFullScreenImage(documentController.img_agun.value),
-                    child: Container(
-                      width: 317,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: documentController.img_agun.value.isNotEmpty
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.network(
-                                documentController.img_agun.value,
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: double.infinity,
-                                errorBuilder: (context, error, stackTrace) =>
-                                    Center(
-                                  child: Text(
-                                    'Foto Tanah Tidak Tersedia',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey.shade600,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          : Center(
-                              child: Text(
-                                'Foto Tanah Tidak Tersedia',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey.shade600,
-                                ),
-                              ),
-                            ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                const Divider(thickness: 1, color: Colors.grey),
-                const SizedBox(height: 16),
-
-                // Document Section
-                const Center(
-                  child: Text(
-                    'DOKUMEN',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Center(
-                  child: GestureDetector(
-                    onTap: () => documentController
-                        .showFullScreenImage(documentController.img_doc.value),
-                    child: Container(
-                      width: 317,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: documentController.img_doc.value.isNotEmpty
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.network(
-                                documentController.img_doc.value,
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: double.infinity,
-                                errorBuilder: (context, error, stackTrace) =>
-                                    Center(
-                                  child: Text(
-                                    'Foto Surat Tidak Tersedia',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey.shade600,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          : Center(
-                              child: Text(
-                                'Foto Surat Tidak Tersedia',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey.shade600,
-                                ),
-                              ),
-                            ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const Divider(
-                  thickness: 1,
-                  color: Colors.grey,
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    const Text(
-                      "Note Document: ",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Obx(
-                      () => Text(
-                        documentController.noteDocument.value.isEmpty
-                            ? 'Tidak ada data'
-                            : documentController.noteDocument.value,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                const Divider(
-                  thickness: 1,
-                  color: Colors.grey,
-                ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
               ],
             ),
-          );
-        }),
+          ),
+          const SizedBox(height: 24),
+          // Document Section
+          SectionCard(
+            title: 'Dokumen',
+            child: Column(
+              children: [
+                ImageContainer(
+                  imageUrl: documentController.img_doc.value,
+                  placeholderText: 'Foto Surat Tidak Tersedia',
+                  onTap: () => documentController
+                      .showFullScreenImage(documentController.img_doc.value),
+                ),
+                const SizedBox(height: 12),
+                
+                FieldReadonly(
+                  label: 'Category Document',
+                  width: double.infinity,
+                  height: 50,
+                  value: surveyController.document_type.value,
+                  keyboardType: TextInputType.text,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+          // Note Section
+          SectionCard(
+            title: 'Note Dokumen',
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                documentController.noteDocument.value.isEmpty
+                    ? 'Tidak ada data'
+                    : documentController.noteDocument.value,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'Outfit',
+                  color: AppColors.black,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

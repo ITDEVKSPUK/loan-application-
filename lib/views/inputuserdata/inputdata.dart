@@ -296,6 +296,43 @@ class InputData extends StatelessWidget {
                         ),
                         TextfieldForm(
                           width: double.infinity,
+                          height: 58,
+                          label: 'Domisili',
+                          controller: controller.alamatController,
+                          readOnly: true,
+                          hintText: controller.alamatController.text.isEmpty
+                              ? 'Provinsi, Kota, Kecamatan, Desa'
+                              : '',
+                          onTap: controller.alamatController.text.isEmpty &&
+                                  !controller.readOnly.value
+                              ? () => showLocationBottomSheet(
+                                  context,
+                                  (value) =>
+                                      controller.alamatController.text = value,
+                                  locationController)
+                              : null,
+                        ),
+                        TextfieldForm(
+                            width: double.infinity,
+                            height: 50,
+                            label: 'Detail Alamat',
+                            readOnly: controller.readOnly.value,
+                            hintText: 'Jalan, RT/RW, Blok, No Rumah',
+                            controller: controller.detileAlamatController),
+                        TextfieldForm(
+                          width: double.infinity,
+                          height: 50,
+                          label: 'Kode POS',
+                          controller: controller.postalCodeController,
+                          readOnly: controller.readOnly.value,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                        ),
+
+                        TextfieldForm(
+                          width: double.infinity,
                           height: 60,
                           label: 'Titik Kordinat Alamat',
                           controller: controller.mapsUrlController,
@@ -308,71 +345,8 @@ class InputData extends StatelessWidget {
                               ? null
                               : controller.navigateToGoogleMaps,
                         ),
-                        TextfieldForm(
-                          width: double.infinity,
-                          height: 50,
-                          label: 'Kode POS',
-                          controller: controller.postalCodeController,
-                          readOnly: controller.readOnly.value,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
-                        ),
-                        TextfieldForm(
-                            width: double.infinity,
-                            height: 50,
-                            label: 'Detail Alamat',
-                            readOnly: controller.readOnly.value,
-                            hintText: 'Jalan, RT/RW, Blok, No Rumah',
-                            controller: controller.detileAlamatController),
+
                         const SizedBox(height: 10),
-                        TextfieldForm(
-                          width: double.infinity,
-                          height: 58,
-                          label: 'Domisili',
-                          controller: controller.alamatController,
-                          readOnly: true,
-                          hintText: controller.alamatController.text.isEmpty
-                              ? 'Provinsi, Kota, Kecamatan, Desa'
-                              : '',
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: ElevatedButton(
-                            onPressed: controller.readOnly.value
-                                ? null
-                                : () => showLocationBottomSheet(
-                                    context,
-                                    (value) => controller
-                                        .alamatController.text = value,
-                                    locationController),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.casualbutton1,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(Icons.location_on,
-                                    color: Colors.white),
-                                const SizedBox(width: 5),
-                                Text(
-                                  'Selengkapnya',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: AppColors.pureWhite,
-                                      fontFamily: 'Outfit'),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
                         Align(
                           alignment: Alignment.centerRight,
                           child: ElevatedButton(
