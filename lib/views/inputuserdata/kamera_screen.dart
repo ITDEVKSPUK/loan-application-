@@ -5,7 +5,7 @@ import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart
 
 class KtpCameraScreen extends StatefulWidget {
   final CreditFormController controller;
-  const KtpCameraScreen({super.key, required this.controller});
+  KtpCameraScreen({super.key, required this.controller});
 
   @override
   _KtpCameraScreenState createState() => _KtpCameraScreenState();

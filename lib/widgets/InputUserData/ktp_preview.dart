@@ -1,14 +1,17 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class KtpPreviewScreen extends StatelessWidget {
   final File imageFile;
+  final String recognizedText; // hasil OCR
   final VoidCallback onConfirm;
 
   const KtpPreviewScreen({
     Key? key,
     required this.imageFile,
+    required this.recognizedText,
     required this.onConfirm,
   }) : super(key: key);
 
@@ -19,10 +22,27 @@ class KtpPreviewScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
+            flex: 2,
             child: Image.file(
               imageFile,
               fit: BoxFit.contain,
               width: double.infinity,
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              width: double.infinity,
+              color: Colors.grey[100],
+              padding: const EdgeInsets.all(16),
+              child: SingleChildScrollView(
+                child: Text(
+                  recognizedText.isNotEmpty
+                      ? recognizedText
+                      : "Tidak ada teks yang terdeteksi",
+                  style: const TextStyle(fontSize: 14),
+                ),
+              ),
             ),
           ),
           Padding(
@@ -55,3 +75,4 @@ class KtpPreviewScreen extends StatelessWidget {
     );
   }
 }
+  

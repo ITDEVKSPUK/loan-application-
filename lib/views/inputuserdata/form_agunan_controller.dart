@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loan_application/API/dio/dio_client.dart';
 import 'package:loan_application/API/models/inqury_survey_models.dart'
@@ -559,31 +560,37 @@ class CreditFormController extends GetxController {
     Get.snackbar("Sukses", "Survey berhasil diperbarui");
   }
 
-  Future<void> scanKTP(BuildContext context) async {
-    if (isProcessing.value) return;
-    isProcessing.value = true;
+Future<void> scanKTP(BuildContext context) async {
+  if (isProcessing.value) return;
+  isProcessing.value = true;
 
-    try {
-      await _initializeControllerFuture;
-      final image = await _cameraController.takePicture();
-      final compressedFile = await compressImage(File(image.path));
-      Get.to(() => KtpPreviewScreen(
-            imageFile: compressedFile,
-            onConfirm: () {
-              selectedKTPImages.add(compressedFile);
+  try {
+    await _initializeControllerFuture;
+    final image = await _cameraController.takePicture();
+    final compressedFile = await compressImage(File(image.path));
+    final inputImage = InputImage.fromFile(compressedFile);
 
-              // Kembali 2x: dari preview -> kamera -> halaman sebelum kamera
-              Get.back(); // keluar dari preview
-              Get.back(); // keluar dari kamera
-              Get.snackbar('Sukses', 'Foto KTP berhasil disimpan');
-            },
-          ));
-    } catch (e) {
-      Get.snackbar('Error', 'Gagal mengambil foto: $e');
-    } finally {
-      isProcessing.value = false;
-    }
+    final recognizer = TextRecognizer(script: TextRecognitionScript.latin);
+    final result = await recognizer.processImage(inputImage);
+    await recognizer.close();
+    print('scanKTP: Recognized text: ${result.text}');
+    Get.to(() => KtpPreviewScreen(
+          imageFile: compressedFile,
+          recognizedText: result.text,
+          onConfirm: () {
+            selectedKTPImages.add(compressedFile);
+            Get.back(); 
+            Get.back(); 
+            Get.snackbar('Sukses', 'Foto KTP berhasil disimpan');
+          },
+        ));
+  } catch (e) {
+    Get.snackbar('Error', 'Gagal mengambil foto: $e');
+  } finally {
+    isProcessing.value = false;
   }
+}
+
 
   Future<void> initializeCamera() async {
     try {
