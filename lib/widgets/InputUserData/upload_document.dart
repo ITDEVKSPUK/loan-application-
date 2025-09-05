@@ -15,10 +15,9 @@ class UploadDocumentPicker extends StatelessWidget {
       children: [
         // Dropdown kategori dokumen
         Obx(() {
-          return DropdownButtonFormField<String>(
-            value: controller.selectedDocument.value.isEmpty
-                ? null
-                : controller.selectedDocument.value,
+          return TextFormField(
+            readOnly: true,
+            controller: controller.selectedDocumentName,
             decoration: InputDecoration(
               labelText: "Kategori Dokumen *",
               labelStyle:
@@ -33,34 +32,68 @@ class UploadDocumentPicker extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(
-                    color: const Color.fromARGB(255, 179, 203, 255), width: 2),
+                borderSide: const BorderSide(
+                    color: Color.fromARGB(255, 179, 203, 255), width: 2),
               ),
               filled: true,
               fillColor: const Color.fromARGB(255, 238, 238, 238),
               errorText: controller.selectedDocument.value.isEmpty
                   ? "Kategori Dokumen wajib dipilih"
                   : null,
+              suffixIcon: const Icon(Icons.arrow_drop_down,
+                  color: Color.fromARGB(255, 139, 143, 147)),
             ),
-            dropdownColor: Colors.white,
-            icon: Icon(Icons.arrow_drop_down,
-                color: const Color.fromARGB(255, 139, 143, 147)),
-            items: controller.documentList.map((doc) {
-              return DropdownMenuItem<String>(
-                value: doc['id_catdocument'].toString(),
-                child: Text(
-                  doc['name'],
-                  style: const TextStyle(fontSize: 15),
+            onTap: () async {
+              final result = await showModalBottomSheet<Map<String, dynamic>>(
+                context: Get.context!,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                 ),
+                builder: (context) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        child: Text(
+                          'Pilih Kategori Dokumen',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: controller.documentList.length,
+                          itemBuilder: (context, index) {
+                            final document = controller.documentList[index];
+                            final isSelected =
+                                controller.selectedDocument.value ==
+                                    document['id_catdocument'].toString();
+
+                            return ListTile(
+                              title: Text(document['name']),
+                              trailing: isSelected
+                                  ? Icon(Icons.check, color: Colors.blue)
+                                  : null,
+                              selected: isSelected,
+                              onTap: () {
+                                Get.back(result: document);
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                },
               );
-            }).toList(),
-            onChanged: (val) {
-              final selected = controller.documentList.firstWhere(
-                (e) => e['id_catdocument'].toString() == val,
-                orElse: () => {},
-              );
-              controller.selectedDocument.value = val!;
-              controller.selectedDocumentName.value = selected['name'] ?? '';
+
+              if (result != null) {
+                // ✅ Gunakan method baru untuk set selected dokumen
+                controller.setSelectedDocument(result);
+              }
             },
           );
         }),
@@ -68,7 +101,7 @@ class UploadDocumentPicker extends StatelessWidget {
 
         // Area upload dengan DottedBorder
         Obx(() {
-          return controller.selectedAgunanImages.isEmpty
+          return controller.selectedDocumentImages.isEmpty
               ? GestureDetector(
                   onTap: () => controller.pickDocumentImages(context),
                   child: DottedBorder(

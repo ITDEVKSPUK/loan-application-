@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/home/home_controller.dart';
+import 'package:loan_application/views/notif/notif_widget.dart';
 import 'package:loan_application/widgets/survey_box.dart';
 
 class NotifPage extends StatelessWidget {
@@ -60,19 +61,12 @@ class NotifPage extends StatelessWidget {
                 ),
                 child: Stack(
                   children: [
-                    SurveyBox(
+                    NotificationBox(
                       name: item.fullName,
-                      date: DateFormat('yyyy-MMMM-dd', 'id_ID')
+                      date: DateFormat('dd-MMMM-yyyy', 'id_ID')
                           .format(item.application.trxDate),
-                      location: item.sectorCity,
-                      image: (item.document?.docPerson.isNotEmpty ?? false)
-                          ? item.document!.docPerson[0].img
-                          : 'https://salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png',
                       status: statusText,
                       statusColor: statusColor,
-                      plafond: item.application.plafond,
-                      aged: item.aged,
-                      trxSurvey: item.application.trxSurvey.toString(),
                     ),
                     // Titik merah indikator belum dibaca
                     Positioned(

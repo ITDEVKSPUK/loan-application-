@@ -60,6 +60,7 @@ class InputDataController extends GetxController {
   final isLocationConfirmed = false.obs; 
   String? dateBornIso;
   final RxInt cifResponse = 0.obs;
+  final isPekerjaanMax = false.obs; // Added reactive variable for warning state
 
   StreamSubscription<Position>? _positionStream;
 
@@ -68,6 +69,7 @@ class InputDataController extends GetxController {
     super.onInit();
     checkLocationServiceAndGetPosition();
     _startLocationUpdates();
+    addPekerjaanListener(); // Add listener for pekerjaanController
   }
 
   @override
@@ -75,7 +77,19 @@ class InputDataController extends GetxController {
     _positionStream?.cancel();
     mapController.value?.dispose();
     mapController.value = null;
+    pekerjaanController.removeListener(updatePekerjaanState); // Clean up listener
+    pekerjaanController.dispose(); // Dispose of pekerjaanController
     super.onClose();
+  }
+
+  // Add listener to pekerjaanController to update warning state
+  void addPekerjaanListener() {
+    pekerjaanController.addListener(updatePekerjaanState);
+  }
+
+  // Update pekerjaan max state based on character count
+  void updatePekerjaanState() {
+    isPekerjaanMax.value = pekerjaanController.text.length == 30;
   }
 
   void setCif(int cifId) {
@@ -447,6 +461,7 @@ class InputDataController extends GetxController {
     cifResponse.value = 0;
     selectedCountryCode.value = '+62';
     mapType.value = MapType.normal;
+    isPekerjaanMax.value = false; // Reset warning state
     update();
   }
 

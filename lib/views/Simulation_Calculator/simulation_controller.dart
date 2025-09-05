@@ -32,21 +32,21 @@ class SimulationController extends GetxController {
   //   isLoanAmountValid.value = num >= 5000000;
   // }
 
-  void validateLoanAmount(String val) {
-    final cleaned = val.replaceAll(RegExp(r'[^0-9]'), '');
-    final amount = int.tryParse(cleaned) ?? 0;
+  // void validateLoanAmount(String val) {
+  //   final cleaned = val.replaceAll(RegExp(r'[^0-9]'), '');
+  //   final amount = int.tryParse(cleaned) ?? 0;
 
-    isLoanAmountValid.value = amount >= 5000000;
+  //   isLoanAmountValid.value = amount >= 5000000;
 
-    print('Parsed amount: $amount');
-    print('Is valid: ${isLoanAmountValid.value}');
-  }
+  //   print('Parsed amount: $amount');
+  //   print('Is valid: ${isLoanAmountValid.value}');
+  // }
 
   Future<void> calculateLoan(BuildContext context) async {
-    if (!isLoanAmountValid.value) {
-      _showError(context, 'Minimal pinjaman Rp 5.000.000');
-      return;
-    }
+    // if (!isLoanAmountValid.value) {
+    //   _showError(context, 'Minimal pinjaman Rp 5.000.000');
+    //   return;
+    // }
     if (loanAmountController.text.isEmpty ||
         loanTermController.text.isEmpty ||
         interestRateController.text.isEmpty) {
@@ -102,7 +102,6 @@ class SimulationController extends GetxController {
       annualInterestRate.value = res.annualInterestRate;
       method.value = res.method;
       repaymentSchedule.value = res.data
-      
           .map((e) => {
                 'month': e.monthSay,
                 'totalPayment': e.payment,
