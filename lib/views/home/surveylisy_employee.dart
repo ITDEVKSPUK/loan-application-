@@ -77,8 +77,7 @@ class _SurveyListState extends State<SurveyList> {
                   itemCount: list.length,
                   itemBuilder: (context, index) {
                     final item = list[index];
-                    final statusText =
-                        item.status?.value ?? item.application.toString();
+                    final statusText = item.status.value;
                     final statusColor = controller.getStatusColor(statusText);
 
                     return GestureDetector(

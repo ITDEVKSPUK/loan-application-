@@ -1,13 +1,10 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:loan_application/API/models/anggota_models.dart';
 import 'package:loan_application/API/models/cif_models.dart';
@@ -39,13 +36,10 @@ class InputDataController extends GetxController {
   final mapsUrlController = TextEditingController();
   final postalCodeController = TextEditingController();
 
-  // Reactive Variables
   final readOnly = true.obs;
-  final fotoKtp = Rxn<File>();
-  final buktiJaminan = Rxn<File>();
   final selectedGender = ''.obs;
   final startDate =
-      DateTime(2025, 6, 24, 13, 2).obs; // 01:02 PM WIB, June 24, 2025
+      DateTime(2025, 6, 24, 13, 2).obs;
   final selectedDateText = ''.obs;
   final selectedDate = ''.obs;
   final isUnmarried = false.obs;
@@ -58,17 +52,15 @@ class InputDataController extends GetxController {
   final selectedLongitude = 0.0.obs;
   final isLoading = true.obs;
   final locationServiceEnabled = true.obs;
-  final initialPosition = const LatLng(-6.175392, 106.827153).obs; // Jakarta
+  final initialPosition = const LatLng(-6.175392, 106.827153).obs; 
   final selectedPosition = Rxn<LatLng>();
   final mapController = Rxn<GoogleMapController>();
   final selectedCountryCode = '+62'.obs;
   final mapType = MapType.normal.obs;
-  final isLocationConfirmed = false.obs; // Track confirmation
+  final isLocationConfirmed = false.obs; 
   String? dateBornIso;
-  final ImagePicker _picker = ImagePicker();
   final RxInt cifResponse = 0.obs;
 
-  // Stream subscription for real-time location updates
   StreamSubscription<Position>? _positionStream;
 
   @override
@@ -420,35 +412,6 @@ class InputDataController extends GetxController {
     }
   }
 
-  Future<void> pickImageFromGallery(bool isKtp) async {
-    try {
-      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        if (isKtp) {
-          fotoKtp.value = File(pickedFile.path);
-        } else {
-          buktiJaminan.value = File(pickedFile.path);
-        }
-      }
-    } catch (e) {
-      _showAwesomeDialog(
-          'Error', 'Gagal memilih gambar: $e', AppColors.redstatus);
-    }
-  }
-
-  void setImageFromCamera(String path, bool isKtp) {
-    try {
-      if (isKtp) {
-        fotoKtp.value = File(path);
-      } else {
-        buktiJaminan.value = File(path);
-      }
-    } catch (e) {
-      _showAwesomeDialog(
-          'Error', 'Gagal mengatur gambar: $e', AppColors.redstatus);
-    }
-  }
-
   void clearForm() {
     selectedGender.value = '';
     namaAwalController.clear();
@@ -464,9 +427,7 @@ class InputDataController extends GetxController {
     nominalController.clear();
     jenisJaminanController.clear();
     detileAlamatController.clear();
-    mapsUrlController.clear();
-    fotoKtp.value = null;
-    buktiJaminan.value = null;
+    mapsUrlController.clear(); 
     isUnmarried.value = false;
     isNoFirstName.value = false;
     isNikValid.value = false;

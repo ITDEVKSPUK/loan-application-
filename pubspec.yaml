@@ -8,6 +8,7 @@ environment:
   sdk: ^3.5.3
 
 dependencies:
+  google_mlkit_text_recognition: ^0.13.0
   camera: ^0.10.5+2
   cupertino_icons: ^1.0.8
   dio: ^5.8.0+1
@@ -40,8 +41,6 @@ dependencies:
   dotted_border: ^2.0.0+3
   google_ml_kit: ^0.20.0
   awesome_dialog: ^3.2.1
-
-
 
 dev_dependencies:
   flutter_lints: ^5.0.0

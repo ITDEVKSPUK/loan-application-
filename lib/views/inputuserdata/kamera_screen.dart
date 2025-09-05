@@ -1,9 +1,7 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
-import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 
 class KtpCameraScreen extends StatefulWidget {
   final CreditFormController controller;

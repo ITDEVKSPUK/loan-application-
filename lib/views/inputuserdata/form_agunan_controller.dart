@@ -39,9 +39,9 @@ class CreditFormController extends GetxController {
   var agunanList = <dynamic>[].obs;
   var documentList = <dynamic>[].obs;
   var documentModel = Rxn<Document>();
-  var collacteral = Rxn<Collateral>(); // For Agunan (docAsset)
-  var ktpImage = ''.obs; // For KTP (docPerson)
-  var img_doc = ''.obs; // For Foto Tanah (docAsset)
+  var collacteral = Rxn<Collateral>();
+  var ktpImage = ''.obs;
+  var img_doc = ''.obs;
   var img_agun = ''.obs;
   var selectedAgunan = ''.obs;
   var selectedDocument = ''.obs;
@@ -92,8 +92,8 @@ class CreditFormController extends GetxController {
 
       // Extract the Document model from the response
       documentModel.value = inquiryResponse.document;
-      addDescript.text = inquiryResponse.collateral.addDescript ?? '';
-      marketValue.text = inquiryResponse.collateral.value ?? '0';
+      addDescript.text = inquiryResponse.collateral.addDescript;
+      marketValue.text = inquiryResponse.collateral.value;
       ktpImage.value = documentModel.value?.docPerson.isNotEmpty ?? false
           ? documentModel.value!.docPerson[0].img
           : '';
@@ -104,7 +104,6 @@ class CreditFormController extends GetxController {
           ? documentModel.value!.docImg[0].img
           : '';
       print("📄 Document model fetched: ${documentModel.value}");
-      if (documentModel == null) return;
 
       final dio = Dio();
       final tempDir = await getTemporaryDirectory();
@@ -114,33 +113,27 @@ class CreditFormController extends GetxController {
         final filePath = "${tempDir.path}/${url.split('/').last}";
         print("📥 Downloading KTP image from: $url to $filePath");
         await dio.download(url, filePath);
-        if (filePath != null) {
-          final file = File(filePath);
-          final compressed = await compressImage(file);
-          selectedKTPImages.add(compressed);
-        }
+        final file = File(filePath);
+        final compressed = await compressImage(file);
+        selectedKTPImages.add(compressed);
       }
 
       if (img_doc.value.isNotEmpty) {
         final url = img_doc.value;
         final filePath = "${tempDir.path}/${url.split('/').last}";
         await dio.download(url, filePath);
-        if (filePath != null) {
-          final file = File(filePath);
-          final compressed = await compressImage(file);
-          selectedDocumentImages.add(compressed);
-        }
+        final file = File(filePath);
+        final compressed = await compressImage(file);
+        selectedDocumentImages.add(compressed);
       }
 
       if (img_agun.value.isNotEmpty) {
         final url = img_agun.value;
         final filePath = "${tempDir.path}/${url.split('/').last}";
         await dio.download(url, filePath);
-        if (filePath != null) {
-          final file = File(filePath);
-          final compressed = await compressImage(file);
-          selectedAgunanImages.add(compressed);
-        }
+        final file = File(filePath);
+        final compressed = await compressImage(file);
+        selectedAgunanImages.add(compressed);
       }
     } catch (e) {
       print("Error fetching documents: $e");
@@ -378,7 +371,7 @@ class CreditFormController extends GetxController {
       assetController.text,
       expensesController.text,
       installmentController.text,
-    ].every((text) => text != null && text.trim().isNotEmpty);
+    ].every((text) => text.trim().isNotEmpty);
     print('validateForm: Form is ${isValid ? 'valid' : 'invalid'}');
     return isValid;
   }
@@ -409,12 +402,8 @@ class CreditFormController extends GetxController {
         trxSurvey: surveyId,
       );
 
-      if (inquiryData != null) {
-        fetchedInquiryData.value = inquiryData;
-        print("✅ Inquiry data berhasil diambil: $inquiryData");
-      } else {
-        Get.snackbar("Error", "Inquiry data kosong atau tidak ditemukan");
-      }
+      fetchedInquiryData.value = inquiryData;
+      print("✅ Inquiry data berhasil diambil: $inquiryData");
     } catch (e) {
       print("❌ Gagal mengambil inquiry data: $e");
       Get.snackbar("Error", "Gagal ambil inquiry data: ${e.toString()}");
@@ -483,8 +472,6 @@ class CreditFormController extends GetxController {
     Get.snackbar("Sukses", "Survey berhasil diperbarui");
   }
 
-  // Camera and OCR Logic
-
   Future<void> scanKTP(BuildContext context) async {
     if (isProcessing.value) return;
     isProcessing.value = true;
@@ -493,8 +480,6 @@ class CreditFormController extends GetxController {
       await _initializeControllerFuture;
       final image = await _cameraController.takePicture();
       final compressedFile = await compressImage(File(image.path));
-
-      // Navigasi ke halaman preview sambil kirim gambar
       Get.to(() => KtpPreviewScreen(
             imageFile: compressedFile,
             onConfirm: () {

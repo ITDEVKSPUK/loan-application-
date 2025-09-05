@@ -9,10 +9,7 @@ class NotePopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize the controller with a unique tag to ensure a new instance per dialog
     final NotePopupController controller = Get.put(NotePopupController(), tag: UniqueKey().toString());
-
-    // Reset and start the animation when the dialog is opened
     controller.resetAndStartAnimation();
 
     return AnimatedBuilder(

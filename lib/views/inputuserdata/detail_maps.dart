@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:loan_application/core/theme/color.dart';
+import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 import 'package:loan_application/widgets/InputUserData/type_maps.dart';
 import 'package:loan_application/widgets/custom_appbar.dart';
-import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 
 class GoogleMapsScreen extends StatelessWidget {
   const GoogleMapsScreen({super.key});
@@ -14,7 +14,6 @@ class GoogleMapsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final InputDataController controller = Get.find<InputDataController>();
-    final double screenHeight = MediaQuery.of(context).size.height;
     const double baseTopOffset = 16.0;
     const double buttonSpacing = 8.0;
     final double mapTypeTopOffset = baseTopOffset + 60.0 + buttonSpacing;
