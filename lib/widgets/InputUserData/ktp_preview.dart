@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 class KtpPreviewScreen extends StatelessWidget {
   final File imageFile;
-  final String recognizedText; // hasil OCR
+  final String recognizedText;
   final VoidCallback onConfirm;
 
   const KtpPreviewScreen({
@@ -75,4 +75,3 @@ class KtpPreviewScreen extends StatelessWidget {
     );
   }
 }
-  

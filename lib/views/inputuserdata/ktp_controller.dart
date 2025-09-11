@@ -14,10 +14,7 @@ class KtpController extends GetxController {
     final textRecognizer = TextRecognizer();
     final recognizedText = await textRecognizer.processImage(inputImage);
 
-    // simpan raw lines
     rawLines.assignAll(recognizedText.text.split("\n"));
-
-    // parsing
     parsedData.value = _parseKtp(rawLines);
 
     await textRecognizer.close();
@@ -26,12 +23,10 @@ class KtpController extends GetxController {
   KtpModel _parseKtp(List<String> lines) {
     final data = KtpModel();
 
-    // 🔹 Cari NIK
     for (var line in lines) {
       data.nik ??= _extractNik(line);
     }
 
-    // 🔹 Kandidat nama (huruf kapital semua, panjang >= 3, tidak mengandung kata blacklist)
     final blacklist = [
       "provinsi",
       "kabupaten",
@@ -68,7 +63,6 @@ class KtpController extends GetxController {
           blacklist.every((word) => !l.contains(word));
     }).toList();
 
-    // 🔹 Ambil kandidat nama paling atas
     if (cleaned.isNotEmpty) {
       data.nama = cleaned.first.trim();
     }
@@ -76,13 +70,10 @@ class KtpController extends GetxController {
     return data;
   }
 
-  /// Ekstrak NIK dengan aman
   String? _extractNik(String line) {
-    // cari angka 16 digit murni
     final nikMatch = RegExp(r'\b\d{16}\b').firstMatch(line);
     if (nikMatch != null) return nikMatch.group(0);
 
-    // fallback: koreksi huruf mirip angka
     final fixed = line
         .replaceAll("O", "0")
         .replaceAll("o", "0")

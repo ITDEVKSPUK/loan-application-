@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -9,11 +10,13 @@ import 'package:intl/intl.dart';
 import 'package:loan_application/API/models/anggota_models.dart';
 import 'package:loan_application/API/models/cif_models.dart';
 import 'package:loan_application/API/models/history_models.dart';
+import 'package:loan_application/API/models/ktp_models.dart';
 import 'package:loan_application/API/service/post_create_CIF.dart';
 import 'package:loan_application/API/service/post_history.dart';
 import 'package:loan_application/API/service/post_nik_check.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
+import 'package:loan_application/views/inputuserdata/ktp_controller.dart';
 
 class InputDataController extends GetxController {
   // Text Controllers
@@ -38,8 +41,7 @@ class InputDataController extends GetxController {
 
   final readOnly = true.obs;
   final selectedGender = ''.obs;
-  final startDate =
-      DateTime(2025, 6, 24, 13, 2).obs;
+  final startDate = DateTime(2025, 6, 24, 13, 2).obs;
   final selectedDateText = ''.obs;
   final selectedDate = ''.obs;
   final isUnmarried = false.obs;
@@ -52,12 +54,12 @@ class InputDataController extends GetxController {
   final selectedLongitude = 0.0.obs;
   final isLoading = true.obs;
   final locationServiceEnabled = true.obs;
-  final initialPosition = const LatLng(-6.175392, 106.827153).obs; 
+  final initialPosition = const LatLng(-6.175392, 106.827153).obs;
   final selectedPosition = Rxn<LatLng>();
   final mapController = Rxn<GoogleMapController>();
   final selectedCountryCode = '+62'.obs;
   final mapType = MapType.normal.obs;
-  final isLocationConfirmed = false.obs; 
+  final isLocationConfirmed = false.obs;
   String? dateBornIso;
   final RxInt cifResponse = 0.obs;
   final isPekerjaanMax = false.obs; // Added reactive variable for warning state
@@ -67,9 +69,17 @@ class InputDataController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    final creditCtrl = Get.find<KtpController>();
     checkLocationServiceAndGetPosition();
     _startLocationUpdates();
-    addPekerjaanListener(); // Add listener for pekerjaanController
+    addPekerjaanListener();
+    // setiap kali OCR nik berubah, isi ke textfield
+    ever<KtpModel>(creditCtrl.parsedData, (ktp) {
+      if (ktp.nik != null && ktp.nik!.isNotEmpty) {
+        nikController.text = ktp.nik!;
+        namaAkhirController.text = ktp.nama ?? '';
+      }
+    });
   }
 
   @override
@@ -77,7 +87,8 @@ class InputDataController extends GetxController {
     _positionStream?.cancel();
     mapController.value?.dispose();
     mapController.value = null;
-    pekerjaanController.removeListener(updatePekerjaanState); // Clean up listener
+    pekerjaanController
+        .removeListener(updatePekerjaanState); // Clean up listener
     pekerjaanController.dispose(); // Dispose of pekerjaanController
     super.onClose();
   }
@@ -429,7 +440,6 @@ class InputDataController extends GetxController {
   void clearForm() {
     selectedGender.value = '';
     namaAwalController.clear();
-    namaAkhirController.clear();
     namaPasanganController.clear();
     tanggallahirController.clear();
     kotaAsalController.clear();
@@ -441,7 +451,7 @@ class InputDataController extends GetxController {
     nominalController.clear();
     jenisJaminanController.clear();
     detileAlamatController.clear();
-    mapsUrlController.clear(); 
+    mapsUrlController.clear();
     isUnmarried.value = false;
     isNoFirstName.value = false;
     isNikValid.value = false;

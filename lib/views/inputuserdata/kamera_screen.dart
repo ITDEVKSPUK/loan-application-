@@ -57,14 +57,9 @@ class _KtpCameraScreenState extends State<KtpCameraScreen> {
                   onPressed: widget.controller.isProcessing.value
                       ? null
                       : () async {
-                          print('KtpCameraScreen: Tombol Konfirmasi ditekan');
                           try {
                             await widget.controller.scanKTP(context);
-                            print('KtpCameraScreen: scanKTP selesai');
-                          } catch (e) {
-                            print(
-                                'KtpCameraScreen: Error saat memanggil scanKTP: $e');
-                          }
+                          } catch (e) {}
                         },
                   backgroundColor: widget.controller.isProcessing.value
                       ? Colors.grey
@@ -87,7 +82,6 @@ class _KtpCameraScreenState extends State<KtpCameraScreen> {
             ],
           );
         } else {
-          print('KtpCameraScreen: Kamera belum siap, menampilkan loading');
           return const Center(child: CircularProgressIndicator());
         }
       }),

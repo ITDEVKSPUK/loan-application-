@@ -5,22 +5,26 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/History/controller_location.dart';
+import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
 import 'package:loan_application/views/inputuserdata/formcontroller.dart';
+import 'package:loan_application/views/inputuserdata/ktp_controller.dart';
 import 'package:loan_application/views/inputuserdata/overlayalamat.dart';
 import 'package:loan_application/widgets/InputUserData/gender_radio.dart';
 import 'package:loan_application/widgets/InputUserData/textfield_form.dart';
+import 'package:loan_application/widgets/InputUserData/upload_ktp.dart';
 import 'package:loan_application/widgets/custom_appbar.dart';
 
 class InputData extends StatelessWidget {
   final controller = Get.put(InputDataController());
   final locationController = Get.put(LocationController());
+  final controllerDoc = Get.find<CreditFormController>();
 
   InputData({super.key});
 
   @override
   Widget build(BuildContext context) {
-    controller.addPekerjaanListener(); // Add listener for pekerjaanController
-
+    controller.addPekerjaanListener();
+    
     return WillPopScope(
       onWillPop: () async {
         Get.offAllNamed('/dashboard');
@@ -38,6 +42,9 @@ class InputData extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Upload KTP
+                UploadKTPPicker(controller: controllerDoc),
+                const SizedBox(height: 24),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [

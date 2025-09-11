@@ -4,7 +4,6 @@ import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/views/inputuserdata/form_agunan_controller.dart';
 import 'package:loan_application/widgets/InputUserData/upload_agunan.dart';
 import 'package:loan_application/widgets/InputUserData/upload_document.dart';
-import 'package:loan_application/widgets/InputUserData/upload_ktp.dart';
 import 'package:loan_application/widgets/custom_appbar.dart';
 
 class FullCreditFormPage extends StatefulWidget {
@@ -15,12 +14,12 @@ class FullCreditFormPage extends StatefulWidget {
 }
 
 class _FullCreditFormPageState extends State<FullCreditFormPage> {
-  final controller = Get.put(CreditFormController());
+  final controller = Get.find<CreditFormController>();
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.fetchDocuments(); // 👈 fetch old files after UI is ready
+      controller.fetchDocuments();
     });
   }
 
@@ -47,10 +46,6 @@ class _FullCreditFormPageState extends State<FullCreditFormPage> {
                 ),
               ),
               const SizedBox(height: 16),
-
-              // Upload KTP
-              UploadKTPPicker(controller: controller),
-              const SizedBox(height: 24),
 
               // Upload Agunan
               UploadAgunanPicker(controller: controller),
