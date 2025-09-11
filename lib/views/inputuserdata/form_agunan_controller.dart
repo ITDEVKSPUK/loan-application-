@@ -7,7 +7,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
-import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loan_application/API/dio/dio_client.dart';
 import 'package:loan_application/API/models/inqury_survey_models.dart'
@@ -21,6 +20,7 @@ import 'package:loan_application/API/service/put_update_survey.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/inputuserdata/formcontroller.dart';
 import 'package:loan_application/views/inputuserdata/kamera_screen.dart';
+import 'package:loan_application/views/inputuserdata/ktp_controller.dart';
 import 'package:loan_application/widgets/InputUserData/ktp_preview.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -560,37 +560,33 @@ class CreditFormController extends GetxController {
     Get.snackbar("Sukses", "Survey berhasil diperbarui");
   }
 
-Future<void> scanKTP(BuildContext context) async {
-  if (isProcessing.value) return;
-  isProcessing.value = true;
+  Future<void> scanKTP(BuildContext context) async {
+    final controller = Get.put(KtpController());
+    if (isProcessing.value) return;
+    isProcessing.value = true;
 
-  try {
-    await _initializeControllerFuture;
-    final image = await _cameraController.takePicture();
-    final compressedFile = await compressImage(File(image.path));
-    final inputImage = InputImage.fromFile(compressedFile);
-
-    final recognizer = TextRecognizer(script: TextRecognitionScript.latin);
-    final result = await recognizer.processImage(inputImage);
-    await recognizer.close();
-    print('scanKTP: Recognized text: ${result.text}');
-    Get.to(() => KtpPreviewScreen(
-          imageFile: compressedFile,
-          recognizedText: result.text,
-          onConfirm: () {
-            selectedKTPImages.add(compressedFile);
-            Get.back(); 
-            Get.back(); 
-            Get.snackbar('Sukses', 'Foto KTP berhasil disimpan');
-          },
-        ));
-  } catch (e) {
-    Get.snackbar('Error', 'Gagal mengambil foto: $e');
-  } finally {
-    isProcessing.value = false;
+    try {
+      await _initializeControllerFuture;
+      final image = await _cameraController.takePicture();
+      final compressedFile = await compressImage(File(image.path));
+      await controller.extractText(compressedFile);
+      print('raw line: Recognized text: ${controller.rawLines}');
+      Get.to(() => KtpPreviewScreen(
+            imageFile: compressedFile,
+            recognizedText: controller.parsedData.value.toString(),
+            onConfirm: () {
+              selectedKTPImages.add(compressedFile);
+              Get.back();
+              Get.back();
+              Get.snackbar('Sukses', 'Foto KTP berhasil disimpan');
+            },
+          ));
+    } catch (e) {
+      Get.snackbar('Error', 'Gagal mengambil foto: $e');
+    } finally {
+      isProcessing.value = false;
+    }
   }
-}
-
 
   Future<void> initializeCamera() async {
     try {
