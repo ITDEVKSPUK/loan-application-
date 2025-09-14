@@ -10,13 +10,11 @@ import 'package:intl/intl.dart';
 import 'package:loan_application/API/models/anggota_models.dart';
 import 'package:loan_application/API/models/cif_models.dart';
 import 'package:loan_application/API/models/history_models.dart';
-import 'package:loan_application/API/models/ktp_models.dart';
 import 'package:loan_application/API/service/post_create_CIF.dart';
 import 'package:loan_application/API/service/post_history.dart';
 import 'package:loan_application/API/service/post_nik_check.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
-import 'package:loan_application/views/inputuserdata/ktp_controller.dart';
 
 class InputDataController extends GetxController {
   // Text Controllers
@@ -69,17 +67,9 @@ class InputDataController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    final creditCtrl = Get.find<KtpController>();
     checkLocationServiceAndGetPosition();
     _startLocationUpdates();
     addPekerjaanListener();
-    // setiap kali OCR nik berubah, isi ke textfield
-    ever<KtpModel>(creditCtrl.parsedData, (ktp) {
-      if (ktp.nik != null && ktp.nik!.isNotEmpty) {
-        nikController.text = ktp.nik!;
-        namaAkhirController.text = ktp.nama ?? '';
-      }
-    });
   }
 
   @override

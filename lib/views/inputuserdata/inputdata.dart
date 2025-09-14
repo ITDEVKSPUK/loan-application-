@@ -18,13 +18,14 @@ class InputData extends StatelessWidget {
   final controller = Get.put(InputDataController());
   final locationController = Get.put(LocationController());
   final controllerDoc = Get.find<CreditFormController>();
+  final ktpController = Get.put(KtpController());
 
   InputData({super.key});
 
   @override
   Widget build(BuildContext context) {
     controller.addPekerjaanListener();
-    
+
     return WillPopScope(
       onWillPop: () async {
         Get.offAllNamed('/dashboard');
@@ -48,17 +49,25 @@ class InputData extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: TextfieldForm(
-                        width: double.infinity,
-                        height: 50,
-                        label: 'NIK',
-                        controller: controller.nikController,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                      ),
+                    Obx(
+                      () {
+                        final nikFromKtp = ktpController.parsedData.value.nik;
+                        if (nikFromKtp != null && nikFromKtp.isNotEmpty) {
+                          controller.nikController.text = nikFromKtp;
+                        }
+                        return Expanded(
+                          child: TextfieldForm(
+                            width: double.infinity,
+                            height: 50,
+                            label: 'NIK',
+                            controller: controller.nikController,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                          ),
+                        );
+                      },
                     ),
                     const SizedBox(width: 10),
                     Column(
@@ -93,8 +102,12 @@ class InputData extends StatelessWidget {
                     ),
                   ],
                 ),
-                Obx(
-                  () => Container(
+                Obx(() {
+                  final nikFromKtp = ktpController.parsedData.value.nik;
+                  if (nikFromKtp != null && nikFromKtp.isNotEmpty) {
+                    controller.nikController.text = nikFromKtp;
+                  }
+                  return Container(
                     child: Column(
                       children: [
                         const SizedBox(height: 10),
@@ -391,8 +404,8 @@ class InputData extends StatelessWidget {
                         const SizedBox(height: 30),
                       ],
                     ),
-                  ),
-                )
+                  );
+                })
               ],
             ),
           ),
