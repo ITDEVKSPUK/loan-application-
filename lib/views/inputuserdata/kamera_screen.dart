@@ -36,7 +36,17 @@ class _KtpCameraScreenState extends State<KtpCameraScreen> {
           return Stack(
             alignment: Alignment.center,
             children: [
-              widget.controller.cameraPreview.value,
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  return GestureDetector(
+                    onTapDown: (details) {
+                      widget.controller.setFocusPoint(details, constraints);
+                    },
+                    child: widget.controller.cameraPreview.value,
+                  );
+                },
+              ),
+              // Frame untuk posisi KTP
               Container(
                 width: 300,
                 height: 180,
@@ -51,6 +61,26 @@ class _KtpCameraScreenState extends State<KtpCameraScreen> {
                   ),
                 ),
               ),
+              // Tombol flash di pojok kanan atas
+              Positioned(
+                top: 20,
+                right: 20,
+                child: Obx(() {
+                  return IconButton(
+                    icon: Icon(
+                      widget.controller.isFlashOn.value
+                          ? Icons.flash_on
+                          : Icons.flash_off,
+                      color: Colors.white,
+                      size: 32,
+                    ),
+                    onPressed: () {
+                      widget.controller.toggleFlash();
+                    },
+                  );
+                }),
+              ),
+              // Tombol capture
               Positioned(
                 bottom: 20,
                 child: FloatingActionButton(

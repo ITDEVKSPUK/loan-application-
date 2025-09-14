@@ -52,7 +52,8 @@ class _DetailDocumentState extends State<DetailDocument> {
                   color: AppColors.black.withOpacity(0.5),
                   child: Center(
                     child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(AppColors.royalBlue),
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(AppColors.royalBlue),
                     ),
                   ),
                 ),
@@ -125,7 +126,8 @@ class _DetailDocumentState extends State<DetailDocument> {
                   label: 'Taksiran Nilai Jaminan',
                   width: double.infinity,
                   height: 50,
-                  value: 'Rp. ${surveyController.formatRupiah(surveyController.inquiryModel.value?.collateral.value.toString() ?? '0')}',
+                  value:
+                      'Rp. ${surveyController.formatRupiah(surveyController.inquiryModel.value?.collateral.value.toString() ?? '0')}',
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 8),
@@ -145,7 +147,6 @@ class _DetailDocumentState extends State<DetailDocument> {
                       .showFullScreenImage(documentController.img_doc.value),
                 ),
                 const SizedBox(height: 12),
-                
                 FieldReadonly(
                   label: 'Category Document',
                   width: double.infinity,
@@ -160,16 +161,21 @@ class _DetailDocumentState extends State<DetailDocument> {
           // Note Section
           SectionCard(
             title: 'Note Dokumen',
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
+            child: Center(
               child: Text(
                 documentController.noteDocument.value.isEmpty
                     ? 'Tidak ada data'
                     : documentController.noteDocument.value,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 14,
                   fontFamily: 'Outfit',
-                  color: AppColors.black,
+                  color:
+                      documentController.noteDocument.value.contains('APPROVED')
+                          ? AppColors.greenstatus
+                          : documentController.noteDocument.value
+                                  .contains('DECLINED')
+                              ? AppColors.redstatus
+                              : AppColors.blackLight,
                 ),
               ),
             ),

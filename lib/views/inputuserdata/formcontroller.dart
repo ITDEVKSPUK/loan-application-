@@ -44,6 +44,7 @@ class InputDataController extends GetxController {
   final selectedDate = ''.obs;
   final isUnmarried = false.obs;
   final isNoFirstName = false.obs;
+  final isNoLastName = false.obs;
   final isNikValid = false.obs;
   final isDontHaveLoan = false.obs;
   final isNextButtonEnabled = false.obs;
@@ -294,8 +295,10 @@ class InputDataController extends GetxController {
     alamatController.text = anggotaResponse.address?.sectorCity ?? '';
     isUnmarried.value = anggotaResponse.owner?.pasanganNama == null ||
         anggotaResponse.owner?.pasanganNama == '';
-    isNoFirstName.value = anggotaResponse.owner?.firstName == null ||
-        anggotaResponse.owner?.firstName == '';
+    // isNoFirstName.value = anggotaResponse.owner?.firstName == null ||
+    //     anggotaResponse.owner?.firstName == '';
+    isNoLastName.value = anggotaResponse.owner?.lastName == null ||
+        anggotaResponse.owner?.lastName == '';
     if (isNoFirstName.value) {
       namaAwalController.text = 'Tidak Memiliki Nama Depan';
     }
@@ -429,7 +432,7 @@ class InputDataController extends GetxController {
 
   void clearForm() {
     selectedGender.value = '';
-    namaAwalController.clear();
+    namaAkhirController.clear();
     namaPasanganController.clear();
     tanggallahirController.clear();
     kotaAsalController.clear();
@@ -533,12 +536,22 @@ class InputDataController extends GetxController {
     update();
   }
 
-  void toggleNoFirstName(bool? value) {
-    isNoFirstName.value = value ?? false;
-    if (isNoFirstName.value) {
-      namaAwalController.text = 'Tidak Memiliki Nama Depan';
+  // void toggleNoFirstName(bool? value) {
+  //   isNoFirstName.value = value ?? false;
+  //   if (isNoFirstName.value) {
+  //     namaAwalController.text = 'Tidak Memiliki Nama Depan';
+  //   } else {
+  //     namaAwalController.clear();
+  //   }
+  //   update();
+  // }
+
+  void toggleNoLastName(bool? value) {
+    isNoLastName.value = value ?? false;
+    if (isNoLastName.value) {
+      namaAkhirController.text = 'Tidak Memiliki Nama Belakang';
     } else {
-      namaAwalController.clear();
+      namaAkhirController.clear();
     }
     update();
   }
