@@ -643,6 +643,35 @@ class CreditFormController extends GetxController {
     });
   }
 
+  Future<void> setFocusPoint(
+      TapDownDetails details, BoxConstraints constraints) async {
+    if (!_cameraController.value.isInitialized) return;
+
+    final Offset offset = Offset(
+      details.localPosition.dx / constraints.maxWidth,
+      details.localPosition.dy / constraints.maxHeight,
+    );
+
+    try {
+      await _cameraController.setFocusPoint(offset);
+      await _cameraController.setExposurePoint(offset);
+      print("✅ Fokus diatur pada: $offset");
+    } catch (e) {
+      print("⚠️ Gagal set fokus: $e");
+    }
+  }
+
+  final isFlashOn = false.obs;
+
+  Future<void> toggleFlash() async {
+    if (_cameraController != null) {
+      isFlashOn.value = !isFlashOn.value;
+      await _cameraController!.setFlashMode(
+        isFlashOn.value ? FlashMode.torch : FlashMode.off,
+      );
+    }
+  }
+
   void disposeCamera() {
     print('disposeCamera: Membuang kamera');
     _cameraController.dispose();

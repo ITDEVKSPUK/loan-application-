@@ -8,7 +8,6 @@ class KtpController extends GetxController {
   final rawLines = <String>[].obs;
   final parsedData = KtpModel().obs;
 
-  /// Scan gambar KTP pakai OCR
   Future<void> extractText(File imageFile) async {
     final inputImage = InputImage.fromFile(imageFile);
     final textRecognizer = TextRecognizer();

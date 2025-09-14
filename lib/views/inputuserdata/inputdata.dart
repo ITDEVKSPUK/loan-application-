@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:loan_application/API/models/ktp_models.dart';
 import 'package:loan_application/core/theme/color.dart';
 import 'package:loan_application/utils/routes/my_app_route.dart';
 import 'package:loan_application/views/History/controller_location.dart';
@@ -19,12 +20,18 @@ class InputData extends StatelessWidget {
   final locationController = Get.put(LocationController());
   final controllerDoc = Get.find<CreditFormController>();
 
+  final KtpController creditCtrl = Get.find<KtpController>();
   InputData({super.key});
 
   @override
   Widget build(BuildContext context) {
     controller.addPekerjaanListener();
-    
+    ever<KtpModel>(creditCtrl.parsedData, (ktp) {
+      if (ktp.nik != null && ktp.nik!.isNotEmpty) {
+        controller.nikController.text = ktp.nik!;
+        controller.namaAwalController.text = ktp.nama ?? '';
+      }
+    });
     return WillPopScope(
       onWillPop: () async {
         Get.offAllNamed('/dashboard');
@@ -106,28 +113,29 @@ class InputData extends StatelessWidget {
                           readOnly: controller.isNoFirstName.value ||
                               controller.readOnly.value,
                         ),
+                        TextfieldForm(
+                            width: double.infinity,
+                            height: 50,
+                            label: 'Nama Akhir',
+                            readOnly: controller.isNoLastName.value ||
+                                controller.readOnly.value,
+                            controller: controller.namaAkhirController),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Checkbox(
-                              value: controller.isNoFirstName.value,
+                              value: controller.isNoLastName.value,
                               onChanged: controller.readOnly.value
                                   ? null
-                                  : controller.toggleNoFirstName,
+                                  : controller.toggleNoLastName,
                             ),
                             const Text(
-                              'Tidak Ada Nama Awal',
+                              'Tidak Ada Nama Akhir',
                               style:
                                   TextStyle(fontSize: 14, fontFamily: 'Outfit'),
                             ),
                           ],
                         ),
-                        TextfieldForm(
-                            width: double.infinity,
-                            height: 50,
-                            label: 'Nama Akhir',
-                            readOnly: controller.readOnly.value,
-                            controller: controller.namaAkhirController),
                         const SizedBox(height: 10),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
