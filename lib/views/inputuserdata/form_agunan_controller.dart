@@ -605,13 +605,11 @@ class CreditFormController extends GetxController {
         firstCamera,
         ResolutionPreset.medium,
       );
-
       _initializeControllerFuture = _cameraController.initialize();
       await _initializeControllerFuture;
 
-      // ✅ Matikan flash di sini
       await _cameraController.setFocusMode(FocusMode.auto);
-      await _cameraController.setFlashMode(FlashMode.off); // ⬅️ Matikan flash
+      await _cameraController.setFlashMode(FlashMode.off);
 
       cameraPreview.value = CameraPreview(_cameraController);
       isCameraInitialized.value = true;
